@@ -95,7 +95,7 @@ export default {
 
 		[namespace.INITSUBSET](state, payload) {
 			if (!state.app.length) {
-				Vue.$http.post(PREFIX + 'version/typelist', {
+				axios.post(PREFIX + 'version/typelist', {
 					token: payload.token,
 					type: 3
 				}).then(res => {
@@ -115,20 +115,20 @@ export default {
 					} else {
 
 					}
-				})
+				});
 			}
 		},
 
 		[namespace.INITPRODUCT](state, payload) {
 			if (!state.app.length) {
-				Vue.$http.post(PREFIX + 'version/product', {
+				axios.post(PREFIX + 'version/product', {
 					token: payload.token,
 				}).then(res => {
 					const json = res.data;
 					if (json.code === 200) {
-						state.product = json.data;
+						state.product = json.result;
 					} else {
-
+						state.product = {};
 					}
 
 				})

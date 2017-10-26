@@ -15,7 +15,7 @@
 					</el-col>
 					<el-col :span="12">
 						<div class="hp-dataBox hp-icon02">
-							<p>{{homeData.router_online_count}}</p>
+							<p>{{homeData.router_online_percent}}</p>
 							<p>设备在线比例</p>
 						</div>
 					</el-col>
@@ -35,7 +35,7 @@
 					</el-col>
 					<el-col :span="12">
 						<div class="hp-dataBox hp-icon02">
-							<p>{{homeData.app_online_count}}</p>
+							<p>{{homeData.app_online_percent}}</p>
 							<p>设备在线比例</p>
 						</div>
 					</el-col>
@@ -140,7 +140,6 @@ export default {
 		for(let i = 0; i < 144; i += 1) {
 			this.fakeDate.push(this.randomData());
 		}
-		//this.renderEchart(this.fakeDate);
 		this.getAlarmst();
 	
 	},
@@ -165,7 +164,7 @@ export default {
 			}).then(res => {
 				const json = res.data;
 				if (json.code === 200) {
-					this.homeData = json.result;
+					this.homeData = json.result.data;
 				} else {
 					this.$message.error(json.msg);
 				}
@@ -192,29 +191,14 @@ export default {
 			};
 			if (range) {
 				const ranges = range.split(' ~ ');
-				params =  {
-					start_time: ranges[0],
-					end_time: ranges[1]
-				}
+				params.start_time = ranges[0];
+				params.end_time =ranges[1];
 			}
 			
 			this.$http.post(PREFIX + 'homepage/alarmst', params).then(res => {
 				const json = res.data;
-				//TODO just for test
-				/*const sortedData = json.data.sort((a, b) => {
-					const aDate = new Date(a.statistics_time);
-					const bDate = new Date(b.statistics_time);
-					if (aDate > bDate) {
-						return 1;
-					} else if (aDate < bDate) {
-						return -1;
-					} else {
-						return 0;
-					}
-				})
-				const data = sortedData.map(handleData);*/
 				if (json.code === 200) {
-					const data = json.result.map(handleData);
+					const data = json.result.data.map(handleData);
 					this.renderEchart(data);
 				} else {
 					this.$message.error(json.msg);
@@ -225,6 +209,7 @@ export default {
 		initEchart () {
 			this.alertChart = echarts.init(document.getElementById('echart-area'));
 		},
+
 		renderEchart (data) {
 			this.alertChart.setOption({
 				tooltip: {
@@ -264,8 +249,7 @@ export default {
 	},
 	computed: {
         ...mapGetters({
-        	token: namespace.TOKEN,
-            user: namespace.USER
+        	token: namespace.TOKEN
         })
     }
 }

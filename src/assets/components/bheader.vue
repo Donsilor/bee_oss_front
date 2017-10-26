@@ -24,7 +24,6 @@ export default {
 	},
 	methods: {
 		logout () {
-			
 			this.$http.post(PREFIX +'auth/logout', {
 				token: this.token
 			}).then(res => {
@@ -35,6 +34,8 @@ export default {
 					});
 					this.$router.push('/');
 					this.$message.success('登出成功');
+				} else {
+					this.$message.error(json.msg);
 				}
 			})
 		}
