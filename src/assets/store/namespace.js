@@ -1,0 +1,16 @@
+export const USER = "user/USER";
+export const INITUSER = "user/INIT";
+export const SETUSER = "user/SET";
+export const DELUSER = "user/DEL";
+export const TOKEN = "website/TOKEN"
+export const SETTOKEN = "website/SETTOKEN";
+export const INITAPP = "chosen/INITAPP";
+export const INITROUTER = "chosen/INITROUTER";
+export const INITSUBSET = "chosen/INITSUBSET";
+export const INITPRODUCT = "chosen/INITPRODUCT";
+export const APP = "chosen/APP";
+export const ROUTER = "chosen/ROUTER";
+export const SUBSET = "chosen/SUBSET";
+export const BRAND = "chosen/BRAND";
+export const TYPE = "chosen/TYPE";
+export const PRODUCT = "chosen/PRODUCT";

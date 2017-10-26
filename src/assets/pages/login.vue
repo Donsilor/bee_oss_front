@@ -1,16 +1,16 @@
 <template>
     <div class="container">
-        <div class="content">
+        <div class="login-content">
             <section class="login-box">
                 <header>
-                    <h1>登录</h1>
+                    <h1>BeeOSS系统 - 登录</h1>
                 </header>
                 <article>
                     <el-form :model="loginForm" ref="loginForm" :rules="rules">
                         <ol class="login-form">
                             <li>
-                                <el-form-item prop="name" required>
-                                    <el-input v-model="loginForm.name" type="text" size="large" placeholder="手机/登录邮箱" />
+                                <el-form-item prop="username" required>
+                                    <el-input v-model="loginForm.username" type="text" size="large" placeholder="手机/登录邮箱" />
                                 </el-form-item>
                             </li>
                             <li>
@@ -31,6 +31,10 @@
     </div>
 </template>
 <script>
+import { PREFIX } from '../lib/util';
+import * as namespace from '../store/namespace';
+import {mapGetters} from 'vuex';
+//import '../data/index.js';
 export default {
     data () {
         const checkName = (rule, value, callback) => {
@@ -43,11 +47,11 @@ export default {
         return {
             
             loginForm: {
-                name: '',
+                username: '',
                 password: ''
             },
             rules: {
-                name: [
+                username: [
                     {
                         required: true,
                         message: '请输入手机或邮箱',
@@ -68,13 +72,35 @@ export default {
             }
         }
     },
-    mounted () {},
+    mounted () {
+        if (this.token) {
+            this.$router.push('main');
+        }
+    },
     methods: {
         login () {
-            this.$message.success('登录成功');
-            this.$router.push('main');
-            
+            this.$http.post( PREFIX + 'auth/login', this.loginForm).then(res => {
+                const json = res.data;
+                if (json.code === 200) {
+                    this.$message.success('登录成功');
+                    this.$store.dispatch({
+                        type: namespace.SETUSER,
+                        info: json.result
+                    })
+                    this.$router.push('main');
+                } else {
+                    this.$message.error(json.msg);
+
+                }
+            }).catch((res) => {
+                this.$message.error(res);
+            });
         }
+    },
+    computed: {
+        ...mapGetters({
+            token: namespace.TOKEN
+        })
     }
 }
 </script>
@@ -86,7 +112,7 @@ export default {
     bottom: 0;
     right: 0;
 }
-.content{
+.login-content{
     height: 100%;
     display: flex;
     justify-content: center;

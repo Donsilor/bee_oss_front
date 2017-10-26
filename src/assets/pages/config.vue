@@ -17,7 +17,7 @@
 						</el-select>
 					</el-col>
 					<el-col :span="5">
-						<label>设备厂商</label>
+						<label>品牌</label>
 					</el-col>
 					<el-col :span="7">
 						<el-select v-model="filterForm.firm" placeholder="全部">
@@ -73,7 +73,7 @@
 						</el-select>
 					</el-col>
 					<el-col :span="5">
-						<label>自设版本号</label>
+						<label>子设备版本</label>
 					</el-col>
 					<el-col :span="7">
 						<el-select v-model="filterForm.self" placeholder="全部">
@@ -88,7 +88,7 @@
 				</el-row>
 				<el-row type="flex" justify="end">
 					<el-col :span="4">
-						<el-button @click="searchedFlag = true; filterPopoverFlag = false" type="primary">查询</el-button>
+						<el-button @click="filterPopoverFlag = false" type="primary">查询</el-button>
 					</el-col>
 				</el-row>
 			</div>
@@ -96,7 +96,7 @@
 		<el-row type="flex" justify="space-between">
 			<el-col :span="12">
 				<el-button-group>
-					<el-button @click="typeBoxFlag = true">录入</el-button>
+					<el-button @click="importBoxFlag = true">录入</el-button>
 					<el-button v-popover:filterPopover >版本匹配搜索 <i class="el-icon-caret-bottom"></i></el-button>
 				</el-button-group>
 			</el-col>
@@ -124,7 +124,7 @@
 			</el-table-column>
 		</el-table>
 		
-		<div class="cp-searchResult" v-show="searchedFlag">
+		<!--<div class="cp-searchResult" v-show="searchedFlag">
 			<p class="btitle">支持的APP版本</p>
 			<el-row class="cpsr-line" :gutter="20">
 				<el-col :span="2" v-for="item in supportVersionList">
@@ -137,16 +137,40 @@
 					<span>{{item}}</span>
 				</el-col>
 			</el-row>
-		</div>
+		</div>-->
 
-		<el-dialog title="录入版本" :visible.sync="typeBoxFlag">
-			<el-form :model="typeForm" ref="typeForm" label-width="8em">
+		<el-dialog title="录入版本" :visible.sync="importBoxFlag">
+			<el-form :model="importForm" ref="importForm" label-width="8em">
 				<el-form-item label="版本类型" >
 					<el-row>
-						<el-col :span="7">
-							<el-select v-model="typeForm.terminal" placeholder="终端">
+						<el-col :span="8">
+							<el-select v-model="importForm.type" placeholder="终端">
 								<el-option
-							      v-for="item in terminalOptions"
+							      v-for="item in typeOptions"
+							      :key="item.value"
+							      :label="item.label"
+							      :value="item.value">
+							    </el-option>
+							</el-select>
+						</el-col>
+						<el-col :span="7" :offset="1" v-show="importForm.type === 1">
+							<el-select v-model="importForm.system" placeholder="操作系统">
+								<el-option
+							      v-for="item in systemOptions"
+							      :key="item.value"
+							      :label="item.label"
+							      :value="item.value">
+							    </el-option>
+							</el-select>
+						</el-col>
+					</el-row>
+				</el-form-item>
+				<el-form-item label="子设备" v-show="importForm.type === 3">
+					<el-row>
+						<el-col :span="8">
+							<el-select v-model="importForm.brand_id" placeholder="品牌">
+								<el-option
+							      v-for="item in brandIDOptions"
 							      :key="item.value"
 							      :label="item.label"
 							      :value="item.value">
@@ -154,19 +178,19 @@
 							</el-select>
 						</el-col>
 						<el-col :span="7" :offset="1">
-							<el-select v-model="typeForm.os" placeholder="操作系统">
+							<el-select v-model="importForm.type_id" placeholder="类型">
 								<el-option
-							      v-for="item in osOptions"
+							      v-for="item in typeIDOptions"
 							      :key="item.value"
 							      :label="item.label"
 							      :value="item.value">
 							    </el-option>
 							</el-select>
 						</el-col>
-						<el-col :span="8"  :offset="1">
-							<el-select v-model="typeForm.version" placeholder="版本号">
+						<el-col :span="7" :offset="1">
+							<el-select v-model="importForm.product_id" placeholder="产品">
 								<el-option
-							      v-for="item in versionOptions"
+							      v-for="item in productIDOptions"
 							      :key="item.value"
 							      :label="item.label"
 							      :value="item.value">
@@ -176,31 +200,39 @@
 					</el-row>
 				</el-form-item>
 				<el-form-item label="版本号">
-					 <el-input type="text" v-model="typeForm.number" />
+					 <el-input type="text" v-model="importForm.version" />
 				</el-form-item>
 				<el-form-item label="发布时间">
 					 <el-date-picker
-				      v-model="typeForm.publishTime"
-				      type="datetime"
-				      placeholder="选择日期时间">
+				      v-model="importForm.release_tm"
+				      type="date"
+				      placeholder="选择日期">
 				    </el-date-picker>
 				</el-form-item>
 				<el-form-item label="支持版本">
-					<el-row>
-						<el-col :span="11">
-					 		<el-input type="text" v-model="typeForm.child" placeholder="子设备版本" />
-					 	</el-col>
-					 	<el-col :span="12"  :offset="1">
-					 		<el-input type="text" v-model="typeForm.app" placeholder="APP版本" />
-					 	</el-col>
-					 </el-row>
+					<el-select multiple v-model="importForm.routers" placeholder="路由" v-show="importForm.type !== 2">
+						<el-option
+					      v-for="item in routerOptions"
+					      :key="item.value"
+					      :label="item.label"
+					      :value="item.value">
+					    </el-option>
+					</el-select>
+					<el-select multiple v-model="importForm.products" placeholder="子设备" v-show="importForm.type === 2">
+						<el-option
+					      v-for="item in subsetOptions"
+					      :key="item.value"
+					      :label="item.label"
+					      :value="item.value">
+					    </el-option>
+					</el-select>
 				</el-form-item>
 				<el-form-item label="版本包所在URL">
-					 <el-input type="text" v-model="typeForm.url" />
+					 <el-input type="text" v-model="importForm.download_url_object" />
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" native-type="submit">确定</el-button>
-					<el-button @click="typeBoxFlag = false;">取消</el-button>
+					<el-button @click="importBoxFlag = false;">取消</el-button>
 				</el-form-item>
 			</el-form>
 		</el-dialog>
@@ -208,7 +240,9 @@
 	</div>
 </template>
 <script>
-
+import * as namespace from '../store/namespace';
+import { mapGetters } from 'vuex';
+import { PREFIX } from '../lib/util.js';
 export default {
 	data () {
 		return {
@@ -226,37 +260,103 @@ export default {
 			],
 			supportVersionList: ["V1.0", "V1.1", "V1.2"],
 			suprrortChildList: ["空调V1.0", "可视门铃V1.0", "电灯V1.1", "智能开关V1.1"],
-			typeBoxFlag: false,
+			importBoxFlag: false,
 			filterPopoverFlag: false,
 			searchedFlag: false,
-			terminalOptions: [
-				{
-					value: '1',
-					lable: '选项一'
-				}
-			],
-			osOptions: [
-				{
-					value: '1',
-					lable: '选项一'
-				}
-			],
-			versionOptions: [
-				{
-					value: '1',
-					lable: '选项一'
-				}
-			],
-			typeForm: {
-				terminal: '',
-				os: '',
+
+			importForm: {
+				type: 1,
+				system: '',
 				version: '',
-				number: '',
-				publishTime: '',
-				child: '',
-				app: '',
-				url: ''
+				release_tm: '',
+				routers: [],
+				products: [],
+				download_url_object: '',
+				brand_id: '',
+				type_id: '',
+				product_id: '',
 			},
+			typeOptions: [
+				{
+					value: 1,
+					label: 'APP'
+				},
+				{
+					value: 2,
+					label: '路由器'
+				},
+				{
+					value: 3,
+					label: '子设备'
+				}
+			],
+			systemOptions: [
+				{
+					value: 'IOS',
+					label: 'IOS'
+				},
+				{
+					value: 'Android',
+					label: 'Android'
+				}
+			],
+
+			routerOptions: [
+				{
+					value: '1',
+					label: '选项一'
+				},
+				{
+					value: '2',
+					label: '选项二'
+				}
+			],
+
+			subsetOptions: [
+				{
+					value: '1',
+					label: '选项一'
+				},
+				{
+					value: '2',
+					label: '选项二'
+				}
+			],
+
+			brandIDOptions: [
+				{
+					value: '1',
+					label: '选项一'
+				},
+				{
+					value: '2',
+					label: '选项二'
+				}
+			],
+
+			typeIDOptions: [
+				{
+					value: '1',
+					label: '选项一'
+				},
+				{
+					value: '2',
+					label: '选项二'
+				}
+			],
+
+			productIDOptions: [
+				{
+					value: '1',
+					label: '选项一'
+				},
+				{
+					value: '2',
+					label: '选项二'
+				}
+			],
+			
+			
 			filterForm: {
 				platform: '',
 				firm: '',
@@ -265,53 +365,66 @@ export default {
 				router: '',
 				self: ''
 			},
+			versionOptions: [
+				{
+					value: '1',
+					label: '选项一'
+				}
+			],
+			
+			childOptions: [
+				{
+					value: '1',
+					label: '选项一'
+				},
+				{
+					value: '2',
+					label: '选项二'
+				}
+			],
 			platformOptions: [
 				{
 					value: '1',
-					lable: '选项一'
+					label: '选项一'
 				}
 			],
 			firmOptions: [
 				{
 					value: '1',
-					lable: '选项一'
+					label: '选项一'
 				}
 			],
 			appOptions: [
 				{
 					value: '1',
-					lable: '选项一'
-				}
-			],
-			childOptions: [
-				{
-					value: '1',
-					lable: '选项一'
-				}
-			],
-			routerOptions: [
-				{
-					value: '1',
-					lable: '选项一'
+					label: '选项一'
 				}
 			],
 			selfOptions: [
 				{
 					value: '1',
-					lable: '选项一'
+					label: '选项一'
 				}
 			],
 
 		}
 	},
-	mounted () {},
+	mounted () {
+
+		this.$store.dispatch({
+			type: namespace.INITAPP,
+			token: this.token
+		});
+	},
 	methods: {
 		rowChosed (row, event) {
 			console.log(row);
 		}
 	},
 	components: {
-		
+		...mapGetters({
+            token: namespace.TOKEN
+        })
 	}
 }
 </script>

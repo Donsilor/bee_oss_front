@@ -18,32 +18,27 @@ module.exports = (options = {}) => ({
   },
   module: {
     rules: [{
-        test: /\.vue$/,
-        use: ['vue-loader']
-      },
-      {
-        test: /\.js$/,
-        use: ['babel-loader'],
-        exclude: /node_modules/
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader']
-      },
-      {
-        test: /\.less$/,
-        use: ['style-loader', 'css-loader', 'less-loader', 'postcss-loader']
-      },
-      {
-        test: /\.(png|jpg|jpeg|gif|eot|ttf|woff|woff2|svg|svgz)(\?.+)?$/,
-        use: [{
-          loader: 'url-loader',
-          options: {
-            limit: 10000
-          }
-        }]
-      }
-    ]
+      test: /\.vue$/,
+      use: ['vue-loader']
+    }, {
+      test: /\.js$/,
+      use: ['babel-loader'],
+      exclude: /node_modules/
+    }, {
+      test: /\.css$/,
+      use: ['style-loader', 'css-loader', 'postcss-loader']
+    }, {
+      test: /\.less$/,
+      use: ['style-loader', 'css-loader', 'less-loader', 'postcss-loader']
+    }, {
+      test: /\.(png|jpg|jpeg|gif|eot|ttf|woff|woff2|svg|svgz)(\?.+)?$/,
+      use: [{
+        loader: 'url-loader',
+        options: {
+          limit: 10000
+        }
+      }]
+    }]
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({
@@ -52,10 +47,10 @@ module.exports = (options = {}) => ({
     new HtmlWebpackPlugin({
       template: 'src/index.html'
     }),
-     new WebpackNotifierPlugin({
-        title: "Notify",
-        excludeWarnings: true,
-        skipFirstNotification: true
+    new WebpackNotifierPlugin({
+      title: "Notify",
+      excludeWarnings: true,
+      skipFirstNotification: true
     }),
     new webpack.NoErrorsPlugin(),
   ],
@@ -69,8 +64,8 @@ module.exports = (options = {}) => ({
     host: '127.0.0.1',
     port: 8010,
     proxy: {
-      '/api/': {
-        target: 'http://127.0.0.1:8080',
+      '/api/*': {
+        target: 'http://beeossdev.egtest.cn:7777',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''

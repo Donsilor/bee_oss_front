@@ -1,5 +1,5 @@
 {
-  "name": "element-starter",
+  "name": "BeeODD",
   "description": "A Vue.js project",
   "author": "yi.shyang@ele.me",
   "private": true,
@@ -8,10 +8,13 @@
     "build": "rimraf dist && webpack -p --progress --hide-modules"
   },
   "dependencies": {
+    "axios": "^0.17.0",
     "element-ui": "^1.4.2",
     "echarts": "^3.7.2",
+    "mockjs": "^1.0.1-beta3",
     "vue": "^2.4.2",
-    "vue-router": "^2.2.1"
+    "vue-router": "^2.2.1",
+    "vuex": "^3.0.0"
   },
   "engines": {
     "node": ">=6"

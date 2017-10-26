@@ -89,7 +89,7 @@
 				<el-table-column prop="time" label="时间" width="200"></el-table-column>
 				<el-table-column prop="version" label="版本号"></el-table-column>
 				<el-table-column prop="batch" label="批次"></el-table-column>
-				<el-table-column prop="success" label="成功与否"></el-table-column>
+				<el-table-column prop="success" label="成功与否" :formatter="changeString"></el-table-column>
 				<el-table-column prop="rate" label="推送到达率"></el-table-column>
 			</el-table>
 		</div>
@@ -253,7 +253,7 @@ export default {
 					time: '2017-12-18 12:00:00',
 					version: '1.9.2',
 					batch: '124',
-					success: '成功',
+					success: false,
 					rate: '100%'
 				}
 			],
@@ -409,6 +409,13 @@ export default {
 		}
 	},
 	methods: {
+		changeString(row, columen, value) {
+			if (value) {
+				return '成功';
+			} else {
+				return '失败';
+			}
+		},
 		rowChoosed (row, event) {
 			this.rateTableFlag = true;
 			setTimeout(() => {

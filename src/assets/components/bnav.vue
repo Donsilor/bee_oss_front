@@ -80,8 +80,8 @@ export default {
 		height: 80px;
 	}
 	li{
-		height: 48px;
-		padding-left: 1.5em;
+		height: 45px;
+		
 		&.actived{
 			background: #3B3B53;
 			a {
@@ -90,10 +90,16 @@ export default {
 		}
 		a{
 			color: #95959b;
+			padding-left: 1.5em;
 			display: block;
-			height: 80px;
+			height: 45px;
 			width: 100%;
-			line-height: 80px;
+			box-sizing: border-box;
+			line-height: 45px;
+			&.router-link-exact-active{
+				background: #3B3B53;
+				color: #ffffff;
+			}
 			&:before{
 				display: inline-block;
 				content: ' ';

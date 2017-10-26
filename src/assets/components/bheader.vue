@@ -5,13 +5,16 @@
 				<h1>BeeNet OSS管理后台</h1>
 			</el-col>
 			<el-col :span="8" class="bnh-info">
-				<span>张三</span>
-				<a href="javascript:;">退出登录</a>
+				<span>{{user.name}}</span>
+				<a href="javascript:;" @click="logout">退出登录</a>
 			</el-col>
 		</el-row>
 	</section>
 </template>
 <script>
+import * as namespace from '../store/namespace';
+import { PREFIX } from '../lib/util';
+import {mapGetters} from 'vuex';
 export default {
 	data () {
 		return {}
@@ -20,8 +23,29 @@ export default {
 
 	},
 	methods: {
+		logout () {
+			
+			this.$http.post(PREFIX +'auth/logout', {
+				token: this.token
+			}).then(res => {
+				const json = res.data;
+				if (json.code === 200) {
+					this.$store.dispatch({
+						type: namespace.DELUSER
+					});
+					this.$router.push('/');
+					this.$message.success('登出成功');
+				}
+			})
+		}
+	},
+	computed: {
+        ...mapGetters({
+        	token: namespace.TOKEN,
+            user: namespace.USER
+        })
+    }
 
-	}
 }
 </script>
 <style lang="less">

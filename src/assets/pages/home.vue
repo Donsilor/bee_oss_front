@@ -4,19 +4,19 @@
 			<el-col :span="8">
 				<header class="hp-header">
 					<h2>路由器信息</h2>
-					<span>截止时间2017-10-13 14:50</span>
+					<!-- <span>截止时间{{homeData.statistics_time}}</span> -->
 				</header>
 				<el-row :gutter="15">
 					<el-col :span="12">
 						<div class="hp-dataBox hp-icon01">
-							<p>127225</p>
+							<p>{{homeData.router_count}}</p>
 							<p>设备安装总量</p>
 						</div>
 					</el-col>
 					<el-col :span="12">
 						<div class="hp-dataBox hp-icon02">
-							<p>78.23</p>
-							<p>设备安装总量</p>
+							<p>{{homeData.router_online_count}}</p>
+							<p>设备在线比例</p>
 						</div>
 					</el-col>
 				</el-row>
@@ -24,18 +24,18 @@
 			<el-col :span="8">
 				<header class="hp-header">
 					<h2>APP信息</h2>
-					<span>截止时间2017-10-13 14:50</span>
+					<!-- <span>截止时间{{homeData.statistics_time}}</span> -->
 				</header>
 				<el-row :gutter="15">
 					<el-col :span="12">
 						<div class="hp-dataBox hp-icon03">
-							<p>997823</p>
+							<p>{{homeData.app_count}}</p>
 							<p>APP安装总量</p>
 						</div>
 					</el-col>
 					<el-col :span="12">
 						<div class="hp-dataBox hp-icon02">
-							<p>87.39</p>
+							<p>{{homeData.app_online_count}}</p>
 							<p>设备在线比例</p>
 						</div>
 					</el-col>
@@ -44,18 +44,18 @@
 			<el-col :span="8">
 				<header class="hp-header">
 					<h2>活跃度</h2>
-					<span>截止时间2017-10-13 14:50</span>
+					<!-- <span>截止时间{{homeData.statistics_time}}</span> -->
 				</header>
 				<el-row :gutter="15">
 					<el-col :span="12">
 						<div class="hp-dataBox hp-icon04">
-							<p>997823</p>
+							<p>{{homeData.pv}}</p>
 							<p>PV</p>
 						</div>
 					</el-col>
 					<el-col :span="12">
 						<div class="hp-dataBox hp-icon05">
-							<p>76777</p>
+							<p>{{homeData.uv}}</p>
 							<p>UV</p>
 						</div>
 					</el-col>
@@ -64,7 +64,7 @@
 		</el-row>
 		<header class="hp-header">
 			<h2>报警趋势图</h2>
-			<span>截止时间2017-10-13 14:50</span>
+			<!-- <span>截止时间2017-10-13 14:50</span> -->
 		</header>
 		<section class="hp-alertTable">
 			<div class="hpat-dateRangeArea">
@@ -78,13 +78,27 @@
 </template>
 <script>
 import echarts from 'echarts/lib/echarts';
+import * as namespace from '../store/namespace';
+import {mapGetters} from 'vuex';
+import { PREFIX } from '../lib/util.js';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title'; 
 
 export default {
 	data () {
+
+
 		return {
+			//TODO just for test echart
+			now: new Date(2007, 10, 24),
+			temMinute: 10 * 60 * 1000,
+			fakeValue: 50,
+			fakeDate: [],
+
+
+			alertChart: null,
+			homeData: {},
 			range: "",
 			pickerOption: {
 				shortcuts: [
@@ -120,29 +134,140 @@ export default {
 		}
 	},
 	mounted () {
-		this.echartInit();
+
+		this.initEchart();
+		this.getHomeData();
+		for(let i = 0; i < 144; i += 1) {
+			this.fakeDate.push(this.randomData());
+		}
+		//this.renderEchart(this.fakeDate);
+		this.getAlarmst();
+	
 	},
 	methods: {
-		changeDate (value) {
+		randomData() {
 			
+			this.now = new Date(this.now.getTime() + this.temMinute);
+			this.fakeValue = this.fakeValue + Math.random() * 21 -10;
+			
+			return {
+				name: this.now.toString(),
+				value: [
+					this.now.Format('yyyy/MM/dd hh:mm'),
+					Math.round(this.fakeValue)
+				]
+			}
 		},
-		echartInit () {
-			const alertChart = echarts.init(document.getElementById('echart-area'));
-			alertChart.setOption({
+
+		getHomeData () {
+			this.$http.post(PREFIX + 'homepage/index', {
+				token: this.token
+			}).then(res => {
+				const json = res.data;
+				if (json.code === 200) {
+					this.homeData = json.result;
+				} else {
+					this.$message.error(json.msg);
+				}
+			})
+		},
+
+		changeDate (value) {
+			this.getAlarmst(value);
+		},
+
+		getAlarmst(range) {
+			const handleData =  x => {
+				const curDate = new Date(x.statistics_time);
+				return {
+					name: curDate.toString(),
+					value: [
+						curDate.Format('yyyy/MM/dd hh:mm'),
+						x.count
+					]
+				}
+			}
+			let params = {
+				token: this.token
+			};
+			if (range) {
+				const ranges = range.split(' ~ ');
+				params =  {
+					start_time: ranges[0],
+					end_time: ranges[1]
+				}
+			}
+			
+			this.$http.post(PREFIX + 'homepage/alarmst', params).then(res => {
+				const json = res.data;
+				//TODO just for test
+				/*const sortedData = json.data.sort((a, b) => {
+					const aDate = new Date(a.statistics_time);
+					const bDate = new Date(b.statistics_time);
+					if (aDate > bDate) {
+						return 1;
+					} else if (aDate < bDate) {
+						return -1;
+					} else {
+						return 0;
+					}
+				})
+				const data = sortedData.map(handleData);*/
+				if (json.code === 200) {
+					const data = json.result.map(handleData);
+					this.renderEchart(data);
+				} else {
+					this.$message.error(json.msg);
+				}
+				
+			})
+		},
+		initEchart () {
+			this.alertChart = echarts.init(document.getElementById('echart-area'));
+		},
+		renderEchart (data) {
+			this.alertChart.setOption({
+				tooltip: {
+			        trigger: 'axis',
+			        formatter: function (params) {
+			            params = params[0];
+			            var date = new Date(params.name);
+			            return `${date.Format('yyyy/MM/dd hh:mm')} ${params.value[1]}`;
+			        },
+			        axisPointer: {
+			            animation: false
+			        }
+			    },
 				xAxis: {
-					data: ["09-10", "09-11", "09-12", "09-13", "09-14", "09-15", "09-16", "09-17", "09-18", "09-19", "09-20"]
+			        type: 'time',
+			        splitLine: {
+			            show: false
+			        }
+			    },
+				yAxis: {
+					name: "报警次数",
+					type: 'value',
+			        boundaryGap: [0, '100%'],
+			        splitLine: {
+			            show: true
+			        }
 				},
-				yAxis: {},
 				series: [
 					{
 						name: '次数',
 						type: 'line',
-						data: [23, 23, 34, 32, 56, 23, 32, 42, 22, 33, 24]
+						data: data
 					}
 				]
 			})
 		}
-	}
+	},
+	computed: {
+        ...mapGetters({
+        	token: namespace.TOKEN,
+            user: namespace.USER
+        })
+    }
 }
 </script>
 <style lang="less">
