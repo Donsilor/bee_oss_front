@@ -75,11 +75,11 @@ export default {
 				}).then(res => {
 					const json = res.data;
 					if (json.code === 200) {
-						const list = json.data;
+						const list = json.result;
 						if (list.length) {
 							state.router = list.map(x => {
 								return {
-									label: `${x.title}-${x.version}`,
+									label: x.title,
 									value: x.version
 								}
 							})
@@ -101,12 +101,12 @@ export default {
 				}).then(res => {
 					const json = res.data;
 					if (json.code === 200) {
-						const list = json.data;
+						const list = json.result;
 						if (list.length) {
 							state.subset = list.map(x => {
 								return {
-									label: `${x.title}-${x.version}`,
-									value: `${x.product_id}-${x.version}`
+									label: x.title,
+									value: `${x.version}-${x.product_id}`
 								}
 							})
 						} else {

@@ -7,7 +7,7 @@
 						<label>选择设备</label>
 					</el-col>
 					<el-col :span="6">
-						<el-select v-model="filterForm.type" placeholder="设备" @change="filterTypeChange">
+						<el-select v-model="filterForm.tab" placeholder="设备" @change="filterTypeChange">
 							<el-option
 						      v-for="item in filterTypeOptions"
 						      :key="item.value"
@@ -16,7 +16,7 @@
 						    </el-option>
 						</el-select>
 					</el-col>
-					<el-col :span="6" v-show="filterForm.type === 1">
+					<el-col :span="6" v-show="filterForm.tab === 1">
 						<el-select v-model="filterForm.system" placeholder="操作系统">
 							<el-option
 						      v-for="item in systemOptions"
@@ -26,7 +26,7 @@
 						    </el-option>
 						</el-select>
 					</el-col>
-					<el-col :span="6" v-show="filterForm.type === 3">
+					<el-col :span="6" v-show="filterForm.tab === 3">
 						<el-select v-model="filterForm.brand_id" placeholder="品牌">
 							<el-option
 						      v-for="item in brandIDOptions"
@@ -36,7 +36,7 @@
 						    </el-option>
 						</el-select>
 					</el-col>
-					<el-col :span="6" v-show="filterForm.type === 3">
+					<el-col :span="6" v-show="filterForm.tab === 3">
 						<el-select v-model="importForm.type_id" placeholder="类型">
 							<el-option
 						      v-for="item in typeIDOptions"
@@ -68,10 +68,10 @@
 					</el-col>
 					<el-col :span="18">
 						
-						<el-radio-group v-model="filterForm.support">
-							<el-radio :label="1" :disabled="filterForm.type === 3">APP</el-radio>
-							<el-radio :label="2" :disabled="filterForm.type === 2">路由器</el-radio>
-							<el-radio :label="3" :disabled="filterForm.type === 3">子设备</el-radio>
+						<el-radio-group v-model="filterForm.type">
+							<el-radio :label="1" :disabled="filterForm.tab === 3">APP</el-radio>
+							<el-radio :label="2" :disabled="filterForm.tab === 2">路由器</el-radio>
+							<el-radio :label="3" :disabled="filterForm.tab === 3">子设备</el-radio>
 						</el-radio-group>
 					</el-col>
 				</el-row>
@@ -89,15 +89,13 @@
 					<el-button v-popover:filterPopover >版本匹配搜索 <i class="el-icon-caret-bottom"></i></el-button>
 				</el-button-group>
 			</el-col>
-			<el-col :span="12" style="text-align: right;">
-				<el-button v-show="searchedFlag" @click="searchedFlag = false">返回</el-button>
-			</el-col>
+			
 		</el-row>
 		
 
 		<p class="btitle">版本列表</p>
 
-		<el-table :data="list" v-show="!searchedFlag" style="width: 100%">
+		<el-table :data="list" style="width: 100%">
 			<el-table-column prop="title" label="产品名称"></el-table-column>
 			<el-table-column prop="version" label="版本号"></el-table-column>
 			<el-table-column prop="s" label="提交时间" ></el-table-column>
@@ -108,15 +106,30 @@
 			<el-table-column prop="s" label="品类"></el-table-column>
 			<el-table-column label="操作" width="100">
 				<template scope="scope">
-					<el-button @click="" type="text">版本详情</el-button>
+					<el-button @click="rowChosed(scope)" type="text">版本详情</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
 		
-		
+		<el-dialog title="版本详情" :visible.sync="infoBoxFlag">
+			<el-row  class="infoBox" :gutter="20">
+				<el-col :span="6" style="text-align:right;">名称：</el-col><el-col :span="18">{{info.title}}&nbsp;</el-col>
+				<el-col :span="6" style="text-align:right;">描述：</el-col><el-col :span="18">{{info.description}}&nbsp;</el-col>
+				<el-col :span="6" style="text-align:right;">备注：</el-col><el-col :span="18">&nbsp;</el-col>
+				<el-col :span="6" style="text-align:right;">版本号：</el-col><el-col :span="18">{{info.version}}&nbsp;</el-col>
+				<el-col :span="6" style="text-align:right;">设备类型：</el-col><el-col :span="18">{{info.type|typeToString}}&nbsp;</el-col>
+				<el-col :span="6" style="text-align:right;">是否强制升级：</el-col><el-col :span="18">{{info.force|forceToString}}&nbsp;</el-col>
+				<el-col :span="6" style="text-align:right;">限制规则：</el-col><el-col :span="18">{{info.rule}}&nbsp;</el-col>
+				<el-col :span="6" style="text-align:right;">固件大小：</el-col><el-col :span="18">{{info.size}} B&nbsp;</el-col>
+				<el-col :span="6" style="text-align:right;">图片地址：</el-col><el-col :span="18">{{info.img_url_object}}&nbsp;</el-col>
+				<el-col :span="6" style="text-align:right;">下载链接：</el-col><el-col :span="18">{{info.download_url_object}}&nbsp;</el-col>
+				<el-col :span="6" style="text-align:right;">版本状态：</el-col><el-col :span="18">{{info.status|statusToString}}&nbsp;</el-col>
+				<el-col :span="6" style="text-align:right;">文件MD5值：</el-col><el-col :span="18">{{info.download_file_md5}}&nbsp;</el-col>
+			</el-row>
+		</el-dialog>
 
 		<el-dialog title="录入版本" :visible.sync="importBoxFlag">
-			<el-form :model="importForm" ref="importForm" label-width="8em">
+			<el-form :model="importForm" ref="importForm" label-width="8em" @submit.prevent="importSubmit">
 				<el-form-item label="版本类型" >
 					<el-row>
 						<el-col :span="8">
@@ -182,11 +195,12 @@
 					 <el-date-picker
 				      v-model="importForm.release_tm"
 				      type="date"
+				      format="yyyy-MM-dd" 
 				      placeholder="选择日期">
 				    </el-date-picker>
 				</el-form-item>
 				<el-form-item label="支持版本">
-					<el-select multiple v-model="importForm.routers" placeholder="路由" v-show="importForm.type !== 2">
+					<el-select style="width: 100%;" multiple v-model="importForm.routers" placeholder="路由" v-show="importForm.type !== 2">
 						<el-option
 					      v-for="item in routerOptions"
 					      :key="item.value"
@@ -194,7 +208,7 @@
 					      :value="item.value">
 					    </el-option>
 					</el-select>
-					<el-select multiple v-model="importForm.products" placeholder="子设备" v-show="importForm.type === 2">
+					<el-select style="width: 100%;" multiple v-model="importForm.products" placeholder="子设备" v-show="importForm.type === 2">
 						<el-option
 					      v-for="item in subsetOptions"
 					      :key="item.value"
@@ -202,19 +216,18 @@
 					      :value="item.value">
 					    </el-option>
 					</el-select>
-
 				</el-form-item>
 				<el-form-item label="object">
-					 <el-input type="text" v-model="importForm.object" />
+					 <el-input type="text" v-model="importForm.download_url_object" />
 				</el-form-item>
 				<el-form-item label="md5">
-					 <el-input type="text" v-model="importForm.md5" />
+					 <el-input type="text" v-model="importForm.download_file_md5" />
 				</el-form-item>
 				<el-form-item label="file_size">
 					 <el-input type="text" v-model="importForm.file_size" />
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" native-type="submit">确定</el-button>
+					<el-button type="primary" @click="importSubmit" native-type="submit">确定</el-button>
 					<el-button @click="importBoxFlag = false;">取消</el-button>
 				</el-form-item>
 			</el-form>
@@ -230,8 +243,10 @@ export default {
 	data () {
 		return {
 			list: [],
+			info: {},
 			importBoxFlag: false,
 			filterPopoverFlag: false,
+			infoBoxFlag: false,
 
 			importForm: {
 				type: 1,
@@ -240,13 +255,14 @@ export default {
 				release_tm: '',
 				routers: [],
 				products: [],
-				object: '',
-				md5: '',
+				download_url_object: '',
+				download_file_md5: '',
 				file_size: '',
 				brand_id: '',
 				type_id: '',
 				product_id: '',
 			},
+
 			filterTypeOptions: [
 				{
 					value: 2,
@@ -257,6 +273,7 @@ export default {
 					label: '子设备'
 				}
 			],
+
 			typeOptions: [
 				{
 					value: 1,
@@ -271,6 +288,7 @@ export default {
 					label: '子设备'
 				}
 			],
+
 			systemOptions: [
 				{
 					value: 'IOS',
@@ -282,16 +300,7 @@ export default {
 				}
 			],
 
-			routerOptions: [
-				{
-					value: '1',
-					label: '选项一'
-				},
-				{
-					value: '2',
-					label: '选项二'
-				}
-			],
+			routerOptions: [],
 
 			subsetOptions: [],
 
@@ -302,17 +311,39 @@ export default {
 			productIDOptions: [],
 			
 			filterForm: {
-				type: 2,
+				tab: 2,
 				system: '',
 				brand_id: '',
 				type_id: '',
-				support: ''
+				product_id: '',
+				type: ''
 			},
 
-			versionOptions: [ ]
+			versionOptions: []
 
 		}
 	},
+
+	filters: {
+		typeToString (x) {
+			if (x*1 === 1) {
+				return 'APP';
+			} else if (x*1 === 2) {
+				return '路由器';
+			} else if (x*1 === 3) {
+				return '子设备';
+			} else {
+				return '未知';
+			}
+		},
+		forceToString (x) {
+			return x ? '是': '否'; 
+		},
+		statusToString (x) {
+			return x ? '启用': '停用';
+		}
+	},
+
 	watch: {
 		'importForm.brand_id' (curVal, oldVal) {
 			this.importForm.type_id = '';
@@ -347,6 +378,10 @@ export default {
 						}
 					});
 				}
+
+				if (!this.versionOptions.length) {
+					this.versionOptions = this.router;
+				}
 			}
 		},
 
@@ -380,16 +415,19 @@ export default {
 		this.getVersionList(1);
 	},
 	methods: {
-		rowChosed (row, event) {
-			console.log(row);
+		rowChosed (scope) {
+			this.infoBoxFlag = true;
+			this.info = scope.row;
 		},
 
 		filterTypeChange () {
-			if (this.filterForm.type === 3) {
-				this.filterForm.support = 2;
+			if (this.filterForm.tab === 3) {
+				this.filterForm.type = 2;
 			} else {
-				this.filterForm.support = '';
+				this.filterForm.type = '';
 			}
+			
+			
 		},
 
 		importBoxShow() {
@@ -409,6 +447,54 @@ export default {
 			if (!this.subsetOptions.length) {
 				this.subsetOptions = this.subset;
 			}
+		},
+		importSubmit () {
+			let params = Object.assign({
+				token: this.token
+			}, this.importForm);
+			params.release_tm = params.release_tm.Format('yyyy-MM-dd hh:mm:ss');
+			if (params.type === 1) {
+				delete params.products;
+				delete params.brand_id;
+				delete params.type_id;
+				delete params.product_id;
+			} else if (params.type === 2) {
+				delete params.routers;
+				delete params.brand_id;
+				delete params.type_id;
+				delete params.product_id;
+				delete params.system;
+				if (this.importForm.products.length) {
+					params.products = this.importForm.products.map(x => {
+						const values = x.split('-');
+						return {
+							version: values[0],
+							product_id: values[1]
+						}
+					})
+				} else {
+					params.products = [];
+				}
+				
+			} else if (params.type === 3) {
+				delete params.system;
+				delete params.products;
+			}
+			this.$http.post(PREFIX + 'version/input', params).then(x => {
+				const json = x.data;
+				if (json.code === 200) {
+					this.$message.success('录入成功');
+					this.importBoxFlag = false;
+					this.getVersionList(1);
+				} else {
+					this.$message.error(json.msg);
+				}
+			})
+
+		},
+
+		queryVersionList() {
+
 		},
 
 		getVersionList(page) {
@@ -448,6 +534,12 @@ export default {
 	}
 	.cpf-line{
 		margin-bottom: 20px;
+	}
+}
+.infoBox{
+	font-size: 1rem;
+	>div{
+		margin-bottom: 18px;
 	}
 }
 </style>
