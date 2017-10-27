@@ -9,7 +9,7 @@
 					<el-col :span="6">
 						<el-select v-model="filterForm.type" placeholder="设备" @change="filterTypeChange">
 							<el-option
-						      v-for="item in typeOptions"
+						      v-for="item in filterTypeOptions"
 						      :key="item.value"
 						      :label="item.label"
 						      :value="item.value">
@@ -67,11 +67,12 @@
 						<label>查询支持设备</label>
 					</el-col>
 					<el-col :span="18">
-						<el-checkbox-group v-model="filterForm.support">
-							<el-checkbox label="路由器" :disabled="filterForm.type ===2 ? true : false"></el-checkbox>
-							<el-checkbox label="APP" :disabled="(filterForm.type === 1 || filterForm.type === 3) ? true: false"></el-checkbox>
-							<el-checkbox label="子设备" :disabled="(filterForm.type === 1 || filterForm.type === 3) ? true: false"></el-checkbox>
-						</el-checkbox-group>
+						
+						<el-radio-group v-model="filterForm.support">
+							<el-radio :label="1" :disabled="filterForm.type === 3">APP</el-radio>
+							<el-radio :label="2" :disabled="filterForm.type === 2">路由器</el-radio>
+							<el-radio :label="3" :disabled="filterForm.type === 3">子设备</el-radio>
+						</el-radio-group>
 					</el-col>
 				</el-row>
 				<el-row type="flex" justify="end">
@@ -107,25 +108,12 @@
 			<el-table-column prop="s" label="品类"></el-table-column>
 			<el-table-column label="操作" width="100">
 				<template scope="scope">
-					<el-button @click="console.log(scope.row)" type="text">版本详情</el-button>
+					<el-button @click="" type="text">版本详情</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
 		
-		<!--<div class="cp-searchResult" v-show="searchedFlag">
-			<p class="btitle">支持的APP版本</p>
-			<el-row class="cpsr-line" :gutter="20">
-				<el-col :span="2" v-for="item in supportVersionList">
-					<span>{{item}}</span>
-				</el-col>
-			</el-row>
-			<p class="btitle">支持的子设备版本</p>
-			<el-row  class="cpsr-line" :gutter="20">
-				<el-col :span="4" v-for="item in suprrortChildList">
-					<span>{{item}}</span>
-				</el-col>
-			</el-row>
-		</div>-->
+		
 
 		<el-dialog title="录入版本" :visible.sync="importBoxFlag">
 			<el-form :model="importForm" ref="importForm" label-width="8em">
@@ -242,11 +230,8 @@ export default {
 	data () {
 		return {
 			list: [],
-			supportVersionList: ["V1.0", "V1.1", "V1.2"],
-			suprrortChildList: ["空调V1.0", "可视门铃V1.0", "电灯V1.1", "智能开关V1.1"],
 			importBoxFlag: false,
 			filterPopoverFlag: false,
-			searchedFlag: false,
 
 			importForm: {
 				type: 1,
@@ -262,6 +247,16 @@ export default {
 				type_id: '',
 				product_id: '',
 			},
+			filterTypeOptions: [
+				{
+					value: 2,
+					label: '路由器'
+				},
+				{
+					value: 3,
+					label: '子设备'
+				}
+			],
 			typeOptions: [
 				{
 					value: 1,
@@ -298,16 +293,7 @@ export default {
 				}
 			],
 
-			subsetOptions: [
-				{
-					value: '1',
-					label: '选项一'
-				},
-				{
-					value: '2',
-					label: '选项二'
-				}
-			],
+			subsetOptions: [],
 
 			brandIDOptions: [],
 
@@ -315,21 +301,15 @@ export default {
 
 			productIDOptions: [],
 			
-			
 			filterForm: {
-				type: 1,
+				type: 2,
 				system: '',
 				brand_id: '',
 				type_id: '',
-				support: ['路由器']
+				support: ''
 			},
 
-			versionOptions: [
-				{
-					value: '1',
-					label: '选项一'
-				}
-			]
+			versionOptions: [ ]
 
 		}
 	},
@@ -344,6 +324,7 @@ export default {
 				}
 			});
 		},
+
 		'importForm.type_id' (curVal, oldVal) {
 			this.importForm.product_id = '';
 			const brandKey = this.importForm.brand_id*1;
@@ -354,27 +335,66 @@ export default {
 					value: x.product_id
 				}
 			})
+		},
+
+		'filterPopoverFlag' (curVal, oldVal) {
+			if (curVal) {
+				if (!this.brandIDOptions.length) {
+					this.brandIDOptions = this.brand.map(x => {
+						return {
+							label: x.brand_name,
+							value: x.brand_id
+						}
+					});
+				}
+			}
+		},
+
+		'filterForm.brand_id' (curVal, oldVal) {
+			this.filterForm.type_id = '';
+			this.typeIDOptions = this.type.filter(x => x.brand_ids.indexOf(curVal*1) >= 0).map(x => {
+				return {
+					label: x.type_name,
+					value: x.type_id
+				}
+			});
 		}
 	},
 	mounted () {
 
-		/*this.$store.dispatch({
+		this.$store.dispatch({
 			type: namespace.INITSUBSET,
 			token: this.token
-		});*/
+		});
+
+		this.$store.dispatch({
+			type: namespace.INITROUTER,
+			token: this.token
+		});
 
 		this.$store.dispatch({
 			type: namespace.INITPRODUCT,
 			token: this.token
 		});
+
 		this.getVersionList(1);
 	},
 	methods: {
 		rowChosed (row, event) {
 			console.log(row);
 		},
+
+		filterTypeChange () {
+			if (this.filterForm.type === 3) {
+				this.filterForm.support = 2;
+			} else {
+				this.filterForm.support = '';
+			}
+		},
+
 		importBoxShow() {
 			this.importBoxFlag = true;
+			this.filterPopoverFlag = false;
 			if (!this.brandIDOptions.length) {
 				this.brandIDOptions = this.brand.map(x => {
 					return {
@@ -383,27 +403,11 @@ export default {
 					}
 				});
 			}
-			
-
-			/*this.typeIDOptions = this.type.map(x => {
-				return {
-					label: x.type_name,
-					value: x.type_id
-				}
-			});
-
-			this.productIDOptions = this.product.map(x => {
-				return {
-					label: x.product_id,
-					value: x.product_id
-				}
-			});*/
-		},
-		filterTypeChange() {
-			if (this.filterForm.type === 1 || this.filterForm.type === 3) {
-				this.filterForm.support = ['路由器'];
-			} else {
-				this.filterForm.support = [];
+			if (!this.routerOptions.length) {
+				this.routerOptions = this.router;
+			}
+			if (!this.subsetOptions.length) {
+				this.subsetOptions = this.subset;
 			}
 		},
 
@@ -426,6 +430,8 @@ export default {
 			brand: namespace.BRAND,
 			type: namespace.TYPE,
 			product: namespace.PRODUCT,
+			router: namespace.ROUTER,
+			subset: namespace.SUBSET,
             token: namespace.TOKEN
         })
 	}

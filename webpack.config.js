@@ -64,12 +64,12 @@ module.exports = (options = {}) => ({
     host: '127.0.0.1',
     port: 8010,
     proxy: {
-      '/api/*': {
+      '/api/index.php/*': {
         target: 'http://beeossdev.egtest.cn:7777',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''
-        }
+        changeOrigin: true
+          /*pathRewrite: {
+            '^/api': ''
+          }*/
       }
     },
     historyApiFallback: {

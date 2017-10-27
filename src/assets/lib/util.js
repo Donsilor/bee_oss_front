@@ -58,9 +58,5 @@ export const formatUrl = url => {
 
 export const PREFIX = (function() {
     const host = window.location.href;
-    if (host.indexOf('localhost') !== -1) {
-        return '/api/';
-    } else {
-        return '';
-    }
+    return '/api/index.php/'
 })();
