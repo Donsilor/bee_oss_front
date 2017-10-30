@@ -6,7 +6,7 @@
                     <h1>BeeOSS系统 - 登录</h1>
                 </header>
                 <article>
-                    <el-form :model="loginForm" ref="loginForm" :rules="rules">
+                    <el-form :model="loginForm" ref="loginForm" @submit.prevent.native="login" :rules="rules">
                         <ol class="login-form">
                             <li>
                                 <el-form-item prop="username" required>
@@ -20,7 +20,7 @@
                             </li>
                             <li>
                                 <el-form-item>
-                                    <el-button @click="login" :disabled="loginForm.name === '' || loginForm.password === ''" type="primary" size="large">登录</el-button>
+                                    <el-button native-type="submit" :disabled="loginForm.name === '' || loginForm.password === ''" type="primary" size="large">登录</el-button>
                                  </el-form-item>
                             </li>
                         </ol>
