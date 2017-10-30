@@ -41,136 +41,177 @@ export default {
 	},
 
 	mutations: {
-		[namespace.INITAPP](state, payload) {
-			if (!state.app.length) {
-				axios.post(PREFIX + 'version/typelist', {
-					token: payload.token,
-					type: 1
-				}).then(res => {
-					const json = res.data;
-					if (json.code === 200) {
-						const list = json.data;
-						if (list.length) {
-							state.app = list.map(x => {
-								return {
-									label: `${x.title}-${x.version}`,
-									value: x.version
-								}
-							})
-						} else {
-							state.app = [];
-						}
+		[namespace.GETAPP](state, payload) {
+			axios.post(PREFIX + 'version/typelist', {
+				token: payload.token,
+				type: 1
+			}).then(res => {
+				const json = res.data;
+				if (json.code === 200) {
+					const list = json.data;
+					if (list.length) {
+						state.app = list.map(x => {
+							return {
+								label: `${x.title}-${x.version}`,
+								value: x.version
+							}
+						})
 					} else {
-
+						state.app = [];
 					}
-				})
-			}
+				} else {
+
+				}
+			});
 		},
 
-		[namespace.INITROUTER](state, payload) {
-			if (!state.app.length) {
-				axios.post(PREFIX + 'version/typelist', {
-					token: payload.token,
-					type: 2
-				}).then(res => {
-					const json = res.data;
-					if (json.code === 200) {
-						const list = json.result;
-						if (list.length) {
-							state.router = list.map(x => {
-								return {
-									label: x.title,
-									value: x.version
-								}
-							})
-						} else {
-							state.router = [];
-						}
+		[namespace.GETROUTER](state, payload) {
+			axios.post(PREFIX + 'version/typelist', {
+				token: payload.token,
+				type: 2
+			}).then(res => {
+				const json = res.data;
+				if (json.code === 200) {
+					const list = json.result;
+					if (list.length) {
+						state.router = list.map(x => {
+							return {
+								label: x.title,
+								value: x.version
+							}
+						})
 					} else {
-
+						state.router = [];
 					}
-				})
-			}
+				} else {
+
+				}
+			});
 		},
 
-		[namespace.INITSUBSET](state, payload) {
-			if (!state.app.length) {
-				axios.post(PREFIX + 'version/typelist', {
-					token: payload.token,
-					type: 3
-				}).then(res => {
-					const json = res.data;
-					if (json.code === 200) {
-						const list = json.result;
-						if (list.length) {
-							state.subset = list.map(x => {
-								return {
-									label: x.title,
-									value: `${x.version}-${x.product_id}`
-								}
-							})
-						} else {
-							state.subset = [];
-						}
+		[namespace.GETSUBSET](state, payload) {
+			axios.post(PREFIX + 'version/typelist', {
+				token: payload.token,
+				type: 3
+			}).then(res => {
+				const json = res.data;
+				if (json.code === 200) {
+					const list = json.result;
+					if (list.length) {
+						state.subset = list.map(x => {
+							return {
+								label: x.title,
+								value: `${x.version}-${x.product_id}`
+							}
+						})
 					} else {
-
+						state.subset = [];
 					}
-				});
-			}
+				} else {
+
+				}
+			});
 		},
 
-		[namespace.INITPRODUCT](state, payload) {
-			if (!state.app.length) {
-				axios.post(PREFIX + 'version/product', {
-					token: payload.token,
-				}).then(res => {
-					const json = res.data;
-					if (json.code === 200) {
-						state.product = json.result;
-					} else {
-						state.product = {};
-					}
-
-				})
-			}
+		[namespace.GETPRODUCT](state, payload) {
+			axios.post(PREFIX + 'version/product', {
+				token: payload.token,
+			}).then(res => {
+				const json = res.data;
+				if (json.code === 200) {
+					state.product = json.result;
+				} else {
+					state.product = {};
+				}
+			});
 		}
 	},
 
 	actions: {
-		[namespace.INITAPP]({
+		[namespace.GETAPP]({
 			commit
 		}, payload) {
 			commit({
-				type: namespace.INITAPP,
+				type: namespace.GETAPP,
 				token: payload.token
-			})
+			});
+		},
+
+		[namespace.INITAPP]({
+			commit,
+			state
+		}, payload) {
+			if (!state.app.length) {
+				commit({
+					type: namespace.GETAPP,
+					token: payload
+				});
+			}
+		},
+
+		[namespace.GETROUTER]({
+			commit
+		}, payload) {
+			commit({
+				type: namespace.GETROUTER,
+				token: payload.token
+			});
 		},
 
 		[namespace.INITROUTER]({
+			commit,
+			state
+		}, payload) {
+			if (!state.router.length) {
+				commit({
+					type: namespace.GETROUTER,
+					token: payload.token
+				});
+			}
+		},
+
+		[namespace.GETSUBSET]({
 			commit
 		}, payload) {
 			commit({
-				type: namespace.INITROUTER,
+				type: namespace.GETSUBSET,
 				token: payload.token
-			})
+			});
 		},
 
 		[namespace.INITSUBSET]({
+			commit,
+			state
+		}, payload) {
+			if (!state.subset.length) {
+				commit({
+					type: namespace.GETSUBSET,
+					token: payload.token
+				});
+			}
+
+		},
+
+		[namespace.GETPRODUCT]({
 			commit
 		}, payload) {
 			commit({
-				type: namespace.INITSUBSET,
+				type: namespace.GETPRODUCT,
 				token: payload.token
-			})
+			});
 		},
 
 		[namespace.INITPRODUCT]({
-			commit
+			commit,
+			state
 		}, payload) {
-			commit({
-				type: namespace.INITPRODUCT,
-				token: payload.token
-			})
+			if (!state.product.length) {
+				commit({
+					type: namespace.GETPRODUCT,
+					token: payload.token
+				});
+			}
+
 		}
 	}
 }

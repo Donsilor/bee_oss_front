@@ -445,10 +445,7 @@ export default {
 						}
 					});
 				}
-
-				if (!this.versionOptions.length) {
-					this.versionOptions = this.router;
-				}
+				this.versionOptions = this.router;
 			}
 		},
 
@@ -514,12 +511,10 @@ export default {
 					}
 				});
 			}
-			if (!this.routerOptions.length) {
-				this.routerOptions = this.router;
-			}
-			if (!this.subsetOptions.length) {
-				this.subsetOptions = this.subset;
-			}
+			
+			this.routerOptions = this.router;
+			this.subsetOptions = this.subset;
+			
 		},
 		importSubmit () {
 			let params = Object.assign({
@@ -557,7 +552,32 @@ export default {
 				const json = x.data;
 				if (json.code === 200) {
 					this.$message.success('录入成功');
+					if (this.importForm.type === 2) {
+						this.$store.dispatch({
+							type: namespace.GETROUTER,
+							token: this.token
+						});
+					} else if(this.importForm.type === 3) {
+						this.$store.dispatch({
+							type: namespace.GETSUBSET,
+							token: this.token
+						});
+					}
 					this.importBoxFlag = false;
+					this.importForm = {
+						type: 1,
+						system: '',
+						version: '',
+						release_tm: '',
+						routers: [],
+						products: [],
+						download_url_object: '',
+						download_file_md5: '',
+						file_size: '',
+						brand_id: '',
+						type_id: '',
+						product_id: '',
+					};
 					this.getVersionList(1);
 				} else {
 					this.$message.error(json.msg);
