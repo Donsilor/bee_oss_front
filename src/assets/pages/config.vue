@@ -7,7 +7,7 @@
 						<label>选择设备</label>
 					</el-col>
 					<el-col :span="6">
-						<el-select v-model="filterForm.tab" placeholder="设备" @change="filterTypeChange">
+						<el-select v-model="filterForm.tab" placeholder="设备" @change="filterTypeChange" clearable @clear="filterClearAll">
 							<el-option
 						      v-for="item in filterTypeOptions"
 						      :key="item.value"
@@ -26,7 +26,12 @@
 						    </el-option>
 						</el-select>
 					</el-col>
-					<el-col :span="6" v-show="filterForm.tab === 3">
+				</el-row>
+				<el-row class="cpf-line" :gutter="20" v-show="filterForm.tab === 3">
+					<el-col :span="6" style="text-align:right;">
+						<label>选择product_id</label>
+					</el-col>
+					<el-col :span="6" >
 						<el-select v-model="filterForm.brand_id" placeholder="品牌">
 							<el-option
 						      v-for="item in brandIDOptions"
@@ -36,8 +41,8 @@
 						    </el-option>
 						</el-select>
 					</el-col>
-					<el-col :span="6" v-show="filterForm.tab === 3">
-						<el-select v-model="importForm.type_id" placeholder="类型">
+					<el-col :span="6">
+						<el-select v-model="filterForm.type_id" placeholder="类型">
 							<el-option
 						      v-for="item in typeIDOptions"
 						      :key="item.value"
@@ -46,13 +51,24 @@
 						    </el-option>
 						</el-select>
 					</el-col>
+					<el-col :span="6">
+						<el-select v-model="filterForm.product_id" placeholder="产品">
+							<el-option
+						      v-for="item in productIDOptions"
+						      :key="item.value"
+						      :label="item.label"
+						      :value="item.value">
+						    </el-option>
+						</el-select>
+					</el-col>
 				</el-row>
-				<el-row class="cpf-line" :gutter="20">
+
+				<el-row class="cpf-line" :gutter="20" v-show="filterForm.tab === 3 || filterForm.tab === 2">
 					<el-col :span="6" style="text-align:right;">
 						<label>选择版本</label>
 					</el-col>
 					<el-col :span="18">
-						<el-select v-model="filterForm.version" placeholder="全部">
+						<el-select v-model="filterForm.version" placeholder="全部" clearable>
 							<el-option
 						      v-for="item in versionOptions"
 						      :key="item.value"
@@ -62,7 +78,7 @@
 						</el-select>
 					</el-col>
 				</el-row>
-				<el-row class="cpf-line" :gutter="20">
+				<el-row class="cpf-line" :gutter="20" v-show="filterForm.tab === 3 || filterForm.tab === 2">
 					<el-col :span="6" style="text-align:right;">
 						<label>查询支持设备</label>
 					</el-col>
@@ -77,7 +93,7 @@
 				</el-row>
 				<el-row type="flex" justify="end">
 					<el-col :span="4">
-						<el-button @click="filterPopoverFlag = false" type="primary">查询</el-button>
+						<el-button @click="composeParams" type="primary">查询</el-button>
 					</el-col>
 				</el-row>
 			</div>
@@ -110,6 +126,11 @@
 				</template>
 			</el-table-column>
 		</el-table>
+		<div class="page-line">
+			<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="5" :current-page.sync="currentPage"></el-pagination>
+		</div>
+
+
 		
 		<el-dialog title="版本详情" :visible.sync="infoBoxFlag">
 			<el-row  class="infoBox" :gutter="20">
@@ -247,6 +268,8 @@ export default {
 			importBoxFlag: false,
 			filterPopoverFlag: false,
 			infoBoxFlag: false,
+			totalItem: 20,
+			currentPage: 1,
 
 			importForm: {
 				type: 1,
@@ -311,12 +334,18 @@ export default {
 			productIDOptions: [],
 			
 			filterForm: {
-				tab: 2,
+				tab: '',
 				system: '',
 				brand_id: '',
 				type_id: '',
 				product_id: '',
+				version: '',
 				type: ''
+			},
+
+			filterParams: {
+				token: '',
+				page: 1,
 			},
 
 			versionOptions: []
@@ -368,6 +397,44 @@ export default {
 			})
 		},
 
+		'filterForm.brand_id' (curVal, oldVal) {
+			this.filterForm.type_id = '';
+			this.filterForm.product_id = '';
+			this.filterForm.version = '';
+			this.typeIDOptions = this.type.filter(x => x.brand_ids.indexOf(curVal*1) >= 0).map(x => {
+				return {
+					label: x.type_name,
+					value: x.type_id
+				}
+			});
+		},
+
+		'filterForm.type_id' (curVal, oldVal) {
+			console.log('done');
+			this.filterForm.product_id = '';
+			this.filterForm.version = '';
+			const brandKey = this.filterForm.brand_id*1;
+			const typeKey = curVal*1;
+			this.productIDOptions = this.product.filter(x => x.brand_id === brandKey && x.type_id === typeKey).map(x => {
+				return {
+					label: x.product_id,
+					value: x.product_id
+				}
+			})
+		},
+
+		'filterForm.product_id' (curVal, oldVal) {
+			this.filterForm.version = '';
+			const productKey = curVal.split('-')[1];
+			this.versionOptions = this.subset.filter(x => x.product_id === productKey).map(x => {
+				const product_id = x.value.split('-')[1];
+				return {
+					label: x.label,
+					value: product_id
+				}
+			})
+		},
+
 		'filterPopoverFlag' (curVal, oldVal) {
 			if (curVal) {
 				if (!this.brandIDOptions.length) {
@@ -415,6 +482,11 @@ export default {
 		this.getVersionList(1);
 	},
 	methods: {
+		filterClearAll () {
+			for (let name in this.filterForm) {
+				this.filterForm[name] = '';
+			}
+		},
 		rowChosed (scope) {
 			this.infoBoxFlag = true;
 			this.info = scope.row;
@@ -423,11 +495,12 @@ export default {
 		filterTypeChange () {
 			if (this.filterForm.tab === 3) {
 				this.filterForm.type = 2;
+				this.filterForm.version = '';
 			} else {
 				this.filterForm.type = '';
+				this.filterForm.version = '';
+				this.versionOptions = this.router;
 			}
-			
-			
 		},
 
 		importBoxShow() {
@@ -497,18 +570,38 @@ export default {
 
 		},
 
+		pageChange () {
+			this.getVersionList(this.currentPage);
+		},
+
 		getVersionList(page) {
-			this.$http.post(PREFIX + 'version/list', {
-				token: this.token,
-				page: page
-			}).then(res => {
+			this.filterParams.token = this.token;
+			this.filterParams.page = page;
+			this.$http.post(PREFIX + 'version/list', this.filterParams).then(res => {
 				const json = res.data;
 				if (json.code === 200) {
 					this.list = json.result.list;
+					this.totalItem = json.result.total;
+					this.currentPage = json.result.current_page;
 				} else {
 					this.$message.error(json.msg);
 				}
 			})
+		},
+
+		composeParams () {
+			this.filterPopoverFlag = false;
+			this.filterParams = {};
+			if (this.filterForm.type) {
+				this.filterParams.type = this.filterForm.type;
+			}
+			if (this.filterForm.version) {
+				this.filterParams.version = this.filterForm.version;
+			}
+			if (this.filterForm.tab === 3 && this.filterForm.product_id) {
+				this.filterParams.product_id = this.filterForm.product_id;
+			}
+			this.getVersionList(1);
 		}
 	},
 	computed: {
