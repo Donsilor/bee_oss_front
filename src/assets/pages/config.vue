@@ -114,9 +114,9 @@
 		<el-table :data="list" style="width: 100%">
 			<el-table-column prop="title" label="产品名称"></el-table-column>
 			<el-table-column prop="version" label="版本号"></el-table-column>
-			<el-table-column prop="created_at" label="提交时间" ></el-table-column>
-			<el-table-column prop="release_time" label="发布时间"></el-table-column>
-			<el-table-column prop="download_file_md5" label="url" width="320"></el-table-column>
+			<el-table-column prop="created_at" label="提交时间" width="175"></el-table-column>
+			<el-table-column prop="release_time" label="发布时间" width="175"></el-table-column>
+			<el-table-column prop="download_file_md5" label="download_file_md5" width="320"></el-table-column>
 			<el-table-column prop="s" label="设备厂商"></el-table-column>
 			<el-table-column prop="s" label="型号"></el-table-column>
 			<el-table-column prop="s" label="品类"></el-table-column>
