@@ -114,8 +114,8 @@
 		<el-table :data="list" style="width: 100%">
 			<el-table-column prop="title" label="产品名称"></el-table-column>
 			<el-table-column prop="version" label="版本号"></el-table-column>
-			<el-table-column prop="s" label="提交时间" ></el-table-column>
-			<el-table-column prop="s" label="发布时间"></el-table-column>
+			<el-table-column prop="created_at" label="提交时间" ></el-table-column>
+			<el-table-column prop="release_time" label="发布时间"></el-table-column>
 			<el-table-column prop="download_file_md5" label="url" width="320"></el-table-column>
 			<el-table-column prop="s" label="设备厂商"></el-table-column>
 			<el-table-column prop="s" label="型号"></el-table-column>
@@ -127,7 +127,7 @@
 			</el-table-column>
 		</el-table>
 		<div class="page-line">
-			<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="5" :current-page.sync="currentPage"></el-pagination>
+			<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="20" :current-page.sync="currentPage"></el-pagination>
 		</div>
 
 
@@ -586,9 +586,6 @@ export default {
 
 		},
 
-		queryVersionList() {
-
-		},
 
 		pageChange () {
 			this.getVersionList(this.currentPage);
@@ -624,6 +621,7 @@ export default {
 			this.getVersionList(1);
 		}
 	},
+
 	computed: {
 		...mapGetters({
 			brand: namespace.BRAND,
