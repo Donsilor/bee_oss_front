@@ -1,0 +1,18 @@
+{
+  "code":0,
+  "data":{
+    "tableColumn":[
+      {"prop": "id", "label": "ID"},
+      {"prop": "date", "label": "申请日期"},
+      {"prop": "name", "label": "申请人"},
+      {"prop": "title", "label": "标题"},
+      {"prop": "status", "label": "状态"},
+      {"prop": "type", "label": "类型"}
+    ],
+    "tableData":[
+      {"id":"1","date":"2017-05-03","name":"王小虎","title":"德州接入乐视等联调","status":"密钥分配","type":"联调操作"},
+      {"id":"2","date":"2017-05-03","name":"王小虎","title":"德州接入乐视等联调","status":"密钥填写","type":"联调操作"}
+    ]
+  },
+  "msg":"success"
+}

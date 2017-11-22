@@ -6,6 +6,7 @@ import OPS from './ops.vue';
 import Facility from './facility.vue';
 import Cloud from './cloud.vue';
 import CMDB from './cmdb.vue';
+import upgrade from './upgradeCenter.vue'
 
 export {
 	Login,
@@ -15,5 +16,6 @@ export {
 	OPS,
 	Facility,
 	Cloud,
-	CMDB
+	CMDB,
+    upgrade
 };

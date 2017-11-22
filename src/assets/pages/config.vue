@@ -2,11 +2,11 @@
 	<div class="page-content config-page">
 		<el-popover ref="filterPopover" width="600" v-model="filterPopoverFlag" placement="bottom-start">
 			<div class="cp-filterFormBox">
-				<el-row class="cpf-line" :gutter="20">
-					<el-col :span="6" style="text-align:right;">
+				<el-row class="cpf-line" :gutter="24">
+					<el-col :span="4" style="text-align:right;">
 						<label>选择设备</label>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-select v-model="filterForm.tab" placeholder="设备" @change="filterTypeChange" clearable @clear="filterClearAll">
 							<el-option
 						      v-for="item in filterTypeOptions"
@@ -16,84 +16,35 @@
 						    </el-option>
 						</el-select>
 					</el-col>
-					<el-col :span="6" v-show="filterForm.tab === 1">
-						<el-select v-model="filterForm.system" placeholder="操作系统">
-							<el-option
-						      v-for="item in systemOptions"
-						      :key="item.value"
-						      :label="item.label"
-						      :value="item.value">
-						    </el-option>
-						</el-select>
-					</el-col>
-				</el-row>
-				<el-row class="cpf-line" :gutter="20" v-show="filterForm.tab === 3">
-					<el-col :span="6" style="text-align:right;">
-						<label>选择product_id</label>
-					</el-col>
-					<el-col :span="6" >
-						<el-select v-model="filterForm.brand_id" placeholder="品牌">
-							<el-option
-						      v-for="item in brandIDOptions"
-						      :key="item.value"
-						      :label="item.label"
-						      :value="item.value">
-						    </el-option>
-						</el-select>
-					</el-col>
-					<el-col :span="6">
-						<el-select v-model="filterForm.type_id" placeholder="类型">
-							<el-option
-						      v-for="item in typeIDOptions"
-						      :key="item.value"
-						      :label="item.label"
-						      :value="item.value">
-						    </el-option>
-						</el-select>
-					</el-col>
-					<el-col :span="6">
-						<el-select v-model="filterForm.product_id" placeholder="产品">
-							<el-option
-						      v-for="item in productIDOptions"
-						      :key="item.value"
-						      :label="item.label"
-						      :value="item.value">
-						    </el-option>
-						</el-select>
-					</el-col>
-				</el-row>
-
-				<el-row class="cpf-line" :gutter="20" v-show="filterForm.tab === 3 || filterForm.tab === 2">
-					<el-col :span="6" style="text-align:right;">
+					<el-col :span="4" style="text-align:right;">
 						<label>选择版本</label>
 					</el-col>
-					<el-col :span="18">
-						<el-select v-model="filterForm.version" placeholder="全部" clearable>
+					<el-col :span="8">
+						<el-select v-model="filterForm.tab" placeholder="版本" @change="filterTypeChange" clearable @clear="filterClearAll">
 							<el-option
-						      v-for="item in versionOptions"
-						      :key="item.value"
-						      :label="item.label"
-						      :value="item.value">
-						    </el-option>
+									v-for="item in filterTypeOptions"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+							</el-option>
 						</el-select>
 					</el-col>
 				</el-row>
-				<el-row class="cpf-line" :gutter="20" v-show="filterForm.tab === 3 || filterForm.tab === 2">
-					<el-col :span="6" style="text-align:right;">
+				<el-row class="cpf-line" :gutter="24">
+					<el-col :span="4" style="text-align:right;">
 						<label>查询支持设备</label>
 					</el-col>
-					<el-col :span="18">
-						
-						<el-radio-group v-model="filterForm.type">
-							<el-radio :label="1" :disabled="filterForm.tab === 3">APP</el-radio>
-							<el-radio :label="2" :disabled="filterForm.tab === 2">路由器</el-radio>
-							<el-radio :label="3" :disabled="filterForm.tab === 3">子设备</el-radio>
-						</el-radio-group>
+					<el-col :span="20" style="text-align:left;">
+						<el-checkbox-group v-model="checkList">
+							<el-checkbox label="设备一"></el-checkbox>
+							<el-checkbox label="设备二"></el-checkbox>
+							<el-checkbox label="设备三"></el-checkbox>
+						</el-checkbox-group>
 					</el-col>
 				</el-row>
-				<el-row type="flex" justify="end">
-					<el-col :span="4">
-						<el-button @click="composeParams" type="primary">查询</el-button>
+				<el-row class="cpf-line" :gutter="24">
+					<el-col :span="24" style="text-align:right; padding-top: 20px">
+						<el-button type="primary" size="">查询</el-button>
 					</el-col>
 				</el-row>
 			</div>
@@ -101,54 +52,142 @@
 		<el-row type="flex" justify="space-between">
 			<el-col :span="12">
 				<el-button-group>
-					<el-button @click="importBoxShow">录入</el-button>
+					<el-button @click="importBoxShow">录入 <i class="el-icon-caret-bottom"></i></el-button>
 					<el-button v-popover:filterPopover >版本匹配搜索 <i class="el-icon-caret-bottom"></i></el-button>
+					<el-button @click="pushBoxFlag = true">推送升级 <i class="el-icon-caret-bottom"></i></el-button>
 				</el-button-group>
 			</el-col>
-			
 		</el-row>
-		
-
 		<p class="btitle">版本列表</p>
-
-		<el-table :data="list" style="width: 100%">
-			<el-table-column prop="title" label="产品名称"></el-table-column>
-			<el-table-column prop="version" label="版本号"></el-table-column>
-			<el-table-column prop="created_at" label="提交时间" width="175"></el-table-column>
-			<el-table-column prop="release_time" label="发布时间" width="175"></el-table-column>
-			<el-table-column prop="download_file_md5" label="download_file_md5" width="320"></el-table-column>
-			<el-table-column prop="s" label="设备厂商"></el-table-column>
-			<el-table-column prop="s" label="型号"></el-table-column>
-			<el-table-column prop="s" label="品类"></el-table-column>
-			<el-table-column label="操作" width="100">
+		<el-table
+				:data="versionList.tableData"
+				style="width: 100%">
+			<el-table-column v-for="item in versionList.tableColumn" :key="item.prop"
+							 :prop="item.prop"
+							 :label="item.label"
+							 :width="'auto'"
+			>
 				<template scope="scope">
-					<el-button @click="rowChosed(scope)" type="text">版本详情</el-button>
+					<div v-if="item.prop == 'type'" >{{getTypeText(scope.row.type)}}</div>
+					<div v-else-if="item.prop == 'status'" >{{getStatusText(scope.row.status)}}</div>
+					<div v-else-if="item.prop == 'force'" >{{getForceText(scope.row.force)}}</div>
+					<div v-else>{{scope.row[item.prop]}}</div>
+				</template>
+			</el-table-column>
+			<el-table-column
+					width="180"
+					label="操作">
+				<template scope="scope">
+					<el-button  type="text" size="small" @click="infoBoxFlag=true">查看详情</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
 		<div class="page-line">
 			<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="20" :current-page.sync="currentPage"></el-pagination>
 		</div>
-
-
-		
 		<el-dialog title="版本详情" :visible.sync="infoBoxFlag">
-			<el-row  class="infoBox" :gutter="20">
-				<el-col :span="6" style="text-align:right;">名称：</el-col><el-col :span="18">{{info.title}}&nbsp;</el-col>
-				<el-col :span="6" style="text-align:right;">描述：</el-col><el-col :span="18">{{info.description}}&nbsp;</el-col>
-				<el-col :span="6" style="text-align:right;">备注：</el-col><el-col :span="18">&nbsp;</el-col>
-				<el-col :span="6" style="text-align:right;">版本号：</el-col><el-col :span="18">{{info.version}}&nbsp;</el-col>
-				<el-col :span="6" style="text-align:right;">设备类型：</el-col><el-col :span="18">{{info.type|typeToString}}&nbsp;</el-col>
-				<el-col :span="6" style="text-align:right;">是否强制升级：</el-col><el-col :span="18">{{info.force|forceToString}}&nbsp;</el-col>
-				<el-col :span="6" style="text-align:right;">限制规则：</el-col><el-col :span="18">{{info.rule}}&nbsp;</el-col>
-				<el-col :span="6" style="text-align:right;">固件大小：</el-col><el-col :span="18">{{info.size}} B&nbsp;</el-col>
-				<el-col :span="6" style="text-align:right;">图片地址：</el-col><el-col :span="18">{{info.img_url_object}}&nbsp;</el-col>
-				<el-col :span="6" style="text-align:right;">下载链接：</el-col><el-col :span="18">{{info.download_url_object}}&nbsp;</el-col>
-				<el-col :span="6" style="text-align:right;">版本状态：</el-col><el-col :span="18">{{info.status|statusToString}}&nbsp;</el-col>
-				<el-col :span="6" style="text-align:right;">文件MD5值：</el-col><el-col :span="18">{{info.download_file_md5}}&nbsp;</el-col>
-			</el-row>
+			<div class="edit_form">
+				<el-form :model="ruleFormDetail" :rules="rulesDetail" ref="ruleFormDetail" label-width="100px" >
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="版本Title" prop="title">
+								<el-input v-model="ruleFormDetail.title" placeholder=""></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="版本号" prop="version">
+								<el-input v-model="ruleFormDetail.version" placeholder=""></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="概略描述" prop="description">
+								<el-input v-model="ruleFormDetail.description" placeholder=""></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="详细事项" prop="description">
+								<el-input v-model="ruleFormDetail.description" placeholder=""></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="是否强制升级" prop="force">
+								<el-select v-model="pushForm.force" placeholder="终端">
+									<el-option label="是" value="1"></el-option>
+									<el-option label="否" value="0"></el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="版本状态" prop="status">
+								<el-select v-model="pushForm.status" placeholder="版本状态">
+									<el-option label="启用" value="1"></el-option>
+									<el-option label="停用" value="0"></el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-form-item label="限制规则" prop="description">
+						<el-input v-model="ruleFormDetail.description" placeholder=""></el-input>
+					</el-form-item>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="固件大小" prop="size">
+								<el-input v-model="ruleFormDetail.size" placeholder=""></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="下载url" prop="download_url_object">
+								<el-input v-model="ruleFormDetail.download_url_object" placeholder=""></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="图标url" prop="img_url_object">
+								<el-input v-model="ruleFormDetail.img_url_object" placeholder=""></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="发布时间" prop="release_tm">
+								<el-input v-model="ruleFormDetail.release_tm" placeholder=""></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="下载md5" prop="download_file_md5">
+								<el-input v-model="ruleFormDetail.download_file_md5" placeholder=""></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="创建时间" prop="created_at">
+								<el-input v-model="ruleFormDetail.created_at" placeholder=""></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="12">
+							<el-form-item label="更新时间" prop="updated_at">
+								<el-input v-model="ruleFormDetail.updated_at" placeholder=""></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="删除时间" prop="delete_at">
+								<el-input v-model="ruleFormDetail.delete_at" placeholder=""></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+				</el-form>
+			</div>
+			<div style="text-align: right; margin: 0">
+				<el-button type="primary" size="mini" @click="submitDetailForm('ruleFormDetail')" >保存</el-button>
+				<el-button size="mini" type="text" @click="infoBoxFlag=false">取消</el-button>
+			</div>
 		</el-dialog>
-
 		<el-dialog title="录入版本" :visible.sync="importBoxFlag">
 			<el-form :model="importForm" ref="importForm" label-width="8em" @submit.prevent="importSubmit">
 				<el-form-item label="版本类型" >
@@ -248,29 +287,79 @@
 					 <el-input type="text" v-model="importForm.file_size" />
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="importSubmit" native-type="submit">确定</el-button>
+					<el-button type="primary" @click="importSubmit">确定</el-button>
 					<el-button @click="importBoxFlag = false;">取消</el-button>
 				</el-form-item>
 			</el-form>
 		</el-dialog>
-		
+		<el-dialog title="推送升级" :visible.sync="pushBoxFlag">
+			<el-form :model="pushForm" ref="pushForm" label-width="8em">
+				<el-form-item label="设备类型" >
+					<el-row>
+						<el-col :span="7">
+							<el-select v-model="pushForm.terminal" placeholder="终端">
+								<el-option
+										v-for="item in terminalOptions"
+										:key="item.value"
+										:label="item.label"
+										:value="item.value">
+								</el-option>
+							</el-select>
+						</el-col>
+						<el-col :span="7" :offset="1">
+							<el-select v-model="pushForm.os" placeholder="操作系统">
+								<el-option
+										v-for="item in osOptions"
+										:key="item.value"
+										:label="item.label"
+										:value="item.value">
+								</el-option>
+							</el-select>
+						</el-col>
+						<el-col :span="8"  :offset="1">
+							<el-select v-model="pushForm.version" placeholder="版本号">
+								<el-option
+										v-for="item in versionOptions"
+										:key="item.value"
+										:label="item.label"
+										:value="item.value">
+								</el-option>
+							</el-select>
+						</el-col>
+					</el-row>
+				</el-form-item>
+				<el-form-item label="版本号">
+					<el-input type="text" v-model="pushForm.number" />
+				</el-form-item>
+				<el-form-item label="推送时间">
+					<el-date-picker
+							v-model="pushForm.time"
+							type="datetime"
+							placeholder="选择日期时间">
+					</el-date-picker>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" native-type="submit">确定</el-button>
+					<el-button @click="pushBoxFlag = false;">取消</el-button>
+				</el-form-item>
+			</el-form>
+		</el-dialog>
 	</div>
 </template>
 <script>
 import * as namespace from '../store/namespace';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import { PREFIX } from '../lib/util.js';
 export default {
 	data () {
 		return {
-			list: [],
+            pushBoxFlag: false,
 			info: {},
 			importBoxFlag: false,
 			filterPopoverFlag: false,
 			infoBoxFlag: false,
 			totalItem: 20,
 			currentPage: 1,
-
 			importForm: {
 				type: 1,
 				system: '',
@@ -285,7 +374,6 @@ export default {
 				type_id: '',
 				product_id: '',
 			},
-
 			filterTypeOptions: [
 				{
 					value: 2,
@@ -296,7 +384,6 @@ export default {
 					label: '子设备'
 				}
 			],
-
 			typeOptions: [
 				{
 					value: 1,
@@ -311,7 +398,6 @@ export default {
 					label: '子设备'
 				}
 			],
-
 			systemOptions: [
 				{
 					value: 'IOS',
@@ -322,37 +408,70 @@ export default {
 					label: 'Android'
 				}
 			],
-
 			routerOptions: [],
-
 			subsetOptions: [],
-
 			brandIDOptions: [],
-
 			typeIDOptions: [],
-
 			productIDOptions: [],
-			
 			filterForm: {
-				tab: '',
-				system: '',
-				brand_id: '',
-				type_id: '',
-				product_id: '',
+//				tab: '',
+//				system: '',
+//				brand_id: '',
+//				product_id: '',
+				support: '',
+                type_id: '',
 				version: '',
 				type: ''
 			},
-
 			filterParams: {
 				token: '',
 				page: 1,
 			},
-
-			versionOptions: []
-
+			versionOptions: [],
+            pushForm: {
+                terminal: '',
+                os: '',
+                version: '',
+                number: '',
+                time: '',
+            },
+            terminalOptions: [
+                {
+                    value: '1',
+                    lable: '选项一'
+                }
+            ],
+            versionOptions: [
+                {
+                    value: '1',
+                    lable: '选项一'
+                }
+            ],
+            osOptions: [
+                {
+                    value: '1',
+                    lable: '选项一'
+                }
+            ],
+            versionList: {},
+            ruleFormDetail: {
+                title: '',
+				description: '',
+				version: '',
+				type: '',
+				force: '',
+				size: '',
+				status: '',
+                download_file_md5: '',
+                download_url_object: '',
+                img_url_object: '',
+                created_at: '',
+                updated_at: '',
+                delete_at: ''
+			},
+            rulesDetail: {}
 		}
 	},
-
 	filters: {
 		typeToString (x) {
 			if (x*1 === 1) {
@@ -372,7 +491,6 @@ export default {
 			return x ? '启用': '停用';
 		}
 	},
-
 	watch: {
 		'importForm.brand_id' (curVal, oldVal) {
 			this.importForm.type_id = '';
@@ -422,7 +540,6 @@ export default {
 				}
 			})
 		},
-
 		'filterForm.product_id' (curVal, oldVal) {
 			this.filterForm.version = '';
 			const productKey = curVal.split('-')[1];
@@ -434,7 +551,6 @@ export default {
 				}
 			})
 		},
-
 		'filterPopoverFlag' (curVal, oldVal) {
 			if (curVal) {
 				if (!this.brandIDOptions.length) {
@@ -448,7 +564,6 @@ export default {
 				this.versionOptions = this.router;
 			}
 		},
-
 		'filterForm.brand_id' (curVal, oldVal) {
 			this.filterForm.type_id = '';
 			this.typeIDOptions = this.type.filter(x => x.brand_ids.indexOf(curVal*1) >= 0).map(x => {
@@ -460,22 +575,18 @@ export default {
 		}
 	},
 	mounted () {
-
 		this.$store.dispatch({
 			type: namespace.INITSUBSET,
 			token: this.token
-		});
-
+		})
 		this.$store.dispatch({
 			type: namespace.INITROUTER,
 			token: this.token
-		});
-
+		})
 		this.$store.dispatch({
 			type: namespace.INITPRODUCT,
 			token: this.token
-		});
-
+		})
 		this.getVersionList(1);
 	},
 	methods: {
@@ -488,7 +599,6 @@ export default {
 			this.infoBoxFlag = true;
 			this.info = scope.row;
 		},
-
 		filterTypeChange () {
 			if (this.filterForm.tab === 3) {
 				this.filterForm.type = 2;
@@ -499,7 +609,6 @@ export default {
 				this.versionOptions = this.router;
 			}
 		},
-
 		importBoxShow() {
 			this.importBoxFlag = true;
 			this.filterPopoverFlag = false;
@@ -511,16 +620,14 @@ export default {
 					}
 				});
 			}
-			
 			this.routerOptions = this.router;
 			this.subsetOptions = this.subset;
-			
 		},
 		importSubmit () {
 			let params = Object.assign({
 				token: this.token
 			}, this.importForm);
-			params.release_tm = params.release_tm.Format('yyyy-MM-dd hh:mm:ss');
+			params.release_tm = params.release_tm && params.release_tm.Format('yyyy-MM-dd hh:mm:ss');
 			if (params.type === 1) {
 				delete params.products;
 				delete params.brand_id;
@@ -543,7 +650,6 @@ export default {
 				} else {
 					params.products = [];
 				}
-				
 			} else if (params.type === 3) {
 				delete params.system;
 				delete params.products;
@@ -585,27 +691,18 @@ export default {
 			})
 
 		},
-
-
 		pageChange () {
-			this.getVersionList(this.currentPage);
+			this.getVersionList(this.currentPage)
 		},
-
 		getVersionList(page) {
-			this.filterParams.token = this.token;
-			this.filterParams.page = page;
-			this.$http.post(PREFIX + 'version/list', this.filterParams).then(res => {
-				const json = res.data;
-				if (json.code === 200) {
-					this.list = json.result.list;
-					this.totalItem = json.result.total;
-					this.currentPage = json.result.current_page;
-				} else {
-					this.$message.error(json.msg);
-				}
-			})
+			this.filterParams.token = this.token
+			this.filterParams.page = page
+			const obj  = this
+            obj.$store.dispatch('getVersions', obj.filterParams).then((result) => {
+                obj.versionList = result.data
+                obj.totalItem = result.data.total
+            })
 		},
-
 		composeParams () {
 			this.filterPopoverFlag = false;
 			this.filterParams = {};
@@ -619,9 +716,76 @@ export default {
 				this.filterParams.product_id = this.filterForm.product_id;
 			}
 			this.getVersionList(1);
-		}
+		},
+        getTypeText (type) {
+		    let text = ''
+		    switch(type) {
+				case 1:
+				    text = 'app'
+					break
+                case 2:
+                    text = '路由器'
+                    break
+                default:
+                    text = '子设备'
+                    break
+			}
+			return text
+		},
+        getStatusText (type) {
+            let text = ''
+            switch(type) {
+                case 1:
+                    text = '有效'
+                    break
+                case 0:
+                    text = '无效'
+                    break
+                default:
+                    break
+            }
+            return text
+        },
+        getForceText (type) {
+            let text = ''
+            switch(type) {
+                case 1:
+                    text = '强制升级'
+                    break
+                case 0:
+                    text = '不强制'
+                    break
+                default:
+                    break
+            }
+            return text
+        },
+        submitDetailForm (formName) {
+            let obj = this
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+//                    obj.$store.dispatch('', obj.ruleFormDetail).then((result) => {
+//                        if (result.data.code === 0) {
+//                            obj.editDialogVisible = false
+//                            obj.search()
+//                        }
+//                    })
+					obj.infoBoxFlag = false
+                } else {
+                    return false
+                }
+            })
+		},
+        // 重置表单
+        resetForm (formName) {
+            if (this.$refs[formName] !== undefined) {
+                this.$refs[formName].resetFields()
+            }
+        },
 	},
-
+    ...mapActions([
+        'getVersions'
+    ]),
 	computed: {
 		...mapGetters({
 			brand: namespace.BRAND,
@@ -651,6 +815,14 @@ export default {
 	font-size: 1rem;
 	>div{
 		margin-bottom: 18px;
+	}
+}
+.edit_form{
+	.el-form-item__label{
+		width: 80px;
+	}
+	.el-select{
+		width: 100%;
 	}
 }
 </style>

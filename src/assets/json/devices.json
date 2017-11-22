@@ -1,0 +1,17 @@
+{
+  "code":0,
+  "data":{
+    "tableColumn":[
+      {"prop": "id", "label": "内部ID"},
+      {"prop": "dev_name", "label": "设备名称"},
+      {"prop": "UUId", "label": "UUID"},
+      {"prop": "number", "label": "串号"},
+      {"prop": "mac_adr", "label": "MAC地址"}
+    ],
+    "tableData":[
+      {"id":"1","dev_name":"dafd234", "UUId":"2344","number":"34","mac_adr":"dsafdaf"},
+      {"id":"1","dev_name":"dafd234", "UUId":"2344","number":"34","mac_adr":"dsafdaf"}
+    ]
+  },
+  "msg":"success"
+}

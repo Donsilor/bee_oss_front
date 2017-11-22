@@ -22,7 +22,11 @@ const routes = [{
 		path: 'ops',
 		name: 'ops',
 		component: Pages.OPS
-	}, {
+	},{
+        path: 'upgrade',
+        name: 'upgrade',
+        component: Pages.upgrade
+    }, {
 		path: 'facility',
 		name: 'facility',
 		component: Pages.Facility

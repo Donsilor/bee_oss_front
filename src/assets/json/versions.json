@@ -1,0 +1,20 @@
+{
+  "code":0,
+  "data":{
+    "total": 30,
+    "current_page": 1,
+    "tableColumn":[
+      {"prop": "type", "label": "产品类型"},
+      {"prop": "title", "label": "版本Title"},
+      {"prop": "version", "label": "版本号"},
+      {"prop": "release_time", "label": "发布时间"},
+      {"prop": "status", "label": "版本状态"},
+      {"prop": "force", "label": "是否强制升级"}
+    ],
+    "tableData":[
+      {"type":1,"title":"dafd234", "version":"2344","release_time":"2017-05-08","status":0,"force":1},
+      {"type":1,"title":"dafd234", "version":"2344","release_time":"2017-05-08","status":0,"force":1}
+    ]
+  },
+  "msg":"success"
+}

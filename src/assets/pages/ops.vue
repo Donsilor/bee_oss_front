@@ -1,594 +1,376 @@
 <template>
 	<div class="page-content ops-page">
-		<el-popover ref="filterPopover" width="440" v-model="filterPopoverFlag" placement="bottom-start">
-			<div class="ops-filterFormBox">
-				<el-row class="ops-line" :gutter="20">
-					<el-col :span="5">
-						<label>推送设备</label>
-					</el-col>
-					<el-col :span="7">
-						<el-select v-model="filterForm.facility" placeholder="全部">
-							<el-option
-						      v-for="item in facilityOptions"
-						      :key="item.value"
-						      :label="item.label"
-						      :value="item.value">
-						    </el-option>
-						</el-select>
-					</el-col>
-					<el-col :span="5">
-						<label>设备厂商</label>
-					</el-col>
-					<el-col :span="7">
-						<el-select v-model="filterForm.firm" placeholder="全部">
-							<el-option
-						      v-for="item in firmOptions"
-						      :key="item.value"
-						      :label="item.label"
-						      :value="item.value">
-						    </el-option>
-						</el-select>
-					</el-col>
-				</el-row>
-				<el-row class="ops-line" :gutter="20">
-					<el-col :span="5">
-						<label>升级类型</label>
-					</el-col>
-					<el-col :span="7">
-						<el-select v-model="filterForm.type" placeholder="全部">
-							<el-option
-						      v-for="item in typeOptions"
-						      :key="item.value"
-						      :label="item.label"
-						      :value="item.value">
-						    </el-option>
-						</el-select>
-					</el-col>
-					<el-col :span="5">
-						<label>子设备</label>
-					</el-col>
-					<el-col :span="7">
-						<el-select v-model="filterForm.child" placeholder="全部">
-							<el-option
-						      v-for="item in childOptions"
-						      :key="item.value"
-						      :label="item.label"
-						      :value="item.value">
-						    </el-option>
-						</el-select>
-					</el-col>
-				</el-row>
-				<el-row type="flex" justify="end">
-					<el-col :span="4">
-						<el-button @click="filterPopoverFlag = false" type="primary">查询</el-button>
-					</el-col>
-				</el-row>
-			</div>
-		</el-popover>
-		<div v-show="!statisticsFlag">
+		<div style="padding-bottom: 30px">
 			<el-row type="flex" justify="space-between">
 				<el-col :span="18">
-					<el-button-group v-show="!searchedFlag">
-						<el-button @click="pushBoxFlag = true">推送升级</el-button>
-						<el-button @click="statisticsFlag = true">设备版本统计</el-button>
-						<el-button v-popover:filterPopover>筛选 <i class="el-icon-caret-bottom"></i></el-button>
-					</el-button-group>
 					<el-input class="searchInput" v-model="searchKey" :maxlength="11" type="text" placeholder="输入用户手机号码" />
-					<el-button @click="searchedFlag = true">查询</el-button>
+					<el-button @click="search">查询</el-button>
 				</el-col>
 				<el-col :span="6" style="text-align: right;">
 					<el-button v-show="searchedFlag" @click="searchedFlag = false">返回</el-button>
 				</el-col>
 			</el-row>
-			
-			<p v-show="!searchedFlag" class="btitle">设备升级记录</p>
-
-			<el-table :data="list" v-show="!searchedFlag" style="width: 100%" v-on:row-click="rowChoosed">
-				<el-table-column prop="facility" label="推送设备"></el-table-column>
-				<el-table-column prop="type" label="类型"></el-table-column>
-				<el-table-column prop="time" label="时间" width="200"></el-table-column>
-				<el-table-column prop="version" label="版本号"></el-table-column>
-				<el-table-column prop="batch" label="批次"></el-table-column>
-				<el-table-column prop="success" label="成功与否" :formatter="changeString"></el-table-column>
-				<el-table-column prop="rate" label="推送到达率"></el-table-column>
-			</el-table>
-		</div>
-		<div v-show="statisticsFlag">
-			<el-row>
-				<el-col :span="18">
-					<p class="btitle">设备版本分布情况统计</p>
+			<el-row class="user_msg_con">
+				<el-col :span="2">
+					<img src="../images/u2978.png">
 				</el-col>
-				<el-col :span="6" style="text-align: right;">
-					<el-button @click="statisticsFlag = false">返回</el-button>
+				<el-col :span="22">
+					<el-form label-width="100px" class="user_msg">
+						<el-row>
+							<el-col :span="7" v-for="item in user_msg">
+								<el-form-item :label="item.name">
+									<span>{{item.value}}</span>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</el-form>
 				</el-col>
 			</el-row>
-			<el-tabs v-model="activedTab" type="card" @tab-click="changeTab">
-				<el-tab-pane label="路由器" name="router">
-					<p class="statisticsHeader"><em>各版本情况</em><span>单位 个</span></p>
-					<div id="routerEchart-area" class="statisticsEchart-area"></div>
-				</el-tab-pane>
-				<el-tab-pane label="app" name="app">
-					<p class="statisticsHeader"><em>各版本情况</em><span>单位 个</span></p>
-					<div id="appEchart-area" class="statisticsEchart-area"></div>
-				</el-tab-pane>
-				<el-tab-pane label="子设备" name="child">
-					<div class="statisticsHeader">
-						<el-select v-model="statisticsFilter.category" placeholder="品类">
-							<el-option
-						      v-for="item in categoryOptions"
-						      :key="item.value"
-						      :label="item.label"
-						      :value="item.value">
-						    </el-option>
-						</el-select>
-						<el-select v-model="statisticsFilter.brand" placeholder="品牌">
-							<el-option
-						      v-for="item in brandOptions"
-						      :key="item.value"
-						      :label="item.label"
-						      :value="item.value">
-						    </el-option>
-						</el-select>
-					</div>
-					<div id="childEchart-area" class="statisticsEchart-area"></div>
-				</el-tab-pane>
-			</el-tabs>
-		</div>
-		
-		<div class="cp-searchResult" v-show="searchedFlag">
-			<p class="btitle">查询结果</p>
-			<div class="cp-personBox">
-				<div class="cppb-infoArea">
-					<div><img :src="person.image" /></div>
-					<div><h2>{{person.name}}</h2>
-						<p>{{person.sex}} {{person.birth}} {{person.mobile}}</p>
-						<p>{{person.city}} {{person.address}} {{person.unit}}</p>
-						<p>共{{facilitysTotal}}个关联设备 {{unusualfacilitysTotal}}个异常</p></div>
+			<el-row class="terminal_list p_r">
+				<h3 class="h3_pp">终端列表</h3>
+				<div class="right_button">
+					<el-button type="primary">用户行为路径</el-button>
+					<el-button type="primary">主查看云平台日志</el-button>
 				</div>
-				<el-table :data="person.facilitys" style="width: 100%">
-					<el-table-column prop="name" label="设备名称"></el-table-column>
-					<el-table-column prop="brand" label="品牌"></el-table-column>
-					<el-table-column prop="category" label="品类"></el-table-column>
-					<el-table-column prop="type" label="型号"></el-table-column>
-					<el-table-column prop="UUID" label="UUID"></el-table-column>
-					<el-table-column prop="status" label="状态"></el-table-column>
-					<el-table-column prop="guarantee" label="保修状态"></el-table-column>
-					<el-table-column  label="操作" width="180" >
+				<el-table
+						:data="terminalList.tableData"
+						style="width: 100%">
+					<el-table-column v-for="item in terminalList.tableColumn" :key="item.prop"
+									 :prop="item.prop"
+									 :label="item.label"
+									 :width="'auto'"
+					>
 						<template scope="scope">
-							<el-button @click="console.log(scope.row)" type="text">查看日志</el-button>
-							<el-button @click="console.log(scope.row)" type="text">下载日志</el-button>
+							<div>{{scope.row[item.prop]}}</div>
+						</template>
+					</el-table-column>
+					<el-table-column
+							width="180"
+							label="操作">
+						<template scope="scope">
+							<el-button  type="text" size="small" @click="logOutLayer=true">登录登出时间</el-button>
+							<el-button  type="text" size="small" @click="errLogLayer=true">错误日志</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
-			</div>
-		</div>
-
-		<el-dialog :visible.sync="rateTableFlag">
-			<div class="rateTable">
-				<div class="rateTable-header">
-					<h2>版本升级的比率情况</h2>
-					<span>统计截止2017-10-12 18:23 (单位：%)</span>
-				</div>
-				<div id="rateEchart-area" class="rateEchart-area">
-					
-				</div>
-			</div>
-		</el-dialog>
-
-		<el-dialog title="推送升级" :visible.sync="pushBoxFlag">
-			<el-form :model="pushForm" ref="pushForm" label-width="8em">
-				<el-form-item label="设备类型" >
-					<el-row>
-						<el-col :span="7">
-							<el-select v-model="pushForm.terminal" placeholder="终端">
-								<el-option
-							      v-for="item in terminalOptions"
-							      :key="item.value"
-							      :label="item.label"
-							      :value="item.value">
-							    </el-option>
-							</el-select>
+				<!--<pager v-show="false" :data="terminalList.tableData" :display-data="terminalList"></pager>-->
+			</el-row>
+			<el-row class="p_r">
+				<h3 class="h3_pp">家庭详情</h3>
+				<el-dropdown class="family_tab" @command="handleCommand">
+				    <span class="el-dropdown-link">
+					  {{allFamily.length && allFamily[0].name}}<i class="el-icon-arrow-down el-icon--right"></i>
+				    </span>
+					<el-dropdown-menu slot="dropdown">
+						<el-dropdown-item :command="item.value" v-for="item in allFamily">{{item.name}}</el-dropdown-item>
+					</el-dropdown-menu>
+				</el-dropdown>
+				<div class="detail_tab_con">
+					<el-tabs v-model="activeName" @tab-click="tabClick">
+						<el-tab-pane label="基本信息" name="first"></el-tab-pane>
+						<el-tab-pane label="成员" name="second"></el-tab-pane>
+						<el-tab-pane label="设备" name="third"></el-tab-pane>
+					</el-tabs>
+					<el-row class="user_msg_con" v-if="activeName=='first'">
+						<el-col :span="2">
+							<img src="../images/u2978.png">
 						</el-col>
-						<el-col :span="7" :offset="1">
-							<el-select v-model="pushForm.os" placeholder="操作系统">
-								<el-option
-							      v-for="item in osOptions"
-							      :key="item.value"
-							      :label="item.label"
-							      :value="item.value">
-							    </el-option>
-							</el-select>
-						</el-col>
-						<el-col :span="8"  :offset="1">
-							<el-select v-model="pushForm.version" placeholder="版本号">
-								<el-option
-							      v-for="item in versionOptions"
-							      :key="item.value"
-							      :label="item.label"
-							      :value="item.value">
-							    </el-option>
-							</el-select>
+						<el-col :span="22">
+							<el-form label-width="100px" class="user_msg">
+								<el-row>
+									<el-col :span="7" v-for="item in user_msg">
+										<el-form-item :label="item.name">
+											<span>{{item.value}}</span>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</el-form>
 						</el-col>
 					</el-row>
-				</el-form-item>
-				<el-form-item label="版本号">
-					 <el-input type="text" v-model="pushForm.number" />
-				</el-form-item>
-				<el-form-item label="推送时间">
-					 <el-date-picker
-				      v-model="pushForm.time"
-				      type="datetime"
-				      placeholder="选择日期时间">
-				    </el-date-picker>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" native-type="submit">确定</el-button>
-					<el-button @click="pushBoxFlag = false;">取消</el-button>
+					<el-row class="user_msg_con" v-if="activeName=='second'">
+						<el-table
+								:data="memberList.tableData"
+								style="width: 100%">
+							<el-table-column v-for="item in memberList.tableColumn" :key="item.prop"
+											 :prop="item.prop"
+											 :label="item.label"
+											 :width="'auto'"
+							>
+							</el-table-column>
+						</el-table>
+					</el-row>
+					<el-row class="user_msg_con" v-if="activeName=='third'">
+						<el-table
+								:data="deviceList.tableData"
+								style="width: 100%">
+							<el-table-column v-for="item in deviceList.tableColumn" :key="item.prop"
+											 :prop="item.prop"
+											 :label="item.label"
+											 :width="'auto'"
+							>
+							</el-table-column>
+						</el-table>
+					</el-row>
+				</div>
+			</el-row>
+		</div>
+		<!--错误日志-->
+		<el-dialog
+			title="错误日志"
+			:visible.sync="errLogLayer">
+			<el-form ref="errLogForm" :model="errLogForm">
+				<el-form-item label="" class="errSearchForm">
+					<el-date-picker
+							v-model="errLogForm.date"
+							type="daterange"
+							placeholder="选择日期范围"
+							:default-value="today">
+					</el-date-picker>
+					<el-select v-model="errLogForm.type">
+						<el-option label="uuid" value="uuid"></el-option>
+						<el-option label="msg_tag" value="msg_tag"></el-option>
+						<el-option label="user_id" value="user_id"></el-option>
+						<el-option label="route_id" value="route_id"></el-option>
+					</el-select>
+					<el-input v-model="errLogForm.inner" placeholder="包含"></el-input>
+					<el-input v-model="errLogForm.uid" placeholder="uuid"></el-input>
+					<el-button type="primary" @click="searchErrLog">搜 索</el-button>
 				</el-form-item>
 			</el-form>
+			<el-collapse v-model="activeNames" accordion>
+				<el-collapse-item :title="item.key" :name="index" v-for="(item, index) in errLogList">
+					<div>{{item.value}}</div>
+				</el-collapse-item>
+			</el-collapse>
+			<span slot="footer" class="dialog-footer">
+               <el-button @click="errLogLayer = false" style="border:none;">取 消</el-button>
+            </span>
 		</el-dialog>
-		
+		<!--登录登出日志-->
+		<el-dialog
+			title="登录登出日志"
+			:visible.sync="logOutLayer">
+			<div style="padding-bottom:15px">
+				<el-date-picker
+						v-model="logOutForm.date"
+						type="daterange"
+						placeholder="选择日期范围"
+						:default-value="today">
+				</el-date-picker>
+			</div>
+			<el-table
+					:data="logOutList.tableData"
+					style="width: 100%">
+				<el-table-column v-for="item in logOutList.tableColumn" :key="item.prop"
+								 :prop="item.prop"
+								 :label="item.label"
+								 :width="'auto'"
+				>
+					<template scope="scope">
+						<div>{{scope.row[item.prop]}}</div>
+					</template>
+				</el-table-column>
+			</el-table>
+			<span slot="footer" class="dialog-footer">
+               <el-button @click="logOutLayer = false" style="border:none;">取 消</el-button>
+            </span>
+		</el-dialog>
 	</div>
 </template>
 <script>
-import echarts from 'echarts/lib/echarts';
-import 'echarts/lib/chart/bar';
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/title'; 
+import { PREFIX } from '../lib/util';
+import * as namespace from '../store/namespace';
+import {mapActions} from 'vuex';
+import pager from '../components/pagination/livePagination.vue'
 export default {
 	computed: {
-		'facilitysTotal' () {
-			return this.person.facilitys.length;
-		},
-		'unusualfacilitysTotal' () {
-			return this.person.facilitys.filter(item => item.status === "unusual").length;
-		}
 	},
+    components: {
+        pager
+    },
 	data () {
 		return {
-			list: [
-				{
-					facility: '路由器',
-					type: '主动推送',
-					time: '2017-12-18 12:00:00',
-					version: '1.9.2',
-					batch: '124',
-					success: false,
-					rate: '100%'
-				}
-			],
-			person: {
-				image: '',
-				name: "张大民",
-				sex: "男",
-				birth: '1982-02-13',
-				mobile: '13800000000',
-				city: '广州',
-				address: "恒大山水郡",
-				unit: '6栋602',
-				facilitys: [
-					{
-						name: '海尔-SDF334',
-						brand: '美的',
-						category: '灯',
-						type: 'SDFSDF3245656',
-						UUID: '2412342345',
-						status: 'unusual',
-						guarantee: '在保'
-					},
-					{
-						name: '海尔-SDF334',
-						brand: '海尔',
-						category: '洗衣机',
-						type: 'SDFSDF3245656',
-						UUID: '2412342345',
-						status: 'unusual',
-						guarantee: '在保'
-					},
-					{
-						name: '海尔-SDF334',
-						brand: 'SONY',
-						category: '灯',
-						type: 'SDFSDF3245656',
-						UUID: '2412342345',
-						status: 'normal',
-						guarantee: '在保'
-					},
-					{
-						name: '海尔-SDF334',
-						brand: '格力',
-						category: '空调',
-						type: 'SDFSDF3245656',
-						UUID: '2412342345',
-						status: 'normal',
-						guarantee: '在保'
-					},
-					{
-						name: '海尔-SDF334',
-						brand: '飞利浦',
-						category: '空调',
-						type: 'SDFSDF3245656',
-						UUID: '2412342345',
-						status: 'normal',
-						guarantee: '在保'
-					},
-				]
+            logOutForm: {
+                date: ''
 			},
-			searchKey: '',
-			pushBoxFlag: false,
-			filterPopoverFlag: false,
-			searchedFlag: false,
-			rateTableFlag: false,
-			statisticsFlag: false,
-			activedTab: 'router', //router, app, child
-			pushForm: {
-				terminal: '',
-				os: '',
-				version: '',
-				number: '',
-				time: '',
+            logOutList: {},
+            logOutLayer: false,
+            activeNames: [0],
+            errLogList: [
+				{
+				    key: 'safdasfdsafd',
+					value: '大分类的发上来开发家乐福大发的卡机福利发的卡老师附近溜达房' +
+					'价大力发动机奥拉夫大家了看法懒得卡附近溜达咖啡啊'
+				},
+                {
+                    key: 'safdasfdsafd',
+                    value: '大分类的发上来开发家乐福大发的卡机福利发的卡老师附近溜达房' +
+                    '价大力发动机奥拉夫大家了看法懒得卡附近溜达咖啡啊'
+                },
+                {
+                    key: 'safdasfdsafd',
+                    value: '大分类的发上来开发家乐福大发的卡机福利发的卡老师附近溜达房' +
+                    '价大力发动机奥拉夫大家了看法懒得卡附近溜达咖啡啊'
+                }
+			],
+		    today: '2017-11-20',
+            errLogForm: {
+                inner: '',
+				uid: '',
+				type: 'uuid',
+                date: ''
 			},
-			filterForm: {
-				facility: '',
-				firm: '',
-				type: '',
-				child: ''
-			},
-			statisticsFilter: {
-				category: '',
-				brand: ''
-			},
-			categoryOptions: [
-				{
-					value: '1',
-					lable: '选项一'
-				}
+            errLogLayer: false,
+            activeName: 'first',
+            searchedFlag: true,
+            searchKey: '',
+            user_msg: [
+				{name: '昵称', value: '', prop: 'F_nick'},
+                {name: '性别', value: '', prop: 'F_gender'},
+                {name: '出生日期', value: '', prop: 'F_birthday'},
+                {name: '手机号', value: '', prop: 'F_phone_num'},
+                {name: '状态', value: '', prop: 'F_state'},
+                {name: '创建时间', value: '', prop: 'F_created_at'},
+                {name: '最近登录时间', value: '', prop: 'F_last_login_time'},
+                {name: '最近登录IP', value: '', prop: 'F_last_login_ip'},
+                {name: '最后一次访问的家庭id', value: '', prop: 'F_last_family_id'}
 			],
-			brandOptions:  [
-				{
-					value: '1',
-					lable: '选项一'
-				}
-			],
-			terminalOptions: [
-				{
-					value: '1',
-					lable: '选项一'
-				}
-			],
-			osOptions: [
-				{
-					value: '1',
-					lable: '选项一'
-				}
-			],
-			versionOptions: [
-				{
-					value: '1',
-					lable: '选项一'
-				}
-			],
-			facilityOptions: [
-				{
-					value: '1',
-					lable: '选项一'
-				}
-			],
-			firmOptions: [
-				{
-					value: '1',
-					lable: '选项一'
-				}
-			],
-			childOptions: [
-				{
-					value: '1',
-					lable: '选项一'
-				}
-			],
-			typeOptions: [
-				{
-					value: '1',
-					lable: '选项一'
-				}
-			],
-			routerEchart: null,
-			appEchart: null,
-			childEchart: null
-
+            terminalList: {},
+            memberList: {},
+			deviceList: {},
+            allFamily: [
+				{name:'家庭一', value:'1'},
+                {name:'家庭二', value:'2'},
+                {name:'家庭三', value:'3'}
+			]
 		}
 	},
 	mounted () {
-		//this.initStatisticsEchart();
+		const obj = this
+        obj.$store.dispatch('getTerminalList', {}).then((result) => {
+            obj.terminalList = result
+        })
+        obj.$store.dispatch('getMemberList', {}).then((result) => {
+            obj.memberList = result
+        })
+        obj.$store.dispatch('getDeviceList', {}).then((result) => {
+            obj.deviceList = result
+        })
+        obj.$store.dispatch('getLogOutList', {}).then((result) => {
+            obj.logOutList = result
+        })
 	},
 	watch: {
-		'statisticsFlag' (curVal, oldVal) {
-			if (curVal) {
-				this.renderStatisticsEchart(this.activedTab);
-			}
-		}
 	},
 	methods: {
-		changeString(row, columen, value) {
-			if (value) {
-				return '成功';
-			} else {
-				return '失败';
+        searchErrLog () {
+            this.$message.error('123123')
+		},
+		search () {
+		    if (!this.searchKey) {
+			  this.$message.error('请输入手机号码')
+			  return
 			}
+			let obj = this
+			obj.$store.dispatch('searchUserMsg',{phone_num: obj.searchKey}).then((result) => {
+		        obj.setUsermsg(result.info)
+			})
 		},
-		rowChoosed (row, event) {
-			this.rateTableFlag = true;
-			setTimeout(() => {
-				this.renderRateEchart();
-			}, 100);
-			
-			//console.log(row);
+        tabClick () {
+		    console.log('输出tab')
 		},
-
-		changeTab(tab, event) {
-			this.renderStatisticsEchart(tab.name);
-			
-		},
-
-		initStatisticsEchart() {
-			this.routerEchart = echarts.init(document.getElementById('routerEchart-area'));
-			this.appEchart = echarts.init(document.getElementById('appEchart-area'));
-			this.childEchart = echarts.init(document.getElementById('childEchart-area'));
-		},
-
-		renderStatisticsEchart(chartName) {
-			setTimeout(() => {
-				if (!this[`${chartName}Echart`]) {
-					this[`${chartName}Echart`] = echarts.init(document.getElementById(`${chartName}Echart-area`));
+        handleCommand(command) {
+            this.$message('click on item ' + command);
+        },
+		setUsermsg (data) {
+            this.user_msg.forEach((item) => {
+                let thisProp = item.prop
+				let thisVal = data[thisProp]
+				let text = ''
+                switch (thisProp) {
+					case 'F_state':
+                        text = thisVal === 0 ? '有效' : thisVal === 1 ? '禁用' : '删除'
+						break
+                    case 'F_gender':
+                        text = thisVal === 0 ? '未配置' : thisVal === 1 ? '男' : '删除'
+                        break
+					default:
+                        text = thisVal
+                        break
 				}
-				this[`${chartName}Echart`].setOption({
-					color: ['#3398DB'],
-					xAxis: {
-						data: ["2.0", "1.8", "1.6", "1.5", "1.3", "1.2", "1.1", "1.0"]
-					},
-					yAxis:{
-						type: 'value',
-						interval: 5000
-					},
-					series: [
-						{
-							name: 'users',
-							type: 'bar',
-							barWidth: '40%',
-							label: {
-				                normal: {
-				                    show: true,
-				                    position: 'top',
-				                    color: '#333'
-				                }
-				            },
-							data: [15087, 18344, 16444, 17789, 0, 0, 0, 20]
-						}
-					]
-				});
-			}, 500);
-			
-		},
-
-		renderRateEchart () {
-			const alertChart = echarts.init(document.getElementById('rateEchart-area'));
-			alertChart.setOption({
-				color: ['#3398DB'],
-				xAxis: {
-					data: ["推送通知", "升级成功率", "升级失败率", "取消升级率"]
-				},
-				yAxis: {
-					type: 'value',
-					interval: 20,
-					max: 100,
-					min: 0
-				},
-				series: [
-					{
-						name: '比率',
-						type: 'bar',
-						barWidth: '40%',
-						label: {
-			                normal: {
-			                    show: true,
-			                    position: 'top',
-			                    color: '#333'
-			                }
-			            },
-						data: [
-							{
-								name: '67.23%',
-								value: 67.23
-							}, 
-							{
-								name: '56.24%',
-								value: 56.24
-							},
-							{
-								name: '38.42%',
-								value: 38.42
-							},
-							{
-								name: '7.25%',
-								value: 7.25
-							}
-						]
-					}
-				]
+                item.value = text || '------'
 			})
 		}
 	},
-	components: {
-		
-	}
+    ...mapActions([
+        'getTerminalList',
+		'getMemberList',
+		'getDeviceList',
+		'getLogOutList',
+		'searchUserMsg'
+    ])
 }
 </script>
+<style lang="less" scope>
+	.p_r{
+		position: relative;
+	}
+	.family_tab{
+		position: absolute;
+		top: 34px;
+		left: 93px;
+	}
+	.user_msg_con{
+		margin-top:30px;
+		padding-top: 15px;
+	}
+	.h3_pp{
+		height: 30px;
+		line-height: 30px;
+		margin:30px 0 15px;
+	}
+</style>
 <style lang="less">
-.ops-filterFormBox{
-	padding: 20px;
-	label{
-		line-height: 36px;
-	}
-	.ops-line{
-		margin-bottom: 20px;
-	}
-}
-.cp-personBox{
-	img{
-		box-sizing: border-box;
-		width: 120px;
-		height: 120px;
-		border: 1px solid #999999;
-	}
-	.cppb-infoArea{
-		margin-bottom: 40px;
-		overflow: hidden;
-		>div{
-			float: left;
-			margin-right: 40px;
-			h2{
-				font-size: 1.125em;
-				margin-bottom: 8px;
-			}
-			p{
-				font-size: .875em;
-				color: #999;
-				margin-bottom: 8px;
+	.errSearchForm{
+		.el-input{
+			width: 100px;
+		}
+		.el-select{
+			.el-input{
+				width: 150px;
 			}
 		}
-	}
-}
-.rateTable{
-	.rateTable-header{
-		h2{
-			font-size: 1.125em;
-			display: inline;
-			margin-right: 20px;
-		}
-		span{
-			font-size: .875em;
-			color: #999999;
+		.el-date-editor{
+			width: 200px;
 		}
 	}
-	.rateEchart-area{
-		width: 100%;
-		height: 300px;
+	.right_button{
+		position: absolute;
+		right: 0px;
+		top: 15px;
 	}
-}
-.statisticsEchart-area{
-	height: 400px;
-	width: 100%;
-}
-.statisticsHeader{
-	margin: 20px  0 30px;
-	em{
-		font-style: normal;
-		font-size: .875em;
-		margin-right: 20px;
+	.user_msg{
+		.el-form-item{
+			width:100%;
+			margin-bottom:2px;
+		}
+		.el-form-item__label{color: #999}
 	}
-	span{
-		color: #999999;
-		font-size: .875em;
+	.ops-page{
+		.el-dropdown-link{
+			color: #20a0ff;
+		}
 	}
-}
+	.detail_tab_con{
+		padding: 15px;
+		border:1px solid #dfe6ec;
+		.el-tabs__header{
+			border-bottom-color: #eee;
+		}
+		.el-tabs__nav{
+			.el-tabs__active-bar{
+				height: 2px !important;
+			}
+		}
+	}
 </style>
