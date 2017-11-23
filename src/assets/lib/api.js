@@ -5,7 +5,8 @@ export const OPS_API = {
     getMemberList: API_ROOT + '../src/assets/json/members.json',  // 成员列表
     getDeviceList: API_ROOT + '../src/assets/json/devices.json',  // 设备列表
     getLogOutList: API_ROOT + '../src/assets/json/logOut.json',  // 登录日志
-    searchUserMsg: API_MASTER + 'iotuser/index'  //
+    searchUserMsg: API_MASTER + 'iotuser/index',  //查询用户所有信息
+    searchLogOut: API_MASTER + 'iotuser/history'  //获取用户登录登出日志
 }
 export const UPGRADE_API = {
     getVersions: API_ROOT + '../src/assets/json/versions.json'  // 版本列表

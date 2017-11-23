@@ -15,42 +15,25 @@ const actions = {
             })
         })
     },
-    getTerminalList({commit, state}, params) {
+    searchLogOut({commit, state}, params) {
         return new Promise((resolve, reject) => {
-            axios.get(OPS_API.getTerminalList, {params: params}).then((response) => {
-                resolve(response.data.data)
-            }).catch((error) => {
-                console.log(error)
-            })
-        })
-    },
-    getMemberList({commit, state}, params) {
-        return new Promise((resolve, reject) => {
-            axios.get(OPS_API.getMemberList, {params: params}).then((response) => {
-                resolve(response.data.data)
-            }).catch((error) => {
-                console.log(error)
-            })
-        })
-    },
-    getDeviceList({commit, state}, params) {
-        return new Promise((resolve, reject) => {
-            axios.get(OPS_API.getDeviceList, {params: params}).then((response) => {
-                resolve(response.data.data)
-            }).catch((error) => {
-                console.log(error)
-            })
-        })
-    },
-    getLogOutList({commit, state}, params) {
-        return new Promise((resolve, reject) => {
-            axios.get(OPS_API.getLogOutList, {params: params}).then((response) => {
-                resolve(response.data.data)
+            axios.post(OPS_API.searchLogOut, params).then((response) => {
+                resolve(response.data.result)
             }).catch((error) => {
                 console.log(error)
             })
         })
     }
+    // getTerminalList({commit, state}, params) {
+    //     return new Promise((resolve, reject) => {
+    //         axios.get(OPS_API.getTerminalList, {params: params}).then((response) => {
+    //             resolve(response.data.data)
+    //         }).catch((error) => {
+    //             console.log(error)
+    //         })
+    //     })
+    // },
+
 }
 export default {
     actions

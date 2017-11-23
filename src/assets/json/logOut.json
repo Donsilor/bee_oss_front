@@ -1,15 +1,9 @@
 {
-  "code":0,
-  "data":{
-    "tableColumn":[
-      {"prop": "id", "label": "序号"},
-      {"prop": "loginTime", "label": "登录时间"},
-      {"prop": "logoutTime", "label": "登出时间"},
-      {"prop": "times", "label": "时长"}
-    ],
-    "tableData":[
-      {"id":"1","loginTime":"2017-05-03", "logoutTime":"2017-05-03","times":"34"}
-    ]
-  },
-  "msg":"success"
+  "tableColumn":[
+    {"prop": "uuid", "label": "序号"},
+    {"prop": "login_time", "label": "登录时间"},
+    {"prop": "created_time", "label": "登出时间"},
+    {"prop": "duration", "label": "时长"}
+  ],
+  "tableData":[]
 }

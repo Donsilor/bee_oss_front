@@ -1,0 +1,14 @@
+{
+  "tableColumn":[
+    {"prop": "id", "label": "内部ID"},
+    {"prop": "dev_name", "label": "设备名称"},
+    {"prop": "UUId", "label": "UUID"},
+    {"prop": "number", "label": "串号"},
+    {"prop": "mac_adr", "label": "MAC地址"},
+    {"prop": "dev_name", "label": "设备情况"},
+    {"prop": "UUId", "label": "设备属性"},
+    {"prop": "number", "label": "创建时间"},
+    {"prop": "mac_adr", "label": "更新时间"}
+  ],
+  "tableData":[]
+}

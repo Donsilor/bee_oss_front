@@ -1,5 +1,6 @@
 import axios from 'axios'
 import NProgress from 'nprogress'
+import '../../../node_modules/nprogress/nprogress.css'
 import { Message } from 'element-ui'
 
 const info = localStorage.getItem('localData') &&
@@ -7,7 +8,7 @@ const info = localStorage.getItem('localData') &&
     JSON.parse(localStorage.getItem('localData')).user.info || {}
 
 const CODE = {
-  SUCCEE: 0,
+  SUCCEE: 200,
   NO_LOGIN: -14
 }
 
@@ -57,13 +58,12 @@ axios.interceptors.response.use(function (response) {
         })
       }
     } else if (response.config.method === 'post' || response.config.method === 'put' || response.config.method === 'delete') {
-      Message({
-        message: response.data.msg,
-        type: 'success'
-      })
+      // Message({
+      //   message: response.data.msg,
+      //   type: 'success'
+      // })
     }
   }
-
   NProgress.done()
   return response
 }, function (error) {

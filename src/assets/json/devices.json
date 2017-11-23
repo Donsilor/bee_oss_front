@@ -1,17 +1,15 @@
 {
-  "code":0,
-  "data":{
-    "tableColumn":[
-      {"prop": "id", "label": "内部ID"},
-      {"prop": "dev_name", "label": "设备名称"},
-      {"prop": "UUId", "label": "UUID"},
-      {"prop": "number", "label": "串号"},
-      {"prop": "mac_adr", "label": "MAC地址"}
-    ],
-    "tableData":[
-      {"id":"1","dev_name":"dafd234", "UUId":"2344","number":"34","mac_adr":"dsafdaf"},
-      {"id":"1","dev_name":"dafd234", "UUId":"2344","number":"34","mac_adr":"dsafdaf"}
-    ]
-  },
-  "msg":"success"
+  "tableColumn":[
+    {"prop": "F_room_id", "label": "房间ID"},
+    {"prop": "F_room_name", "label": "房间名称"},
+    {"prop": "F_device_id", "label": "子设备uuid"},
+    {"prop": "F_device_name", "label": "子设备名称"},
+    {"prop": "F_category_id", "label": "产品id"},
+    {"prop": "F_business_id", "label": "厂家企业内部ID"},
+    {"prop": "F_device_state", "label": "设备状态"},
+    {"prop": "F_device_params", "label": "子设备属性"},
+    {"prop": "F_created_at", "label": "创建时间"},
+    {"prop": "F_updated_at", "label": "更新时间"}
+  ],
+  "tableData":[]
 }

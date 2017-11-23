@@ -1,16 +1,10 @@
 {
-  "code":0,
-  "data":{
-    "tableColumn":[
-      {"prop": "id", "label": "内部ID"},
-      {"prop": "name", "label": "昵称"},
-      {"prop": "roleId", "label": "角色ID"},
-      {"prop": "times", "label": "创建时间截"}
-    ],
-    "tableData":[
-      {"id":"1","name":"sdfdsf", "times":"2017-05-03","roleId":"34"},
-      {"id":"1","name":"sdfdsf", "times":"2017-05-03","roleId":"34"}
-    ]
-  },
-  "msg":"success"
+  "tableColumn":[
+    {"prop": "F_uid", "label": "内部ID"},
+    {"prop": "F_nickname", "label": "昵称"},
+    {"prop": "F_role_id", "label": "角色ID"},
+    {"prop": "F_created_at", "label": "创建时间"},
+    {"prop": "F_updated_at", "label": "更新时间"}
+  ],
+  "tableData":[]
 }

@@ -30,12 +30,12 @@ export default {
 					className: 'config',
 					url: '/main/config'
 				},
-                {
-                    title: '推送',
-                    id: 'upgrade',
-                    className: 'upgrade',
-                    url: '/main/upgrade'
-                },
+//                {
+//                    title: '推送',
+//                    id: 'upgrade',
+//                    className: 'upgrade',
+//                    url: '/main/upgrade'
+//                },
 				{
 					title: '设备OPS',
 					id: 'ops',
