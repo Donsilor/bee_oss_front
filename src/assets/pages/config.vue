@@ -35,7 +35,7 @@
 						<label>查询支持设备</label>
 					</el-col>
 					<el-col :span="20" style="text-align:left;">
-						<el-checkbox-group v-model="checkList">
+						<el-checkbox-group v-model="suportDevice">
 							<el-checkbox label="设备一"></el-checkbox>
 							<el-checkbox label="设备二"></el-checkbox>
 							<el-checkbox label="设备三"></el-checkbox>
@@ -59,6 +59,31 @@
 			</el-col>
 		</el-row>
 		<p class="btitle">版本列表</p>
+		<el-table
+				:data="versionsFirst.tableData"
+				style="width: 100%">
+			<el-table-column v-for="item in versionsFirst.tableColumn" :key="item.prop"
+							 :prop="item.prop"
+							 :label="item.label"
+							 :width="'auto'"
+			>
+				<template scope="scope">
+					<div v-if="item.prop == 'type'" >{{getTypeText(scope.row.type)}}</div>
+					<div v-else-if="item.prop == 'status'" >{{getStatusText(scope.row.status)}}</div>
+					<div v-else-if="item.prop == 'force'" >{{getForceText(scope.row.force)}}</div>
+					<div v-else>{{scope.row[item.prop]}}</div>
+				</template>
+			</el-table-column>
+			<el-table-column
+					width="180"
+					label="操作">
+				<template scope="scope">
+					<el-button  type="text" size="small" @click="infoBoxFlag=true">查看详情</el-button>
+				</template>
+			</el-table-column>
+		</el-table>
+		<!--子设备列表-->
+		<h3 class="h3_pp">子设备列表</h3>
 		<el-table
 				:data="versionList.tableData"
 				style="width: 100%">
@@ -85,6 +110,7 @@
 		<div class="page-line">
 			<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="20" :current-page.sync="currentPage"></el-pagination>
 		</div>
+		<!--版本详情-->
 		<el-dialog title="版本详情" :visible.sync="infoBoxFlag">
 			<div class="edit_form">
 				<el-form :model="ruleFormDetail" :rules="rulesDetail" ref="ruleFormDetail" label-width="100px" >
@@ -188,8 +214,12 @@
 				<el-button size="mini" type="text" @click="infoBoxFlag=false">取消</el-button>
 			</div>
 		</el-dialog>
+		<!--版本录入-->
 		<el-dialog title="录入版本" :visible.sync="importBoxFlag">
 			<el-form :model="importForm" ref="importForm" label-width="8em" @submit.prevent="importSubmit">
+				<el-form-item label="版本title">
+					<el-input type="text" v-model="importForm.title" />
+				</el-form-item>
 				<el-form-item label="版本类型" >
 					<el-row>
 						<el-col :span="8">
@@ -251,6 +281,12 @@
 				<el-form-item label="版本号">
 					 <el-input type="text" v-model="importForm.version" />
 				</el-form-item>
+				<el-form-item label="概要描述">
+					<el-input type="text" v-model="importForm.description" />
+				</el-form-item>
+				<el-form-item label="详细事项">
+					<el-input type="text" v-model="importForm.note" />
+				</el-form-item>
 				<el-form-item label="发布时间">
 					 <el-date-picker
 				      v-model="importForm.release_tm"
@@ -277,8 +313,17 @@
 					    </el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="object">
-					 <el-input type="text" v-model="importForm.download_url_object" />
+				<el-form-item label="上传固件包">
+					 <!--<el-input type="text" v-model="importForm.download_url_object" />-->
+					<el-upload
+							class="upload-demo"
+							action="http://iot-dev-upgrade-center.egtest.cn:7777/oss_file_upload"
+							:on-preview="handlePreview"
+							:limit="1"
+							:on-remove="handleRemove"
+							:file-list="fileList">
+						<el-button size="small" type="primary">点击上传</el-button>
+					</el-upload>
 				</el-form-item>
 				<el-form-item label="md5">
 					 <el-input type="text" v-model="importForm.download_file_md5" />
@@ -286,12 +331,19 @@
 				<el-form-item label="file_size">
 					 <el-input type="text" v-model="importForm.file_size" />
 				</el-form-item>
+				<el-form-item label="是否强制升级">
+					<el-select style="width: 100%;" v-model="importForm.force" placeholder="请选择">
+						<el-option label="否" :value="0"></el-option>
+						<el-option label="是" :value="1"></el-option>
+					</el-select>
+				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="importSubmit">确定</el-button>
 					<el-button @click="importBoxFlag = false;">取消</el-button>
 				</el-form-item>
 			</el-form>
 		</el-dialog>
+		<!--推送升级-->
 		<el-dialog title="推送升级" :visible.sync="pushBoxFlag">
 			<el-form :model="pushForm" ref="pushForm" label-width="8em">
 				<el-form-item label="设备类型" >
@@ -350,6 +402,8 @@
 import * as namespace from '../store/namespace';
 import { mapGetters, mapActions } from 'vuex';
 import { PREFIX } from '../lib/util.js';
+import version_first_json from '../json/versions.json'
+import versions_children_json from '../json/versionsChildren.json'
 export default {
 	data () {
 		return {
@@ -360,8 +414,10 @@ export default {
 			infoBoxFlag: false,
 			totalItem: 20,
 			currentPage: 1,
+            fileList: [],
 			importForm: {
 				type: 1,
+				title: '',
 				system: '',
 				version: '',
 				release_tm: '',
@@ -370,9 +426,12 @@ export default {
 				download_url_object: '',
 				download_file_md5: '',
 				file_size: '',
+				force: '',
 				brand_id: '',
 				type_id: '',
 				product_id: '',
+                description: '',
+                note: ''
 			},
 			filterTypeOptions: [
 				{
@@ -424,8 +483,8 @@ export default {
 				type: ''
 			},
 			filterParams: {
-				token: '',
-				page: 1,
+				// token: '',
+				page: 1
 			},
 			versionOptions: [],
             pushForm: {
@@ -453,6 +512,7 @@ export default {
                     lable: '选项一'
                 }
             ],
+			versionsFirst: {},
             versionList: {},
             ruleFormDetail: {
                 title: '',
@@ -469,7 +529,8 @@ export default {
                 updated_at: '',
                 delete_at: ''
 			},
-            rulesDetail: {}
+            rulesDetail: {},
+            suportDevice: []
 		}
 	},
 	filters: {
@@ -502,7 +563,6 @@ export default {
 				}
 			});
 		},
-
 		'importForm.type_id' (curVal, oldVal) {
 			this.importForm.product_id = '';
 			const brandKey = this.importForm.brand_id*1;
@@ -514,7 +574,6 @@ export default {
 				}
 			})
 		},
-
 		'filterForm.brand_id' (curVal, oldVal) {
 			this.filterForm.type_id = '';
 			this.filterForm.product_id = '';
@@ -526,7 +585,6 @@ export default {
 				}
 			});
 		},
-
 		'filterForm.type_id' (curVal, oldVal) {
 			console.log('done');
 			this.filterForm.product_id = '';
@@ -575,18 +633,18 @@ export default {
 		}
 	},
 	mounted () {
-		this.$store.dispatch({
-			type: namespace.INITSUBSET,
-			token: this.token
-		})
-		this.$store.dispatch({
-			type: namespace.INITROUTER,
-			token: this.token
-		})
-		this.$store.dispatch({
-			type: namespace.INITPRODUCT,
-			token: this.token
-		})
+//		this.$store.dispatch({
+//			type: namespace.INITSUBSET
+//			// token: this.token
+//		})
+//		this.$store.dispatch({
+//			type: namespace.INITROUTER
+//			// token: this.token
+//		})
+//		this.$store.dispatch({
+//			type: namespace.INITPRODUCT
+//			// token: this.token
+//		})
 		this.getVersionList(1);
 	},
 	methods: {
@@ -625,7 +683,7 @@ export default {
 		},
 		importSubmit () {
 			let params = Object.assign({
-				token: this.token
+				// token: this.token
 			}, this.importForm);
 			params.release_tm = params.release_tm && params.release_tm.Format('yyyy-MM-dd hh:mm:ss');
 			if (params.type === 1) {
@@ -660,13 +718,13 @@ export default {
 					this.$message.success('录入成功');
 					if (this.importForm.type === 2) {
 						this.$store.dispatch({
-							type: namespace.GETROUTER,
-							token: this.token
+							type: namespace.GETROUTER
+							// token: this.token
 						});
 					} else if(this.importForm.type === 3) {
 						this.$store.dispatch({
-							type: namespace.GETSUBSET,
-							token: this.token
+							type: namespace.GETSUBSET
+							// token: this.token
 						});
 					}
 					this.importBoxFlag = false;
@@ -695,13 +753,27 @@ export default {
 			this.getVersionList(this.currentPage)
 		},
 		getVersionList(page) {
-			this.filterParams.token = this.token
+			// this.filterParams.token = this.token
 			this.filterParams.page = page
 			const obj  = this
             obj.$store.dispatch('getVersions', obj.filterParams).then((result) => {
-                obj.versionList = result.data
-                obj.totalItem = result.data.total
+			    let currentData = result.result
+			    if(!(obj.versionsFirst.tableData && obj.versionsFirst.tableData.length)) {
+                    obj.setFirstVersionList(currentData)
+				}
+                versions_children_json.tableData = currentData.device_version.data.items
+				obj.versionList = versions_children_json
+                obj.totalItem = currentData.device_version.data.page.total
             })
+		},
+        setFirstVersionList (dataObj) {
+            version_first_json.tableData = []
+		    for (let attr in dataObj) {
+		        if(attr !== 'device_version') {
+                    version_first_json.tableData.push(dataObj[attr])
+				}
+			}
+		    this.versionsFirst = version_first_json
 		},
 		composeParams () {
 			this.filterPopoverFlag = false;
@@ -726,8 +798,14 @@ export default {
                 case 2:
                     text = '路由器'
                     break
-                default:
+                case 3:
                     text = '子设备'
+                    break
+                case 4:
+                    text = 'IOS APP'
+                    break
+                default:
+                    text = 'H5'
                     break
 			}
 			return text
@@ -782,6 +860,12 @@ export default {
                 this.$refs[formName].resetFields()
             }
         },
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+        },
+        handlePreview(file) {
+            console.log(file);
+        }
 	},
     ...mapActions([
         'getVersions'
@@ -792,13 +876,18 @@ export default {
 			type: namespace.TYPE,
 			product: namespace.PRODUCT,
 			router: namespace.ROUTER,
-			subset: namespace.SUBSET,
-            token: namespace.TOKEN
+			subset: namespace.SUBSET
+            // token: namespace.TOKEN
         })
 	}
 }
 </script>
 <style lang="less">
+.h3_pp{
+	height: 30px;
+	line-height: 30px;
+	margin:30px 0 15px;
+}
 .cpsr-line{
 	margin-bottom: 80px;
 }

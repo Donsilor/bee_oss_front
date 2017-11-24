@@ -8,7 +8,7 @@ import {UPGRADE_API} from "~/assets/lib/api";
 const actions = {
     getVersions({commit, state}, params) {
         return new Promise((resolve, reject) => {
-            axios.get(UPGRADE_API.getVersions, {params: params}).then((response) => {
+            axios.post(UPGRADE_API.getVersions, params).then((response) => {
                 resolve(response.data)
             }).catch((error) => {
                 console.log(error)

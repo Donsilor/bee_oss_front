@@ -9,5 +9,5 @@ export const OPS_API = {
     searchLogOut: API_MASTER + 'iotuser/history'  //获取用户登录登出日志
 }
 export const UPGRADE_API = {
-    getVersions: API_ROOT + '../src/assets/json/versions.json'  // 版本列表
+    getVersions: API_MASTER + 'version/list'  // 版本列表
 }

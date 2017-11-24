@@ -49,10 +49,10 @@ export default {
 					url: '/main/facility'
 				},
 				{
-					title: '云端OPS',
-					id: 'cloud',
+					title: '经分数据',
+					id: 'throughData',
 					className: 'cloud',
-					url: '/main/cloud'
+					url: '/main/throughData'
 				},
 				{
 					title: 'CMDB',

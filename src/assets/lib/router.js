@@ -35,6 +35,10 @@ const routes = [{
 		name: 'cloud',
 		component: Pages.Cloud
 	}, {
+        path: 'throughData',
+        name: 'throughData',
+        component: Pages.ThroughData
+    }, {
 		path: 'cmdb',
 		name: 'cmdb',
 		component: Pages.CMDB

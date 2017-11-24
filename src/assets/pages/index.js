@@ -5,6 +5,7 @@ import Config from './config.vue';
 import OPS from './ops.vue';
 import Facility from './facility.vue';
 import Cloud from './cloud.vue';
+import ThroughData from './throughData.vue';
 import CMDB from './cmdb.vue';
 import upgrade from './upgradeCenter.vue'
 
@@ -17,5 +18,6 @@ export {
 	Facility,
 	Cloud,
 	CMDB,
-    upgrade
+    upgrade,
+    ThroughData
 };
