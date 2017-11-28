@@ -92,7 +92,8 @@ export default {
 		[namespace.GETSUBSET](state, payload) {
 			axios.post(PREFIX + 'version/typelist', {
 				token: payload.token,
-				type: 3
+				type: 3,
+				product_id: payload.product_id
 			}).then(res => {
 				const json = res.data;
 				if (json.code === 200) {
@@ -186,7 +187,8 @@ export default {
 			if (!state.subset.length) {
 				commit({
 					type: namespace.GETSUBSET,
-					token: payload.token
+					token: payload.token,
+					product_id: payload.product_id
 				});
 			}
 

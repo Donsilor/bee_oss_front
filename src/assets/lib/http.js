@@ -33,7 +33,7 @@ axios.interceptors.request.use(function (config) {
     Object.keys(params).map(function (key) {
       str.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
     })
-    config.data = str.join('&')   //把参数拆成一个个字符串提交.....................................
+    config.data = str.join('&')
   }
   // Do something before request is sent
   return config
