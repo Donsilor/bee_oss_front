@@ -55,7 +55,25 @@ const actions = {
     },
     pushUpdateAction({commit, state}, params) {
         return new Promise((resolve, reject) => {
-            axios.post(UPGRADE_API.puchUpdateAction, params).then((response) => {
+            axios.post(UPGRADE_API.pushUpdateAction, params).then((response) => {
+                resolve(response.data)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
+    },
+    getPushHistoryList({commit, state}, params) {
+        return new Promise((resolve, reject) => {
+            axios.post(UPGRADE_API.getPushHistoryList, params).then((response) => {
+                resolve(response.data)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
+    },
+    getVersionDetailAction({commit, state}, params) {
+        return new Promise((resolve, reject) => {
+            axios.post(UPGRADE_API.getVersionDetailAction, params).then((response) => {
                 resolve(response.data)
             }).catch((error) => {
                 console.log(error)

@@ -12,5 +12,7 @@ export const UPGRADE_API = {
     getVersions: API_MASTER + 'version/list',  // 版本列表
     selectVersion: API_MASTER + 'version/search',  // 版本匹配搜索
     importSubmitAction: API_MASTER + 'version/input',  //版本录入
-    puchUpdateAction: API_MASTER + 'version/release'  //版本推送
+    pushUpdateAction: API_MASTER + 'version/release',  //版本推送
+    getPushHistoryList: API_MASTER + 'version/released',  //版本推送历史
+    getVersionDetailAction: API_MASTER + 'version/info'  //偶去版本详情
 }

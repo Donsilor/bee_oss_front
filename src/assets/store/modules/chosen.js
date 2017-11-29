@@ -77,7 +77,8 @@ export default {
 						state.router = list.map(x => {
 							return {
 								label: x.title,
-								value: x.version
+								value: x.version,
+								product_id: x.product_id
 							}
 						})
 					} else {

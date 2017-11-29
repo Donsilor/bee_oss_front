@@ -15,6 +15,7 @@ const CODE = {
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
   config.withCredentials = true
+  // config.headers['Content-Type'] = 'application/json'
   config.data['token'] = info.token || ''
   NProgress.start()
   if (config.method === 'post' || config.method === 'put') {
@@ -22,18 +23,14 @@ axios.interceptors.request.use(function (config) {
     var str = []
     for (var k in config.data) {
       if (typeof config.data[k] !== 'function') {
-        // 参数是对象，并且不为空
-        if (typeof config.data[k] === 'object') {
-          params[k] = JSON.stringify(config.data[k])
-        } else {
-          params[k] = config.data[k]
-        }
+         params[k] = config.data[k]
       }
     }
-    Object.keys(params).map(function (key) {
-      str.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
-    })
-    config.data = str.join('&')
+    // Object.keys(params).map(function (key) {
+    //   str.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+    // })
+    // config.data = str.join('&')
+      config.data = params
   }
   // Do something before request is sent
   return config

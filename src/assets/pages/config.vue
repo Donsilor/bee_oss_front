@@ -100,6 +100,7 @@
 				</el-row>
 			</div>
 		</el-popover>
+		<!--顶部tab-->
 		<el-row type="flex" justify="space-between">
 			<el-col :span="12">
 				<el-button-group>
@@ -109,58 +110,96 @@
 				</el-button-group>
 			</el-col>
 		</el-row>
-		<p class="btitle">版本列表</p>
-		<!--固定版本列表-->
-		<el-table
-				:data="versionsFirst.tableData"
-				style="width: 100%">
-			<el-table-column v-for="item in versionsFirst.tableColumn" :key="item.prop"
-							 :prop="item.prop"
-							 :label="item.label"
-							 :width="'auto'"
-			>
-				<template scope="scope">
-					<div v-if="item.prop == 'type'" >{{getTypeText(scope.row.type)}}</div>
-					<div v-else-if="item.prop == 'status'" >{{getStatusText(scope.row.status)}}</div>
-					<div v-else-if="item.prop == 'force'" >{{getForceText(scope.row.force)}}</div>
-					<div v-else>{{scope.row[item.prop]}}</div>
-				</template>
-			</el-table-column>
-			<el-table-column
-					width="180"
-					label="操作">
-				<template scope="scope">
-					<el-button  type="text" size="small" @click="infoBoxFlag=true">查看详情</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
-		<!--子设备列表-->
-		<el-table
-				:show-header="false"
-				:data="versionList.tableData"
-				style="width: 100%; border-top:0 none">
-			<el-table-column v-for="item in versionList.tableColumn" :key="item.prop"
-							 :prop="item.prop"
-							 :label="item.label"
-							 :width="'auto'"
-			>
-				<template scope="scope">
-					<div v-if="item.prop == 'type'" >{{getTypeText(scope.row.type)}}</div>
-					<div v-else-if="item.prop == 'status'" >{{getStatusText(scope.row.status)}}</div>
-					<div v-else-if="item.prop == 'force'" >{{getForceText(scope.row.force)}}</div>
-					<div v-else>{{scope.row[item.prop]}}</div>
-				</template>
-			</el-table-column>
-			<el-table-column
-					width="180"
-					label="操作">
-				<template scope="scope">
-					<el-button  type="text" size="small" @click="infoBoxFlag=true">查看详情</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
-		<div class="page-line">
-			<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="20" :current-page.sync="currentPage"></el-pagination>
+		<div class="p-r">
+			<el-tabs v-model="activeName" @tab-click="tabClick" style="margin:10px 0 15px">
+				<el-tab-pane label="版本列表" name="first"></el-tab-pane>
+				<el-tab-pane label="推送历史记录" name="second"></el-tab-pane>
+			</el-tabs>
+			<el-button type="text" v-if="!firstTableShow" @click="backToList" class="btn-back">返回列表</el-button>
+		</div>
+		<!--版本列表-->
+		<div v-if="activeName==='first'">
+			<!--固定版本列表-->
+			<el-table
+					v-if="firstTableShow"
+					:data="versionsFirst.tableData"
+					style="width: 100%">
+				<el-table-column v-for="item in versionsFirst.tableColumn" :key="item.prop"
+								 :prop="item.prop"
+								 :label="item.label"
+								 :width="'auto'"
+				>
+					<template scope="scope">
+						<div v-if="item.prop === 'type'" >{{getTypeText(scope.row.type)}}</div>
+						<div v-else-if="item.prop === 'status'" >{{getStatusText(scope.row.status)}}</div>
+						<div v-else-if="item.prop === 'force'" >{{getForceText(scope.row.force)}}</div>
+						<div v-else-if="item.prop === 'release_time'" >{{formatTime(scope.row['release_time'])}}</div>
+						<div v-else>{{scope.row[item.prop]}}</div>
+					</template>
+				</el-table-column>
+				<el-table-column
+						width="180"
+						label="操作">
+					<template scope="scope">
+						<el-button  type="text" size="small" @click="getVersionHistory(scope.row)">查看版本历史</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<!--子设备列表-->
+			<el-table
+					:show-header="childTableHeaderShow"
+					:data="versionList.tableData"
+					style="width: 100%; border-top:0 none">
+				<el-table-column v-for="item in versionList.tableColumn" :key="item.prop"
+								 :prop="item.prop"
+								 :label="item.label"
+								 :width="'auto'"
+				>
+					<template scope="scope">
+						<div v-if="item.prop == 'type'" >{{getTypeText(scope.row.type)}}</div>
+						<div v-else-if="item.prop == 'status'" >{{getStatusText(scope.row.status)}}</div>
+						<div v-else-if="item.prop == 'force'" >{{getForceText(scope.row.force)}}</div>
+						<div v-else-if="item.prop === 'release_time'" >{{formatTime(scope.row['release_time'])}}</div>
+						<div v-else>{{scope.row[item.prop]}}</div>
+					</template>
+				</el-table-column>
+				<el-table-column
+						width="180"
+						label="操作">
+					<template scope="scope">
+						<el-button  type="text" size="small" @click="getVersionDetail(scope.row)">查看详情</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<!--子设备翻页-->
+			<div class="page-line">
+				<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="20" :current-page.sync="currentPage"></el-pagination>
+			</div>
+		</div>
+		<!--推送历史记录-->
+		<div v-if="activeName==='second'">
+			<el-table
+					:data="pushHistoryList.tableData"
+					style="width: 100%; border-top:0 none">
+				<el-table-column v-for="item in pushHistoryList.tableColumn" :key="item.prop"
+								 :prop="item.prop"
+								 :label="item.label"
+								 :width="'auto'"
+				>
+					<template scope="scope">
+						<div v-if="item.prop == 'type'" >{{getTypeText(scope.row.type)}}</div>
+						<div v-else-if="item.prop == 'status'" >{{getStatusTextPush(scope.row.status)}}</div>
+						<div v-else>{{scope.row[item.prop]}}</div>
+					</template>
+				</el-table-column>
+				<el-table-column
+						width="180"
+						label="操作">
+					<template scope="scope">
+						<el-button  type="text" size="small" @click="infoBoxFlag=true">查看详情</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
 		</div>
 		<!--版本详情-->
 		<el-dialog title="版本详情" :visible.sync="infoBoxFlag">
@@ -169,93 +208,93 @@
 					<el-row>
 						<el-col :span="12">
 							<el-form-item label="版本Title" prop="title">
-								<el-input v-model="ruleFormDetail.title" placeholder=""></el-input>
+								<el-input :disabled="true" v-model="ruleFormDetail.title" placeholder=""></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="版本号" prop="version">
-								<el-input v-model="ruleFormDetail.version" placeholder=""></el-input>
+								<el-input :disabled="true" v-model="ruleFormDetail.version" placeholder=""></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-row>
 						<el-col :span="12">
 							<el-form-item label="概略描述" prop="description">
-								<el-input v-model="ruleFormDetail.description" placeholder=""></el-input>
+								<el-input :disabled="true" v-model="ruleFormDetail.description" placeholder=""></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="详细事项" prop="description">
-								<el-input v-model="ruleFormDetail.description" placeholder=""></el-input>
+								<el-input :disabled="true" v-model="ruleFormDetail.description" placeholder=""></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-row>
 						<el-col :span="12">
 							<el-form-item label="是否强制升级" prop="force">
-								<el-select v-model="ruleFormDetail.force" placeholder="终端">
-									<el-option label="是" value="1"></el-option>
-									<el-option label="否" value="0"></el-option>
+								<el-select :disabled="true" v-model="ruleFormDetail.force" placeholder="请选择">
+									<el-option label="是" :value="1"></el-option>
+									<el-option label="否" :value="0"></el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="版本状态" prop="status">
-								<el-select v-model="ruleFormDetail.status" placeholder="版本状态">
-									<el-option label="启用" value="1"></el-option>
-									<el-option label="停用" value="0"></el-option>
+								<el-select :disabled="true" v-model="ruleFormDetail.status" placeholder="请选择">
+									<el-option label="启用" :value="1"></el-option>
+									<el-option label="停用" :value="0"></el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-form-item label="限制规则" prop="description">
-						<el-input v-model="ruleFormDetail.description" placeholder=""></el-input>
+						<el-input :disabled="true" v-model="ruleFormDetail.description" placeholder=""></el-input>
 					</el-form-item>
 					<el-row>
 						<el-col :span="12">
 							<el-form-item label="固件大小" prop="size">
-								<el-input v-model="ruleFormDetail.size" placeholder=""></el-input>
+								<el-input :disabled="true" v-model="ruleFormDetail.size" placeholder=""></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="下载url" prop="download_url_object">
-								<el-input v-model="ruleFormDetail.download_url_object" placeholder=""></el-input>
+								<el-input :disabled="true" v-model="ruleFormDetail.download_url_object" placeholder=""></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-row>
 						<el-col :span="12">
 							<el-form-item label="图标url" prop="img_url_object">
-								<el-input v-model="ruleFormDetail.img_url_object" placeholder=""></el-input>
+								<el-input :disabled="true" v-model="ruleFormDetail.img_url_object" placeholder=""></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="发布时间" prop="release_tm">
-								<el-input v-model="ruleFormDetail.release_tm" placeholder=""></el-input>
+								<el-input :disabled="true" v-model="ruleFormDetail.release_tm" placeholder=""></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-row>
 						<el-col :span="12">
 							<el-form-item label="下载md5" prop="download_file_md5">
-								<el-input v-model="ruleFormDetail.download_file_md5" placeholder=""></el-input>
+								<el-input :disabled="true" v-model="ruleFormDetail.download_file_md5" placeholder=""></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="创建时间" prop="created_at">
-								<el-input v-model="ruleFormDetail.created_at" placeholder=""></el-input>
+								<el-input :disabled="true" v-model="ruleFormDetail.created_at" placeholder=""></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-row>
 						<el-col :span="12">
 							<el-form-item label="更新时间" prop="updated_at">
-								<el-input v-model="ruleFormDetail.updated_at" placeholder=""></el-input>
+								<el-input :disabled="true" v-model="ruleFormDetail.updated_at" placeholder=""></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="删除时间" prop="delete_at">
-								<el-input v-model="ruleFormDetail.delete_at" placeholder=""></el-input>
+								<el-input :disabled="true" v-model="ruleFormDetail.delete_at" placeholder=""></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -303,9 +342,10 @@
 <script>
 import * as namespace from '../store/namespace';
 import { mapGetters, mapActions } from 'vuex';
-import { PREFIX } from '../lib/util.js';
+import '../lib/util.js';
 import version_first_json from '../json/versions.json'
 import versions_children_json from '../json/versionsChildren.json'
+import push_history_json from '../json/pushHistory.json'
 import version_input from '../components/versionInputLayer.vue'
 import push_update from '../components/pushUpdateLayer.vue'
 export default {
@@ -315,6 +355,9 @@ export default {
 	},
 	data () {
 		return {
+            firstTableShow: true,
+            childTableHeaderShow: false,
+		    activeName: 'first',
             pushBoxFlag: false,
 			info: {},
 			importBoxFlag: false,
@@ -390,7 +433,8 @@ export default {
                 delete_at: ''
 			},
             rulesDetail: {},
-            suportDevice: []
+            suportDevice: [],
+            pushHistoryList: {}
 		}
 	},
 	filters: {
@@ -481,6 +525,42 @@ export default {
 		this.getVersionList(1);
 	},
 	methods: {
+        formatTime (val) {
+            if ((typeof val) === 'number') {
+                let date = new Date(val)
+                return date.Format('yyyy-MM-dd')
+			}else {
+                return '------'
+			}
+		},
+        getVersionDetail (dataObj) {
+            this.infoBoxFlag = true
+			let param = {
+                type: dataObj.type,
+                version: dataObj.version,
+                product_id: dataObj.product_id
+			}
+			let obj = this
+            obj.$store.dispatch('getVersionDetailAction', param).then((result) => {
+                let datas = result.result
+				let form = obj.ruleFormDetail
+				for (let attr in form) {
+                    form[attr] = datas[attr]
+				}
+            })
+		},
+        tabClick () {
+            if (this.activeName === 'second') {
+                if (!this.pushHistoryList.tableData) {
+                    this.$store.dispatch('getPushHistoryList', {}).then((result) => {
+                        let datas = result.result
+                        push_history_json.tableData = datas.items
+						this.pushHistoryList = push_history_json
+						// 翻页效果
+                    })
+				}
+			}
+		},
 		filterClearAll () {
 			for (let name in this.filterForm) {
 				this.filterForm[name] = '';
@@ -532,13 +612,18 @@ export default {
                 delete params.system
                 params.products = params.routersList
                 if (params.products.length) {
-//					params.products = params.products.map(x => {
-//						const values = x.split('-')
-//						return {
-//							version: values[0],
-//							product_id: values[1]
-//						}
-//					})
+					params.products = params.products.map(x => {
+					    let product_id = ''
+					    this.router.forEach(y => {
+					        if (y.value === x) {
+                                product_id = y.product_id
+							}
+						})
+						return {
+							version: x,
+							product_id: product_id
+						}
+					})
                 }
             } else if (params.type === 3) {
                 delete params.system;
@@ -627,11 +712,14 @@ export default {
                 obj.totalItem = currentData.device_version.data.page.total
             })
         },
+        // 获取所有版本列表
 		getVersionList(page) {
 			// this.filterParams.token = this.token
 			this.listParams.page = page
 			const obj  = this
             obj.$store.dispatch('getVersions', obj.listParams).then((result) => {
+                obj.firstTableShow = true
+                obj.childTableHeaderShow = false
 			    let currentData = result.result
 			    if(!(obj.versionsFirst.tableData && obj.versionsFirst.tableData.length)) {
                     obj.setFirstVersionList(currentData)
@@ -641,6 +729,7 @@ export default {
                 obj.totalItem = currentData.device_version.data.page.total
             })
 		},
+		// 渲染固定的四行表格
         setFirstVersionList (dataObj) {
             version_first_json.tableData = []
 		    for (let attr in dataObj) {
@@ -671,6 +760,20 @@ export default {
 			}
 			return text
 		},
+        getStatusTextPush(type) {
+            let text = ''
+            switch(type) {
+                case 1:
+                    text = '成功'
+                    break
+                case 0:
+                    text = '失败'
+                    break
+                default:
+                    break
+            }
+            return text
+        },
         getStatusText (type) {
             let text = ''
             switch(type) {
@@ -715,12 +818,39 @@ export default {
                 }
             })
 		},
+        // 历史版本
+        getVersionHistoryList(page, type) {
+            // this.filterParams.token = this.token
+            this.listParams.page = page
+			let param = {
+                page: page,
+                level: 2,
+                type: type,
+			}
+            const obj  = this
+            obj.$store.dispatch('getVersions', param).then((result) => {
+                let currentData = result.result
+				obj.firstTableShow = false
+                obj.childTableHeaderShow = true
+                versions_children_json.tableData = currentData.items
+                obj.versionList = versions_children_json
+                obj.totalItem = currentData.page.total
+            })
+        },
+        getVersionHistory (dataObj) {
+            this.getVersionHistoryList(1, dataObj.type)
+		},
+		backToList () {
+            this.getVersionList(1)
+		}
 	},
     ...mapActions([
         'getVersions',
         'selectVersion',
 		'importSubmitAction',
-		'pushUpdateAction'
+		'pushUpdateAction',
+		'getPushHistoryList',
+		'getVersionDetailAction'
     ]),
 	computed: {
 		...mapGetters({
@@ -736,35 +866,51 @@ export default {
 }
 </script>
 <style lang="less">
-.h3_pp{
-	height: 30px;
-	line-height: 30px;
-	margin:30px 0 15px;
-}
-.cpsr-line{
-	margin-bottom: 80px;
-}
-.cp-filterFormBox{
-	padding: 20px;
-	label{
-		line-height: 36px;
+	.cp-filterFormBox{
+		padding: 20px;
+		label{
+			line-height: 36px;
+		}
+		.cpf-line{
+			margin-bottom: 20px;
+		}
 	}
-	.cpf-line{
-		margin-bottom: 20px;
+.config-page{
+	.el-tabs__active-bar{
+		height: 2px;
 	}
-}
-.infoBox{
-	font-size: 1rem;
-	>div{
-		margin-bottom: 18px;
+	.h3_pp{
+		height: 30px;
+		line-height: 30px;
+		margin:30px 0 15px;
 	}
-}
-.edit_form{
-	.el-form-item__label{
-		width: 80px;
+	.cpsr-line{
+		margin-bottom: 80px;
 	}
-	.el-select{
-		width: 100%;
+	.infoBox{
+		font-size: 1rem;
+		>div{
+			margin-bottom: 18px;
+		}
+	}
+	.edit_form{
+		.el-form-item__label{
+			width: 80px;
+		}
+		.el-select{
+			width: 100%;
+		}
+	}
+	.el-input.is-disabled .el-input__inner{
+		color: #333;
+	}
+	.p-r{
+		position: relative;
+	}
+	.btn-back{
+		position: absolute;
+		right: 10px;
+		top: 10px;
 	}
 }
 </style>

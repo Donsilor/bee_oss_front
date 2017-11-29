@@ -244,6 +244,8 @@ export default {
                         break
                     case 'routersList':
                     case 'productsList':
+                    case 'routersList_tem':
+                    case 'productsList_tem':
                         form[attr] = []
                         break
                     case 'force':
