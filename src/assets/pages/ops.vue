@@ -11,117 +11,122 @@
 					<!--<el-button v-show="searchedFlag" @click="searchedFlag = false">返回</el-button>-->
 				<!--</el-col>-->
 			</el-row>
-			<!--用户信息-->
-			<el-row v-if="hasAllMsg" class="user_msg_con">
-				<el-col :span="3">
-					<div class="first-img">
-						<img src="../images/u2978.png" width="95" height="130">
+			<div v-if="!hasAllMsg" style="height: 400px; color: #999; width: 100%; text-align: center; line-height: 400px">
+				请输入手机号码查询用户信息
+			</div>
+			<div v-if="hasAllMsg">
+				<!--用户信息-->
+				<el-row class="user_msg_con">
+					<el-col :span="3">
+						<div class="first-img">
+							<img src="../images/u2978.png" width="95" height="130">
+						</div>
+					</el-col>
+					<el-col :span="21">
+						<el-form label-width="100px" class="user_msg">
+							<el-row>
+								<el-col :span="7" v-for="item in user_msg">
+									<el-form-item :label="item.name">
+										<span>{{item.value}}</span>
+									</el-form-item>
+								</el-col>
+							</el-row>
+						</el-form>
+					</el-col>
+				</el-row>
+				<!--终端列表-->
+				<el-row class="terminal_list p_r">
+					<h3 class="h3_pp">终端列表</h3>
+					<div class="right_button">
+						<!--<el-button type="primary">用户行为路径</el-button>-->
+						<el-button type="primary">主查看云平台日志</el-button>
 					</div>
-				</el-col>
-				<el-col :span="21">
-					<el-form label-width="100px" class="user_msg">
-						<el-row>
-							<el-col :span="7" v-for="item in user_msg">
-								<el-form-item :label="item.name">
-									<span>{{item.value}}</span>
-								</el-form-item>
-							</el-col>
-						</el-row>
-					</el-form>
-				</el-col>
-			</el-row>
-			<!--终端列表-->
-			<el-row v-if="hasAllMsg" class="terminal_list p_r">
-				<h3 class="h3_pp">终端列表</h3>
-				<div class="right_button">
-					<!--<el-button type="primary">用户行为路径</el-button>-->
-					<el-button type="primary">主查看云平台日志</el-button>
-				</div>
-				<el-table
-						:data="terminalList.tableData"
-						style="width: 100%">
-					<el-table-column v-for="item in terminalList.tableColumn" :key="item.prop"
-									 :prop="item.prop"
-									 :label="item.label"
-									 :width="'auto'"
-					>
-						<template scope="scope">
-							<div>{{scope.row[item.prop]}}</div>
-						</template>
-					</el-table-column>
-					<el-table-column
-							width="auto"
-							label="日志">
-						<template scope="scope">
-							<el-button  type="text" size="small" @click="openLogOutLayer(scope.row)">登录登出日志</el-button>
-							<!--<el-button  type="text" size="small" @click="errLogLayer=true">错误日志</el-button>-->
-						</template>
-					</el-table-column>
-				</el-table>
-				<!--<pager v-show="false" :data="terminalList.tableData" :display-data="terminalList"></pager>-->
-			</el-row>
-			<!--家庭详情-->
-			<el-row v-if="hasAllMsg" class="p_r">
-				<h3 class="h3_pp">家庭详情</h3>
-				<el-dropdown class="family_tab" @command="handleCommand">
+					<el-table
+							:data="terminalList.tableData"
+							style="width: 100%">
+						<el-table-column v-for="item in terminalList.tableColumn" :key="item.prop"
+										 :prop="item.prop"
+										 :label="item.label"
+										 :width="'auto'"
+						>
+							<template scope="scope">
+								<div>{{scope.row[item.prop]}}</div>
+							</template>
+						</el-table-column>
+						<el-table-column
+								width="auto"
+								label="日志">
+							<template scope="scope">
+								<el-button  type="text" size="small" @click="openLogOutLayer(scope.row)">登录登出日志</el-button>
+								<!--<el-button  type="text" size="small" @click="errLogLayer=true">错误日志</el-button>-->
+							</template>
+						</el-table-column>
+					</el-table>
+					<!--<pager v-show="false" :data="terminalList.tableData" :display-data="terminalList"></pager>-->
+				</el-row>
+				<!--家庭详情-->
+				<el-row class="p_r">
+					<h3 class="h3_pp">家庭详情</h3>
+					<el-dropdown class="family_tab" @command="handleCommand">
 				    <span class="el-dropdown-link">
 					  {{allFamily.length && allFamily[0].name}}<i class="el-icon-arrow-down el-icon--right"></i>
 				    </span>
-					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item :command="item.value" v-for="item in allFamily">{{item.name}}</el-dropdown-item>
-					</el-dropdown-menu>
-				</el-dropdown>
-				<div class="detail_tab_con">
-					<el-tabs v-model="activeName" @tab-click="tabClick">
-						<el-tab-pane label="基本信息" name="first"></el-tab-pane>
-						<el-tab-pane label="成员" name="second"></el-tab-pane>
-						<el-tab-pane label="设备" name="third"></el-tab-pane>
-					</el-tabs>
-					<!--家庭-基本信息-->
-					<el-row class="user_msg_con" v-if="activeName==='first'">
-						<el-col :span="2">
-							<img src="../images/u2978.png">
-						</el-col>
-						<el-col :span="22">
-							<el-form label-width="100px" class="user_msg">
-								<el-row>
-									<el-col :span="7" v-for="item in family_info">
-										<el-form-item :label="item.name">
-											<span>{{item.value}}</span>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</el-form>
-						</el-col>
-					</el-row>
-					<!--家庭-成员列表-->
-					<el-row class="user_msg_con" v-if="activeName==='second'">
-						<el-table
-								:data="memberList.tableData"
-								style="width: 100%">
-							<el-table-column v-for="item in memberList.tableColumn" :key="item.prop"
-											 :prop="item.prop"
-											 :label="item.label"
-											 :width="'auto'"
-							>
-							</el-table-column>
-						</el-table>
-					</el-row>
-					<!--家庭-设备列表-->
-					<el-row class="user_msg_con" v-if="activeName==='third'">
-						<el-table
-								:data="deviceList.tableData"
-								style="width: 100%">
-							<el-table-column v-for="item in deviceList.tableColumn" :key="item.prop"
-											 :prop="item.prop"
-											 :label="item.label"
-											 :width="'auto'"
-							>
-							</el-table-column>
-						</el-table>
-					</el-row>
-				</div>
-			</el-row>
+						<el-dropdown-menu slot="dropdown">
+							<el-dropdown-item :command="item.value" v-for="item in allFamily">{{item.name}}</el-dropdown-item>
+						</el-dropdown-menu>
+					</el-dropdown>
+					<div class="detail_tab_con">
+						<el-tabs v-model="activeName" @tab-click="tabClick">
+							<el-tab-pane label="基本信息" name="first"></el-tab-pane>
+							<el-tab-pane label="成员" name="second"></el-tab-pane>
+							<el-tab-pane label="设备" name="third"></el-tab-pane>
+						</el-tabs>
+						<!--家庭-基本信息-->
+						<el-row class="user_msg_con" v-if="activeName==='first'">
+							<el-col :span="2">
+								<img src="../images/u2978.png">
+							</el-col>
+							<el-col :span="22">
+								<el-form label-width="100px" class="user_msg">
+									<el-row>
+										<el-col :span="7" v-for="item in family_info">
+											<el-form-item :label="item.name">
+												<span>{{item.value}}</span>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-form>
+							</el-col>
+						</el-row>
+						<!--家庭-成员列表-->
+						<el-row class="user_msg_con" v-if="activeName==='second'">
+							<el-table
+									:data="memberList.tableData"
+									style="width: 100%">
+								<el-table-column v-for="item in memberList.tableColumn" :key="item.prop"
+												 :prop="item.prop"
+												 :label="item.label"
+												 :width="'auto'"
+								>
+								</el-table-column>
+							</el-table>
+						</el-row>
+						<!--家庭-设备列表-->
+						<el-row class="user_msg_con" v-if="activeName==='third'">
+							<el-table
+									:data="deviceList.tableData"
+									style="width: 100%">
+								<el-table-column v-for="item in deviceList.tableColumn" :key="item.prop"
+												 :prop="item.prop"
+												 :label="item.label"
+												 :width="'auto'"
+								>
+								</el-table-column>
+							</el-table>
+						</el-row>
+					</div>
+				</el-row>
+			</div>
 		</div>
 		<!--错误日志-->
 		<el-dialog
