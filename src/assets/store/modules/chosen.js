@@ -7,16 +7,21 @@ import axios from 'axios';
 export default {
 	state: {
 		product: {},
-		app: [],
+		appIos: [],
+        appAndroid: [],
 		router: [],
 		subset: [],
 
 	},
 
 	getters: {
-		[namespace.APP](state) {
-			return state.app;
+		[namespace.APPIOS](state) {
+			return state.appIos;
 		},
+
+        [namespace.APPANDROID](state) {
+            return state.appAndroid;
+        },
 
 		[namespace.ROUTER](state) {
 			return state.router;
@@ -41,29 +46,53 @@ export default {
 	},
 
 	mutations: {
-		[namespace.GETAPP](state, payload) {
-			axios.post(PREFIX + 'version/typelist', {
-				token: payload.token,
-				type: 1
-			}).then(res => {
-				const json = res.data;
-				if (json.code === 200) {
-					const list = json.data;
-					if (list.length) {
-						state.app = list.map(x => {
-							return {
-								label: `${x.title}-${x.version}`,
-								value: x.version
-							}
-						})
-					} else {
-						state.app = [];
-					}
-				} else {
+		[namespace.GETAPPIOS](state, payload) {
+            axios.post(PREFIX + 'version/typelist', {
+                token: payload.token,
+                type: 4
+            }).then(res => {
+                const json = res.data;
+                if (json.code === 200) {
+                    const list = json.result;
+                    if (list.length) {
+                        state.appIos = list.map(x => {
+                            return {
+                                label: `${x.title}-${x.version}`,
+                                value: x.version
+                            }
+                        })
+                    } else {
+                        state.appIos = [];
+                    }
+                } else {
 
-				}
-			});
-		},
+                }
+            });
+        },
+
+        [namespace.GETAPPANDROID](state, payload) {
+            axios.post(PREFIX + 'version/typelist', {
+                token: payload.token,
+                type: 1
+            }).then(res => {
+                const json = res.data;
+                if (json.code === 200) {
+                    const list = json.result;
+                    if (list.length) {
+                        state.appAndroid = list.map(x => {
+                            return {
+                                label: x.title,
+                                value: x.version
+                            }
+                        })
+                    } else {
+                        state.appAndroid = [];
+                    }
+                } else {
+
+                }
+            });
+        },
 
 		[namespace.GETROUTER](state, payload) {
 			axios.post(PREFIX + 'version/typelist', {
@@ -130,26 +159,47 @@ export default {
 	},
 
 	actions: {
-		[namespace.GETAPP]({
+		[namespace.GETAPPIOS]({
 			commit
 		}, payload) {
 			commit({
-				type: namespace.GETAPP,
+				type: namespace.GETAPPIOS,
 				token: payload.token
 			});
 		},
 
-		[namespace.INITAPP]({
+		[namespace.INITAPPIOS]({
 			commit,
 			state
 		}, payload) {
-			if (!state.app.length) {
+			if (!state.appIos.length) {
 				commit({
-					type: namespace.GETAPP,
+					type: namespace.GETAPPIOS,
 					token: payload
 				});
 			}
 		},
+
+        [namespace.GETAPPANDROID]({
+		   commit
+	    }, payload) {
+            commit({
+                type: namespace.GETAPPANDROID,
+                token: payload.token
+            });
+        },
+
+        [namespace.INITAPPANDROID]({
+			   commit,
+			   state
+		   }, payload) {
+            if (!state.appAndroid.length) {
+                commit({
+                    type: namespace.GETAPPANDROID,
+                    token: payload
+                });
+            }
+        },
 
 		[namespace.GETROUTER]({
 			commit

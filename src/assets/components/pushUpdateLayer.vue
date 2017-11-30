@@ -1,9 +1,9 @@
 <template>
-	<el-form :model="pushForm" ref="pushForm" label-width="8em">
+	<el-form :model="pushForm" ref="pushForm" :rules="rules"  label-width="8em">
 		<el-form-item label="产品类型" >
 			<el-row :gutter="24" >
 				<el-col :span="8" style="padding: 0">
-					<el-select v-model="pushForm.tab" placeholder="选择类型">
+					<el-select v-model="pushForm.tab" placeholder="选择类型" @change="typeChangeEvent">
 						<el-option
 								v-for="item in typeOptions"
 								:key="item.value"
@@ -12,7 +12,7 @@
 						</el-option>
 					</el-select>
 				</el-col>
-				<el-col :span="8" v-if="pushForm.tab===1">
+				<el-col :span="9" v-if="pushForm.tab===1">
 					<el-select v-model="pushForm.system" placeholder="操作系统">
 						<el-option
 								v-for="item in systemOptions"
@@ -24,61 +24,60 @@
 				</el-col>
 			</el-row>
 		</el-form-item>
-		<el-row class="cpf-line" :gutter="24" v-if="pushForm.tab===3">
-			<el-col :span="4" style="text-align:right;">
-				<label>选择子设备</label>
-			</el-col>
-			<el-col :span="7" style="padding:0; margin-bottom: 20px">
-				<el-select v-model="pushForm.brand_id" placeholder="品牌">
-					<el-option
-							v-for="item in brandIDOptionsChild"
-							:key="item.value"
-							:label="item.label"
-							:value="item.value">
-					</el-option>
-				</el-select>
-			</el-col>
-			<el-col :span="6" style="padding-right: 0">
-				<el-select v-model="pushForm.type_id" placeholder="类型">
-					<el-option
-							v-for="item in typeIDOptionsChild"
-							:key="item.value"
-							:label="item.label"
-							:value="item.value">
-					</el-option>
-				</el-select>
-			</el-col>
-			<el-col :span="5" style="padding-right: 0">
-				<el-select v-model="pushForm.product_id" placeholder="产品">
-					<el-option
-							v-for="item in productIDOptionsChild"
-							:key="item.value"
-							:label="item.label"
-							:value="item.value">
-					</el-option>
-				</el-select>
-			</el-col>
-		</el-row>
-		<el-form-item label="推送类型" >
-			<el-row>
-				<el-col :span="8">
-					<el-select v-model="pushForm.push_type" placeholder="选择类型">
-						<el-option label="全量升级" :value="1"></el-option>
-						<el-option label="灰度升级" :value="2"></el-option>
+		<el-form-item label="选择子设备" prop="product_id" v-if="pushForm.tab===3">
+			<el-row class="cpf-line" :gutter="24">
+				<el-col :span="8" style="padding:0;">
+					<el-select v-model="pushForm.brand_id" placeholder="品牌">
+						<el-option
+								v-for="item in brandIDOptionsChild"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value">
+						</el-option>
 					</el-select>
 				</el-col>
-				<el-col :span="8" :offset="1" v-if="pushForm.push_type===2">
-					<el-select v-model="pushForm.list_type" placeholder="请选择">
-						<el-option label="白名单" :value="1"></el-option>
-						<el-option label="黑名单" :value="2"></el-option>
+				<el-col :span="6" style="padding-right: 0">
+					<el-select v-model="pushForm.type_id" placeholder="类型">
+						<el-option
+								v-for="item in typeIDOptionsChild"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value">
+						</el-option>
+					</el-select>
+				</el-col>
+				<el-col :span="6" style="padding-right: 0">
+					<el-select v-model="pushForm.product_id" prop="product_id" placeholder="产品">
+						<el-option
+								v-for="item in productIDOptionsChild"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value">
+						</el-option>
 					</el-select>
 				</el-col>
 			</el-row>
 		</el-form-item>
-		<el-form-item label="uuid">
+		<el-form-item label="选择版本" prop="version">
 			<el-row class="cpf-line" :gutter="24">
-				<el-col :span="12" style="padding-left: 0">
-					<el-select multiple v-model="pushForm.routersList" placeholder="路由" v-if="pushForm.tab !== 3">
+				<el-col :span="8" style="padding:0">
+					<el-select v-model="pushForm.version"  placeholder="选择版本" v-if="pushForm.tab === 1">
+						<el-option
+								v-for="item in appAndroid"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value">
+						</el-option>
+					</el-select>
+					<el-select v-model="pushForm.version"  placeholder="选择版本" v-if="pushForm.tab === 4">
+						<el-option
+								v-for="item in appIos"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value">
+						</el-option>
+					</el-select>
+					<el-select v-model="pushForm.version"  placeholder="选择版本" v-if="pushForm.tab === 2">
 						<el-option
 								v-for="item in router"
 								:key="item.value"
@@ -86,7 +85,7 @@
 								:value="item.value">
 						</el-option>
 					</el-select>
-					<el-select multiple v-model="pushForm.productsList" placeholder="子设备" v-if="pushForm.tab === 3">
+					<el-select v-model="pushForm.version"  placeholder="选择版本" v-if="pushForm.tab === 3">
 						<el-option
 								v-for="item in subset"
 								:key="item.value"
@@ -97,8 +96,33 @@
 				</el-col>
 			</el-row>
 		</el-form-item>
+		<el-row>
+			<el-col :span="12" style="padding-right: 23px">
+				<el-form-item label="推送类型" prop="push_type">
+					<el-select v-model="pushForm.push_type"  placeholder="选择类型" @change="pushTypeChangeEvent">
+						<el-option label="全量升级" :value="1"></el-option>
+						<el-option label="灰度升级" :value="2"></el-option>
+					</el-select>
+				</el-form-item>
+			</el-col>
+			<el-col :span="7" :offset="1"  v-if="pushForm.push_type===2" style="margin-left: -11px">
+				<el-form-item label="" prop="list_type" label-width="0">
+					<el-select v-model="pushForm.list_type"  placeholder="请选择">
+						<el-option label="白名单" :value="1"></el-option>
+						<el-option label="黑名单" :value="2"></el-option>
+					</el-select>
+				</el-form-item>
+			</el-col>
+		</el-row>
+		<el-form-item label="uuid" prop="uuid">
+			<el-row :gutter="24">
+				<el-col :span="8" style="padding:0">
+					<el-input  v-model="pushForm.uuid"></el-input>
+				</el-col>
+			</el-row>
+		</el-form-item>
 		<el-form-item>
-			<el-button type="primary"@click="pushUpdateForm">确定</el-button>
+			<el-button type="primary"@click="pushUpdateForm('pushForm')">确定</el-button>
 			<el-button @click="closeParentFlow">取消</el-button>
 		</el-form-item>
 	</el-form>
@@ -106,23 +130,11 @@
 <script>
 import * as namespace from '../store/namespace';
 export default {
-    props: ['brandIDOptions','typeIDOptions','productIDOptions','router','subset','type','product'],
+    props: ['brandIDOptions','typeIDOptions',
+		'productIDOptions','router','subset',
+		'type','product', 'appAndroid', 'appIos'],
 	data () {
 		return {
-            pushForm: {
-                tab: 1,
-                system: 'Android',
-				type: 1,
-                push_type: '',
-                list_type: '',
-                version: '',
-				product_id: '',
-				brand_id: '',
-				type_id: '',
-                routersList: [],
-                productsList: [],
-                uuid: []
-            },
             brandIDOptionsChild: this.brandIDOptions,
             typeIDOptionsChild: this.typeIDOptions,
             productIDOptionsChild: this.productIDOptions,
@@ -149,7 +161,48 @@ export default {
                     value: 'Android',
                     label: 'Android'
                 }
-            ]
+            ],
+            pushForm: {
+                tab: 1,
+                system: 'Android',
+                type: 1,
+                push_type: '',
+                list_type: '',
+                version: '',
+                product_id: '',
+                brand_id: '',
+                type_id: '',
+                uuid: ''
+            },
+            rules: {
+                version: [
+                    { required: true, message: '请选择版本' }
+                ],
+                push_type: [
+                    { required: true, message: '请选择推送类型' }
+                ],
+                list_type: [
+                    { required: false, message: '请选择类型' }
+                ],
+                product_id: [
+                    { required: false, message: '请选择产品类型' }
+                ],
+                uuid: [
+                    { required: false, message: '请输入uuid' },
+                    {
+                        validator: (rule, value, callback) => {
+							let reg = /[\;|\"|\。]+/
+							if (reg.test(value)) {
+                                callback(new Error('uuid规则不符'));
+							} else {
+                                callback();
+							}
+
+                        },
+                        trigger: 'blur'
+                    }
+                ]
+            }
 		}
 	},
 	watch: {
@@ -185,8 +238,38 @@ export default {
 	mounted () {
 	},
 	methods: {
+        typeChangeEvent (val) {
+            if (val === 3) {
+                this.rules.product_id = [
+                    { required: true, message: '请选择产品类型' }
+                ]
+			}
+		},
+        pushTypeChangeEvent (val) {
+            if (val === 2) {
+				this.rules.list_type = [
+                    { required: true, message: '请选择类型' }
+                ]
+				this.rules.uuid =  [
+                    { required: true, message: '请输入uuid' },
+                    {
+                        validator: (rule, value, callback) => {
+                            let reg = /[\;|\"|\。]+/
+                            if (reg.test(value)) {
+                                callback(new Error('uuid规则不符'));
+                            } else {
+                                callback();
+                            }
+
+                        },
+                        trigger: 'blur'
+                    }
+                ]
+            }
+        },
         resetPushForm () {
             let form = this.pushForm
+            this.$refs['pushForm'].resetFields()
 			for (let attr in form) {
                 switch (attr){
                     case 'tab':
@@ -199,7 +282,7 @@ export default {
                     case 'routersList':
                     case 'productsList':
 					case 'uuid':
-                        form[attr] = []
+                        form[attr] = ''
                         break
                     default:
                         form[attr] = ''
@@ -210,8 +293,15 @@ export default {
         closeParentFlow () {
             this.$emit('closePushBox')
 		},
-        pushUpdateForm () {
-            this.$emit('pushUpdateParent',this.pushForm)
+        pushUpdateForm (formName) {
+            const obj = this
+            obj.$refs[formName].validate((valid) => {
+                if (valid) {
+                    obj.$emit('pushUpdateParent',obj.pushForm)
+                } else {
+                    return false
+                }
+            })
 		}
 	},
 	computed: {

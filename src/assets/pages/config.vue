@@ -1,111 +1,11 @@
 <template>
 	<div class="page-content config-page">
-		<!--版本匹配搜索-->
-		<el-popover ref="filterPopover" width="600" v-model="filterPopoverFlag" placement="bottom-start">
-			<div class="cp-filterFormBox">
-				<el-row class="cpf-line" :gutter="24">
-					<el-col :span="4" style="text-align:right;">
-						<label>选择设备</label>
-					</el-col>
-					<el-col :span="8">
-						<el-select v-model="filterForm.tab" placeholder="设备">
-							<el-option
-						      v-for="item in filterTypeOptions"
-						      :key="item.value"
-						      :label="item.label"
-						      :value="item.value">
-						    </el-option>
-						</el-select>
-					</el-col>
-					<el-col :span="4" style="text-align:right;" v-if="filterForm.tab===2">
-						<label>选择版本</label>
-					</el-col>
-					<el-col :span="8" v-if="filterForm.tab===2">
-						<el-select v-model="filterForm.version" placeholder="选择版本" clearable @clear="filterClearAll">
-							<el-option
-									v-for="item in router"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value">
-							</el-option>
-						</el-select>
-					</el-col>
-				</el-row>
-				<el-row v-if="filterForm.tab===3" class="cpf-line" :gutter="24">
-					<el-col :span="4" style="text-align:right;">
-						<label>选择子设备</label>
-					</el-col>
-					<el-col :span="6">
-						<el-select v-model="filterForm.brand_id" placeholder="品牌">
-							<el-option
-									v-for="item in brandIDOptions"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value">
-							</el-option>
-						</el-select>
-					</el-col>
-					<el-col :span="6">
-						<el-select v-model="filterForm.type_id" placeholder="类型">
-							<el-option
-									v-for="item in typeIDOptions"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value">
-							</el-option>
-						</el-select>
-					</el-col>
-					<el-col :span="6">
-						<el-select v-model="filterForm.product_id" placeholder="产品">
-							<el-option
-									v-for="item in productIDOptions"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value">
-							</el-option>
-						</el-select>
-					</el-col>
-				</el-row>
-				<el-row v-if="filterForm.tab===3" class="cpf-line" :gutter="24">
-					<el-col :span="4" style="text-align:right;">
-						<label>选择版本</label>
-					</el-col>
-					<el-col :span="8">
-						<el-select v-model="filterForm.version" placeholder="版本">
-							<el-option
-									v-for="item in subset"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value">
-							</el-option>
-						</el-select>
-					</el-col>
-				</el-row>
-				<el-row class="cpf-line" :gutter="24">
-					<el-col :span="4" style="text-align:right;">
-						<label>查询支持设备</label>
-					</el-col>
-					<el-col :span="20" style="text-align:left;">
-						<el-radio-group v-model="filterForm.type">
-							<el-radio :label="2" v-if="filterForm.tab===3">路由器</el-radio>
-							<el-radio :label="1" v-if="filterForm.tab===2">APP</el-radio>
-							<el-radio :label="3" v-if="filterForm.tab===2">子设备</el-radio>
-						</el-radio-group>
-					</el-col>
-				</el-row>
-				<el-row class="cpf-line" :gutter="24">
-					<el-col :span="24" style="text-align:right; padding-top: 20px">
-						<el-button type="primary" size="" @click="filterVersions">查询</el-button>
-					</el-col>
-				</el-row>
-			</div>
-		</el-popover>
 		<!--顶部tab-->
 		<el-row type="flex" justify="space-between">
 			<el-col :span="12">
 				<el-button-group>
 					<el-button @click="openImportLayer">录入 <i class="el-icon-caret-bottom"></i></el-button>
-					<el-button v-popover:filterPopover >版本匹配搜索 <i class="el-icon-caret-bottom"></i></el-button>
+					<el-button @click="filterPopoverFlag=true" >版本匹配搜索 <i class="el-icon-caret-bottom"></i></el-button>
 					<el-button @click="openPushLayer">推送升级 <i class="el-icon-caret-bottom"></i></el-button>
 				</el-button-group>
 			</el-col>
@@ -201,6 +101,106 @@
 				</el-table-column>
 			</el-table>
 		</div>
+		<!--版本匹配搜索-->
+		<el-dialog title="版本匹配搜索" :visible.sync="filterPopoverFlag">
+			<div class="cp-filterFormBox">
+				<el-row class="cpf-line" :gutter="24">
+					<el-col :span="4" style="text-align:right;">
+						<label>选择设备</label>
+					</el-col>
+					<el-col :span="8">
+						<el-select v-model="filterForm.tab" placeholder="设备">
+							<el-option
+									v-for="item in filterTypeOptions"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+							</el-option>
+						</el-select>
+					</el-col>
+					<el-col :span="4" style="text-align:right;" v-if="filterForm.tab===2">
+						<label>选择版本</label>
+					</el-col>
+					<el-col :span="8" v-if="filterForm.tab===2">
+						<el-select v-model="filterForm.version" placeholder="选择版本" clearable @clear="filterClearAll">
+							<el-option
+									v-for="item in router"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+							</el-option>
+						</el-select>
+					</el-col>
+				</el-row>
+				<el-row v-if="filterForm.tab===3" class="cpf-line" :gutter="24">
+					<el-col :span="4" style="text-align:right;">
+						<label>选择子设备</label>
+					</el-col>
+					<el-col :span="6">
+						<el-select v-model="filterForm.brand_id" placeholder="品牌">
+							<el-option
+									v-for="item in brandIDOptions"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+							</el-option>
+						</el-select>
+					</el-col>
+					<el-col :span="6">
+						<el-select v-model="filterForm.type_id" placeholder="类型">
+							<el-option
+									v-for="item in typeIDOptions"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+							</el-option>
+						</el-select>
+					</el-col>
+					<el-col :span="6">
+						<el-select v-model="filterForm.product_id" placeholder="产品">
+							<el-option
+									v-for="item in productIDOptions"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+							</el-option>
+						</el-select>
+					</el-col>
+				</el-row>
+				<el-row v-if="filterForm.tab===3" class="cpf-line" :gutter="24">
+					<el-col :span="4" style="text-align:right;">
+						<label>选择版本</label>
+					</el-col>
+					<el-col :span="8">
+						<el-select v-model="filterForm.version" placeholder="版本">
+							<el-option
+									v-for="item in subset"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+							</el-option>
+						</el-select>
+					</el-col>
+				</el-row>
+				<el-row class="cpf-line" :gutter="24">
+					<el-col :span="4" style="text-align:right;">
+						<label>查询支持设备</label>
+					</el-col>
+					<el-col :span="20" style="text-align:left;">
+						<el-radio-group v-model="filterForm.type">
+							<el-radio :label="2" v-if="filterForm.tab===3">路由器</el-radio>
+							<el-radio :label="1" v-if="filterForm.tab===2">APP</el-radio>
+							<el-radio :label="3" v-if="filterForm.tab===2">子设备</el-radio>
+						</el-radio-group>
+					</el-col>
+				</el-row>
+				<el-row class="cpf-line" :gutter="24">
+					<el-col :span="24" style="text-align:right; padding-top: 20px">
+						<el-button type="primary" size="" @click="filterVersions">查询</el-button>
+					</el-col>
+				</el-row>
+			</div>
+		</el-dialog>
 		<!--版本详情-->
 		<el-dialog title="版本详情" :visible.sync="infoBoxFlag">
 			<div class="edit_form">
@@ -301,7 +301,7 @@
 				</el-form>
 			</div>
 			<div style="text-align: right; margin: 0">
-				<el-button type="primary" size="mini" @click="submitDetailForm('ruleFormDetail')" >保存</el-button>
+				<el-button type="primary" size="mini" @click="submitDetailForm('ruleFormDetail')" >确定</el-button>
 				<el-button size="mini" type="text" @click="infoBoxFlag=false">取消</el-button>
 			</div>
 		</el-dialog>
@@ -333,6 +333,8 @@
 					:type="type"
 					:product="product"
 					:router="router"
+					:appIos="appIos"
+					:appAndroid="appAndroid"
 					:subset="subset"
 			>
 			</push-update>
@@ -469,7 +471,6 @@ export default {
 			});
 		},
 		'filterForm.type_id' (curVal, oldVal) {
-			console.log('done');
 			this.filterForm.product_id = '';
 			this.filterForm.version = '';
 			const brandKey = this.filterForm.brand_id*1;
@@ -513,8 +514,11 @@ export default {
 	},
 	mounted () {
 //        this.$store.dispatch({
-//            type: namespace.INITAPP
+//            type: namespace.INITAPPIOS
 //        })
+        this.$store.dispatch({
+            type: namespace.INITAPPANDROID
+        })
 		this.$store.dispatch({
 			type: namespace.INITROUTER
 		})
@@ -596,6 +600,7 @@ export default {
                 this.$refs['pushUpdates'].resetPushForm()
             })
 		},
+		// 版本录入
         importSubmit (dataObj) {
             let params = Object.assign({
                 // token: this.token
@@ -649,24 +654,23 @@ export default {
                 }
             })
         },
+		// 推送升级
         pushUpdate (dataObj) {
             let params = Object.assign({
             }, dataObj);
+            params.uuid = params.uuid.split(',')
             if (params.tab === 1) {
                 if (params.system === 'IOS') {
                     params.type = 4
 				} else {
                     params.type = 1
 				}
-                params.uuid = params.routersList
                 delete params.product_id
             } else if (params.tab === 2) {
                 delete params.product_id
                 delete params.system
-                params.uuid = params.routersList
             } else if (params.tab === 3) {
                 delete params.system;
-                params.uuid = params.productsList
             }
             if (params.push_type === 1) {
                 delete params.list_type
@@ -689,6 +693,7 @@ export default {
 		pageChange () {
 			this.getVersionList(this.currentPage)
 		},
+		// 版本匹配搜索
         filterVersions () {
 		    const obj = this
 			obj.currentPage = 1
@@ -702,14 +707,15 @@ export default {
                 // delete currentParam.product_id
 			}
             obj.$store.dispatch('selectVersion', currentParam).then((result) => {
-		        obj.filterPopoverFlag = false
-                let currentData = result.result
-                if((obj.versionsFirst.tableData && obj.versionsFirst.tableData.length)) {
-                    obj.versionsFirst.tableData = []
-                }
-                versions_children_json.tableData = currentData.items
-                obj.versionList = versions_children_json
-                obj.totalItem = currentData.device_version.data.page.total
+		        if (result.code === 200) {
+                    obj.filterPopoverFlag = false
+                    obj.firstTableShow = false
+                    obj.childTableHeaderShow = true
+                    let currentData = result.result
+                    versions_children_json.tableData = currentData.items
+                    obj.versionList = versions_children_json
+                    obj.totalItem = currentData.page.total
+				}
             })
         },
         // 获取所有版本列表
@@ -718,15 +724,17 @@ export default {
 			this.listParams.page = page
 			const obj  = this
             obj.$store.dispatch('getVersions', obj.listParams).then((result) => {
-                obj.firstTableShow = true
-                obj.childTableHeaderShow = false
-			    let currentData = result.result
-			    if(!(obj.versionsFirst.tableData && obj.versionsFirst.tableData.length)) {
-                    obj.setFirstVersionList(currentData)
+                if (result.code === 200) {
+                    obj.firstTableShow = true
+                    obj.childTableHeaderShow = false
+                    let currentData = result.result
+                    if(!(obj.versionsFirst.tableData && obj.versionsFirst.tableData.length)) {
+                        obj.setFirstVersionList(currentData)
+                    }
+                    versions_children_json.tableData = currentData.device_version.data.items
+                    obj.versionList = versions_children_json
+                    obj.totalItem = currentData.device_version.data.page.total
 				}
-                versions_children_json.tableData = currentData.device_version.data.items
-				obj.versionList = versions_children_json
-                obj.totalItem = currentData.device_version.data.page.total
             })
 		},
 		// 渲染固定的四行表格
@@ -802,6 +810,7 @@ export default {
             }
             return text
         },
+		// 获取详情
         submitDetailForm (formName) {
             let obj = this
             this.$refs[formName].validate((valid) => {
@@ -829,12 +838,14 @@ export default {
 			}
             const obj  = this
             obj.$store.dispatch('getVersions', param).then((result) => {
-                let currentData = result.result
-				obj.firstTableShow = false
-                obj.childTableHeaderShow = true
-                versions_children_json.tableData = currentData.items
-                obj.versionList = versions_children_json
-                obj.totalItem = currentData.page.total
+                if (result.code === 200) {
+                    let currentData = result.result
+                    obj.firstTableShow = false
+                    obj.childTableHeaderShow = true
+                    versions_children_json.tableData = currentData.items
+                    obj.versionList = versions_children_json
+                    obj.totalItem = currentData.page.total
+				}
             })
         },
         getVersionHistory (dataObj) {
@@ -859,8 +870,8 @@ export default {
 			product: namespace.PRODUCT,
 			router: namespace.ROUTER,
 			subset: namespace.SUBSET,
-			apps: namespace.APP
-            // token: namespace.TOKEN
+			appIos: namespace.APPIOS,
+            appAndroid: namespace.APPANDROID
         })
 	}
 }
