@@ -13,10 +13,12 @@
 			</el-row>
 			<!--用户信息-->
 			<el-row v-if="hasAllMsg" class="user_msg_con">
-				<el-col :span="2">
-					<img src="../images/u2978.png">
+				<el-col :span="3">
+					<div class="first-img">
+						<img src="../images/u2978.png" width="95" height="130">
+					</div>
 				</el-col>
-				<el-col :span="22">
+				<el-col :span="21">
 					<el-form label-width="100px" class="user_msg">
 						<el-row>
 							<el-col :span="7" v-for="item in user_msg">
@@ -453,6 +455,11 @@ export default {
 	.ops-page{
 		.el-dropdown-link{
 			color: #20a0ff;
+		}
+		.first-img{
+			width: 95px;
+			height: 130px;
+			overflow: hidden;
 		}
 	}
 	.detail_tab_con{

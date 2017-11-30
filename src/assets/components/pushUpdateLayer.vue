@@ -1,6 +1,6 @@
 <template>
 	<el-form :model="pushForm" ref="pushForm" :rules="rules"  label-width="8em">
-		<el-form-item label="产品类型" >
+		<el-form-item label="产品类型" prop="tab">
 			<el-row :gutter="24" >
 				<el-col :span="8" style="padding: 0">
 					<el-select v-model="pushForm.tab" placeholder="选择类型" @change="typeChangeEvent">
@@ -175,6 +175,9 @@ export default {
                 uuid: ''
             },
             rules: {
+                tab: [
+                    { required: true, message: '请选择产品类型' }
+                ],
                 version: [
                     { required: true, message: '请选择版本' }
                 ],

@@ -105,7 +105,7 @@
 		<el-dialog title="版本匹配搜索" :visible.sync="filterPopoverFlag">
 			<div class="cp-filterFormBox">
 				<el-row class="cpf-line" :gutter="24">
-					<el-col :span="4" style="text-align:right;">
+					<el-col :span="5" style="text-align:right;">
 						<label>选择设备</label>
 					</el-col>
 					<el-col :span="8">
@@ -118,10 +118,10 @@
 							</el-option>
 						</el-select>
 					</el-col>
-					<el-col :span="4" style="text-align:right;" v-if="filterForm.tab===2">
+					<el-col :span="4" style="text-align:right; padding-left: 0" v-if="filterForm.tab===2">
 						<label>选择版本</label>
 					</el-col>
-					<el-col :span="8" v-if="filterForm.tab===2">
+					<el-col :span="7" v-if="filterForm.tab===2">
 						<el-select v-model="filterForm.version" placeholder="选择版本" clearable @clear="filterClearAll">
 							<el-option
 									v-for="item in router"
@@ -133,10 +133,10 @@
 					</el-col>
 				</el-row>
 				<el-row v-if="filterForm.tab===3" class="cpf-line" :gutter="24">
-					<el-col :span="4" style="text-align:right;">
+					<el-col :span="5" style="text-align:right;">
 						<label>选择子设备</label>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-select v-model="filterForm.brand_id" placeholder="品牌">
 							<el-option
 									v-for="item in brandIDOptions"
@@ -146,7 +146,7 @@
 							</el-option>
 						</el-select>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="5" style="padding: 0">
 						<el-select v-model="filterForm.type_id" placeholder="类型">
 							<el-option
 									v-for="item in typeIDOptions"
@@ -156,7 +156,7 @@
 							</el-option>
 						</el-select>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="5">
 						<el-select v-model="filterForm.product_id" placeholder="产品">
 							<el-option
 									v-for="item in productIDOptions"
@@ -168,7 +168,7 @@
 					</el-col>
 				</el-row>
 				<el-row v-if="filterForm.tab===3" class="cpf-line" :gutter="24">
-					<el-col :span="4" style="text-align:right;">
+					<el-col :span="5" style="text-align:right;">
 						<label>选择版本</label>
 					</el-col>
 					<el-col :span="8">
@@ -183,10 +183,10 @@
 					</el-col>
 				</el-row>
 				<el-row class="cpf-line" :gutter="24">
-					<el-col :span="4" style="text-align:right;">
+					<el-col :span="5" style="text-align:right;">
 						<label>查询支持设备</label>
 					</el-col>
-					<el-col :span="20" style="text-align:left;">
+					<el-col :span="19" style="text-align:left;">
 						<el-radio-group v-model="filterForm.type">
 							<el-radio :label="2" v-if="filterForm.tab===3">路由器</el-radio>
 							<el-radio :label="1" v-if="filterForm.tab===2">APP</el-radio>
@@ -695,6 +695,18 @@ export default {
 		},
 		// 版本匹配搜索
         filterVersions () {
+            if (!this.filterForm.version) {
+                this.$message.error('请选择版本')
+                return
+			}
+            if (!this.filterForm.type) {
+                this.$message.error('请选择支持设备')
+                return
+            }
+            if (this.filterForm.tab === 3 && !this.filterForm.product_id) {
+                this.$message.error('请选择子设备')
+                return
+            }
 		    const obj = this
 			obj.currentPage = 1
             let currentParam =  obj.filterParams
