@@ -1,6 +1,5 @@
 import * as namespace from '../namespace';
 
-
 export default {
     state: {
         info: localStorage.getItem('localData') && JSON.parse(localStorage.getItem('localData')).user && JSON.parse(localStorage.getItem('localData')).user.info || {}
@@ -12,8 +11,6 @@ export default {
         [namespace.TOKEN](state) {
             return state.info.token || '';
         }
-
-
     },
     mutations: {
         /*[namespace.INITUSER](state, payload) {

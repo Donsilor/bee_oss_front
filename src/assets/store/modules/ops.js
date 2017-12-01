@@ -3,7 +3,7 @@ import {
 	PREFIX
 } from '../../lib/util';
 import axios from '../../lib/http';
-import {OPS_API} from "~/assets/lib/api";
+import {OPS_API, THROUGH_API} from "~/assets/lib/api";
 
 const actions = {
     searchUserMsg({commit, state}, params) {
@@ -18,6 +18,42 @@ const actions = {
     searchLogOut({commit, state}, params) {
         return new Promise((resolve, reject) => {
             axios.post(OPS_API.searchLogOut, params).then((response) => {
+                resolve(response.data.result)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
+    },
+    rootLogs({commit, state}, params) {
+        return new Promise((resolve, reject) => {
+            axios.post(OPS_API.rootLogs, params).then((response) => {
+                resolve(response.data.result)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
+    },
+    throughDatas({commit, state}, params) {
+        return new Promise((resolve, reject) => {
+            axios.post(THROUGH_API.throughDatas, params).then((response) => {
+                resolve(response.data.result)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
+    },
+    deviceTotals({commit, state}, params) {
+        return new Promise((resolve, reject) => {
+            axios.post(THROUGH_API.deviceTotal, params).then((response) => {
+                resolve(response.data.result)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
+    },
+    onlineLogs({commit, state}, params) {
+        return new Promise((resolve, reject) => {
+            axios.post(THROUGH_API.onlineLog, params).then((response) => {
                 resolve(response.data.result)
             }).catch((error) => {
                 console.log(error)

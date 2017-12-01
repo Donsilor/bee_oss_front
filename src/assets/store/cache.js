@@ -19,7 +19,6 @@ function deepClone(obj) {
 
 export default {
   save() {
-      console.log(store.state);
       alert('done');
       const states = store.state;
       const list = deepClone(states);

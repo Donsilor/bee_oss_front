@@ -23,6 +23,14 @@ const routes = [{
 		name: 'ops',
 		component: Pages.OPS
 	},{
+        path: 'ops/:id',
+        name: 'ops',
+        component: Pages.OPS
+    }, {
+        path: 'rootLog/:id',
+        name: 'rootLog',
+        component: Pages.RootLog
+    },{
         path: 'upgrade',
         name: 'upgrade',
         component: Pages.upgrade

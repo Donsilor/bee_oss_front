@@ -5,7 +5,7 @@
 			<el-row type="flex" justify="space-between">
 				<el-col :span="18">
 					<el-input class="searchInput" v-model="searchKey" :maxlength="11" type="text" placeholder="输入用户手机号码" />
-					<el-button @click="search">查询</el-button>
+					<el-button type="primary" @click="search">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
 				</el-col>
 				<!--<el-col :span="6" style="text-align: right;">-->
 					<!--<el-button v-show="searchedFlag" @click="searchedFlag = false">返回</el-button>-->
@@ -39,7 +39,7 @@
 					<h3 class="h3_pp">终端列表</h3>
 					<div class="right_button">
 						<!--<el-button type="primary">用户行为路径</el-button>-->
-						<el-button type="primary">主查看云平台日志</el-button>
+						<el-button type="primary" @click="toRootLog">主查看云平台日志</el-button>
 					</div>
 					<el-table
 							:data="terminalList.tableData"
@@ -284,10 +284,10 @@ export default {
 		}
 	},
 	mounted () {
-		const obj = this
-//        obj.$store.dispatch('getTerminalList', {}).then((result) => {
-//            obj.terminalList = result
-//        })
+		if (this.$route.params.id) {
+		    this.searchKey = this.$route.params.id
+            this.getUserData(this.searchKey)
+		}
 	},
 	watch: {
 	},
@@ -300,13 +300,17 @@ export default {
 			  this.$message.error('请输入手机号码')
 			  return
 			}
-			let obj = this
-			obj.$store.dispatch('searchUserMsg',{phone_num: obj.searchKey}).then((result) => {
-		        obj.user_id = result.info.F_uid
-		        obj.setUsermsg(result.info)
-				obj.hasAllMsg = true
-				obj.setAllData(result)
-			})
+			this.getUserData(this.searchKey)
+		},
+		// 拉取数据
+		getUserData (key) {
+            let obj = this
+            obj.$store.dispatch('searchUserMsg',{phone_num: key}).then((result) => {
+                obj.user_id = result.info.F_uid
+                obj.setUsermsg(result.info)
+                obj.hasAllMsg = true
+                obj.setAllData(result)
+            })
 		},
 		setAllData (dataObj) {
             terminalLists.tableData = dataObj.client_list
@@ -405,6 +409,9 @@ export default {
         pageChange () {
             this.changeLogOut(this.currentPage)
         },
+		toRootLog () {
+            this.$router.push({path: '/main/rootLog/' + this.searchKey})
+		}
 	},
     ...mapActions([
 		'searchUserMsg',
@@ -413,6 +420,7 @@ export default {
 }
 </script>
 <style lang="less" scope>
+	.el-collapse-item__header{height: 250px}
 	.p_r{
 		position: relative;
 	}

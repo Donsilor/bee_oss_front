@@ -6,7 +6,8 @@ export const OPS_API = {
     getDeviceList: API_ROOT + '../src/assets/json/devices.json',  // 设备列表
     getLogOutList: API_ROOT + '../src/assets/json/logOut.json',  // 登录日志
     searchUserMsg: API_MASTER + 'iotuser/index',  //查询用户所有信息
-    searchLogOut: API_MASTER + 'iotuser/history'  //获取用户登录登出日志
+    searchLogOut: API_MASTER + 'iotuser/history',  //获取用户登录登出日志
+    rootLogs: API_MASTER + 'mongodebug/index'  //云平台日志
 }
 export const UPGRADE_API = {
     getVersions: API_MASTER + 'version/list',  // 版本列表
@@ -14,5 +15,10 @@ export const UPGRADE_API = {
     importSubmitAction: API_MASTER + 'version/input',  //版本录入
     pushUpdateAction: API_MASTER + 'version/release',  //版本推送
     getPushHistoryList: API_MASTER + 'version/released',  //版本推送历史
-    getVersionDetailAction: API_MASTER + 'version/info'  //偶去版本详情
+    getVersionDetailAction: API_MASTER + 'version/info'  //版本详情
+}
+export const THROUGH_API = {
+    throughDatas: API_MASTER + 'analyzer/index',  // 经分数据统计
+    deviceTotal: API_MASTER + 'analyzer/devicest',  // 按品类/产品ID统计子设备个数
+    onlineLog: API_MASTER + 'analyzer/onlinelog',  // APP/路由器在线日志列表
 }

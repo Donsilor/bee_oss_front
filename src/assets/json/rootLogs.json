@@ -1,0 +1,30 @@
+{
+  "tableColumn":[
+    {"prop": "log_type", "label": "log_type"},
+    {"prop": "channel", "label": "channel"},
+    {"prop": "method", "label": "method"},
+    {"prop": "msg_tag", "label": "msg_tag"},
+    {"prop": "session_id", "label": "session_id"},
+    {"prop": "host_name", "label": "host_name"},
+    {"prop": "client_info", "label": "client_info"},
+    {"prop": "svr_id", "label": "svr_id"},
+    {"prop": "dst_id", "label": "dst_id"},
+    {"prop": "uuid", "label": "uuid"},
+    {"prop": "user_id", "label": "user_id"},
+    {"prop": "family_id", "label": "family_id"},
+    {"prop": "room_id", "label": "room_id"},
+    {"prop": "router_id", "label": "router_id"},
+    {"prop": "device_id", "label": "device_id"},
+    {"prop": "msg", "label": "msg"},
+    {"prop": "req_time", "label": "req_time"},
+    {"prop": "process_time", "label": "process_time"},
+    {"prop": "rcv_time", "label": "rcv_time"},
+    {"prop": "rsp_time", "label": "rsp_time"},
+    {"prop": "queue_cost_time", "label": "queue_cost_time"},
+    {"prop": "process_cost_time", "label": "处理耗时"},
+    {"prop": "net_cost_time", "label": "process_cost_time"},
+    {"prop": "cost_time", "label": "cost_time"},
+    {"prop": "created_time", "label": "created_time"}
+  ],
+  "tableData":[]
+}

@@ -34,6 +34,7 @@
 import { PREFIX } from '../lib/util';
 import * as namespace from '../store/namespace';
 import {mapGetters} from 'vuex';
+import cache from '../../assets/store/cache.js';
 export default {
     data () {
         const checkName = (rule, value, callback) => {
@@ -73,7 +74,7 @@ export default {
     },
     mounted () {
         if (this.token) {
-            this.$router.push('main');
+           this.$router.push('main');
         }
     },
     methods: {
