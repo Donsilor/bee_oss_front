@@ -3,10 +3,6 @@ import NProgress from 'nprogress'
 import '../../../node_modules/nprogress/nprogress.css'
 import { Message } from 'element-ui'
 
-const info = localStorage.getItem('localData') &&
-    JSON.parse(localStorage.getItem('localData')).user &&
-    JSON.parse(localStorage.getItem('localData')).user.info || {}
-
 const CODE = {
   SUCCEE: 200,
   NO_LOGIN: -14
@@ -14,6 +10,9 @@ const CODE = {
 
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
+    let info = localStorage.getItem('localData') &&
+        JSON.parse(localStorage.getItem('localData')).user &&
+        JSON.parse(localStorage.getItem('localData')).user.info || {}
   config.withCredentials = true
   // config.headers['Content-Type'] = 'application/json'
   config.data['token'] = info.token || ''

@@ -41,10 +41,14 @@ export default {
         [namespace.SETUSER]({
             commit
         }, payload) {
-            commit({
-                type: namespace.SETUSER,
-                info: payload.info
+            return new Promise((resolve, reject) => {
+                commit({
+                    type: namespace.SETUSER,
+                    info: payload.info
+                })
+                resolve()
             })
+
         },
         [namespace.DELUSER]({
             commit

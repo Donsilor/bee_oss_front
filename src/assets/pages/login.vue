@@ -74,20 +74,28 @@ export default {
     },
     mounted () {
         if (this.token) {
-           this.$router.push('main');
+            this.$router.push('main');
         }
     },
     methods: {
         login () {
+            let obj = this
             this.$http.post( PREFIX + 'auth/login', this.loginForm).then(res => {
                 const json = res.data;
                 if (json.code === 200) {
                     this.$message.success('登录成功');
+                    let userObj = {
+                        user : {
+                            info: json.result
+                        }
+                    }
+                    localStorage.setItem('localData', JSON.stringify(userObj))
                     this.$store.dispatch({
                         type: namespace.SETUSER,
-                        info: json.result
+                        info: json.result,
+                    }).then(() => {
+                        this.$router.push('main');
                     })
-                    this.$router.push('main');
                 } else {
                     this.$message.error(json.msg);
 
