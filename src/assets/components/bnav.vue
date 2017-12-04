@@ -59,7 +59,13 @@ export default {
 					id: 'cmdb',
 					className: 'cmdb',
 					url: '/main/cmdb'
-				}
+				},
+                {
+                    title: '云平台日志',
+                    id: 'rootLog',
+                    className: 'cmdb',
+                    url: '/main/rootLog'
+                }
 			]
 		};
 	},

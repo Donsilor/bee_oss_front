@@ -67,7 +67,8 @@
 						width="180"
 						label="操作">
 					<template scope="scope">
-						<el-button  type="text" size="small" @click="getVersionDetail(scope.row)">查看详情</el-button>
+						<el-button v-if="!firstTableShow" type="text" size="small" @click="getVersionDetail(scope.row)">查看详情</el-button>
+						<el-button v-if="firstTableShow" type="text" size="small" @click="getVersionHistory(scope.row)">查看历史版本</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -840,13 +841,14 @@ export default {
             })
 		},
         // 历史版本
-        getVersionHistoryList(page, type) {
+        getVersionHistoryList(page, type, product_id) {
             // this.filterParams.token = this.token
             this.listParams.page = page
 			let param = {
                 page: page,
                 level: 2,
                 type: type,
+				product_id: product_id || ''
 			}
             const obj  = this
             obj.$store.dispatch('getVersions', param).then((result) => {
@@ -861,7 +863,7 @@ export default {
             })
         },
         getVersionHistory (dataObj) {
-            this.getVersionHistoryList(1, dataObj.type)
+            this.getVersionHistoryList(1, dataObj.type, dataObj.product_id)
 		},
 		backToList () {
             this.getVersionList(1)

@@ -27,7 +27,7 @@ const routes = [{
         name: 'ops',
         component: Pages.OPS
     }, {
-        path: 'rootLog/:id',
+        path: 'rootLog',
         name: 'rootLog',
         component: Pages.RootLog
     },{

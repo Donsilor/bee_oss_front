@@ -1,8 +1,8 @@
 <template>
 	<div class="page-content rootLog-page">
-		<div style="padding-bottom: 10px;">
-			<el-button type="text" @click="goBack"><<&nbsp;返回</el-button>
-	    </div>
+		<!--<div style="padding-bottom: 10px;">-->
+			<!--<el-button type="text" @click="goBack"><<&nbsp;返回</el-button>-->
+	    <!--</div>-->
 		<div style="padding-bottom: 30px;">
 			<!--搜索框-->
 			<el-row :gutter="24" >
@@ -114,7 +114,7 @@ export default {
 <style lang="less">
 	.rootLog-page{
 		.el-table th>.cell,
-		.el-table td>.cell{
+		.el-table td>.cell>div{
 			overflow:hidden;
 			white-space:nowrap;
 			text-overflow:ellipsis;
@@ -122,7 +122,7 @@ export default {
 			-moz-text-overflow: ellipsis;
 			-webkit-text-overflow: ellipsis;
 		}
-		.el-table .cell div{
+		.el-table .cell, .el-table th>div{
 			padding-right: 0;
 		}
 	}

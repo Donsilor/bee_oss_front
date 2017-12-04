@@ -1,0 +1,12 @@
+{
+  "tableColumn":[
+    {"prop": "category_id", "label": "客户端ID"},
+    {"prop": "client_info", "label": "客户端类型"},
+    {"prop": "family_id", "label": "家庭ID"},
+    {"prop": "room_id", "label": "房间ID"},
+    {"prop": "router_id", "label": "路由ID"},
+    {"prop": "device_id", "label": "设备ID"},
+    {"prop": "msg", "label": "错误信息"}
+  ],
+  "tableData":[]
+}

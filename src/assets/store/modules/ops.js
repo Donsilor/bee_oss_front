@@ -24,6 +24,15 @@ const actions = {
             })
         })
     },
+    operaList({commit, state}, params) {
+        return new Promise((resolve, reject) => {
+            axios.post(OPS_API.operaList, params).then((response) => {
+                resolve(response.data.result)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
+    },
     rootLogs({commit, state}, params) {
         return new Promise((resolve, reject) => {
             axios.post(OPS_API.rootLogs, params).then((response) => {

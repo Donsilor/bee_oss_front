@@ -37,10 +37,9 @@
 				<!--终端列表-->
 				<el-row class="terminal_list p_r">
 					<h3 class="h3_pp">终端列表</h3>
-					<div class="right_button">
-						<!--<el-button type="primary">用户行为路径</el-button>-->
-						<el-button type="primary" @click="toRootLog">主查看云平台日志</el-button>
-					</div>
+					<!--<div class="right_button">-->
+						<!--<el-button type="primary" @click="toRootLog">主查看云平台日志</el-button>-->
+					<!--</div>-->
 					<el-table
 							:data="terminalList.tableData"
 							style="width: 100%">
@@ -50,7 +49,10 @@
 										 :width="'auto'"
 						>
 							<template scope="scope">
-								<div>{{scope.row[item.prop]}}</div>
+								<div v-if="item.prop === 'F_device_state'">
+									{{getStatusText(scope.row['F_status'])}}
+								</div>
+								<div v-else>{{scope.row[item.prop]}}</div>
 							</template>
 						</el-table-column>
 						<el-table-column
@@ -67,10 +69,11 @@
 				<!--家庭详情-->
 				<el-row class="p_r">
 					<h3 class="h3_pp">家庭详情</h3>
+					<el-button @click="openOperListLayer" class="operation-list" size="small" type="primary">子设备操作流水</el-button>
 					<el-dropdown class="family_tab" @command="handleCommand">
-				    <span class="el-dropdown-link">
-					  {{allFamily.length && allFamily[0].name}}<i class="el-icon-arrow-down el-icon--right"></i>
-				    </span>
+						<span class="el-dropdown-link">
+						  {{allFamily.length && allFamily[0].name}}<i class="el-icon-arrow-down el-icon--right"></i>
+						</span>
 						<el-dropdown-menu slot="dropdown">
 							<el-dropdown-item :command="item.value" v-for="item in allFamily">{{item.name}}</el-dropdown-item>
 						</el-dropdown-menu>
@@ -82,7 +85,7 @@
 							<el-tab-pane label="设备" name="third"></el-tab-pane>
 						</el-tabs>
 						<!--家庭-基本信息-->
-						<el-row class="user_msg_con" v-if="activeName==='first'">
+						<el-row class="user_msg_con" v-show="activeName==='first'">
 							<el-col :span="2">
 								<img src="../images/u2978.png">
 							</el-col>
@@ -99,7 +102,7 @@
 							</el-col>
 						</el-row>
 						<!--家庭-成员列表-->
-						<el-row class="user_msg_con" v-if="activeName==='second'">
+						<el-row class="user_msg_con" v-show="activeName==='second'">
 							<el-table
 									:data="memberList.tableData"
 									style="width: 100%">
@@ -112,7 +115,23 @@
 							</el-table>
 						</el-row>
 						<!--家庭-设备列表-->
-						<el-row class="user_msg_con" v-if="activeName==='third'">
+						<el-row class="user_msg_con" v-show="activeName==='third'">
+							<el-table
+									:data="routerList.tableData"
+									style="width: 100%; margin-bottom: 15px">
+								<el-table-column v-for="item in routerList.tableColumn" :key="item.prop"
+												 :prop="item.prop"
+												 :label="item.label"
+												 :width="'auto'"
+								>
+									<template scope="scope">
+										<div v-if="item.prop === 'F_device_state'">
+											{{getRouterStatusText(scope.row['F_device_state'])}}
+										</div>
+										<div v-else>{{scope.row[item.prop]}}</div>
+									</template>
+								</el-table-column>
+							</el-table>
 							<el-table
 									:data="deviceList.tableData"
 									style="width: 100%">
@@ -121,6 +140,12 @@
 												 :label="item.label"
 												 :width="'auto'"
 								>
+									<template scope="scope">
+										<div v-if="item.prop === 'F_device_state'">
+											{{getStatusText(scope.row['F_device_state'])}}
+										</div>
+										<div v-else>{{scope.row[item.prop]}}</div>
+									</template>
 								</el-table-column>
 							</el-table>
 						</el-row>
@@ -191,6 +216,34 @@
                <el-button @click="logOutLayer = false" style="border:none;">取 消</el-button>
             </span>
 		</el-dialog>
+		<!--子设备操作流水-->
+		<el-dialog
+				title="子设备操作流水"
+				:visible.sync="operListLayer">
+			<div style="padding-bottom:15px">
+				<el-date-picker
+						v-model="operListForm.date"
+						@change="changeSelectOperList"
+						placeholder="今天"
+				>
+				</el-date-picker>
+			</div>
+			<el-table
+					:data="operList.tableData"
+					style="width: 100%">
+				<el-table-column v-for="item in operList.tableColumn" :key="item.prop"
+								 :prop="item.prop"
+								 :label="item.label"
+				>
+					<template scope="scope">
+						<div>{{scope.row[item.prop]}}</div>
+					</template>
+				</el-table-column>
+			</el-table>
+			<span slot="footer" class="dialog-footer">
+               <el-button @click="operListLayer = false" style="border:none;">取 消</el-button>
+            </span>
+		</el-dialog>
 	</div>
 </template>
 <script>
@@ -201,6 +254,8 @@ import terminalLists from '../json/terminalList.json'
 import deviceLists from '../json/devices.json'
 import logOutLists from '../json/logOut.json'
 import memberLists from '../json/members.json'
+import routerLists from '../json/routers.json'
+import operLists from '../json/operList.json'
 import '../lib/util'
 export default {
 	computed: {
@@ -209,6 +264,7 @@ export default {
 	data () {
 		return {
             hasAllMsg: false,
+            operListLayer: false,
             logOutLayer: false,
             errActiveName: [0],
             errLogList: [
@@ -248,10 +304,11 @@ export default {
                 {name: '出生日期', value: '', prop: 'F_birthday'},
                 {name: '手机号', value: '', prop: 'F_phone_num'},
                 {name: '状态', value: '', prop: 'F_state'},
-                {name: '创建时间', value: '', prop: 'F_created_at'},
+                {name: '注册时间', value: '', prop: 'F_created_at'},
                 {name: '最近登录时间', value: '', prop: 'F_last_login_time'},
                 {name: '最近登录IP', value: '', prop: 'F_last_login_ip'},
-                {name: '最后一次访问的家庭id', value: '', prop: 'F_last_family_id'}
+                {name: '最后一次访问的家庭id', value: '', prop: 'F_last_family_id'},
+                {name: '在线状态', value: '', prop: 'F_status_name'}
 			],
 			family_info: [
                 {name: '内部ID', value: '', prop: 'F_owner_id'},
@@ -271,7 +328,10 @@ export default {
             memberList: {},
 			deviceList: {},
             logOutList: {},
+			routerList: {},
+            operList: {},
             allFamily: [],
+			allFamilyIndex: 0,
             user_id: '',
             logOutForm: {
                 date: new Date(),
@@ -279,6 +339,9 @@ export default {
 				uuid: '',
 				userId: ''
             },
+			operListForm: {
+                date: new Date()
+			},
             totalItem: 0,
 			currentPage: 1
 		}
@@ -321,7 +384,8 @@ export default {
                     this.allFamily.push({
 						name: '家庭' + (index + 1),
 						value: index + 1,
-						list: item
+						list: item,
+						family_id: item.info.F_family_id
 					})
 				})
 				this.changeFamilyData(familys[0])
@@ -331,9 +395,13 @@ export default {
 		changeFamilyData (dataObj) {
 			memberLists.tableData = dataObj.member_list
             deviceLists.tableData = dataObj.device_list
+			let arr = []
+            arr.push(dataObj.router_info)
+			routerLists.tableData = arr
 			this.setFamilyInfo(dataObj.info)
 			this.memberList = memberLists
             this.deviceList = deviceLists
+            this.routerList = routerLists
 		},
         setFamilyInfo (data) {
             this.family_info.forEach((item) => {
@@ -355,6 +423,7 @@ export default {
 		    // console.log('输出tab')
 		},
         handleCommand(command) {
+            this.allFamilyIndex = command - 1
             this.changeFamilyData(this.allFamily[command-1].list)
            // this.$message('click on item ' + command);
         },
@@ -411,11 +480,70 @@ export default {
         },
 		toRootLog () {
             this.$router.push({path: '/main/rootLog/' + this.searchKey})
+		},
+        getStatusText (type) {
+            let text = ''
+            switch(type) {
+                case 1:
+                    text = '有效'
+                    break
+                case 0:
+                    text = '无效'
+                    break
+                default:
+                    text = '未知'
+                    break
+            }
+            return text
+        },
+        getRouterStatusText (type) {
+            let text = ''
+            switch(type) {
+                case 1:
+                    text = '工厂测试'
+                    break
+                case 2:
+                    text = '库存'
+                    break
+                case 3:
+                    text = '销售出'
+                    break
+                case 5:
+                    text = '返修'
+                    break
+                default:
+                    text = '失效'
+                    break
+            }
+            return text
+        },
+		getOperaList () {
+            let obj = this
+			let param = {
+                select_date: this.operListForm.date,
+                family_id: this.allFamily[this.allFamilyIndex].family_id
+			}
+            obj.$store.dispatch('operaList', param).then((result) => {
+                if (result && result.data) {
+                    operLists.tableData = result.data
+				}else {
+                    operLists.tableData =  []
+				}
+				obj.operList = operLists
+            })
+		},
+        openOperListLayer () {
+            this.operListLayer = true
+			this.getOperaList()
+		},
+        changeSelectOperList () {
+            this.getOperaList()
 		}
 	},
     ...mapActions([
 		'searchUserMsg',
-		'searchLogOut'
+		'searchLogOut',
+		'operaList'
     ])
 }
 </script>
@@ -437,6 +565,11 @@ export default {
 		height: 30px;
 		line-height: 30px;
 		margin:40px 0 15px;
+	}
+	.operation-list{
+		position: absolute;
+		right: 20px;
+		top: 75px;
 	}
 </style>
 <style lang="less">

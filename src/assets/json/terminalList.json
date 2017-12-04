@@ -8,7 +8,7 @@
     {"prop": "F_hardwareVersion", "label": "硬件版本"},
     {"prop": "F_routerVersion", "label": "路由器版本"},
     {"prop": "F_zigbeeVersion", "label": "zigbee版本"},
-    {"prop": "F_register", "label": "用户注册时间"}
+    {"prop": "F_status_name", "label": "状态"}
   ],
   "tableData":[]
 }
