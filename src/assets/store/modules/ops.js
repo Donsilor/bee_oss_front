@@ -68,6 +68,24 @@ const actions = {
                 console.log(error)
             })
         })
+    },
+    logRegDatas({commit, state}, params) {
+        return new Promise((resolve, reject) => {
+            axios.post(THROUGH_API.logRegData, params).then((response) => {
+                resolve(response.data.result)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
+    },
+    qpsDatas({commit, state}, params) {
+        return new Promise((resolve, reject) => {
+            axios.post(THROUGH_API.qpsData, params).then((response) => {
+                resolve(response.data.result)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
     }
     // getTerminalList({commit, state}, params) {
     //     return new Promise((resolve, reject) => {

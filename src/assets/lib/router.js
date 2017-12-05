@@ -45,7 +45,34 @@ const routes = [{
 	}, {
         path: 'throughData',
         name: 'throughData',
-        component: Pages.ThroughData
+        component: Pages.ThroughData,
+        children: [
+            {
+                path: '',
+                name: 'throughAll',
+                component: Pages.AllThroughData,
+            },
+			{
+                path: 'appRouterData',
+                name: 'appRouterData',
+                component: Pages.AppRouterData,
+			},
+            {
+                path: 'devicesData',
+                name: 'devicesData',
+                component: Pages.DevicesData,
+            },
+            {
+                path: 'logRegData',
+                name: 'logRegData',
+                component: Pages.LogRegData,
+            },
+            {
+                path: 'qpsData',
+                name: 'qpsData',
+                component: Pages.QpsData,
+            }
+		]
     }, {
 		path: 'cmdb',
 		name: 'cmdb',

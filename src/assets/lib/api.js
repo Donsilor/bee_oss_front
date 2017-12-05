@@ -22,4 +22,6 @@ export const THROUGH_API = {
     throughDatas: API_MASTER + 'analyzer/index',  // 经分数据统计
     deviceTotal: API_MASTER + 'analyzer/devicest',  // 按品类/产品ID统计子设备个数
     onlineLog: API_MASTER + 'analyzer/onlinelog',  // APP/路由器在线日志列表
+    logRegData: API_MASTER + 'analyzer/analyzerlog',  // 按channel获取用户登录注册日志
+    qpsData: API_MASTER + 'analyzer/qpslog',  // 获取QPS日志列表
 }
