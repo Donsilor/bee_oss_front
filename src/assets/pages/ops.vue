@@ -210,7 +210,7 @@
 				</el-table-column>
 			</el-table>
 			<div class="page-line">
-				<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="20" :current-page.sync="currentPage"></el-pagination>
+				<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="10" :current-page.sync="currentPage"></el-pagination>
 			</div>
 			<span slot="footer" class="dialog-footer">
                <el-button @click="logOutLayer = false" style="border:none;">取 消</el-button>
@@ -240,6 +240,9 @@
 					</template>
 				</el-table-column>
 			</el-table>
+			<div class="page-line">
+				<el-pagination small layout="prev, pager, next" :total="totalItemOper" @current-change="pageOperChange" :page-size="10" :current-page.sync="currentOperPage"></el-pagination>
+			</div>
 			<span slot="footer" class="dialog-footer">
                <el-button @click="operListLayer = false" style="border:none;">取 消</el-button>
             </span>
@@ -343,7 +346,9 @@ export default {
                 date: new Date()
 			},
             totalItem: 0,
-			currentPage: 1
+			currentPage: 1,
+            totalItemOper: 0,
+			currentOperPage: 1
 		}
 	},
 	mounted () {
@@ -473,10 +478,14 @@ export default {
             obj.$store.dispatch('searchLogOut', param).then((result) => {
                 logOutLists.tableData = result.data
                 obj.logOutList = logOutLists
+				obj.totalItem = result.total
             })
 		},
         pageChange () {
             this.changeLogOut(this.currentPage)
+        },
+        pageOperChange () {
+            this.getOperaList(this.currentOperPage)
         },
 		toRootLog () {
             this.$router.push({path: '/main/rootLog/' + this.searchKey})
@@ -517,16 +526,20 @@ export default {
             }
             return text
         },
-		getOperaList () {
+		getOperaList (page) {
             let obj = this
 			let param = {
                 select_date: this.operListForm.date,
-                family_id: this.allFamily[this.allFamilyIndex].family_id
+                family_id: 0,
+				limit: 10,
+                current_page: page
+                // family_id: this.allFamily[this.allFamilyIndex].family_id
 			}
             obj.$store.dispatch('operaList', param).then((result) => {
                 if (result && result.data) {
                     operLists.tableData = result.data
-				}else {
+					obj.totalItemOper = result.total
+                }else {
                     operLists.tableData =  []
 				}
 				obj.operList = operLists
@@ -534,10 +547,10 @@ export default {
 		},
         openOperListLayer () {
             this.operListLayer = true
-			this.getOperaList()
+			this.getOperaList(1)
 		},
         changeSelectOperList () {
-            this.getOperaList()
+            this.getOperaList(1)
 		}
 	},
     ...mapActions([
@@ -569,7 +582,7 @@ export default {
 	.operation-list{
 		position: absolute;
 		right: 20px;
-		top: 75px;
+		top: 45px;
 	}
 </style>
 <style lang="less">

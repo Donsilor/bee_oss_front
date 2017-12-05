@@ -5,35 +5,47 @@
 	    <!--</div>-->
 		<div style="padding-bottom: 30px;">
 			<!--搜索框-->
-			<el-row :gutter="24" >
-				<el-col :span="3" style="padding-right: 0">
-					<el-input v-model="rootLogForm.uuid" placeholder="uuid"></el-input>
+			<el-row :gutter="24">
+				<el-col :span="22">
+					<el-row :gutter="24" >
+						<el-col :span="3" style="padding-right: 0">
+							<el-input v-model="rootLogForm.uuid" placeholder="uuid"></el-input>
+						</el-col>
+						<el-col :span="3" style="padding-right: 0">
+							<el-input v-model="rootLogForm.msg_tag" placeholder="msg_tag"></el-input>
+						</el-col>
+						<el-col :span="3" style="padding-right: 0">
+							<el-input v-model="rootLogForm.session_id" placeholder="session_id"></el-input>
+						</el-col>
+						<el-col :span="3" style="padding-right: 0">
+							<el-input v-model="rootLogForm.user_id" placeholder="user_id"></el-input>
+						</el-col>
+						<el-col :span="3" style="padding-right: 0">
+							<el-input v-model="rootLogForm.router_id" placeholder="router_id"></el-input>
+						</el-col>
+						<el-col :span="3">
+							<el-date-picker
+									style="padding-right: 40px"
+									v-model="rootLogForm.select_date"
+									placeholder="今天"
+							>
+							</el-date-picker>
+						</el-col>
+						<el-col :span="3" >
+							<el-time-picker
+									is-range
+									v-model="rootLogForm.start_end_time"
+									range-separator="至"
+									start-placeholder="开始时间"
+									end-placeholder="结束时间"
+									placeholder="选择时间范围">
+							</el-time-picker>
+						</el-col>
+					</el-row>
 				</el-col>
-				<el-col :span="3" style="padding-right: 0">
-					<el-input v-model="rootLogForm.msg_tag" placeholder="msg_tag"></el-input>
-				</el-col>
-				<el-col :span="3" style="padding-right: 0">
-					<el-input v-model="rootLogForm.session_id" placeholder="session_id"></el-input>
-				</el-col>
-				<el-col :span="3" style="padding-right: 0">
-					<el-input v-model="rootLogForm.user_id" placeholder="user_id"></el-input>
-				</el-col>
-				<el-col :span="3" style="padding-right: 0">
-					<el-input v-model="rootLogForm.router_id" placeholder="router_id"></el-input>
-				</el-col>
-				<el-col :span="3">
-					<el-date-picker
-							v-model="rootLogForm.select_date"
-							placeholder="今天"
-					>
-					</el-date-picker>
-				</el-col>
-				<el-col :span="2" style="margin-left: 40px">
+				<el-col :span="2">
 					<el-button type="primary" @click="getRootLogs">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
 				</el-col>
-				<!--<el-col :span="6" style="text-align: right;">-->
-					<!--<el-button v-show="searchedFlag" @click="searchedFlag = false">返回</el-button>-->
-				<!--</el-col>-->
 			</el-row>
 		</div>
 		<div>
@@ -47,7 +59,7 @@
 								 :width="'auto'"
 				>
 					<template scope="scope">
-						<div>{{scope.row[item.prop]}}</div>
+						<div :title="scope.row[item.prop]">{{scope.row[item.prop]}}</div>
 					</template>
 				</el-table-column>
 				<!--<el-table-column-->
@@ -78,7 +90,8 @@ export default {
                 user_id: '',
                 router_id: '',
                 msg_tag: '',
-                session_id: ''
+                session_id: '',
+                start_end_time: []
 			},
             totalItem: 0,
 			currentPage: 1,
@@ -96,7 +109,19 @@ export default {
 		},
         getRootLogs () {
             let obj = this
-            obj.$store.dispatch('rootLogs', obj.rootLogForm).then((result) => {
+			let param = {}
+			let currentForm =  obj.rootLogForm
+			for (let attr in currentForm) {
+                if (attr === 'start_end_time') {
+                    if (currentForm['start_end_time'].length) {
+                        param.start_time = currentForm['start_end_time'][0].Format('hh:mm:ss')
+                        param.end_time = currentForm['start_end_time'][1].Format('hh:mm:ss')
+					}
+				}else {
+                    param[attr] = currentForm[attr]
+				}
+			}
+            obj.$store.dispatch('rootLogs',param).then((result) => {
                 // obj.terminalList = result
                 rootLogJson.tableData = result.data
 				this.rootLogData = rootLogJson
@@ -113,7 +138,6 @@ export default {
 </script>
 <style lang="less">
 	.rootLog-page{
-		.el-table th>.cell,
 		.el-table td>.cell>div{
 			overflow:hidden;
 			white-space:nowrap;
@@ -124,6 +148,9 @@ export default {
 		}
 		.el-table .cell, .el-table th>div{
 			padding-right: 0;
+		}
+		.el-date-editor.el-input{
+			width: 150px;
 		}
 	}
 </style>
