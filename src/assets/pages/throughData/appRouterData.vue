@@ -1,6 +1,6 @@
 <template>
 	<div class="page-content cloud-page">
-		<div style="position: relative">
+		<div style="position: relative; margin-bottom: 30px">
 			<el-date-picker
 					v-model="select_date"
 					@change="changeSelectDate"
@@ -15,10 +15,7 @@
 	</div>
 </template>
 <script>
-import echarts from 'echarts/lib/echarts';
-import 'echarts/lib/chart/line';
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/title';
+import echarts from 'echarts';
 import {mapActions} from 'vuex';
 import '../../lib/util'
 export default {
@@ -57,6 +54,10 @@ export default {
         },
         renderEchart (Xarrs, Apparrs, Routerarrs) {
             this.alertChart.setOption({
+                title: {
+                    text: '',
+                    subtext: ''
+                },
                 tooltip: {
                     trigger: 'axis',
 //                    formatter: function (params) {
@@ -64,9 +65,25 @@ export default {
 //                        var date = new Date(params.name);
 //                        return `${date.Format('yyyy/MM/dd hh:mm')} ${params.value[1]}`;
 //                    },
-                    axisPointer: {
-                        animation: false
+//                    axisPointer: {
+//                        animation: false
+//                    }
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        },
+                        dataView: {readOnly: false},
+                        magicType: {type: ['line', 'bar']},
+                        restore: {},
+                        saveAsImage: {}
                     }
+                },
+                legend: {
+                    show: true,
+                    data: ['APP在线数','路由在线数']
                 },
                 xAxis: {
                     type: 'category',
@@ -85,7 +102,7 @@ export default {
                 },
                 series: [
                     {
-                        name: '在线APP数',
+                        name: 'APP在线数',
                         type: 'line',
                         data: Apparrs,
                         markPoint: {
@@ -101,7 +118,7 @@ export default {
                         }
                     },
                     {
-                        name: '在线路由数',
+                        name: '路由在线数',
                         type: 'line',
                         data: Routerarrs,
                         markPoint: {
@@ -134,7 +151,7 @@ export default {
 .cloud-page{
 	.btn-right{
 		position: absolute;
-		right: 20px;
+		right: 0px;
 		top:10px
 	}
 }

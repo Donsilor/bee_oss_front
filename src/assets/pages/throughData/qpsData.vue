@@ -1,6 +1,6 @@
 <template>
 	<div class="page-content cloud-page">
-		<div style="position: relative">
+		<div style="position: relative; margin-bottom: 30px">
 			<el-date-picker
 					v-model="select_date"
 					@change="changeSelectDate"
@@ -74,24 +74,18 @@ export default {
                 toolbox: {
                     show: true,
                     feature: {
-                        mark: {
-                            show: true
+                        dataZoom: {
+                            yAxisIndex: 'none'
                         },
-                        dataView: {
-                            show: true,
-                            readOnly: false
-                        },
-                        magicType: {
-                            show: true,
-                            type: ['line']
-                        },
-                        restore: {
-                            show: true
-                        },
-                        saveAsImage: {
-                            show: true
-                        }
+                        dataView: {readOnly: false},
+                        magicType: {type: ['line', 'bar']},
+                        restore: {},
+                        saveAsImage: {}
                     }
+                },
+                legend: {
+                    show: true,
+                    data: ['OPS数量']
                 },
                 xAxis: {
                     type: 'category',
@@ -110,7 +104,7 @@ export default {
                 },
                 series: [
                     {
-                        name: '数量',
+                        name: 'OPS数量',
                         type: 'line',
                         data: dataArrs,
                         markPoint: {

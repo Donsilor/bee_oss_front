@@ -1,6 +1,6 @@
 <template>
 	<div class="page-content cloud-page">
-		<div style="position: relative">
+		<div style="position: relative; margin-bottom: 30px">
 			<el-date-picker
 					v-model="select_date"
 					@change="changeSelectDate"
@@ -15,10 +15,7 @@
 	</div>
 </template>
 <script>
-import echarts from 'echarts/lib/echarts';
-import 'echarts/lib/chart/line';
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/title';
+import echarts from 'echarts';
 import {mapActions} from 'vuex';
 import '../../lib/util'
 export default {
@@ -66,26 +63,20 @@ export default {
                         animation: false
                     }
                 },
+                legend: {
+                    show: true,
+                    data: ['子设备按分类统计']
+                },
                 toolbox: {
                     show: true,
                     feature: {
-                        mark: {
-                            show: true
+                        dataZoom: {
+                            yAxisIndex: 'none'
                         },
-                        dataView: {
-                            show: true,
-                            readOnly: false
-                        },
-                        magicType: {
-                            show: true,
-                            type: ['line']
-                        },
-                        restore: {
-                            show: true
-                        },
-                        saveAsImage: {
-                            show: true
-                        }
+                        dataView: {readOnly: false},
+                        magicType: {type: ['line', 'bar']},
+                        restore: {},
+                        saveAsImage: {}
                     }
                 },
                 xAxis: {
@@ -105,7 +96,7 @@ export default {
                 },
                 series: [
                     {
-                        name: '数量',
+                        name: '子设备按分类统计',
                         type: 'line',
                         data: dataArrs,
                         markPoint: {

@@ -1,6 +1,6 @@
 <template>
 	<div class="page-content cloud-page">
-		<div style="position: relative">
+		<div style="position: relative; margin-bottom: 30px">
 			<el-date-picker
 					v-model="select_date"
 					@change="changeSelectDate"
@@ -19,10 +19,7 @@
 	</div>
 </template>
 <script>
-import echarts from 'echarts/lib/echarts';
-import 'echarts/lib/chart/line';
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/title';
+import echarts from 'echarts';
 import {mapActions} from 'vuex';
 import '../../lib/util'
 export default {
@@ -46,22 +43,22 @@ export default {
                 if (result.data && result.data.result.data) {
                     let datas = result.data.result.data
                     let Xarrs = []
-                    let Apparrs = []
-                    let Routerarrs = []
+                    let Loginrrs = []
+                    let Registerarrs = []
                     datas.forEach((item) => {
                         let currentTime = new Date(item['start_stat_time'])
                         Xarrs.push(currentTime.Format('hh:mm:ss'))
-                        Routerarrs.push(item['router_num'])
-                        Apparrs.push(item['app_num'])
+                        Loginrrs.push(item['logined_total_num'])
+                        Registerarrs.push(item['registered_total_num'])
                     })
-                    obj.renderEchart(Xarrs, Apparrs, Routerarrs)
+                    obj.renderEchart(Xarrs, Loginrrs, Registerarrs)
                 }
             })
 		},
         initEchart () {
             this.alertChart = echarts.init(document.getElementById('charts-con'));
         },
-        renderEchart (Xarrs, Apparrs, Routerarrs) {
+        renderEchart (Xarrs, Loginrrs, Registerarrs) {
             this.alertChart.setOption({
                 tooltip: {
                     trigger: 'axis',
@@ -89,11 +86,27 @@ export default {
                         show: true
                     }
                 },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        },
+                        dataView: {readOnly: false},
+                        magicType: {type: ['line', 'bar']},
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                legend: {
+                    show: true,
+                    data: ['注册用户数','登录用户数']
+                },
                 series: [
                     {
-                        name: '在线APP数',
+                        name: '注册用户数',
                         type: 'line',
-                        data: Apparrs,
+                        data: Registerarrs,
                         markPoint: {
                             data: [
                                 {type: 'max', name: '最大值'},
@@ -107,9 +120,9 @@ export default {
                         }
                     },
                     {
-                        name: '在线路由数',
+                        name: '登录用户数',
                         type: 'line',
-                        data: Routerarrs,
+                        data: Loginrrs,
                         markPoint: {
                             data: [
                                 {type: 'max', name: '最大值'},
