@@ -10,22 +10,78 @@
 		</div>
 		<div class="allList">
 			<el-row :gutter="24">
-				<el-col :span="4" @click="goRouter('app')">
-					<div class="con-pp">
+				<el-col :span="4">
+					<div class="con-pp pontiner" @click="goRouter('appRouterData')">
 						<div class="ico-img">
-							<i class="el-icon-upload" style="font-size: 4rem; color: #ccc"></i>
+							<i class="el-icon-upload" style="font-size: 3.5rem; color: #ccc"></i>
 						</div>
-						<div><strong>5</strong></div>
+						<div><strong>{{numAll.app_num}}</strong></div>
 						<h3>APP在线数</h3>
 					</div>
 				</el-col>
-				<el-col :span="4" @click="goRouter('app')">
-					<div class="con-pp">
+				<el-col :span="4"  :offset="1">
+					<div class="con-pp pontiner" @click="goRouter('appRouterData')">
 						<div class="ico-img">
-							<i class="el-icon-upload" style="font-size: 4rem; color: #ccc"></i>
+							<i class="el-icon-menu" style="font-size: 3rem; color: #ccc"></i>
 						</div>
-						<div><strong>5</strong></div>
+						<div><strong>{{numAll.router_num}}</strong></div>
 						<h3>路由在线数</h3>
+					</div>
+				</el-col>
+				<el-col :span="4" :offset="1">
+					<div class="con-pp pontiner" @click="goRouter('logRegData')">
+						<div class="ico-img">
+							<i class="el-icon-star-on" style="font-size: 3.5rem; color: #ccc"></i>
+						</div>
+						<div><strong>{{numAll.registered_total_num}}</strong></div>
+						<h3>用户注册</h3>
+					</div>
+				</el-col>
+				<el-col :span="4"  :offset="1">
+					<div class="con-pp pontiner" @click="goRouter('logRegData')">
+						<div class="ico-img">
+							<i class="el-icon-star-off" style="font-size: 3rem; color: #ccc"></i>
+						</div>
+						<div><strong>{{numAll.logined_total_num}}</strong></div>
+						<h3>用户登录</h3>
+					</div>
+				</el-col>
+				<el-col :span="4" :offset="1">
+					<div class="con-pp pontiner" @click="goRouter('devicesData')">
+						<div class="ico-img">
+							<i class="el-icon-upload" style="font-size: 3.5rem; color: #ccc"></i>
+						</div>
+						<div><strong>{{numAll.device_total}}</strong></div>
+						<h3>子设备统计</h3>
+					</div>
+				</el-col>
+			</el-row>
+			<el-row style="margin-top: 3rem" :gutter="24">
+				<el-col :span="4" >
+					<div class="con-pp pontiner" @click="goRouter('0')">
+						<div class="ico-img">
+							<i class="el-icon-menu" style="font-size: 3rem; color: #ccc"></i>
+						</div>
+						<div><strong>{{numAll.family_total}}</strong></div>
+						<h3>家庭统计</h3>
+					</div>
+				</el-col>
+				<el-col :span="4" :offset="1">
+					<div class="con-pp pontiner" @click="goRouter('0')" >
+						<div class="ico-img">
+							<i class="el-icon-share" style="font-size: 3rem; color: #ccc"></i>
+						</div>
+						<div><strong>{{numAll.device_op_num}}</strong></div>
+						<h3>设备操作统计</h3>
+					</div>
+				</el-col>
+				<el-col :span="4"  :offset="1">
+					<div class="con-pp pontiner" @click="goRouter('qpsData')">
+						<div class="ico-img">
+							<i class="el-icon-view" style="font-size: 3rem; color: #ccc"></i>
+						</div>
+						<div><strong>{{numAll.oper_num}}</strong></div>
+						<h3>QPS</h3>
 					</div>
 				</el-col>
 			</el-row>
@@ -57,7 +113,8 @@ export default {
                 logined_total_num: 0,
                 family_total: 0,
                 device_total: 0,
-                device_op_num: 0
+                device_op_num: 0,
+                oper_num: 0
 			}
 		}
 	},
@@ -80,6 +137,11 @@ export default {
 		},
         changeSelectDate () {
             this.getFirstDatas()
+		},
+        goRouter (val) {
+            if (val !== '0') {
+                this.$router.push({path: '/main/throughData/' + val})
+			}
 		}
 	},
 	components: {},
@@ -90,27 +152,31 @@ export default {
 </script>
 <style lang="less">
 	.allList{
-		margin-top: 20px;
+		margin-top: 40px;
 		.con-pp{
 			.ico-img{
-				height: 70px;
-				padding-top: 6px;
+				height: 60px;
+				padding-top: 10px;
 			}
 			i{
-				width: 64px;
-				height: 64px;
+				width: 50px;
+				height: 50px;
 			}
 			strong{
 				font-size: 1.75em;
 				color: #00CC33;
 			}
-			background: #fff;
+			background: #F2F2F2;
 			height: 150px;
 			text-align: center;
 		}
+		.pontiner{
+			cursor: pointer;
+			min-width: 180px;
+		}
 	}
 	.bg-gray{
-		background: #F2F2F2;
+		padding-right: 5rem;
 	}
 .cloud-page{
 	 .el-tabs__active-bar{
