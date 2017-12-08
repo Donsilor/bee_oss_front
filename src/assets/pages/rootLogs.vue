@@ -31,7 +31,7 @@
 							>
 							</el-date-picker>
 						</el-col>
-						<el-col :span="3" >
+						<el-col :span="3">
 							<el-time-picker
 									is-range
 									v-model="rootLogForm.start_end_time"
@@ -52,6 +52,11 @@
 			<el-table
 					:data="rootLogData.tableData"
 					style="width: 100%">
+				<el-table-column label="操作">
+					<template scope="scope">
+						<el-button type="text" @click="getDetail(scope.row)">详情</el-button>
+					</template>
+				</el-table-column>
 				<el-table-column v-for="item in rootLogData.tableColumn" :key="item.prop"
 								 :prop="item.prop"
 								 :show-overflow-tooltip="true"
@@ -71,6 +76,22 @@
 				<!--</el-table-column>-->
 			</el-table>
 		</div>
+		<el-dialog title="日志详情" :visible.sync="detailFlag" class="rootLogDetail">
+			<div class="edit_form">
+				<el-form :model="logDetail+': '"  label-width="100px" >
+					<el-row>
+						<el-col :span="12" v-for="(value, key) in logDetail">
+							<el-form-item :label="key">
+								<span>{{value}}</span>
+							</el-form-item>
+						</el-col>
+					</el-row>
+				</el-form>
+			</div>
+			<div style="text-align: right; margin: 0">
+				<el-button type="primary" @click="detailFlag=false">关闭</el-button>
+			</div>
+		</el-dialog>
 	</div>
 </template>
 <script>
@@ -83,6 +104,7 @@ export default {
     components: {},
 	data () {
 		return {
+            detailFlag:false,
             rootLogForm: {
                 inner: '',
                 uuid: '',
@@ -95,7 +117,34 @@ export default {
 			},
             totalItem: 0,
 			currentPage: 1,
-            rootLogData: {}
+            rootLogData: {},
+            logDetail: {
+                log_type: '',
+                channel: '',
+                method: '',
+                msg_tag: '',
+                session_id: '',
+                host_name: '',
+                client_info: '',
+                svr_id: '',
+                dst_id: '',
+                uuid: '',
+                user_id: '',
+                family_id: '',
+                room_id: '',
+                router_id: '',
+                device_id: '',
+                msg: '',
+                req_time: '',
+                process_time: '',
+                rcv_time: '',
+                rsp_time: '',
+                queue_cost_time: '',
+                process_cost_time: '',
+                net_cost_time: '',
+                cost_time: '',
+                created_time: ''
+			}
 		}
 	},
 	mounted () {
@@ -103,6 +152,13 @@ export default {
 	watch: {
 	},
 	methods: {
+        getDetail (dataObj) {
+            this.detailFlag = true
+            let obj = this.logDetail
+			for (let attr in obj) {
+                obj[attr] = dataObj[attr]
+			}
+		},
         goBack () {
             let id = this.$route.params.id
             this.$router.push({path: '/main/ops/' + id})
@@ -151,6 +207,21 @@ export default {
 		}
 		.el-date-editor.el-input{
 			width: 150px;
+		}
+	}
+	.rootLogDetail{
+		.el-form-item__content{
+			word-wrap: break-word;
+			line-height: 30px;
+		}
+		.el-form-item{
+			margin-bottom: 3px;
+		}
+		.el-form-item__label{
+			line-height: 30px;
+			padding-top: 0;
+			padding-bottom: 0;
+			color: #999;
 		}
 	}
 </style>

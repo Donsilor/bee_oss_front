@@ -41,26 +41,26 @@
 					</el-col>
 				</el-row>
 			</el-col>
-			<el-col :span="8">
-				<header class="hp-header">
-					<h2>活跃度</h2>
-					<!-- <span>截止时间{{homeData.statistics_time}}</span> -->
-				</header>
-				<el-row :gutter="15">
-					<el-col :span="12">
-						<div class="hp-dataBox hp-icon04">
-							<p>{{homeData.pv}}</p>
-							<p>PV</p>
-						</div>
-					</el-col>
-					<el-col :span="12">
-						<div class="hp-dataBox hp-icon05">
-							<p>{{homeData.uv}}</p>
-							<p>UV</p>
-						</div>
-					</el-col>
-				</el-row>
-			</el-col>
+			<!--<el-col :span="8">-->
+				<!--<header class="hp-header">-->
+					<!--<h2>活跃度</h2>-->
+					<!--&lt;!&ndash; <span>截止时间{{homeData.statistics_time}}</span> &ndash;&gt;-->
+				<!--</header>-->
+				<!--<el-row :gutter="15">-->
+					<!--<el-col :span="12">-->
+						<!--<div class="hp-dataBox hp-icon04">-->
+							<!--<p>{{homeData.pv}}</p>-->
+							<!--<p>PV</p>-->
+						<!--</div>-->
+					<!--</el-col>-->
+					<!--<el-col :span="12">-->
+						<!--<div class="hp-dataBox hp-icon05">-->
+							<!--<p>{{homeData.uv}}</p>-->
+							<!--<p>UV</p>-->
+						<!--</div>-->
+					<!--</el-col>-->
+				<!--</el-row>-->
+			<!--</el-col>-->
 		</el-row>
 		<header class="hp-header">
 			<h2>报警趋势图</h2>

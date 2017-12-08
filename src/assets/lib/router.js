@@ -74,9 +74,13 @@ const routes = [{
             }
 		]
     }, {
-		path: 'cmdb',
-		name: 'cmdb',
-		component: Pages.CMDB
+        path: 'cmdb',
+        name: 'cmdb',
+        component: Pages.CMDB
+    }, {
+		path: 'warnManage',
+		name: 'warnManage',
+		component: Pages.WarnManage
 	}]
 }];
 

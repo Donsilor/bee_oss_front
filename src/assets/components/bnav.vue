@@ -54,6 +54,12 @@ export default {
 					className: 'cloud',
 					url: '/main/throughData'
 				},
+                {
+                    title: '告警管理',
+                    id: 'warnManage',
+                    className: 'cloud',
+                    url: '/main/warnManage'
+                },
 				{
 					title: 'CMDB',
 					id: 'cmdb',

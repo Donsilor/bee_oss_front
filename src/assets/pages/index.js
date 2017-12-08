@@ -13,7 +13,8 @@ import DevicesData from './throughData/devicesData.vue';
 import LogRegData from './throughData/logRegData.vue';
 import QpsData from './throughData/qpsData.vue';
 import CMDB from './cmdb.vue';
-import upgrade from './upgradeCenter.vue'
+import upgrade from './upgradeCenter.vue';
+import WarnManage from './warnManage.vue';
 
 export {
 	Login,
@@ -31,5 +32,6 @@ export {
     AppRouterData,
     DevicesData,
     LogRegData,
-    QpsData
+    QpsData,
+    WarnManage
 };
