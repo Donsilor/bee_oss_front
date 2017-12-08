@@ -3,7 +3,6 @@
 		<div style="position: relative; margin-bottom: 30px">
 			<el-date-picker
 					v-model="select_date"
-					@change="changeSelectDate"
 					placeholder="今天"
 			>
 			</el-date-picker>
@@ -15,10 +14,11 @@
 					end-placeholder="结束时间"
 					placeholder="选择时间范围">
 			</el-time-picker>
-			<el-select v-model="group_type" placeholder="svr_id" @change="typeChange">
-				<el-option label="Access_All" value="Access_All"></el-option>
+			<el-select v-model="group_type" placeholder="请选择">
+				<el-option label="svr_id" value="svr_id"></el-option>
 				<el-option label="monitor_name" value="monitor_name"></el-option>
 			</el-select>
+			<el-button type="primary" @click="changeSelectDate">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
 			<el-button class="btn-right" type="text" @click="goBack"><<&nbsp;返回</el-button>
 		</div>
 		<el-row :gutter="24">
@@ -48,22 +48,24 @@ export default {
 			let param = {
                 select_date: obj.select_date,
                 group_by: obj.group_type,
-				start_time: obj.start_end_time[0] || '',
-				end_time: obj.start_end_time[1] || ''
+				start_time: obj.start_end_time[0] && obj.start_end_time[0].Format('hh:mm:ss') || '',
+				end_time: obj.start_end_time[1] && obj.start_end_time[1].Format('hh:mm:ss') || ''
 			}
             obj.$store.dispatch('getwarnDatas',param).then((result) => {
-                if (result.data && result.data.length) {
+                if (result.data) {
                     let datas = result.data
 					let Xarrs = []
 					let Valuearrs = []
-                    datas.forEach((item) => {
-                        for (let attr in item) {
-                            if (attr !== 'count') {
-                                Xarrs.push(item[attr])
-							}
-						}
-                        Valuearrs.push(item['count'])
-					})
+					if (result.data.length) {
+                        datas.forEach((item) => {
+                            for (let attr in item) {
+                                if (attr !== 'count') {
+                                    Xarrs.push(item[attr])
+                                }
+                            }
+                            Valuearrs.push(item['count'])
+                        })
+					}
                     obj.renderEchart(Xarrs, Valuearrs)
 				}
             })
