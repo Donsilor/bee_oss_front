@@ -5,7 +5,7 @@ import { Message } from 'element-ui'
 
 const CODE = {
   SUCCEE: 200,
-  NO_LOGIN: -14
+  NO_LOGIN: 401
 }
 
 // Add a request interceptor
@@ -46,7 +46,8 @@ axios.interceptors.response.use(function (response) {
     if (response.data.code !== CODE.SUCCEE) {
       // console.error(response.data)
       if (response.data.code === CODE.NO_LOGIN) {
-        // 错误码回调
+        // 未登录的情况
+        window.location.hash = '/'
       } else {
         Message({
           message: response.data.msg,

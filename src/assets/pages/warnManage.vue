@@ -52,7 +52,7 @@ export default {
 				end_time: obj.start_end_time[1] && obj.start_end_time[1].Format('hh:mm:ss') || ''
 			}
             obj.$store.dispatch('getwarnDatas',param).then((result) => {
-                if (result.data) {
+                    if (result.data) {
                     let datas = result.data
 					let Xarrs = []
 					let Valuearrs = []
@@ -118,7 +118,7 @@ export default {
                 series: [
                     {
                         name: this.group_type,
-                        type: 'line',
+                        type: 'bar',
                         data: Valuearrs,
                         markPoint: {
                             data: [
