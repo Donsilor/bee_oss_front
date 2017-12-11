@@ -6,7 +6,7 @@
 		<el-form-item label="版本类型" prop="type">
 			<el-row>
 				<el-col :span="8">
-					<el-select v-model="importForm.type" placeholder="终端">
+					<el-select v-model="importForm.type" placeholder="终端" @change="typeChangeEvent">
 						<el-option
 								v-for="item in typeOptions"
 								:key="item.value"
@@ -15,7 +15,7 @@
 						</el-option>
 					</el-select>
 				</el-col>
-				<el-col :span="7" :offset="1" v-show="importForm.type === 1">
+				<el-col :span="7" :offset="1" v-if="importForm.type === 1">
 					<el-select v-model="importForm.system" placeholder="操作系统">
 						<el-option
 								v-for="item in systemOptions"
@@ -27,7 +27,7 @@
 				</el-col>
 			</el-row>
 		</el-form-item>
-		<el-form-item label="子设备" prop="product_id" v-show="importForm.type === 3">
+		<el-form-item label="子设备" prop="product_id" v-if="importForm.type === 3">
 			<el-row>
 				<el-col :span="8">
 					<el-select v-model="importForm.brand_id" placeholder="品牌">
@@ -180,7 +180,7 @@ export default {
             importForm: {
                 type: 1,
                 title: '',
-                system: 'android',
+                system: 'Android',
                 version: '',
                 release_tm: '',
                 routersList: [],
@@ -213,16 +213,16 @@ export default {
                     { required: true, message: '请输入详细事项' }
                 ],
                 product_id: [
-                    { required: true, message: '请输入子设备' }
+                    { required: false, message: '请输入子设备' }
                 ],
                 release_tm: [
                     { required: true, message: '请选择发布时间' }
                 ],
                 routersList: [
-                    { required: true, message: '请选择支持版本' }
+                    { required: false, message: '请选择支持版本' }
                 ],
                 productsList: [
-                    { required: true, message: '请选择支持版本' }
+                    { required: false, message: '请选择支持版本' }
                 ],
                 download_url_object: [
                     { required: true, message: '请上传固件包' }
@@ -278,7 +278,7 @@ export default {
 			for (let attr in form) {
                 switch (attr){
 					case 'system':
-                        form[attr] = 'android'
+                        form[attr] = 'Android'
 					    break
                     case 'type':
                         form[attr] = 1
@@ -299,6 +299,17 @@ export default {
         closeParentFlow () {
             this.$emit('closeImportBox')
 		},
+        typeChangeEvent (val) {
+            if (val === 3) {
+                this.rulesImport.product_id = [
+                    { required: true, message: '请选择产品类型' }
+                ]
+            } else {
+                this.rulesImport.product_id = [
+                    { required: false }
+                ]
+			}
+        },
         importSubmitForm (formName) {
             const obj = this
             obj.$refs[formName].validate((valid) => {
