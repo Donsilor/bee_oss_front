@@ -95,6 +95,15 @@ const actions = {
                 console.log(error)
             })
         })
+    },
+    getwarnDataList({commit, state}, params) {
+        return new Promise((resolve, reject) => {
+            axios.post(THROUGH_API.warnDataSearch, params).then((response) => {
+                resolve(response.data.result)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
     }
     // getTerminalList({commit, state}, params) {
     //     return new Promise((resolve, reject) => {

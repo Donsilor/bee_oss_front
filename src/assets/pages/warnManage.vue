@@ -54,21 +54,23 @@ export default {
 				end_time: obj.start_end_time[1] && obj.start_end_time[1].Format('hh:mm:ss') || ''
 			}
             obj.$store.dispatch('getwarnDatas',param).then((result) => {
-                    if (result.data) {
-                    let datas = result.data
-					let Xarrs = []
-					let Valuearrs = []
-					if (result.data.length) {
-                        datas.forEach((item) => {
-                            for (let attr in item) {
-                                if (attr !== 'count') {
-                                    Xarrs.push(item[attr])
-                                }
-                            }
-                            Valuearrs.push(item['count'])
-                        })
+				if (result.data) {
+					let data = result.data
+					let datas = data.result.data
+					let datasObj = {}
+					let xObj = []
+					if (datas.length) {
+						datas.forEach((item) => {
+                            xObj.push(item.start_stat_time)
+						    if (!datasObj[item.monitor_name]) {
+                                datasObj[item.monitor_name] = []
+							} else {
+                                datasObj[item.monitor_name].push(item.report_num)
+							}
+						})
+                        xObj = Array.from(xObj)
 					}
-                    obj.renderEchart(Xarrs, Valuearrs)
+					obj.renderEchart(xObj, datasObj)
 				}
             })
 		},
@@ -78,7 +80,32 @@ export default {
         initEchart () {
             this.alertChart = echarts.init(document.getElementById('charts-con'));
         },
-        renderEchart (Xarrs, Valuearrs) {
+        renderEchart (xObj, datasObj) {
+            let curSeries = []
+			let legendArr = []
+			if (datasObj) {
+                for (let attr in datasObj) {
+                    legendArr.push(attr)
+                    curSeries.push({
+                        name: attr,
+                        type: 'line',
+                        data: datasObj[attr],
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        },
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    })
+				}
+
+
+			}
             this.alertChart.setOption({
                 title: {
                     text: '',
@@ -101,11 +128,11 @@ export default {
                 },
                 legend: {
                     show: true,
-                    data: [this.group_type]
+                    data: legendArr
                 },
                 xAxis: {
                     type: 'category',
-					data: Xarrs,
+					data: xObj,
                     splitLine: {
                         show: false
                     }
@@ -117,24 +144,7 @@ export default {
                         show: true
                     }
                 },
-                series: [
-                    {
-                        name: this.group_type,
-                        type: 'line',
-                        data: Valuearrs,
-                        markPoint: {
-                            data: [
-                                {type: 'max', name: '最大值'},
-                                {type: 'min', name: '最小值'}
-                            ]
-                        },
-                        markLine: {
-                            data: [
-                                {type: 'average', name: '平均值'}
-                            ]
-                        }
-                    }
-                ]
+                series: curSeries
             })
         },
         goBack () {

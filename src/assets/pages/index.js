@@ -15,6 +15,7 @@ import QpsData from './throughData/qpsData.vue';
 import CMDB from './cmdb.vue';
 import upgrade from './upgradeCenter.vue';
 import WarnManage from './warnManage.vue';
+import WarnDataSearch from './warnDataSearch.vue';
 
 export {
 	Login,
@@ -33,5 +34,6 @@ export {
     DevicesData,
     LogRegData,
     QpsData,
-    WarnManage
+    WarnManage,
+    WarnDataSearch
 };

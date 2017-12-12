@@ -64,7 +64,7 @@ export default {
                 },
                 {
                     title: '告警管理',
-                    path: '',
+                    path: '/main',
                     icon: 'facility',
                     children: [
                         {
@@ -73,7 +73,7 @@ export default {
                             isSelected: false
                         },
                         {
-                            path: '',
+                            path: '/main/warnDataSearch',
                             title: '业务告警查询',
                             isSelected: false
                         }
@@ -81,8 +81,15 @@ export default {
                 },
                 {
                     title: '云平台日志',
-                    path: '/main/rootLog',
-                    icon: 'cmdb'
+                    path: '/main',
+                    icon: 'cmdb',
+					children: [
+                        {
+                            path: '/main/rootLog',
+                            title: '云平台日志',
+                            isSelected: false
+                        }
+					]
                 }
 			],
 			navs: [
@@ -153,11 +160,11 @@ export default {
 	},
 	mounted () {
 	    let obj = this
-        if (obj.default) {
-            obj.defaultActive = obj.default
-        } else {
-            obj.defaultActive = obj.$route.path
-        }
+//        if (obj.default) {
+//            obj.defaultActive = obj.default
+//        } else {
+//            obj.defaultActive = obj.$route.path
+//        }
 	},
 	methods: {
 

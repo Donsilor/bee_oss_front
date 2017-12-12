@@ -81,7 +81,11 @@ const routes = [{
 		path: 'warnManage',
 		name: 'warnManage',
 		component: Pages.WarnManage
-	}]
+	},{
+        path: 'warnDataSearch',
+        name: 'warnDataSearch',
+        component: Pages.WarnDataSearch
+    }]
 }];
 
 const router = new VueRouter({
