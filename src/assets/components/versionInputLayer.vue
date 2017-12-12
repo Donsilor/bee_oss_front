@@ -334,7 +334,7 @@ export default {
         },
         getUploadData (val) {
 		    let data = val.result
-		    this.importForm.download_url_object = data.download_url
+		    this.importForm.download_url_object = data.object
             this.importForm.download_file_md5 = data.md5
             this.importForm.file_size = data.file_size
             this.$refs['importForm'].validate((valid) => {})

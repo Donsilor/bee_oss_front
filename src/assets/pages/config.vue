@@ -531,11 +531,11 @@ export default {
 	},
 	methods: {
         formatTime (val) {
-            if ((typeof val) === 'number') {
+            if (!val) {
+                return '------'
+			} else {
                 let date = new Date(val)
                 return date.Format('yyyy-MM-dd')
-			}else {
-                return '------'
 			}
 		},
         getVersionDetail (dataObj) {

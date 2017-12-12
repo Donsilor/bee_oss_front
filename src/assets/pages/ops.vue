@@ -115,7 +115,8 @@
 							</el-table>
 						</el-row>
 						<!--家庭-设备列表-->
-						<el-row class="user_msg_con" v-show="activeName==='third'">
+						<el-row class="user_msg_con" v-show="activeName==='third'" style="padding-top: 0">
+							<h3 class="h3_inner">路由器</h3>
 							<el-table
 									:data="routerList.tableData"
 									style="width: 100%; margin-bottom: 15px">
@@ -132,6 +133,7 @@
 									</template>
 								</el-table-column>
 							</el-table>
+							<h3 class="h3_inner">子设备</h3>
 							<el-table
 									:data="deviceList.tableData"
 									style="width: 100%">
@@ -236,7 +238,11 @@
 								 :label="item.label"
 				>
 					<template scope="scope">
-						<div>{{scope.row[item.prop]}}</div>
+						<div v-if="scope.row[item.prop]==='created_time'">{{scope.row[item.prop].Format('yyyy-MM-dd')}}</div>
+						<div v-else-if="scope.row[item.prop]==='rsp_time'">{{scope.row[item.prop].Format('yyyy-MM-dd')}}</div>
+						<div v-else-if="scope.row[item.prop]==='cost_time'">{{scope.row[item.prop]+'秒'}}</div>
+						<div v-else-if="scope.row[item.prop]==='created_time'">{{scope.row[item.prop].Format('yyyy-MM-dd')}}</div>
+						<div v-else>{{scope.row[item.prop]}}</div>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -531,8 +537,8 @@ export default {
 			let param = {
                 select_date: this.operListForm.date,
                 family_id: 0,
-				limit: 10,
-                current_page: page
+				limit: 5,
+                page: page
                 // family_id: this.allFamily[this.allFamilyIndex].family_id
 			}
             obj.$store.dispatch('operaList', param).then((result) => {
@@ -571,13 +577,16 @@ export default {
 		left: 93px;
 	}
 	.user_msg_con{
-		margin-top:30px;
+		margin-top:10px;
 		padding-top: 15px;
 	}
 	.h3_pp{
 		height: 30px;
 		line-height: 30px;
 		margin:40px 0 15px;
+	}
+	.h3_inner{
+		padding: 0 0 15px;
 	}
 	.operation-list{
 		position: absolute;

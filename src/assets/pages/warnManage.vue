@@ -14,10 +14,11 @@
 					end-placeholder="结束时间"
 					placeholder="选择时间范围">
 			</el-time-picker>
-			<el-select v-model="group_type" placeholder="请选择">
-				<el-option label="svr_id" value="svr_id"></el-option>
-				<el-option label="monitor_name" value="monitor_name"></el-option>
-			</el-select>
+			<!--<el-select placeholder="请选择" value="monitor_name">-->
+				<!--&lt;!&ndash;<el-option label="svr_id" value="svr_id"></el-option>&ndash;&gt;-->
+				<!--<el-option label="monitor_name" value="monitor_name"></el-option>-->
+			<!--</el-select>-->
+			<!--<el-input type="text" v-model="group_by" style="width: 15%"></el-input>-->
 			<el-button type="primary" @click="changeSelectDate">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
 			<el-button class="btn-right" type="text" @click="goBack"><<&nbsp;返回</el-button>
 		</div>
@@ -35,7 +36,8 @@ export default {
 		return {
             start_end_time: [],
             select_date: new Date(),
-            group_type: 'svr_id'
+            group_type: 'svr_id',
+			group_by: ''
 		}
 	},
 	mounted () {
@@ -47,7 +49,7 @@ export default {
 			let obj = this
 			let param = {
                 select_date: obj.select_date,
-                group_by: obj.group_type,
+                group_by: obj.group_by,
 				start_time: obj.start_end_time[0] && obj.start_end_time[0].Format('hh:mm:ss') || '',
 				end_time: obj.start_end_time[1] && obj.start_end_time[1].Format('hh:mm:ss') || ''
 			}
@@ -118,7 +120,7 @@ export default {
                 series: [
                     {
                         name: this.group_type,
-                        type: 'bar',
+                        type: 'line',
                         data: Valuearrs,
                         markPoint: {
                             data: [

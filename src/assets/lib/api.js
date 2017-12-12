@@ -24,6 +24,6 @@ export const THROUGH_API = {
     onlineLog: API_MASTER + 'analyzer/onlinelog',  // APP/路由器在线日志列表
     logRegData: API_MASTER + 'analyzer/analyzerlog',  // 按channel获取用户登录注册日志
     qpsData: API_MASTER + 'analyzer/qpslog',  // 获取QPS日志列表
-    warnData: API_MASTER + 'monitor/index'  // 按告警名称、服务器Id统计数量
+    warnData: API_MASTER + 'monitor/statistics'  // 按告警名称、服务器Id统计数量
 
 }

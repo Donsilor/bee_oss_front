@@ -80,7 +80,7 @@
 						<div class="ico-img">
 							<i class="el-icon-view" style="font-size: 3rem; color: #ccc"></i>
 						</div>
-						<div><strong>{{numAll.oper_num}}</strong></div>
+						<div><strong>{{numAll.access_msg_num}}</strong></div>
 						<h3>QPS</h3>
 					</div>
 				</el-col>
@@ -114,7 +114,7 @@ export default {
                 family_total: 0,
                 device_total: 0,
                 device_op_num: 0,
-                oper_num: 0
+                access_msg_num: 0
 			}
 		}
 	},

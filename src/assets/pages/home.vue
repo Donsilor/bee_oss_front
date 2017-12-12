@@ -1,85 +1,76 @@
 <template>
 	<div class="home-page">
-		<el-row class="hp-dataArea" :gutter="40">
-			<el-col :span="8">
+		<el-row class="hp-dataArea" :gutter="24">
+			<el-col :span="6">
 				<header class="hp-header">
 					<h2>路由器信息</h2>
 					<!-- <span>截止时间{{homeData.statistics_time}}</span> -->
 				</header>
-				<el-row :gutter="15">
-					<el-col :span="12">
+				<el-row :gutter="24">
+					<el-col :span="20">
 						<div class="hp-dataBox hp-icon01">
-							<p>{{homeData.router_count}}</p>
+							<p>{{homeData.router_num}}</p>
 							<p>设备安装总量</p>
 						</div>
-					</el-col>
-					<el-col :span="12">
-						<div class="hp-dataBox hp-icon02">
-							<p>{{homeData.router_online_percent}}</p>
-							<p>设备在线比例</p>
-						</div>
+						<!--<div class="hp-dataBox hp-icon02 border-top">-->
+							<!--<p>{{homeData.router_online_percent}}</p>-->
+							<!--<p>设备在线比例</p>-->
+						<!--</div>-->
 					</el-col>
 				</el-row>
 			</el-col>
-			<el-col :span="8">
+			<el-col :span="6">
 				<header class="hp-header">
 					<h2>APP信息</h2>
 					<!-- <span>截止时间{{homeData.statistics_time}}</span> -->
 				</header>
-				<el-row :gutter="15">
-					<el-col :span="12">
+				<el-row :gutter="24">
+					<el-col :span="20">
 						<div class="hp-dataBox hp-icon03">
-							<p>{{homeData.app_count}}</p>
-							<p>APP安装总量</p>
+							<p>{{homeData.app_num}}</p>
+							<p>APP数量</p>
 						</div>
-					</el-col>
-					<el-col :span="12">
-						<div class="hp-dataBox hp-icon02">
-							<p>{{homeData.app_online_percent}}</p>
-							<p>设备在线比例</p>
-						</div>
+						<!--<div class="hp-dataBox hp-icon02 border-top">-->
+							<!--<p>{{homeData.app_online_percent}}</p>-->
+							<!--<p>设备在线比例</p>-->
+						<!--</div>-->
 					</el-col>
 				</el-row>
 			</el-col>
-			<!--<el-col :span="8">-->
-				<!--<header class="hp-header">-->
-					<!--<h2>活跃度</h2>-->
-					<!--&lt;!&ndash; <span>截止时间{{homeData.statistics_time}}</span> &ndash;&gt;-->
-				<!--</header>-->
-				<!--<el-row :gutter="15">-->
-					<!--<el-col :span="12">-->
-						<!--<div class="hp-dataBox hp-icon04">-->
-							<!--<p>{{homeData.pv}}</p>-->
-							<!--<p>PV</p>-->
+			<el-col :span="6">
+				<header class="hp-header">
+					<h2>QPS</h2>
+					<!-- <span>截止时间{{homeData.statistics_time}}</span> -->
+				</header>
+				<el-row :gutter="24">
+					<el-col :span="20">
+						<div class="hp-dataBox hp-icon03">
+							<p>{{homeData.access_msg_num}}</p>
+							<p>QPS数量</p>
+						</div>
+						<!--<div class="hp-dataBox hp-icon02 border-top">-->
+							<!--<p>{{homeData.app_online_percent}}</p>-->
+							<!--<p>设备在线比例</p>-->
 						<!--</div>-->
-					<!--</el-col>-->
-					<!--<el-col :span="12">-->
-						<!--<div class="hp-dataBox hp-icon05">-->
-							<!--<p>{{homeData.uv}}</p>-->
-							<!--<p>UV</p>-->
-						<!--</div>-->
-					<!--</el-col>-->
-				<!--</el-row>-->
-			<!--</el-col>-->
+					</el-col>
+				</el-row>
+			</el-col>
 		</el-row>
 		<header class="hp-header">
 			<h2>报警趋势图</h2>
-			<!-- <span>截止时间2017-10-13 14:50</span> -->
 		</header>
 		<section class="hp-alertTable">
-			<div class="hpat-dateRangeArea">
-				<el-date-picker v-model="range" range-separator=" ~ " type="daterange" align="left" placeholder="时间段选择" :picker-options="pickerOption" v-on:change="changeDate"></el-date-picker>
-			</div>
-			<div id="echart-area" class="echart-area">
-				
-			</div>
+			<!--<div class="hpat-dateRangeArea">-->
+				<!--<el-date-picker v-model="range" range-separator=" ~ " type="daterange" align="left" placeholder="时间段选择" :picker-options="pickerOption" v-on:change="changeDate"></el-date-picker>-->
+			<!--</div>-->
+			<div id="echart-area" class="echart-area"></div>
 		</section>
 	</div>
 </template>
 <script>
 import echarts from 'echarts/lib/echarts';
 import * as namespace from '../store/namespace';
-import {mapGetters} from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 import { PREFIX } from '../lib/util.js';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
@@ -134,14 +125,22 @@ export default {
 		}
 	},
 	mounted () {
-
 		this.initEchart();
 		this.getHomeData();
 		for(let i = 0; i < 144; i += 1) {
 			this.fakeDate.push(this.randomData());
 		}
 		this.getAlarmst();
-	
+
+        const obj = this;
+        if (obj && !obj._isDestroyed) {
+            obj.getDataInterval = setInterval(() => {
+                if (obj && !obj._isDestroyed)
+                    obj.getHomeData();
+            }, 60000);
+        } else {
+            clearInterval(obj.getDataInterval)
+		}
 	},
 	methods: {
 		randomData() {
@@ -157,24 +156,16 @@ export default {
 				]
 			}
 		},
-
 		getHomeData () {
-			this.$http.post(PREFIX + 'homepage/index', {
-				token: this.token
-			}).then(res => {
-				const json = res.data;
-				if (json.code === 200) {
-					this.homeData = json.result.data;
-				} else {
-					this.$message.error(json.msg);
-				}
-			})
+            this.$store.dispatch('throughDatas',{}).then((result) => {
+                if (result) {
+                    this.homeData = result;
+                }
+            })
 		},
-
 		changeDate (value) {
 			this.getAlarmst(value);
 		},
-
 		getAlarmst(range) {
 			const handleData =  x => {
 				const curDate = new Date(x.statistics_time);
@@ -189,11 +180,13 @@ export default {
 			let params = {
 				token: this.token
 			};
-			if (range) {
-				const ranges = range.split(' ~ ');
-				params.start_time = ranges[0];
-				params.end_time =ranges[1];
-			}
+//			if (range) {
+//				const ranges = range.split(' ~ ');
+//				params.start_time = ranges[0];
+//				params.end_time = ranges[1];
+//			}
+            params.start_time = (new Date()).Format('yyyy/MM/dd') + ' 00:00';
+            params.end_time = (new Date()).Format('yyyy/MM/dd') + ' 23:59';
 			
 			this.$http.post(PREFIX + 'homepage/alarmst', params).then(res => {
 				const json = res.data;
@@ -209,7 +202,6 @@ export default {
 		initEchart () {
 			this.alertChart = echarts.init(document.getElementById('echart-area'));
 		},
-
 		renderEchart (data) {
 			this.alertChart.setOption({
 				tooltip: {
@@ -251,7 +243,10 @@ export default {
         ...mapGetters({
         	token: namespace.TOKEN
         })
-    }
+    },
+    ...mapActions([
+        'throughDatas'
+    ])
 }
 </script>
 <style lang="less">
@@ -282,9 +277,8 @@ export default {
 }
 .hp-dataBox{
 	background: #ffffff;
-	height: 125px;
 	box-sizing: border-box;
-	padding: 32px 20px 32px 86px;
+	padding: 15px 20px 32px 86px;
 	position: relative;
 	&:hover{
 		box-shadow:  2px 2px 10px rgba(0, 0, 0, .15)
@@ -373,4 +367,5 @@ export default {
 		}
 	}
 }
+.border-top{border-top:1px solid #d8d8d8}
 </style>
