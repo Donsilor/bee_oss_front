@@ -107,6 +107,9 @@ export default {
 
 			}
             this.alertChart.setOption({
+                grid : {
+                    left: 35
+				},
                 title: {
                     text: '',
                     subtext: ''
@@ -116,6 +119,7 @@ export default {
                 },
                 toolbox: {
                     show: true,
+					top: 20,
                     feature: {
                         dataZoom: {
                             yAxisIndex: 'none'
@@ -128,7 +132,8 @@ export default {
                 },
                 legend: {
                     show: true,
-                    data: legendArr
+                    data: legendArr,
+					top: 0
                 },
                 xAxis: {
                     type: 'category',
@@ -138,6 +143,7 @@ export default {
                     }
                 },
                 yAxis: {
+                    left: 200,
                     name: "数量",
                     type: 'value',
                     splitLine: {

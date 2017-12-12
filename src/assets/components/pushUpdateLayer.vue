@@ -13,7 +13,7 @@
 					</el-select>
 				</el-col>
 				<el-col :span="9" v-if="pushForm.tab===1">
-					<el-select v-model="pushForm.system" placeholder="操作系统">
+					<el-select v-model="pushForm.system" placeholder="操作系统"  @change="sysChangeEvent">
 						<el-option
 								v-for="item in systemOptions"
 								:key="item.value"
@@ -242,10 +242,25 @@ export default {
 	},
 	methods: {
         typeChangeEvent (val) {
+            this.pushForm.type = val
+			if (this.pushForm.system === 'IOS') {
+                this.pushForm.type = 4
+			}
             if (val === 3) {
                 this.rules.product_id = [
                     { required: true, message: '请选择产品类型' }
                 ]
+			} else {
+                this.rules.product_id = [
+                    { required: false, message: '请选择产品类型' }
+                ]
+			}
+		},
+        sysChangeEvent (val) {
+            if (val === 'Android') {
+                this.pushForm.type = 1
+			} else {
+                this.pushForm.type = 4
 			}
 		},
         pushTypeChangeEvent (val) {
@@ -268,7 +283,23 @@ export default {
                         trigger: 'blur'
                     }
                 ]
-            }
+            } else {
+                this.rules.uuid =  [
+                    { required: false, message: '请输入uuid' },
+                    {
+                        validator: (rule, value, callback) => {
+                            let reg = /[\;|\"|\。]+/
+                            if (reg.test(value)) {
+                                callback(new Error('uuid规则不符'));
+                            } else {
+                                callback();
+                            }
+
+                        },
+                        trigger: 'blur'
+                    }
+                ]
+			}
         },
         resetPushForm () {
             let form = this.pushForm

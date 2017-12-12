@@ -97,7 +97,7 @@
 						width="180"
 						label="操作">
 					<template scope="scope">
-						<el-button  type="text" size="small" @click="infoBoxFlag=true">查看详情</el-button>
+						<el-button  type="text" size="small" @click="getVersionDetail(scope.row)">查看详情</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -302,8 +302,7 @@
 				</el-form>
 			</div>
 			<div style="text-align: right; margin: 0">
-				<el-button type="primary" size="mini" @click="submitDetailForm('ruleFormDetail')" >确定</el-button>
-				<el-button size="mini" type="text" @click="infoBoxFlag=false">取消</el-button>
+				<el-button type="primary"  @click="infoBoxFlag=false" >确定</el-button>
 			</div>
 		</el-dialog>
 		<!--版本录入-->

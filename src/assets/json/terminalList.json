@@ -5,9 +5,6 @@
     {"prop": "F_osType", "label": "操作系统类型"},
     {"prop": "F_osVersion", "label": "操作系统版本"},
     {"prop": "F_appVersion", "label": "app版本"},
-    {"prop": "F_hardwareVersion", "label": "硬件版本"},
-    {"prop": "F_routerVersion", "label": "路由器版本"},
-    {"prop": "F_zigbeeVersion", "label": "zigbee版本"},
     {"prop": "F_status_name", "label": "状态"}
   ],
   "tableData":[]

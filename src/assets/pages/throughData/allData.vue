@@ -15,17 +15,8 @@
 						<div class="ico-img">
 							<i class="el-icon-upload" style="font-size: 3.5rem; color: #ccc"></i>
 						</div>
-						<div><strong>{{numAll.app_num}}</strong></div>
-						<h3>APP在线数</h3>
-					</div>
-				</el-col>
-				<el-col :span="4"  :offset="1">
-					<div class="con-pp pontiner" @click="goRouter('appRouterData')">
-						<div class="ico-img">
-							<i class="el-icon-menu" style="font-size: 3rem; color: #ccc"></i>
-						</div>
-						<div><strong>{{numAll.router_num}}</strong></div>
-						<h3>路由在线数</h3>
+						<div><strong>{{numAll.app_num}}/{{numAll.router_num}}</strong></div>
+						<h3>APP/路由在线数</h3>
 					</div>
 				</el-col>
 				<el-col :span="4" :offset="1">
@@ -33,17 +24,8 @@
 						<div class="ico-img">
 							<i class="el-icon-star-on" style="font-size: 3.5rem; color: #ccc"></i>
 						</div>
-						<div><strong>{{numAll.registered_total_num}}</strong></div>
-						<h3>用户注册</h3>
-					</div>
-				</el-col>
-				<el-col :span="4"  :offset="1">
-					<div class="con-pp pontiner" @click="goRouter('logRegData')">
-						<div class="ico-img">
-							<i class="el-icon-star-off" style="font-size: 3rem; color: #ccc"></i>
-						</div>
-						<div><strong>{{numAll.logined_total_num}}</strong></div>
-						<h3>用户登录</h3>
+						<div><strong>{{numAll.registered_total_num}}/{{numAll.logined_total_num}}</strong></div>
+						<h3>用户注册/登录数</h3>
 					</div>
 				</el-col>
 				<el-col :span="4" :offset="1">
@@ -55,9 +37,7 @@
 						<h3>子设备统计</h3>
 					</div>
 				</el-col>
-			</el-row>
-			<el-row style="margin-top: 3rem" :gutter="24">
-				<el-col :span="4" >
+				<el-col :span="4" :offset="1">
 					<div class="con-pp pontiner" @click="goRouter('0')">
 						<div class="ico-img">
 							<i class="el-icon-menu" style="font-size: 3rem; color: #ccc"></i>
@@ -75,7 +55,9 @@
 						<h3>设备操作统计</h3>
 					</div>
 				</el-col>
-				<el-col :span="4"  :offset="1">
+			</el-row>
+			<el-row style="margin-top: 3rem" :gutter="24">
+				<el-col :span="4" >
 					<div class="con-pp pontiner" @click="goRouter('qpsData')">
 						<div class="ico-img">
 							<i class="el-icon-view" style="font-size: 3rem; color: #ccc"></i>

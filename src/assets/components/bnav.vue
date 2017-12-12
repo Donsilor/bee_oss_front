@@ -64,7 +64,7 @@ export default {
                 },
                 {
                     title: '告警管理',
-                    path: '/main',
+                    path: 'gjgl',
                     icon: 'facility',
                     children: [
                         {
@@ -81,7 +81,7 @@ export default {
                 },
                 {
                     title: '云平台日志',
-                    path: '/main',
+                    path: 'yptrz',
                     icon: 'cmdb',
 					children: [
                         {
@@ -190,6 +190,7 @@ export default {
 	}
 	.el-submenu .el-menu-item{
 		font-size: 14px;
+		min-width: auto;
 		padding-left: 30px !important;
 	}
 	.el-menu-item{

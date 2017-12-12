@@ -1,57 +1,67 @@
 <template>
 	<div class="home-page">
 		<el-row class="hp-dataArea" :gutter="24">
-			<el-col :span="6">
+			<el-col :span="7" class="no-padding">
 				<header class="hp-header">
 					<h2>路由器信息</h2>
 					<!-- <span>截止时间{{homeData.statistics_time}}</span> -->
 				</header>
 				<el-row :gutter="24">
-					<el-col :span="20">
+					<el-col :span="8" class="no-padding">
 						<div class="hp-dataBox hp-icon01">
 							<p>{{homeData.router_num}}</p>
-							<p>设备安装总量</p>
+							<p>路由器在线数</p>
 						</div>
-						<!--<div class="hp-dataBox hp-icon02 border-top">-->
-							<!--<p>{{homeData.router_online_percent}}</p>-->
-							<!--<p>设备在线比例</p>-->
-						<!--</div>-->
+					</el-col>
+					<el-col :span="8" class="no-padding">
+						<div class="hp-dataBox hp-icon01">
+							<p>{{homeData.router_num_all}}</p>
+							<p>路由器总数</p>
+						</div>
+					</el-col>
+					<el-col :span="8" class="no-padding">
+						<div class="hp-dataBox hp-icon02" style="padding-left: 0">
+							<p>{{homeData.router_num_percent}}</p>
+							<p>路由器在线比例</p>
+						</div>
 					</el-col>
 				</el-row>
 			</el-col>
-			<el-col :span="6">
+			<el-col :span="7" :offset="1" class="no-padding">
 				<header class="hp-header">
-					<h2>APP信息</h2>
-					<!-- <span>截止时间{{homeData.statistics_time}}</span> -->
+					<h2>用户信息</h2>
 				</header>
 				<el-row :gutter="24">
-					<el-col :span="20">
-						<div class="hp-dataBox hp-icon03">
+					<el-col :span="8" class="no-padding">
+						<div class="hp-dataBox hp-icon01">
 							<p>{{homeData.app_num}}</p>
-							<p>APP数量</p>
+							<p>用户在线数</p>
 						</div>
-						<!--<div class="hp-dataBox hp-icon02 border-top">-->
-							<!--<p>{{homeData.app_online_percent}}</p>-->
-							<!--<p>设备在线比例</p>-->
-						<!--</div>-->
+					</el-col>
+					<el-col :span="8" class="no-padding">
+						<div class="hp-dataBox hp-icon01">
+							<p>{{homeData.app_num_all}}</p>
+							<p>用户总数</p>
+						</div>
+					</el-col>
+					<el-col :span="8" class="no-padding">
+						<div class="hp-dataBox hp-icon02" style="padding-left: 0">
+							<p>{{homeData.app_num_percent}}</p>
+							<p>用户在线比例</p>
+						</div>
 					</el-col>
 				</el-row>
 			</el-col>
-			<el-col :span="6">
+			<el-col :span="7" :offset="1" class="no-padding">
 				<header class="hp-header">
-					<h2>QPS</h2>
-					<!-- <span>截止时间{{homeData.statistics_time}}</span> -->
+					<h2>QPS信息</h2>
 				</header>
 				<el-row :gutter="24">
-					<el-col :span="20">
-						<div class="hp-dataBox hp-icon03">
+					<el-col :span="8" class="no-padding">
+						<div class="hp-dataBox hp-icon01">
 							<p>{{homeData.access_msg_num}}</p>
 							<p>QPS数量</p>
 						</div>
-						<!--<div class="hp-dataBox hp-icon02 border-top">-->
-							<!--<p>{{homeData.app_online_percent}}</p>-->
-							<!--<p>设备在线比例</p>-->
-						<!--</div>-->
 					</el-col>
 				</el-row>
 			</el-col>
@@ -63,7 +73,7 @@
 			<!--<div class="hpat-dateRangeArea">-->
 				<!--<el-date-picker v-model="range" range-separator=" ~ " type="daterange" align="left" placeholder="时间段选择" :picker-options="pickerOption" v-on:change="changeDate"></el-date-picker>-->
 			<!--</div>-->
-			<div id="echart-area" class="echart-area"></div>
+			<div id="charts-con" class="echart-area" style="padding-top: 20px"></div>
 		</section>
 	</div>
 </template>
@@ -78,7 +88,6 @@ import 'echarts/lib/component/title';
 
 export default {
 	data () {
-
 
 		return {
 			//TODO just for test echart
@@ -163,81 +172,133 @@ export default {
                 }
             })
 		},
-		changeDate (value) {
-			this.getAlarmst(value);
-		},
-		getAlarmst(range) {
-			const handleData =  x => {
-				const curDate = new Date(x.statistics_time);
-				return {
-					name: curDate.toString(),
-					value: [
-						curDate.Format('yyyy/MM/dd hh:mm'),
-						x.count
-					]
-				}
-			}
-			let params = {
-				token: this.token
-			};
-//			if (range) {
-//				const ranges = range.split(' ~ ');
-//				params.start_time = ranges[0];
-//				params.end_time = ranges[1];
+		getAlarmst() {
+//			const handleData =  x => {
+//				const curDate = new Date(x.statistics_time);
+//				return {
+//					name: curDate.toString(),
+//					value: [
+//						curDate.Format('yyyy/MM/dd hh:mm'),
+//						x.count
+//					]
+//				}
 //			}
-            params.start_time = (new Date()).Format('yyyy/MM/dd') + ' 00:00';
-            params.end_time = (new Date()).Format('yyyy/MM/dd') + ' 23:59';
-			
-			this.$http.post(PREFIX + 'homepage/alarmst', params).then(res => {
-				const json = res.data;
-				if (json.code === 200) {
-					const data = json.result.data.map(handleData);
-					this.renderEchart(data);
-				} else {
-					this.$message.error(json.msg);
-				}
-				
-			})
+//			let params = {
+//				token: this.token
+//			};
+//            params.start_time = (new Date()).Format('yyyy/MM/dd') + ' 00:00';
+//            params.end_time = (new Date()).Format('yyyy/MM/dd') + ' 23:59';
+//
+//			this.$http.post(PREFIX + 'homepage/alarmst', params).then(res => {
+//				const json = res.data;
+//				if (json.code === 200) {
+//					const data = json.result.data.map(handleData);
+//					this.renderEchart(data);
+//				} else {
+//					this.$message.error(json.msg);
+//				}
+//
+//			})
+            let obj = this
+            let param = {
+                select_date: new Date(),
+                group_by: ''
+            }
+            obj.$store.dispatch('getwarnDatas',param).then((result) => {
+                if (result.data) {
+                    let data = result.data
+                    let datas = data.result.data
+                    let datasObj = {}
+                    let xObj = []
+                    if (datas.length) {
+                        datas.forEach((item) => {
+                            xObj.push(item.start_stat_time)
+                            if (!datasObj[item.monitor_name]) {
+                                datasObj[item.monitor_name] = []
+                            } else {
+                                datasObj[item.monitor_name].push(item.report_num)
+                            }
+                        })
+                        xObj = Array.from(xObj)
+                    }
+                    obj.renderEchart(xObj, datasObj)
+                }
+            })
 		},
-		initEchart () {
-			this.alertChart = echarts.init(document.getElementById('echart-area'));
-		},
-		renderEchart (data) {
-			this.alertChart.setOption({
-				tooltip: {
-			        trigger: 'axis',
-			        formatter: function (params) {
-			            params = params[0];
-			            var date = new Date(params.name);
-			            return `${date.Format('yyyy/MM/dd hh:mm')} ${params.value[1]}`;
-			        },
-			        axisPointer: {
-			            animation: false
-			        }
-			    },
-				xAxis: {
-			        type: 'time',
-			        splitLine: {
-			            show: false
-			        }
-			    },
-				yAxis: {
-					name: "报警次数",
-					type: 'value',
-			        boundaryGap: [0, '100%'],
-			        splitLine: {
-			            show: true
-			        }
+        initEchart () {
+            this.alertChart = echarts.init(document.getElementById('charts-con'));
+        },
+        renderEchart (xObj, datasObj) {
+            let curSeries = []
+            let legendArr = []
+            if (datasObj) {
+                for (let attr in datasObj) {
+                    legendArr.push(attr)
+                    curSeries.push({
+                        name: attr,
+                        type: 'line',
+                        data: datasObj[attr],
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        },
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    })
+                }
+
+
+            }
+            this.alertChart.setOption({
+                title: {
+                    text: '',
+                    subtext: ''
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+				grid: {
+                    left:35
 				},
-				series: [
-					{
-						name: '次数',
-						type: 'line',
-						data: data
-					}
-				]
-			})
-		}
+                toolbox: {
+                    show: true,
+                    top: 20,
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        },
+                        dataView: {readOnly: false},
+                        magicType: {type: ['line', 'bar']},
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                legend: {
+                    show: true,
+                    data: legendArr
+                },
+                xAxis: {
+                    type: 'category',
+                    data: xObj,
+                    splitLine: {
+                        show: false
+                    }
+                },
+                yAxis: {
+                    name: "数量",
+                    type: 'value',
+                    splitLine: {
+                        show: true
+                    }
+                },
+                series: curSeries
+            })
+        },
 	},
 	computed: {
         ...mapGetters({
@@ -245,11 +306,15 @@ export default {
         })
     },
     ...mapActions([
-        'throughDatas'
+        'throughDatas',
+		'getwarnDatas'
     ])
 }
 </script>
 <style lang="less">
+.no-padding{
+	padding: 0 !important;
+}
 .iconStyle(@width: 16px, @height: 16px){
 	width: @width;
 	height: @height;
@@ -261,6 +326,8 @@ export default {
 }
 
 .hp-header{
+	position: relative;
+	margin-left: -0.8rem;
 	margin-bottom: 1em;
 	h2{
 		font-size: 1.125em;
