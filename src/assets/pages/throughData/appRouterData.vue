@@ -92,6 +92,9 @@ export default {
                         show: false
                     }
                 },
+                grid: {
+                    top:80
+                },
                 yAxis: {
                     name: "数量",
                     type: 'value',
@@ -105,6 +108,11 @@ export default {
                         name: 'APP在线数',
                         type: 'line',
                         data: Apparrs,
+                        itemStyle: {
+                            normal: {
+                                color: '#81c0c0'
+                            }
+                        },
                         markPoint: {
                             data: [
                                 {type: 'max', name: '最大值'},
@@ -121,6 +129,11 @@ export default {
                         name: '路由在线数',
                         type: 'line',
                         data: Routerarrs,
+                        itemStyle: {
+                            normal: {
+                                color: '#666'
+                            }
+                        },
                         markPoint: {
                             data: [
                                 {type: 'max', name: '最大值'},

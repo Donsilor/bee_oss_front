@@ -1,6 +1,8 @@
 {
   "tableColumn":[
     {"prop": "uuid", "label": "序号"},
+    {"prop": "addr", "label": "地址"},
+    {"prop": "channel", "label": "来源"},
     {"prop": "login_time", "label": "登录时间"},
     {"prop": "created_time", "label": "登出时间"},
     {"prop": "duration", "label": "时长"}

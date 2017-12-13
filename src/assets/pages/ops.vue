@@ -137,7 +137,7 @@
 								</el-table-column>
 							</el-table>
 							<h3 class="h3_inner">子设备</h3>
-							<div>
+							<div class="childDevice">
 								<el-table
 										:data="deviceList.tableData"
 										style="width: 100%">
@@ -151,7 +151,7 @@
 											<div v-if="item.prop === 'F_device_state'">
 												{{getStatusText(scope.row['F_device_state'])}}
 											</div>
-											<div v-else>{{scope.row[item.prop]}}</div>
+											<div :title="scope.row[item.prop]" v-else>{{scope.row[item.prop]}}</div>
 										</template>
 									</el-table-column>
 								</el-table>

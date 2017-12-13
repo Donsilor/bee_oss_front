@@ -23,7 +23,23 @@ export default {
 		return {
             activeName: '1',
             select_date: new Date(),
-            alertChart: null
+            alertChart: null,
+            allTypes: {
+                1: '空调',
+                2: '窗帘',
+                3: '电视',
+                4: '电饭煲',
+                5: '灯',
+                6: '电子秤',
+                7: '摄像头',
+                8: '只能开关',
+                9: '空气质量检测仪',
+                10: '温湿度计',
+                11: '路由器',
+                12: '门窗传感器',
+                13: '红外传感器',
+                14: '可视对讲'
+			}
 		}
 	},
 	mounted () {
@@ -39,7 +55,7 @@ export default {
 					let Xarrs = []
 					let dataArrs = []
                     datas.forEach((item) => {
-                        Xarrs.push(item['F_category_id'])
+                        Xarrs.push(obj.filterType(item['F_category_id']))
                         dataArrs.push(item['count'])
 					})
                     obj.renderEchart(Xarrs, dataArrs)
@@ -63,6 +79,9 @@ export default {
                         animation: false
                     }
                 },
+				grid: {
+                    top:80
+				},
                 legend: {
                     show: true,
                     data: ['子设备按分类统计']
@@ -101,7 +120,7 @@ export default {
                         data: dataArrs,
 						itemStyle: {
                             normal: {
-								color: '#005757'
+								color: '#81c0c0'
 							}
 						},
                         markPoint: {
@@ -121,6 +140,9 @@ export default {
         },
         goBack () {
             history.go(-1)
+		},
+        filterType (val) {
+            return this.allTypes[val]
 		}
 	},
 	components: {},
