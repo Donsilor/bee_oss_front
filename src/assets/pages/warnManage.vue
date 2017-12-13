@@ -108,6 +108,7 @@ export default {
 			}
             this.alertChart.setOption({
                 grid : {
+                    top: 80,
                     left: 35
 				},
                 title: {
@@ -119,7 +120,7 @@ export default {
                 },
                 toolbox: {
                     show: true,
-					top: 20,
+					top: 0,
                     feature: {
                         dataZoom: {
                             yAxisIndex: 'none'
@@ -133,7 +134,7 @@ export default {
                 legend: {
                     show: true,
                     data: legendArr,
-					top: 0
+					top: 35
                 },
                 xAxis: {
                     type: 'category',

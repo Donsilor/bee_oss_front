@@ -4,8 +4,13 @@
 			<template v-if="item.children" >
 				<el-submenu :index="item.path">
 					<template slot="title"><i class="icon-pp" :class="item.icon"></i>{{item.title}}</template>
-					<el-menu-item v-for="subItem in item.children" :index="subItem.path" :key="subItem.path" :route="{ path: subItem.path }">{{subItem.title}}
-					</el-menu-item>
+					<div v-for="subItem in item.children">
+						<a target="_blank" class="href-a" v-if="subItem.elseUrl" :href="subItem.path">{{subItem.title}}</a>
+						<el-menu-item :index="subItem.path" v-else
+									  :key="subItem.path"
+									  :route="{ path: subItem.path }">{{subItem.title}}
+						</el-menu-item>
+					</div>
 				</el-submenu>
 			</template>
 			<template v-if="!item.children">
@@ -75,6 +80,12 @@ export default {
                         {
                             path: '/main/warnDataSearch',
                             title: '业务告警查询',
+                            isSelected: false
+                        },
+                        {
+                            path: 'http://zabbix.evergrande.me:9999/zabbix/zabbix.php?action=problem.view',
+                            title: '系统告警',
+							elseUrl: true,
                             isSelected: false
                         }
                     ]
@@ -172,6 +183,11 @@ export default {
 }
 </script>
 <style lang="less">
+.href-a{
+	font-size: 14px;
+	color: #95959b;
+	padding-left: 30px
+}
 .iconStyle(@width: 16px, @height: 16px){
 	width: @width;
 	height: @height;

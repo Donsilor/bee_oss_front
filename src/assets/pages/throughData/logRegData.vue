@@ -43,30 +43,65 @@ export default {
                 if (result.data && result.data.result.data) {
                     let datas = result.data.result.data
                     let Xarrs = []
-                    let Loginrrs = []
-                    let Registerarrs = []
+					let dataObj = {
+                        'login': {
+                            title: '阶段用户登录数',
+							value: []
+						},
+						'login_all': {
+                            title: '用户登录总数',
+                            value: []
+                        },
+                        'register': {
+                            title: '阶段用户注册数',
+                            value: []
+                        },
+                        'register_all': {
+                            title: '用户注册总数',
+                            value: []
+                        },
+					}
                     datas.forEach((item) => {
                         let currentTime = new Date(item['start_stat_time'])
                         Xarrs.push(currentTime.Format('hh:mm:ss'))
-                        Loginrrs.push(item['logined_total_num'])
-                        Registerarrs.push(item['registered_total_num'])
+                        dataObj['login'].value.push(item['logined_total_num'])
+                        dataObj['login_all'].value.push(item['logined_total_num_all'])
+                        dataObj['register'].value.push(item['registered_total_num'])
+                        dataObj['register_all'].value.push(item['registered_total_num_all'])
                     })
-                    obj.renderEchart(Xarrs, Loginrrs, Registerarrs)
+                    obj.renderEchart(Xarrs, dataObj)
                 }
             })
 		},
         initEchart () {
             this.alertChart = echarts.init(document.getElementById('charts-con'));
         },
-        renderEchart (Xarrs, Loginrrs, Registerarrs) {
+        renderEchart (Xarrs, dataObj) {
+            let curSeries = []
+			let curLengen = []
+            for (let attr in dataObj) {
+                curLengen.push(dataObj[attr].title)
+                curSeries.push({
+                    name: dataObj[attr].title,
+                    type: 'line',
+                    data: dataObj[attr].value,
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                })
+			}
+
             this.alertChart.setOption({
                 tooltip: {
                     trigger: 'axis',
-//                    formatter: function (params) {
-//                        params = params[0];
-//                        var date = new Date(params.name);
-//                        return `${date.Format('yyyy/MM/dd hh:mm')} ${params.value[1]}`;
-//                    },
                     axisPointer: {
                         animation: false
                     }
@@ -100,42 +135,9 @@ export default {
                 },
                 legend: {
                     show: true,
-                    data: ['注册用户数','登录用户数']
+                    data: curLengen
                 },
-                series: [
-                    {
-                        name: '注册用户数',
-                        type: 'line',
-                        data: Registerarrs,
-                        markPoint: {
-                            data: [
-                                {type: 'max', name: '最大值'},
-                                {type: 'min', name: '最小值'}
-                            ]
-                        },
-                        markLine: {
-                            data: [
-                                {type: 'average', name: '平均值'}
-                            ]
-                        }
-                    },
-                    {
-                        name: '登录用户数',
-                        type: 'line',
-                        data: Loginrrs,
-                        markPoint: {
-                            data: [
-                                {type: 'max', name: '最大值'},
-                                {type: 'min', name: '最小值'}
-                            ]
-                        },
-                        markLine: {
-                            data: [
-                                {type: 'average', name: '平均值'}
-                            ]
-                        }
-                    }
-                ]
+                series: curSeries
             })
         },
         goBack () {

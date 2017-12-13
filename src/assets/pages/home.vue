@@ -60,21 +60,23 @@
 					<el-col :span="8" class="no-padding">
 						<div class="hp-dataBox hp-icon01">
 							<p>{{homeData.access_msg_num}}</p>
-							<p>QPS数量</p>
+							<p>QPS访问量</p>
 						</div>
 					</el-col>
 				</el-row>
 			</el-col>
 		</el-row>
-		<header class="hp-header">
-			<h2>报警趋势图</h2>
-		</header>
-		<section class="hp-alertTable">
-			<!--<div class="hpat-dateRangeArea">-->
+		<el-row :gutter="24">
+			<header class="hp-header">
+				<h2>报警趋势图</h2>
+			</header>
+			<section class="hp-alertTable">
+				<!--<div class="hpat-dateRangeArea">-->
 				<!--<el-date-picker v-model="range" range-separator=" ~ " type="daterange" align="left" placeholder="时间段选择" :picker-options="pickerOption" v-on:change="changeDate"></el-date-picker>-->
-			<!--</div>-->
-			<div id="charts-con" class="echart-area" style="padding-top: 20px"></div>
-		</section>
+				<!--</div>-->
+				<div id="charts-con" class="echart-area" style="padding-top: 20px"></div>
+			</section>
+		</el-row>
 	</div>
 </template>
 <script>
@@ -88,7 +90,6 @@ import 'echarts/lib/component/title';
 
 export default {
 	data () {
-
 		return {
 			//TODO just for test echart
 			now: new Date(2007, 10, 24),
@@ -263,11 +264,12 @@ export default {
                     trigger: 'axis'
                 },
 				grid: {
-                    left:35
+                    top: 80,
+                    left:45
 				},
                 toolbox: {
                     show: true,
-                    top: 20,
+                    top: 0,
                     feature: {
                         dataZoom: {
                             yAxisIndex: 'none'
@@ -280,6 +282,7 @@ export default {
                 },
                 legend: {
                     show: true,
+					top: 40,
                     data: legendArr
                 },
                 xAxis: {
@@ -415,6 +418,8 @@ export default {
 
 .hp-alertTable{
 	background: #ffffff;
+	position: relative;
+	margin-left: -0.8rem;
 }
 
 .hpat-dateRangeArea{

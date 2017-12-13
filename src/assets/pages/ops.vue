@@ -478,7 +478,7 @@ export default {
                 client_id: form.client_id,
                 uuid: form.uuid,
 				user_id: obj.user_id,
-                current_page: page,
+                page: page,
 				limit: 10
             }
             obj.$store.dispatch('searchLogOut', param).then((result) => {
