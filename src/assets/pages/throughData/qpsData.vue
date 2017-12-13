@@ -107,6 +107,11 @@ export default {
                         name: 'OPS数量',
                         type: 'line',
                         data: dataArrs,
+                        itemStyle: {
+                            normal: {
+                                color: '#81c0c0'
+                            }
+                        },
                         markPoint: {
                             data: [
                                 {type: 'max', name: '最大值'},
