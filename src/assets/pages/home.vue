@@ -20,7 +20,7 @@
 						</div>
 					</el-col>
 					<el-col :span="8" class="no-padding">
-						<div class="hp-dataBox hp-icon02" style="padding-left: 0">
+						<div class="hp-dataBox hp-icon02">
 							<p>{{homeData.router_num_percent}}</p>
 							<p>路由器在线比例</p>
 						</div>
@@ -45,7 +45,7 @@
 						</div>
 					</el-col>
 					<el-col :span="8" class="no-padding">
-						<div class="hp-dataBox hp-icon02" style="padding-left: 0">
+						<div class="hp-dataBox hp-icon02">
 							<p>{{homeData.app_num_percent}}</p>
 							<p>用户在线比例</p>
 						</div>
@@ -348,7 +348,7 @@ export default {
 .hp-dataBox{
 	background: #ffffff;
 	box-sizing: border-box;
-	padding: 15px 20px 32px 86px;
+	padding: 15px 20px 32px 20px;
 	position: relative;
 	&:hover{
 		box-shadow:  2px 2px 10px rgba(0, 0, 0, .15)
@@ -357,6 +357,7 @@ export default {
 		&:first-child{
 			color: #00CC33;
 			font-size: 1.75em;
+			height: 42px;
 			font-weight: bold;
 		}
 		&:nth-child(2) {
@@ -372,17 +373,21 @@ export default {
 		left: 30px;
 	}
 	&.hp-icon01 {
+		/*
 		&:before{
 			background-image: url("../images/u71.png");
 			.iconStyle(36px, 27px);
 		}
+		*/
 	}
 
 	&.hp-icon02 {
+		/*
 		&:before{
 			background-image: url("../images/u91.png");
 			.iconStyle(32px, 32px);
 		}
+		*/
 		p{
 			&:first-child {
 				&:after{

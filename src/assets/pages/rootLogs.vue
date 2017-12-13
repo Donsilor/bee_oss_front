@@ -18,6 +18,9 @@
 							<el-input v-model="rootLogForm.session_id" placeholder="session_id"></el-input>
 						</el-col>
 						<el-col :span="3" style="padding-right: 0">
+							<el-input v-model="rootLogForm.svr_id" placeholder="svr_id"></el-input>
+						</el-col>
+						<el-col :span="3" style="padding-right: 0">
 							<el-input v-model="rootLogForm.user_id" placeholder="user_id"></el-input>
 						</el-col>
 						<el-col :span="3" style="padding-right: 0">
@@ -110,6 +113,7 @@ export default {
                 uuid: '',
 				select_date: new Date(),
                 user_id: '',
+				svr_id: '',
                 router_id: '',
                 msg_tag: '',
                 session_id: '',

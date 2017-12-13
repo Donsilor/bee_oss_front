@@ -533,8 +533,8 @@ export default {
             if (!val) {
                 return '------'
 			} else {
-                let date = new Date(val)
-                return date.Format('yyyy-MM-dd')
+                let date = new Date(val*1000)
+                return date.Format('yyyy-MM-dd hh:mm:ss')
 			}
 		},
         getVersionDetail (dataObj) {

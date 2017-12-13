@@ -69,16 +69,19 @@
 				<!--家庭详情-->
 				<el-row class="p_r">
 					<h3 class="h3_pp">家庭详情</h3>
-					<el-button @click="openOperListLayer" class="operation-list" size="small" type="primary">子设备操作流水</el-button>
 					<el-dropdown class="family_tab" @command="handleCommand">
-						<span class="el-dropdown-link">
-						  {{allFamily.length && allFamily[0].name}}<i class="el-icon-arrow-down el-icon--right"></i>
-						</span>
+						<el-button type="" size="small">
+							{{allFamily.length && allFamily[0].name}}<i class="el-icon-arrow-down el-icon--right"></i>
+						</el-button>
+						<!--<span class="el-dropdown-link">-->
+						  <!--{{allFamily.length && allFamily[0].name}}<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
+						<!--</span>-->
 						<el-dropdown-menu slot="dropdown">
 							<el-dropdown-item :command="item.value" v-for="item in allFamily">{{item.name}}</el-dropdown-item>
 						</el-dropdown-menu>
 					</el-dropdown>
-					<div class="detail_tab_con">
+					<div class="detail_tab_con p_r">
+						<el-button @click="openOperListLayer" class="operation-list" size="small" type="primary">用户操作轨迹</el-button>
 						<el-tabs v-model="activeName" @tab-click="tabClick">
 							<el-tab-pane label="基本信息" name="first"></el-tab-pane>
 							<el-tab-pane label="成员" name="second"></el-tab-pane>
@@ -134,22 +137,25 @@
 								</el-table-column>
 							</el-table>
 							<h3 class="h3_inner">子设备</h3>
-							<el-table
-									:data="deviceList.tableData"
-									style="width: 100%">
-								<el-table-column v-for="item in deviceList.tableColumn" :key="item.prop"
-												 :prop="item.prop"
-												 :label="item.label"
-												 :width="'auto'"
-								>
-									<template scope="scope">
-										<div v-if="item.prop === 'F_device_state'">
-											{{getStatusText(scope.row['F_device_state'])}}
-										</div>
-										<div v-else>{{scope.row[item.prop]}}</div>
-									</template>
-								</el-table-column>
-							</el-table>
+							<div>
+								<el-table
+										:data="deviceList.tableData"
+										style="width: 100%">
+									<el-table-column v-for="item in deviceList.tableColumn" :key="item.prop"
+													 :prop="item.prop"
+													 :label="item.label"
+													 :width="'auto'"
+													 sortable
+									>
+										<template scope="scope">
+											<div v-if="item.prop === 'F_device_state'">
+												{{getStatusText(scope.row['F_device_state'])}}
+											</div>
+											<div v-else>{{scope.row[item.prop]}}</div>
+										</template>
+									</el-table-column>
+								</el-table>
+							</div>
 						</el-row>
 					</div>
 				</el-row>
@@ -573,7 +579,7 @@ export default {
 	}
 	.family_tab{
 		position: absolute;
-		top: 45px;
+		top: 40px;
 		left: 93px;
 	}
 	.user_msg_con{
@@ -591,7 +597,7 @@ export default {
 	.operation-list{
 		position: absolute;
 		right: 20px;
-		top: 45px;
+		top: 15px;
 	}
 </style>
 <style lang="less">
@@ -640,6 +646,19 @@ export default {
 			.el-tabs__active-bar{
 				height: 2px !important;
 			}
+		}
+	}
+	.childDevice {
+		.el-table td>.cell>div{
+			overflow:hidden;
+			white-space:nowrap;
+			text-overflow:ellipsis;
+			-o-text-overflow:ellipsis;
+			-moz-text-overflow: ellipsis;
+			-webkit-text-overflow: ellipsis;
+		}
+		.el-table .cell, .el-table th>div{
+			padding-right: 0;
 		}
 	}
 </style>
