@@ -65,12 +65,12 @@ export default {
                 {
                     title: '经分数据',
                     path: '/main/throughData',
-                    icon: 'cloud'
+                    icon: 'facility'
                 },
                 {
                     title: '告警管理',
                     path: 'gjgl',
-                    icon: 'facility',
+                    icon: 'warn',
                     children: [
                         {
                             path: '/main/warnManage',
@@ -93,7 +93,7 @@ export default {
                 {
                     title: '云平台日志',
                     path: 'yptrz',
-                    icon: 'cmdb',
+                    icon: 'cloud',
 					children: [
                         {
                             path: '/main/rootLog',
@@ -185,7 +185,7 @@ export default {
 <style lang="less">
 .href-a{
 	font-size: 14px;
-	padding-left: 30px;
+	padding-left: 45px;
 	height: 50px;
 	line-height: 50px;
 	color: #95959b;
@@ -205,6 +205,7 @@ export default {
 	.el-submenu__title{
 		font-size: 16px;
 		color: #95959b;
+		padding-left: 33px !important;
 	}
 	.el-submenu__title:hover{
 		background: #3b3b53;
@@ -215,10 +216,11 @@ export default {
 	.el-submenu .el-menu-item{
 		font-size: 14px;
 		min-width: auto;
-		padding-left: 30px !important;
+		padding-left: 45px !important;
 	}
 	.el-menu-item{
 		font-size: 16px;
+		padding-left: 33px !important;
 		color: #95959b
 	}
 	.el-menu-item:hover{
@@ -236,36 +238,42 @@ export default {
 			content: '';
 			display: inline-block;
 			position: relative;
-			left: -5px;
+			left: -8px;
 		}
 		.home:before{
-			background-image: url('../images/u48.png');
-			.iconStyle;
+			background-image: url('../images/home.png');
+			.iconStyle(20px, 20px)
 		}
 
 		.config:before{
-			background-image: url('../images/u50.png');
-			.iconStyle(16px, 18px);
+			background-image: url('../images/upgrade.png');
+			.iconStyle(20px, 20px);
 		}
 
 		.ops:before{
-			background-image: url('../images/u43.png');
-			.iconStyle;
+			background-image: url('../images/dev.png');
+			.iconStyle(20px, 20px);
 		}
 
 		.facility:before{
-			background-image: url('../images/u65.png');
-			.iconStyle(16px, 16px);
+			background-image: url('../images/through.png');
+			.iconStyle(20px, 20px);
 		}
 
 		.cloud:before{
-			background-image: url('../images/u52.png');
-			.iconStyle;
+			background-image: url('../images/log.png');
+			.iconStyle(20px, 20px);
 		}
+
+		.warn:before{
+			background-image: url('../images/warn.png');
+			.iconStyle(20px, 20px);
+		}
+
 
 		.cmdb:before{
 			background-image: url('../images/u59.png');
-			.iconStyle(14px, 16px);
+			.iconStyle(20px, 20px);
 		}
 	}
 

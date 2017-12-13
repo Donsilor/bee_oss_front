@@ -13,7 +13,7 @@
 				<el-col :span="4">
 					<div class="con-pp pontiner" @click="goRouter('appRouterData')">
 						<div class="ico-img">
-							<i class="el-icon-upload" style="font-size: 3.5rem; color: #ccc"></i>
+							<i class="icon-user"></i>
 						</div>
 						<div><strong>{{numAll.app_num}}/{{numAll.router_num}}</strong></div>
 						<h3>APP/路由在线数</h3>
@@ -22,7 +22,7 @@
 				<el-col :span="4" :offset="1">
 					<div class="con-pp pontiner" @click="goRouter('logRegData')">
 						<div class="ico-img">
-							<i class="el-icon-star-on" style="font-size: 3.5rem; color: #ccc"></i>
+							<i class="icon-register"></i>
 						</div>
 						<div><strong>{{numAll.registered_total_num}}/{{numAll.logined_total_num}}</strong></div>
 						<h3>用户注册/登录数</h3>
@@ -31,7 +31,7 @@
 				<el-col :span="4" :offset="1">
 					<div class="con-pp pontiner" @click="goRouter('devicesData')">
 						<div class="ico-img">
-							<i class="el-icon-upload" style="font-size: 3.5rem; color: #ccc"></i>
+							<i class="icon-device"></i>
 						</div>
 						<div><strong>{{numAll.device_total}}</strong></div>
 						<h3>子设备统计</h3>
@@ -40,7 +40,7 @@
 				<el-col :span="4" :offset="1">
 					<div class="con-pp pontiner" @click="goRouter('0')">
 						<div class="ico-img">
-							<i class="el-icon-menu" style="font-size: 3rem; color: #ccc"></i>
+							<i class="icon-family"></i>
 						</div>
 						<div><strong>{{numAll.family_total}}</strong></div>
 						<h3>家庭统计</h3>
@@ -49,7 +49,7 @@
 				<el-col :span="4" :offset="1">
 					<div class="con-pp pontiner" @click="goRouter('0')" >
 						<div class="ico-img">
-							<i class="el-icon-share" style="font-size: 3rem; color: #ccc"></i>
+							<i class="icon-device"></i>
 						</div>
 						<div><strong>{{numAll.device_op_num}}</strong></div>
 						<h3>设备操作统计</h3>
@@ -60,7 +60,7 @@
 				<el-col :span="4" >
 					<div class="con-pp pontiner" @click="goRouter('qpsData')">
 						<div class="ico-img">
-							<i class="el-icon-view" style="font-size: 3rem; color: #ccc"></i>
+							<i class="icon-qps"></i>
 						</div>
 						<div><strong>{{numAll.access_msg_num}}</strong></div>
 						<h3>QPS</h3>
@@ -68,17 +68,6 @@
 				</el-col>
 			</el-row>
 		</div>
-		<!--<div class="allThrougtData" style="margin-top: 15px">-->
-			<!--<el-tabs v-model="activeName" @tab-click="handleClick">-->
-				<!--<el-tab-pane :label="'APP在线 ('+numAll.app_num+')'" name="1"></el-tab-pane>-->
-				<!--<el-tab-pane :label="'路由器在线 ('+numAll.router_num+')'" name="2"></el-tab-pane>-->
-				<!--<el-tab-pane :label="'用户注册 ('+numAll.registered_total_num+')'" name="3"></el-tab-pane>-->
-				<!--<el-tab-pane :label="'用户登录 ('+numAll.logined_total_num+')'" name="4"></el-tab-pane>-->
-				<!--<el-tab-pane :label="'家庭统计 ('+numAll.family_total+')'" name="5"></el-tab-pane>-->
-				<!--<el-tab-pane :label="'子设备统计 ('+numAll.device_total+')'" name="7"></el-tab-pane>-->
-				<!--<el-tab-pane :label="'设备操作统计 ('+numAll.device_op_num+')'" name="8"></el-tab-pane>-->
-			<!--</el-tabs>-->
-		<!--</div>-->
 	</div>
 </template>
 <script>
@@ -137,24 +126,51 @@ export default {
 		margin-top: 40px;
 		.con-pp{
 			.ico-img{
-				height: 60px;
-				padding-top: 10px;
-			}
-			i{
-				width: 50px;
-				height: 50px;
+				height: 2.5rem;
+				padding-top: 1rem;
 			}
 			strong{
 				font-size: 1.75em;
 				color: #00CC33;
 			}
-			background: #F2F2F2;
+			border: 1px solid #eee;
 			height: 150px;
 			text-align: center;
+		}
+		.con-pp:hover{
+			background: #eee;
 		}
 		.pontiner{
 			cursor: pointer;
 			min-width: 180px;
+		}
+		.icon-pp(@width, @height){
+			margin: auto;
+			width: @width;
+			height: @height;
+			display: block;
+			background-size: @width @height;
+			background-repeat: no-repeat;
+		}
+		.icon-user{
+			background-image: url("../../images/login.png");
+			.icon-pp(2rem, 2rem)
+		}
+		.icon-register{
+			background-image: url("../../images/register.png");
+			.icon-pp(2rem, 2rem)
+		}
+		.icon-device{
+			background-image: url("../../images/device.png");
+			.icon-pp(2rem, 2rem)
+		}
+		.icon-family{
+			background-image: url("../../images/family.png");
+			.icon-pp(2rem, 2rem)
+		}
+		.icon-qps{
+			background-image: url("../../images/QPS.png");
+			.icon-pp(2rem, 2rem)
 		}
 	}
 	.bg-gray{

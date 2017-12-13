@@ -99,6 +99,11 @@ export default {
                         name: '子设备按分类统计',
                         type: 'bar',
                         data: dataArrs,
+						itemStyle: {
+                            normal: {
+								color: '#005757'
+							}
+						},
                         markPoint: {
                             data: [
                                 {type: 'max', name: '最大值'},
