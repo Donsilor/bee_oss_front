@@ -236,22 +236,24 @@
 				>
 				</el-date-picker>
 			</div>
-			<el-table
-					:data="operList.tableData"
-					style="width: 100%">
-				<el-table-column v-for="item in operList.tableColumn" :key="item.prop"
-								 :prop="item.prop"
-								 :label="item.label"
-				>
-					<template scope="scope">
-						<div v-if="scope.row[item.prop]==='created_time'">{{scope.row[item.prop].Format('yyyy-MM-dd')}}</div>
-						<div v-else-if="scope.row[item.prop]==='rsp_time'">{{scope.row[item.prop].Format('yyyy-MM-dd')}}</div>
-						<div v-else-if="scope.row[item.prop]==='cost_time'">{{scope.row[item.prop]+'秒'}}</div>
-						<div v-else-if="scope.row[item.prop]==='created_time'">{{scope.row[item.prop].Format('yyyy-MM-dd')}}</div>
-						<div v-else>{{scope.row[item.prop]}}</div>
-					</template>
-				</el-table-column>
-			</el-table>
+			<div class="childDevice">
+				<el-table
+						:data="operList.tableData"
+						style="width: 100%">
+					<el-table-column v-for="item in operList.tableColumn" :key="item.prop"
+									 :prop="item.prop"
+									 :label="item.label"
+					>
+						<template scope="scope">
+							<div v-if="scope.row[item.prop]==='created_time'">{{scope.row[item.prop].Format('yyyy-MM-dd')}}</div>
+							<div v-else-if="scope.row[item.prop]==='rsp_time'">{{scope.row[item.prop].Format('yyyy-MM-dd')}}</div>
+							<div v-else-if="scope.row[item.prop]==='cost_time'">{{scope.row[item.prop]+'秒'}}</div>
+							<div v-else-if="scope.row[item.prop]==='created_time'">{{scope.row[item.prop].Format('yyyy-MM-dd')}}</div>
+							<div v-else>{{scope.row[item.prop]}}</div>
+						</template>
+					</el-table-column>
+				</el-table>
+			</div>
 			<div class="page-line">
 				<el-pagination small layout="prev, pager, next" :total="totalItemOper" @current-change="pageOperChange" :page-size="10" :current-page.sync="currentOperPage"></el-pagination>
 			</div>
@@ -597,6 +599,7 @@ export default {
 	.operation-list{
 		position: absolute;
 		right: 20px;
+		z-index: 999;
 		top: 15px;
 	}
 </style>
