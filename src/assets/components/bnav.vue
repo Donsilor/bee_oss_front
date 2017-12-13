@@ -4,8 +4,8 @@
 			<template v-if="item.children" >
 				<el-submenu :index="item.path">
 					<template slot="title"><i class="icon-pp" :class="item.icon"></i>{{item.title}}</template>
-					<div v-for="subItem in item.children">
-						<el-menu-item v-if="subItem.elseUrl" :index="subItem.path"><a target="_blank" class="href-a"  :href="subItem.path">{{subItem.title}}</a></el-menu-item>
+					<div v-for="subItem in item.children" style="overflow: hidden">
+						<a target="_blank" v-if="subItem.elseUrl" class="href-a"  :href="subItem.path">{{subItem.title}}</a>
 						<el-menu-item :index="subItem.path" v-else
 									  :key="subItem.path"
 									  :route="{ path: subItem.path }">{{subItem.title}}
@@ -185,7 +185,16 @@ export default {
 <style lang="less">
 .href-a{
 	font-size: 14px;
+	padding-left: 30px;
+	height: 50px;
+	line-height: 50px;
 	color: #95959b;
+	display: block;
+	width: 100%;
+}
+.href-a:hover{
+	background: #3b3b53;
+
 }
 .iconStyle(@width: 16px, @height: 16px){
 	width: @width;

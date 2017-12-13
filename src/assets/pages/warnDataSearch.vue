@@ -17,9 +17,9 @@
 						<el-col :span="3" style="padding-right: 0">
 							<el-input v-model="rootLogForm.monitor_name" placeholder="告警名称"></el-input>
 						</el-col>
-						<el-col :span="3">
+						<el-col :span="3" style="padding-right: 0">
 							<el-date-picker
-									style="padding-right: 40px"
+									style="width: 100%"
 									v-model="rootLogForm.select_date"
 									placeholder="今天"
 							>
@@ -38,7 +38,7 @@
 					</el-row>
 				</el-col>
 				<el-col :span="2">
-					<el-button type="primary" @click="getRootLogs">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
+					<el-button type="primary" @click="getRootLogs(1)">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
 				</el-col>
 			</el-row>
 		</div>
@@ -51,20 +51,17 @@
 								 :show-overflow-tooltip="true"
 								 :label="item.label"
 								 :width="'auto'"
+								 sortable
 				>
 					<template scope="scope">
 						<div v-if="scope.row[item.prop]==='created_time'">{{scope.row[item.prop].Format('yyyy/MM/dd hh:mm')}}</div>
 						<div :title="scope.row[item.prop]" v-else>{{scope.row[item.prop]}}</div>
 					</template>
 				</el-table-column>
-				<!--<el-table-column-->
-						<!--width="auto"-->
-						<!--label="日志">-->
-					<!--<template scope="scope">-->
-						<!--<el-button  type="text" size="small" @click="openLogOutLayer(scope.row)">登录登出日志</el-button>-->
-					<!--</template>-->
-				<!--</el-table-column>-->
 			</el-table>
+			<div class="page-line">
+				<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="15" :current-page.sync="currentPage"></el-pagination>
+			</div>
 		</div>
 	</div>
 </template>
@@ -84,6 +81,7 @@ export default {
 				select_date: new Date(),
                 svr_id: '',
                 monitor_name: '',
+				limit: 15,
                 start_end_time: []
 			},
             totalItem: 0,
@@ -92,6 +90,7 @@ export default {
 		}
 	},
 	mounted () {
+	    this.getRootLogs(1)
 	},
 	watch: {
 	},
@@ -103,10 +102,11 @@ export default {
                 obj[attr] = dataObj[attr]
 			}
 		},
-        getRootLogs () {
+        getRootLogs (page) {
             let obj = this
 			let param = {}
 			let currentForm =  obj.rootLogForm
+            currentForm.page = page
 			for (let attr in currentForm) {
                 if (attr === 'start_end_time') {
                     if (currentForm['start_end_time'].length) {
@@ -121,10 +121,11 @@ export default {
                 // obj.terminalList = result
                 rootLogJson.tableData = result.data.result.data
 				this.rootLogData = rootLogJson
+				this.totalItem = result.data.result.total
             })
         },
         pageChange () {
-            this.changeLogOut(this.currentPage)
+            this.getRootLogs(this.currentPage)
         }
 	},
     ...mapActions([

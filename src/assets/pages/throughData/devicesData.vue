@@ -97,7 +97,7 @@ export default {
                 series: [
                     {
                         name: '子设备按分类统计',
-                        type: 'line',
+                        type: 'bar',
                         data: dataArrs,
                         markPoint: {
                             data: [

@@ -20,7 +20,7 @@
 						</div>
 					</el-col>
 					<el-col :span="8" class="no-padding">
-						<div class="hp-dataBox hp-icon02">
+						<div class="hp-dataBox hp-icon02" style="padding-left: 0">
 							<p>{{homeData.router_num_percent}}</p>
 							<p>路由器在线比例</p>
 						</div>
@@ -45,7 +45,7 @@
 						</div>
 					</el-col>
 					<el-col :span="8" class="no-padding">
-						<div class="hp-dataBox hp-icon02">
+						<div class="hp-dataBox hp-icon02" style="padding-left: 10px">
 							<p>{{homeData.app_num_percent}}</p>
 							<p>用户在线比例</p>
 						</div>
@@ -54,13 +54,19 @@
 			</el-col>
 			<el-col :span="7" :offset="1" class="no-padding">
 				<header class="hp-header">
-					<h2>QPS信息</h2>
+					<h2>请求信息</h2>
 				</header>
 				<el-row :gutter="24">
 					<el-col :span="8" class="no-padding">
 						<div class="hp-dataBox hp-icon01">
 							<p>{{homeData.access_msg_num}}</p>
 							<p>QPS访问量</p>
+						</div>
+					</el-col>
+					<el-col :span="9" class="no-padding" >
+						<div class="hp-dataBox hp-icon01">
+							<p>{{homeData.access_msg_num_all}}</p>
+							<p>请求总数</p>
 						</div>
 					</el-col>
 				</el-row>
@@ -348,11 +354,12 @@ export default {
 .hp-dataBox{
 	background: #ffffff;
 	box-sizing: border-box;
-	padding: 15px 20px 32px 20px;
+	padding: 15px 0px 32px 20px;
 	position: relative;
+	/*
 	&:hover{
 		box-shadow:  2px 2px 10px rgba(0, 0, 0, .15)
-	}
+	}*/
 	p{
 		&:first-child{
 			color: #00CC33;
@@ -438,7 +445,6 @@ export default {
 
 @media (max-width: 1690px) {
 	.hp-dataBox{
-		padding-left: 20px;
 		&:before{
 			display: none;
 		}

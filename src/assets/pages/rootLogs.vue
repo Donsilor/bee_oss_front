@@ -1,8 +1,5 @@
 <template>
 	<div class="page-content rootLog-page">
-		<!--<div style="padding-bottom: 10px;">-->
-			<!--<el-button type="text" @click="goBack"><<&nbsp;返回</el-button>-->
-	    <!--</div>-->
 		<div style="padding-bottom: 30px;">
 			<!--搜索框-->
 			<el-row :gutter="24">
@@ -26,9 +23,9 @@
 						<el-col :span="3" style="padding-right: 0">
 							<el-input v-model="rootLogForm.router_id" placeholder="router_id"></el-input>
 						</el-col>
-						<el-col :span="3">
+						<el-col :span="3" style="padding-right: 0">
 							<el-date-picker
-									style="padding-right: 40px"
+									style="width: 100%"
 									v-model="rootLogForm.select_date"
 									placeholder="今天"
 							>
@@ -47,7 +44,7 @@
 					</el-row>
 				</el-col>
 				<el-col :span="2">
-					<el-button type="primary" @click="getRootLogs">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
+					<el-button type="primary" @click="getRootLogs(1)">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
 				</el-col>
 			</el-row>
 		</div>
@@ -55,7 +52,7 @@
 			<el-table
 					:data="rootLogData.tableData"
 					style="width: 100%">
-				<el-table-column label="操作">
+				<el-table-column label="操作" :width="60">
 					<template scope="scope">
 						<el-button type="text" @click="getDetail(scope.row)">详情</el-button>
 					</template>
@@ -64,7 +61,8 @@
 								 :prop="item.prop"
 								 :show-overflow-tooltip="true"
 								 :label="item.label"
-								 :width="'auto'"
+								 :width="getWidth(item.prop)"
+								 sortable
 				>
 					<template scope="scope">
 						<div :title="scope.row[item.prop]">{{scope.row[item.prop]}}</div>
@@ -78,6 +76,9 @@
 					<!--</template>-->
 				<!--</el-table-column>-->
 			</el-table>
+			<div class="page-line">
+				<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="15" :current-page.sync="currentPage"></el-pagination>
+			</div>
 		</div>
 		<el-dialog title="日志详情" :visible.sync="detailFlag" class="rootLogDetail">
 			<div class="edit_form">
@@ -117,6 +118,7 @@ export default {
                 router_id: '',
                 msg_tag: '',
                 session_id: '',
+				limit: 15,
                 start_end_time: []
 			},
             totalItem: 0,
@@ -147,11 +149,13 @@ export default {
                 process_cost_time: '',
                 net_cost_time: '',
                 cost_time: '',
+                req: '',
                 created_time: ''
 			}
 		}
 	},
 	mounted () {
+	    this.getRootLogs(1)
 	},
 	watch: {
 	},
@@ -163,14 +167,11 @@ export default {
                 obj[attr] = dataObj[attr]
 			}
 		},
-        goBack () {
-            let id = this.$route.params.id
-            this.$router.push({path: '/main/ops/' + id})
-		},
-        getRootLogs () {
+        getRootLogs (page) {
             let obj = this
 			let param = {}
 			let currentForm =  obj.rootLogForm
+            currentForm.page = page
 			for (let attr in currentForm) {
                 if (attr === 'start_end_time') {
                     if (currentForm['start_end_time'].length) {
@@ -185,11 +186,38 @@ export default {
                 // obj.terminalList = result
                 rootLogJson.tableData = result.data
 				this.rootLogData = rootLogJson
+				this.totalItem = result.total
             })
         },
         pageChange () {
-            this.changeLogOut(this.currentPage)
-        }
+            this.getRootLogs(this.currentPage)
+        },
+        getWidth (prop) {
+            let val = 0
+            switch (prop) {
+                case 'method':
+                    val = 100
+                    break
+				case 'user_id':
+				case 'msg_tag':
+                    val = 100
+					break
+				case 'router_id':
+				case 'cost_time':
+				    val = 110
+					break
+                case 'host_name':
+                    val = 120
+                    break
+                case 'created_time':
+                    val = 130
+					break
+				default:
+					val = 'auto'
+					break
+			}
+			return val
+		}
 	},
     ...mapActions([
 		'rootLogs'
