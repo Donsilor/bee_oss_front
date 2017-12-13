@@ -245,11 +245,9 @@
 									 :label="item.label"
 					>
 						<template scope="scope">
-							<div v-if="scope.row[item.prop]==='created_time'">{{scope.row[item.prop].Format('yyyy-MM-dd')}}</div>
-							<div v-else-if="scope.row[item.prop]==='rsp_time'">{{scope.row[item.prop].Format('yyyy-MM-dd')}}</div>
-							<div v-else-if="scope.row[item.prop]==='cost_time'">{{scope.row[item.prop]+'秒'}}</div>
-							<div v-else-if="scope.row[item.prop]==='created_time'">{{scope.row[item.prop].Format('yyyy-MM-dd')}}</div>
-							<div v-else>{{scope.row[item.prop]}}</div>
+							<div v-if="scope.row[item.prop]==='created_time'" :title="scope.row[item.prop].Format('yyyy-MM-dd')">{{scope.row[item.prop].Format('yyyy-MM-dd')}}</div>
+							<div v-else-if="scope.row[item.prop]==='rsp_time'" :title="scope.row[item.prop].Format('yyyy-MM-dd')">{{scope.row[item.prop].Format('yyyy-MM-dd')}}</div>
+							<div v-else :title="scope.row[item.prop]">{{scope.row[item.prop]}}</div>
 						</template>
 					</el-table-column>
 				</el-table>

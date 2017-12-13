@@ -1,20 +1,12 @@
 {
   "tableColumn":[
-    {"prop": "category_id", "label": "客户端ID"},
+    {"prop": "uuid", "label": "appuuid"},
+    {"prop": "category_id", "label": "设备品类"},
+    {"prop": "device_id", "label": "子设备uuid"},
+    {"prop": "channel", "label": "渠道"},
     {"prop": "method", "label": "方法"},
-    {"prop": "code", "label": "code"},
-    {"prop": "cost_time", "label": "cost_time"},
-    {"prop": "created_time", "label": "created_time"},
-    {"prop": "log_type", "label": "log_type"},
-    {"prop": "rcv_time", "label": "rcv_time"},
-    {"prop": "rsp_time", "label": "rsp_time"},
-    {"prop": "rcv_time", "label": "rcv_time"},
-    {"prop": "req_id", "label": "req_id"},
-    {"prop": "client_info", "label": "客户端类型"},
-    {"prop": "family_id", "label": "家庭ID"},
-    {"prop": "room_id", "label": "房间ID"},
-    {"prop": "router_id", "label": "路由ID"},
-    {"prop": "device_id", "label": "设备ID"},
+    {"prop": "code", "label": "错误码"},
+    {"prop": "created_time", "label": "创建时间"},
     {"prop": "msg", "label": "错误信息"}
   ],
   "tableData":[]
