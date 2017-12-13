@@ -108,7 +108,7 @@ export default {
 			}
             this.alertChart.setOption({
                 grid : {
-                    top: 80,
+                    top: 90,
                     left: 70
 				},
                 title: {

@@ -270,7 +270,7 @@ export default {
                     trigger: 'axis'
                 },
 				grid: {
-                    top: 80,
+                    top: 100,
                     left:70
 				},
                 toolbox: {
