@@ -1,9 +1,9 @@
 <template>
 	<el-form :model="pushForm" ref="pushForm" :rules="rules"  label-width="8em">
-		<el-form-item label="产品类型" prop="tab">
+		<el-form-item label="产品类型" prop="type">
 			<el-row :gutter="24" >
 				<el-col :span="8" style="padding: 0">
-					<el-select v-model="pushForm.tab" placeholder="选择类型" @change="typeChangeEvent">
+					<el-select v-model="pushForm.type" placeholder="选择类型" @change="typeChangeEvent">
 						<el-option
 								v-for="item in typeOptions"
 								:key="item.value"
@@ -12,56 +12,56 @@
 						</el-option>
 					</el-select>
 				</el-col>
-				<el-col :span="9" v-if="pushForm.tab===1">
-					<el-select v-model="pushForm.system" placeholder="操作系统"  @change="sysChangeEvent">
-						<el-option
-								v-for="item in systemOptions"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value">
-						</el-option>
-					</el-select>
-				</el-col>
+				<!--<el-col :span="9" v-if="pushForm.tab===1">-->
+					<!--<el-select v-model="pushForm.system" placeholder="操作系统"  @change="sysChangeEvent">-->
+						<!--<el-option-->
+								<!--v-for="item in systemOptions"-->
+								<!--:key="item.value"-->
+								<!--:label="item.label"-->
+								<!--:value="item.value">-->
+						<!--</el-option>-->
+					<!--</el-select>-->
+				<!--</el-col>-->
 			</el-row>
 		</el-form-item>
-		<el-form-item label="选择子设备" prop="product_id" v-if="pushForm.tab===3">
-			<el-row class="cpf-line" :gutter="24">
-				<el-col :span="8" style="padding:0;">
-					<el-select v-model="pushForm.brand_id" placeholder="品牌">
-						<el-option
-								v-for="item in brandIDOptionsChild"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value">
-						</el-option>
-					</el-select>
-				</el-col>
-				<el-col :span="6" style="padding-right: 0">
-					<el-select v-model="pushForm.type_id" placeholder="类型">
-						<el-option
-								v-for="item in typeIDOptionsChild"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value">
-						</el-option>
-					</el-select>
-				</el-col>
-				<el-col :span="6" style="padding-right: 0">
-					<el-select v-model="pushForm.product_id" prop="product_id" placeholder="产品">
-						<el-option
-								v-for="item in productIDOptionsChild"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value">
-						</el-option>
-					</el-select>
-				</el-col>
-			</el-row>
-		</el-form-item>
+		<!--<el-form-item label="选择子设备" prop="product_id" v-if="pushForm.type===3">-->
+			<!--<el-row class="cpf-line" :gutter="24">-->
+				<!--<el-col :span="8" style="padding:0;">-->
+					<!--<el-select v-model="pushForm.brand_id" placeholder="品牌">-->
+						<!--<el-option-->
+								<!--v-for="item in brandIDOptionsChild"-->
+								<!--:key="item.value"-->
+								<!--:label="item.label"-->
+								<!--:value="item.value">-->
+						<!--</el-option>-->
+					<!--</el-select>-->
+				<!--</el-col>-->
+				<!--<el-col :span="6" style="padding-right: 0">-->
+					<!--<el-select v-model="pushForm.type_id" placeholder="类型">-->
+						<!--<el-option-->
+								<!--v-for="item in typeIDOptionsChild"-->
+								<!--:key="item.value"-->
+								<!--:label="item.label"-->
+								<!--:value="item.value">-->
+						<!--</el-option>-->
+					<!--</el-select>-->
+				<!--</el-col>-->
+				<!--<el-col :span="6" style="padding-right: 0">-->
+					<!--<el-select v-model="pushForm.product_id" prop="product_id" placeholder="产品">-->
+						<!--<el-option-->
+								<!--v-for="item in productIDOptionsChild"-->
+								<!--:key="item.value"-->
+								<!--:label="item.label"-->
+								<!--:value="item.value">-->
+						<!--</el-option>-->
+					<!--</el-select>-->
+				<!--</el-col>-->
+			<!--</el-row>-->
+		<!--</el-form-item>-->
 		<el-form-item label="选择版本" prop="version">
 			<el-row class="cpf-line" :gutter="24">
 				<el-col :span="8" style="padding:0">
-					<el-select v-model="pushForm.version"  placeholder="选择版本" v-if="pushForm.tab === 1">
+					<el-select v-model="pushForm.version"  placeholder="选择版本" v-if="pushForm.type === 1">
 						<el-option
 								v-for="item in appAndroid"
 								:key="item.value"
@@ -69,7 +69,7 @@
 								:value="item.value">
 						</el-option>
 					</el-select>
-					<el-select v-model="pushForm.version"  placeholder="选择版本" v-if="pushForm.tab === 4">
+					<el-select v-model="pushForm.version"  placeholder="选择版本" v-if="pushForm.type === 4">
 						<el-option
 								v-for="item in appIos"
 								:key="item.value"
@@ -77,7 +77,7 @@
 								:value="item.value">
 						</el-option>
 					</el-select>
-					<el-select v-model="pushForm.version"  placeholder="选择版本" v-if="pushForm.tab === 2">
+					<el-select v-model="pushForm.version"  placeholder="选择版本" v-if="pushForm.type === 2">
 						<el-option
 								v-for="item in router"
 								:key="item.value"
@@ -85,14 +85,14 @@
 								:value="item.value">
 						</el-option>
 					</el-select>
-					<el-select v-model="pushForm.version"  placeholder="选择版本" v-if="pushForm.tab === 3">
-						<el-option
-								v-for="item in subset"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value">
-						</el-option>
-					</el-select>
+					<!--<el-select v-model="pushForm.version"  placeholder="选择版本" v-if="pushForm.tab === 3">-->
+						<!--<el-option-->
+								<!--v-for="item in subset"-->
+								<!--:key="item.value"-->
+								<!--:label="item.label"-->
+								<!--:value="item.value">-->
+						<!--</el-option>-->
+					<!--</el-select>-->
 				</el-col>
 			</el-row>
 		</el-form-item>
@@ -144,30 +144,18 @@ export default {
             typeOptions: [
                 {
                     value: 1,
-                    label: 'APP'
+                    label: '安卓'
                 },
                 {
                     value: 2,
                     label: '路由器'
                 },
                 {
-                    value: 3,
-                    label: '子设备'
-                }
-            ],
-            systemOptions: [
-                {
-                    value: 'IOS',
+                    value: 4,
                     label: 'IOS'
-                },
-                {
-                    value: 'Android',
-                    label: 'Android'
                 }
             ],
             pushForm: {
-                tab: 1,
-                system: 'Android',
                 type: 1,
                 push_type: '',
                 list_type: '',
@@ -178,7 +166,7 @@ export default {
                 uuid: ''
             },
             rules: {
-                tab: [
+                type: [
                     { required: true, message: '请选择产品类型' }
                 ],
                 version: [
@@ -245,19 +233,18 @@ export default {
 	},
 	methods: {
         typeChangeEvent (val) {
-            this.pushForm.type = val
-			if (this.pushForm.system === 'IOS') {
-                this.pushForm.type = 4
-			}
-            if (val === 3) {
-                this.rules.product_id = [
-                    { required: true, message: '请选择产品类型' }
-                ]
-			} else {
-                this.rules.product_id = [
-                    { required: false, message: '请选择产品类型' }
-                ]
-			}
+//			if (this.pushForm.system === 'IOS') {
+//                this.pushForm.type = 4
+//			}
+//            if (val === 3) {
+//                this.rules.product_id = [
+//                    { required: true, message: '请选择产品类型' }
+//                ]
+//			} else {
+//                this.rules.product_id = [
+//                    { required: false, message: '请选择产品类型' }
+//                ]
+//			}
 		},
         sysChangeEvent (val) {
             if (val === 'Android') {
@@ -309,13 +296,12 @@ export default {
             this.$refs['pushForm'].resetFields()
 			for (let attr in form) {
                 switch (attr){
-                    case 'tab':
 					case 'type':
                         form[attr] = 1
                         break
-                    case 'system':
-                        form[attr] = 'Android'
-                        break
+//                    case 'system':
+//                        form[attr] = 'Android'
+//                        break
                     case 'routersList':
                     case 'productsList':
 					case 'uuid':

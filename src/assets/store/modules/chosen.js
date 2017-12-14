@@ -196,7 +196,7 @@ export default {
             if (!state.appAndroid.length) {
                 commit({
                     type: namespace.GETAPPANDROID,
-                    token: payload
+                    token: payload.token
                 });
             }
         },

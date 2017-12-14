@@ -5,6 +5,9 @@
     {"prop": "F_osType", "label": "操作系统类型"},
     {"prop": "F_osVersion", "label": "操作系统版本"},
     {"prop": "F_appVersion", "label": "app版本"},
+    {"prop": "F_addr", "label": "地域"},
+    {"prop": "F_lastLogin", "label": "最后登录时间"},
+    {"prop": "F_lastLogout", "label": "最后登出时间"},
     {"prop": "F_status_name", "label": "状态"}
   ],
   "tableData":[]

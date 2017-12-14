@@ -1,6 +1,7 @@
 {
   "tableColumn":[
     {"prop": "channel", "label": "来源"},
+    {"prop": "method", "label": "方法名"},
     {"prop": "addr", "label": "地址"},
     {"prop": "login_time", "label": "登录时间"},
     {"prop": "created_time", "label": "登出时间"},

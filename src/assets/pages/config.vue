@@ -513,9 +513,9 @@ export default {
 		},
 	},
 	mounted () {
-//        this.$store.dispatch({
-//            type: namespace.INITAPPIOS
-//        })
+        this.$store.dispatch({
+            type: namespace.INITAPPIOS
+        })
         this.$store.dispatch({
             type: namespace.INITAPPANDROID
         })
@@ -649,25 +649,11 @@ export default {
             let params = Object.assign({
             }, dataObj);
             params.uuid = params.uuid.split(',')
-            if (params.tab === 1) {
-                if (params.system === 'IOS') {
-                    params.type = 4
-				} else {
-                    params.type = 1
-				}
-                delete params.product_id
-            } else if (params.tab === 2) {
-                delete params.product_id
-                delete params.system
-            } else if (params.tab === 3) {
-                delete params.system;
-            }
             if (params.push_type === 1) {
                 delete params.list_type
 			}
             delete params.brand_id
             delete params.type_id
-            delete params.system
             delete params.productsList
             delete params.routersList
             delete params.tab
