@@ -97,7 +97,7 @@
 			</el-row>
 		</el-form-item>
 		<el-row>
-			<el-col :span="12" style="padding-right: 23px">
+			<el-col :span="12" style="padding-right: 27px">
 				<el-form-item label="推送类型" prop="push_type">
 					<el-select v-model="pushForm.push_type"  placeholder="选择类型" @change="pushTypeChangeEvent">
 						<el-option label="全量升级" :value="1"></el-option>
@@ -105,7 +105,7 @@
 					</el-select>
 				</el-form-item>
 			</el-col>
-			<el-col :span="7" :offset="1"  v-if="pushForm.push_type===2" style="margin-left: -11px">
+			<el-col :span="7" :offset="1"  v-if="pushForm.push_type===2" style="margin-left: -15px">
 				<el-form-item label="" prop="list_type" label-width="0">
 					<el-select v-model="pushForm.list_type"  placeholder="请选择">
 						<el-option label="白名单" :value="1"></el-option>
@@ -116,9 +116,12 @@
 		</el-row>
 		<el-form-item label="uuid" prop="uuid">
 			<el-row :gutter="24">
-				<el-col :span="8" style="padding:0">
+				<el-col :span="17" style="padding-left:0">
 					<el-input  v-model="pushForm.uuid"></el-input>
 				</el-col>
+			</el-row>
+			<el-row>
+				<span style="font-size: 12px; color: #999">可输入多个uuid，用逗号隔开</span>
 			</el-row>
 		</el-form-item>
 		<el-form-item>
