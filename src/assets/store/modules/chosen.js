@@ -128,7 +128,7 @@ export default {
 				const json = res.data;
 				if (json.code === 200) {
 					const list = json.result;
-					if (list.length) {
+					if (list && list.length) {
 						state.subset = list.map(x => {
 							return {
 								label: x.title,
@@ -227,7 +227,8 @@ export default {
 		}, payload) {
 			commit({
 				type: namespace.GETSUBSET,
-				token: payload.token
+				token: payload.token,
+				product_id: payload.product_id
 			});
 		},
 

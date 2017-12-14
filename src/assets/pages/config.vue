@@ -316,6 +316,7 @@
 					:productIDOptions="productIDOptions"
 					:type="type"
 					:product="product"
+					:appIos="appIos"
 					:router="router"
 					:subset="subset"
 			>
@@ -335,7 +336,6 @@
 					:router="router"
 					:appIos="appIos"
 					:appAndroid="appAndroid"
-					:subset="subset"
 			>
 			</push-update>
 		</el-dialog>
@@ -613,26 +613,25 @@ export default {
                 delete params.products
                 delete params.product_id
             } else if (params.type === 2) {
-                delete params.product_id
                 delete params.system
-                params.products = params.routersList
+                params.products = params.productsList
                 if (params.products.length) {
 					params.products = params.products.map(x => {
 					    let product_id = ''
-					    this.router.forEach(y => {
-					        if (y.value === x) {
-                                product_id = y.product_id
-							}
-						})
+//					    this.router.forEach(y => {
+//					        if (y.value === x) {
+//                                product_id = y.product_id
+//							}
+//						})
 						return {
 							version: x,
-							product_id: product_id
+							product_id: params.product_id
 						}
 					})
                 }
             } else if (params.type === 3) {
-                delete params.system;
-                params.routers = params.productsList
+                delete params.system
+                params.routers = params.routersList
             }
             delete params.productsList
             delete params.routersList
@@ -640,15 +639,6 @@ export default {
             this.$store.dispatch('importSubmitAction', params).then((result) => {
                 if (result.code === 200) {
                     this.$message.success('录入成功');
-//                    if (this.importForm.type === 2) {
-//						this.$store.dispatch({
-//							type: namespace.GETROUTER
-//						});
-//                    } else if(this.importForm.type === 3) {
-//						this.$store.dispatch({
-//							type: namespace.GETSUBSET
-//						});
-//                    }
                     this.importBoxFlag = false;
                     this.getVersionList(1);
                 }

@@ -27,7 +27,7 @@
 				</el-col>
 			</el-row>
 		</el-form-item>
-		<el-form-item label="子设备" prop="product_id" v-if="importForm.type === 3">
+		<el-form-item label="子设备" prop="product_id" v-if="importForm.type !== 1">
 			<el-row>
 				<el-col :span="8">
 					<el-select v-model="importForm.brand_id" placeholder="品牌">
@@ -50,7 +50,7 @@
 					</el-select>
 				</el-col>
 				<el-col :span="7" :offset="1">
-					<el-select v-model="importForm.product_id" placeholder="产品">
+					<el-select v-model="importForm.product_id" @change="productChange" placeholder="产品">
 						<el-option
 								v-for="item in productIDOptionsChild"
 								:key="item.value"
@@ -78,7 +78,7 @@
 					placeholder="选择日期">
 			</el-date-picker>
 		</el-form-item>
-		<el-form-item label="支持版本" prop="routersList" v-if="importForm.type !== 3">
+		<el-form-item label="支持路由" prop="routersList" v-if="importForm.type === 1">
 			<el-select style="width: 100%;" multiple v-model="importForm.routersList" placeholder="路由">
 				<el-option
 						v-for="item in router"
@@ -88,10 +88,20 @@
 				</el-option>
 			</el-select>
 		</el-form-item>
-		<el-form-item label="支持版本" prop="productsList" v-if="importForm.type === 3">
+		<el-form-item label="支持子设备" prop="productsList" v-if="importForm.type === 2">
 			<el-select style="width: 100%;" multiple v-model="importForm.productsList" placeholder="子设备">
 				<el-option
 						v-for="item in subset"
+						:key="item.value"
+						:label="item.label"
+						:value="item.value">
+				</el-option>
+			</el-select>
+		</el-form-item>
+		<el-form-item label="支持路由" prop="productsList" v-if="importForm.type === 3">
+			<el-select style="width: 100%;" multiple v-model="importForm.routersList" placeholder="路由">
+				<el-option
+						v-for="item in router"
 						:key="item.value"
 						:label="item.label"
 						:value="item.value">
@@ -143,8 +153,9 @@
 </template>
 <script>
 import * as namespace from '../store/namespace';
+import { mapGetters, mapActions } from 'vuex';
 export default {
-    props: ['brandIDOptions','typeIDOptions','productIDOptions','router','subset','type','product'],
+    props: ['brandIDOptions','typeIDOptions','productIDOptions','appIos','router','type','product'],
 	data () {
 		return {
             brandIDOptionsChild: this.brandIDOptions,
@@ -257,14 +268,7 @@ export default {
                     value: x.product_id
                 }
             })
-        },
-        'importForm.product_id' (curVal, oldVal) {
-            this.$store.dispatch({
-                type: namespace.INITSUBSET,
-                token: this.token,
-                product_id: curVal
-            })
-        },
+        }
 	},
 	mounted () {
 	},
@@ -299,14 +303,20 @@ export default {
         closeParentFlow () {
             this.$emit('closeImportBox')
 		},
+		productChange (val) {
+            this.$store.dispatch({
+                type: namespace.GETSUBSET,
+                product_id: val
+            })
+		},
         typeChangeEvent (val) {
-            if (val === 3) {
+            if (val === 1) {
                 this.rulesImport.product_id = [
-                    { required: true, message: '请选择产品类型' }
+                    { required: false }
                 ]
             } else {
                 this.rulesImport.product_id = [
-                    { required: false }
+                    { required: true, message: '请选择产品类型' }
                 ]
 			}
         },
@@ -369,8 +379,11 @@ export default {
             return isLt2M;
 		}
 	},
-	computed: {
-	}
+    computed: {
+        ...mapGetters({
+            subset: namespace.SUBSET
+        })
+    }
 }
 </script>
 <style lang="less">
