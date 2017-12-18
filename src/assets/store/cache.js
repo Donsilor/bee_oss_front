@@ -21,7 +21,7 @@ export default {
     save() {
       const states = store.state;
       const list = deepClone(states);
-      localStorage.setItem(storageKey, JSON.stringify(list));
+      // localStorage.setItem(storageKey, JSON.stringify(list));
     },
     get() {
       return JSON.parse(localStorage.getItem(storageKey)) || {};
