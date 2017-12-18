@@ -179,6 +179,12 @@ export default {
                 }
             })
 		},
+        randomColor (num) {
+            let colors = ['#336666','#642100','#930000','#0000E3','#0066CC','#333','#81C0C0',
+                '#20A0FF','#d9006c','#00CC33','#467500','#616130','#424200','#f00']
+            // let index = Math.floor((Math.random()*colors.length))
+            return colors[num]
+        },
 		getAlarmst() {
 //			const handleData =  x => {
 //				const curDate = new Date(x.statistics_time);
@@ -238,6 +244,7 @@ export default {
         renderEchart (xObj, datasObj) {
             let curSeries = []
             let legendArr = []
+			let num = 0
             if (datasObj) {
                 for (let attr in datasObj) {
                     legendArr.push(attr)
@@ -255,6 +262,11 @@ export default {
                             data: [
                                 {type: 'average', name: '平均值'}
                             ]
+                        },
+                        itemStyle: {
+                            normal: {
+                                color: this.randomColor(num++)
+                            }
                         }
                     })
                 }

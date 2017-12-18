@@ -18,7 +18,7 @@ function deepClone(obj) {
 }
 
 export default {
-  save() {
+    save() {
       const states = store.state;
       const list = deepClone(states);
       localStorage.setItem(storageKey, JSON.stringify(list));

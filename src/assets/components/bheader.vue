@@ -28,15 +28,16 @@ export default {
 				token: this.token
 			}).then(res => {
 				const json = res.data;
-				if (json.code === 200) {
-					this.$store.dispatch({
-						type: namespace.DELUSER
-					});
-					this.$router.push('/');
-					this.$message.success('登出成功');
-				} else {
-					this.$message.error(json.msg);
-				}
+//				if (json.code === 200) {
+//
+//				} else {
+//					this.$message.error(json.msg);
+//				}
+                this.$store.dispatch({
+                    type: namespace.DELUSER
+                });
+                this.$router.push('/');
+                this.$message.success('登出成功');
 			})
 		}
 	},
