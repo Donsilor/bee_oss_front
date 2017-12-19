@@ -41,7 +41,7 @@
 						<!--<el-button type="primary" @click="toRootLog">主查看云平台日志</el-button>-->
 					<!--</div>-->
 					<el-table
-							:data="terminalList.tableData"
+							:data="terminalListPage"
 							style="width: 100%">
 						<el-table-column v-for="item in terminalList.tableColumn" :key="item.prop"
 										 :prop="item.prop"
@@ -205,18 +205,20 @@
 				>
 				</el-date-picker>
 			</div>
-			<el-table
-					:data="logOutList.tableData"
-					style="width: 100%">
-				<el-table-column v-for="item in logOutList.tableColumn" :key="item.prop"
-								 :prop="item.prop"
-								 :label="item.label"
-				>
-					<template scope="scope">
-						<div>{{scope.row[item.prop]}}</div>
-					</template>
-				</el-table-column>
-			</el-table>
+			<div class="childDevice">
+				<el-table
+						:data="logOutList.tableData"
+						style="width: 100%">
+					<el-table-column v-for="item in logOutList.tableColumn" :key="item.prop"
+									 :prop="item.prop"
+									 :label="item.label"
+					>
+						<template scope="scope">
+							<div>{{scope.row[item.prop]}}</div>
+						</template>
+					</el-table-column>
+				</el-table>
+			</div>
 			<div class="page-line">
 				<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="10" :current-page.sync="currentPage"></el-pagination>
 			</div>
