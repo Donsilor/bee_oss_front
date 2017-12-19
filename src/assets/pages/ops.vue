@@ -64,7 +64,7 @@
 							</template>
 						</el-table-column>
 					</el-table>
-					<!--<pager v-show="false" :data="terminalList.tableData" :display-data="terminalList"></pager>-->
+					<pager v-if="terminalList.tableData && terminalList.tableData.length" :data="terminalList.tableData" :display-data="terminalListPage"></pager>
 				</el-row>
 				<!--家庭详情-->
 				<el-row class="p_r">
@@ -272,10 +272,13 @@ import memberLists from '../json/members.json'
 import routerLists from '../json/routers.json'
 import operLists from '../json/operList.json'
 import '../lib/util'
+import pager from '../components/pagination/livePagination.vue'
 export default {
 	computed: {
 	},
-    components: {},
+    components: {
+        pager
+	},
 	data () {
 		return {
             hasAllMsg: false,
@@ -360,7 +363,8 @@ export default {
             totalItem: 0,
 			currentPage: 1,
             totalItemOper: 0,
-			currentOperPage: 1
+			currentOperPage: 1,
+            terminalListPage: []
 		}
 	},
 	mounted () {
@@ -649,7 +653,7 @@ export default {
 			}
 		}
 	}
-	.childDevice {
+	.childDevice, .terminal_list {
 		.el-table td>.cell>div{
 			overflow:hidden;
 			white-space:nowrap;

@@ -82,7 +82,7 @@
 		</div>
 		<el-dialog title="日志详情" :visible.sync="detailFlag" class="rootLogDetail">
 			<div class="edit_form">
-				<el-form :model="logDetail+': '"  label-width="100px" >
+				<el-form :model="logDetail+': '"  label-width="125px" >
 					<el-row>
 						<el-col :span="12" v-for="(value, key) in logDetail">
 							<el-form-item :label="key">
