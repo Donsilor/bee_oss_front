@@ -85,6 +85,10 @@ const routes = [{
         path: 'warnDataSearch',
         name: 'warnDataSearch',
         component: Pages.WarnDataSearch
+    },{
+        path: 'familyList',
+        name: 'familyList',
+        component: Pages.FamilyList
     }]
 }];
 

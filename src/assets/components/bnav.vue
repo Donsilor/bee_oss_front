@@ -58,9 +58,21 @@ export default {
 
                 },
                 {
-                    title: '设备OPS',
-                    path: '/main/ops',
-                    icon: 'ops'
+                    title: '业务数据',
+                    path: 'yhsj',
+                    icon: 'ops',
+                    children: [
+                        {
+                            title: '用户信息',
+                            path: '/main/ops',
+                            icon: ''
+                        },
+                        {
+                            title: '家庭信息',
+                            path: '/main/familyList',
+                            icon: ''
+                        }
+                    ]
                 },
                 {
                     title: '经分数据',
@@ -91,13 +103,18 @@ export default {
                     ]
                 },
                 {
-                    title: '云平台日志',
+                    title: '日志查询',
                     path: 'yptrz',
                     icon: 'cloud',
 					children: [
                         {
                             path: '/main/rootLog',
                             title: '云平台日志',
+                            isSelected: false
+                        },
+                        {
+                            path: '',
+                            title: '错误日志',
                             isSelected: false
                         }
 					]

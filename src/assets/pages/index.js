@@ -16,6 +16,7 @@ import CMDB from './cmdb.vue';
 import upgrade from './upgradeCenter.vue';
 import WarnManage from './warnManage.vue';
 import WarnDataSearch from './warnDataSearch.vue';
+import FamilyList from './familyList.vue';
 
 export {
 	Login,
@@ -35,5 +36,6 @@ export {
     LogRegData,
     QpsData,
     WarnManage,
-    WarnDataSearch
+    WarnDataSearch,
+    FamilyList
 };

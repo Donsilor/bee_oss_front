@@ -2,46 +2,45 @@
 	<div class="page-content rootLog-page">
 		<div style="padding-bottom: 30px;">
 			<!--搜索框-->
-			<el-row :gutter="24">
-				<el-col :span="22">
-					<el-row :gutter="24" >
-						<el-col :span="3" style="padding-right: 0">
-							<el-input v-model="rootLogForm.uuid" placeholder="uuid"></el-input>
-						</el-col>
-						<el-col :span="3" style="padding-right: 0">
-							<el-input v-model="rootLogForm.msg_tag" placeholder="msg_tag"></el-input>
-						</el-col>
-						<el-col :span="3" style="padding-right: 0">
-							<el-input v-model="rootLogForm.session_id" placeholder="session_id"></el-input>
-						</el-col>
-						<el-col :span="3" style="padding-right: 0">
-							<el-input v-model="rootLogForm.svr_id" placeholder="svr_id"></el-input>
-						</el-col>
-						<el-col :span="3" style="padding-right: 0">
-							<el-input v-model="rootLogForm.user_id" placeholder="user_id"></el-input>
-						</el-col>
-						<el-col :span="3" style="padding-right: 0">
-							<el-input v-model="rootLogForm.router_id" placeholder="router_id"></el-input>
-						</el-col>
-						<el-col :span="3" style="padding-right: 0">
-							<el-date-picker
-									style="width: 100%"
-									v-model="rootLogForm.select_date"
-									placeholder="今天"
-							>
-							</el-date-picker>
-						</el-col>
-						<el-col :span="3">
-							<el-time-picker
-									is-range
-									v-model="rootLogForm.start_end_time"
-									range-separator="至"
-									start-placeholder="开始时间"
-									end-placeholder="结束时间"
-									placeholder="选择时间范围">
-							</el-time-picker>
-						</el-col>
-					</el-row>
+			<el-row :gutter="24" >
+				<el-col :span="2" style="padding-right: 0; ">
+					<el-input v-model="rootLogForm.uuid" placeholder="uuid"></el-input>
+				</el-col>
+				<el-col :span="2" style="padding-right: 0; padding-left: 10px;">
+					<el-input v-model="rootLogForm.msg_tag" placeholder="msg_tag"></el-input>
+				</el-col>
+				<el-col :span="2" style="padding-right: 0; padding-left: 10px;">
+					<el-input v-model="rootLogForm.session_id" placeholder="session_id"></el-input>
+				</el-col>
+				<el-col :span="2" style="padding-right: 0; padding-left: 10px;">
+					<el-input v-model="rootLogForm.svr_id" placeholder="svr_id"></el-input>
+				</el-col>
+				<el-col :span="2" style="padding-right: 0; padding-left: 10px;">
+					<el-input v-model="rootLogForm.user_id" placeholder="user_id"></el-input>
+				</el-col>
+				<el-col :span="2" style="padding-right: 0; padding-left: 10px;">
+					<el-input v-model="rootLogForm.router_id" placeholder="router_id"></el-input>
+				</el-col>
+				<el-col :span="2" style="padding-right: 0; padding-left: 10px;">
+					<el-input v-model="rootLogForm.code" type="number" placeholder="code"></el-input>
+				</el-col>
+				<el-col :span="3" style="padding-right: 0; padding-left: 10px;">
+					<el-date-picker
+							style="width: 100%"
+							v-model="rootLogForm.select_date"
+							placeholder="今天"
+					>
+					</el-date-picker>
+				</el-col>
+				<el-col :span="3">
+					<el-time-picker
+							is-range
+							v-model="rootLogForm.start_end_time"
+							range-separator="至"
+							start-placeholder="开始时间"
+							end-placeholder="结束时间"
+							placeholder="选择时间范围">
+					</el-time-picker>
 				</el-col>
 				<el-col :span="2">
 					<el-button type="primary" @click="getRootLogs(1)">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
@@ -117,6 +116,7 @@ export default {
 				svr_id: '',
                 router_id: '',
                 msg_tag: '',
+				code: '',
                 session_id: '',
 				limit: 15,
                 start_end_time: []
@@ -148,6 +148,7 @@ export default {
                 queue_cost_time: '',
                 process_cost_time: '',
                 net_cost_time: '',
+				code: '',
                 cost_time: '',
                 req: '',
                 created_time: ''
@@ -170,7 +171,16 @@ export default {
         getRootLogs (page) {
             let obj = this
 			let param = {}
-			let currentForm =  obj.rootLogForm
+			let currentForm = {}
+			for (let attr in obj.rootLogForm) {
+                currentForm[attr] = obj.rootLogForm[attr]
+			}
+			if (currentForm.code) {
+                currentForm.code = parseInt(currentForm.code)
+            } else {
+                delete currentForm.code
+			}
+
             currentForm.page = page
 			for (let attr in currentForm) {
                 if (attr === 'start_end_time') {
