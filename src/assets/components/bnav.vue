@@ -113,7 +113,7 @@ export default {
                             isSelected: false
                         },
                         {
-                            path: '',
+                            path: '/main/errLog',
                             title: '错误日志',
                             isSelected: false
                         }

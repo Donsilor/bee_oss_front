@@ -42,6 +42,15 @@ const actions = {
             })
         })
     },
+    errLogs({commit, state}, params) {
+        return new Promise((resolve, reject) => {
+            axios.post(OPS_API.errLogs, params).then((response) => {
+                resolve(response.data.result)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
+    },
     throughDatas({commit, state}, params) {
         return new Promise((resolve, reject) => {
             axios.post(THROUGH_API.throughDatas, params).then((response) => {

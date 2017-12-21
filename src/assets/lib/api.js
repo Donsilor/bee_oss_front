@@ -8,6 +8,7 @@ export const OPS_API = {
     searchUserMsg: API_MASTER + 'iotuser/index',  //查询用户所有信息
     searchLogOut: API_MASTER + 'iotuser/history',  //获取用户登录登出日志
     rootLogs: API_MASTER + 'mongodebug/index',  //云平台日志
+    errLogs: API_MASTER + 'mongodebug/approuter',  //错误日志
     operaList: API_MASTER + 'iotuser/operlist'  //子设备操作流水
 }
 export const UPGRADE_API = {

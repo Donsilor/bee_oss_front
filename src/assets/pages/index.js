@@ -17,6 +17,7 @@ import upgrade from './upgradeCenter.vue';
 import WarnManage from './warnManage.vue';
 import WarnDataSearch from './warnDataSearch.vue';
 import FamilyList from './familyList.vue';
+import ErrLog from './errLogs.vue';
 
 export {
 	Login,
@@ -37,5 +38,6 @@ export {
     QpsData,
     WarnManage,
     WarnDataSearch,
-    FamilyList
+    FamilyList,
+    ErrLog
 };
