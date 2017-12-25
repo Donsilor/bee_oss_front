@@ -113,7 +113,7 @@ const actions = {
                 console.log(error)
             })
         })
-    }
+    },
     // getTerminalList({commit, state}, params) {
     //     return new Promise((resolve, reject) => {
     //         axios.get(OPS_API.getTerminalList, {params: params}).then((response) => {
@@ -123,6 +123,43 @@ const actions = {
     //         })
     //     })
     // },
+    // 路由管理
+    routerList({commit, state}, params) {
+        return new Promise((resolve, reject) => {
+            axios.post(OPS_API.routerList, params).then((response) => {
+                resolve(response.data.result)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
+    },
+    addRouter({commit, state}, params) {
+        return new Promise((resolve, reject) => {
+            axios.post(OPS_API.addRouter, params).then((response) => {
+                resolve(response.data.result)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
+    },
+    deleteRouter({commit, state}, params) {
+        return new Promise((resolve, reject) => {
+            axios.post(OPS_API.deleteRouter, params).then((response) => {
+                resolve(response.data.result)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
+    },
+    importRouter({commit, state}, params) {
+        return new Promise((resolve, reject) => {
+            axios.post(OPS_API.importRouter, params).then((response) => {
+                resolve(response.data.result)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
+    }
 
 }
 export default {

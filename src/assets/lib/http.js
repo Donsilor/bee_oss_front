@@ -5,6 +5,7 @@ import { Message } from 'element-ui'
 
 const CODE = {
   SUCCEE: 200,
+  SUCCEEELSE: 0,
   NO_LOGIN: 401
 }
 
@@ -43,7 +44,7 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) {
   // Do something with response data
   if (response.status === 200) {
-    if (response.data.code !== CODE.SUCCEE) {
+    if (response.data.code !== CODE.SUCCEE && response.data.code !== CODE.SUCCEEELSE) {
       // console.error(response.data)
       if (response.data.code === CODE.NO_LOGIN) {
         // 未登录的情况

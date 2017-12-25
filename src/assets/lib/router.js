@@ -93,6 +93,22 @@ const routes = [{
         path: 'familyList',
         name: 'familyList',
         component: Pages.FamilyList
+    },{
+        path: 'routerManager',
+        name: 'routerIndex',
+        component: Pages.RouterIndex,
+        children: [
+            {
+                path: '',
+                name: 'routerManager',
+                component: Pages.RouterManager,
+            },
+            {
+                path: 'import',
+                name: 'import',
+                component: Pages.ImportRouter,
+            }
+        ]
     }]
 }];
 

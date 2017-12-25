@@ -9,7 +9,11 @@ export const OPS_API = {
     searchLogOut: API_MASTER + 'iotuser/history',  //获取用户登录登出日志
     rootLogs: API_MASTER + 'mongodebug/index',  //云平台日志
     errLogs: API_MASTER + 'mongodebug/approuter',  //错误日志
-    operaList: API_MASTER + 'iotuser/operlist'  //子设备操作流水
+    operaList: API_MASTER + 'iotuser/operlist',  //子设备操作流水
+    routerList: API_MASTER + 'iotrouter/lists',  //获取路由列表
+    addRouter: API_MASTER + 'iotrouter/add',  //添加路由
+    deleteRouter: API_MASTER + 'iotrouter/del',  //删除路由
+    importRouter: API_MASTER + 'iotrouter/import'  //路由批量导入
 }
 export const UPGRADE_API = {
     getVersions: API_MASTER + 'version/list',  // 版本列表

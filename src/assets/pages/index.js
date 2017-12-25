@@ -18,6 +18,9 @@ import WarnManage from './warnManage.vue';
 import WarnDataSearch from './warnDataSearch.vue';
 import FamilyList from './familyList.vue';
 import ErrLog from './errLogs.vue';
+import RouterIndex from './routerManager/index.vue';
+import RouterManager from './routerManager/routerManager.vue';
+import ImportRouter from './routerManager/importRouter.vue';
 
 export {
 	Login,
@@ -39,5 +42,8 @@ export {
     WarnManage,
     WarnDataSearch,
     FamilyList,
-    ErrLog
+    ErrLog,
+    RouterIndex,
+    RouterManager,
+    ImportRouter
 };

@@ -1,0 +1,12 @@
+{
+  "tableColumn":[
+    {"prop": "name", "label": "内部ID"},
+    {"prop": "router_uuid", "label": "UUID"},
+    {"prop": "device_auth_key", "label": "设备验证KEY"},
+    {"prop": "sn_number", "label": "设备编号"},
+    {"prop": "mac_address", "label": "设备MAC"},
+    {"prop": "state", "label": "设备状态"},
+    {"prop": "device_attr_ext", "label": "设备参数"}
+  ],
+  "tableData":[]
+}

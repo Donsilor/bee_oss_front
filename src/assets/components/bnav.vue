@@ -1,23 +1,25 @@
 <template>
-	<el-menu :default-active="defaultActive" :router=true class="menu-list">
-		<template v-for="item in menuData">
-			<template v-if="item.children" >
-				<el-submenu :index="item.path">
-					<template slot="title"><i class="icon-pp" :class="item.icon"></i>{{item.title}}</template>
-					<div v-for="subItem in item.children" style="overflow: hidden">
-						<a target="_blank" v-if="subItem.elseUrl" class="href-a"  :href="subItem.path">{{subItem.title}}</a>
-						<el-menu-item :index="subItem.path" v-else
-									  :key="subItem.path"
-									  :route="{ path: subItem.path }">{{subItem.title}}
-						</el-menu-item>
-					</div>
-				</el-submenu>
+	<div class="left-menu">
+		<el-menu :default-active="defaultActive" :router=true class="menu-list">
+			<template v-for="item in menuData">
+				<template v-if="item.children" >
+					<el-submenu :index="item.path">
+						<template slot="title"><i class="icon-pp" :class="item.icon"></i>{{item.title}}</template>
+						<div v-for="subItem in item.children" style="overflow: hidden">
+							<a target="_blank" v-if="subItem.elseUrl" class="href-a"  :href="subItem.path">{{subItem.title}}</a>
+							<el-menu-item :index="subItem.path" v-else
+										  :key="subItem.path"
+										  :route="{ path: subItem.path }">{{subItem.title}}
+							</el-menu-item>
+						</div>
+					</el-submenu>
+				</template>
+				<template v-if="!item.children">
+					<el-menu-item :index="item.path" :key="item.path" :route="{ path: item.path }"><i class="icon-pp" :class="item.icon"></i>{{item.title}}</el-menu-item>
+				</template>
 			</template>
-			<template v-if="!item.children">
-				<el-menu-item :index="item.path" :key="item.path" :route="{ path: item.path }"><i class="icon-pp" :class="item.icon"></i>{{item.title}}</el-menu-item>
-			</template>
-		</template>
-	</el-menu>
+		</el-menu>
+	</div>
 	<!--<div class="bnav">-->
 		<!--<ul>-->
 			<!--<li v-for="item in navs" :class="{'active': actived === item.id}">-->
@@ -62,6 +64,11 @@ export default {
                     path: 'yhsj',
                     icon: 'ops',
                     children: [
+                        {
+                            title: '路由管理',
+                            path: '/main/routerManager',
+                            icon: ''
+                        },
                         {
                             title: '用户信息',
                             path: '/main/ops',
@@ -188,11 +195,11 @@ export default {
 	},
 	mounted () {
 	    let obj = this
-//        if (obj.default) {
-//            obj.defaultActive = obj.default
-//        } else {
-//            obj.defaultActive = obj.$route.path
-//        }
+        if (obj.default) {
+            obj.defaultActive = obj.default
+        } else {
+            obj.defaultActive = obj.$route.path
+        }
 	},
 	methods: {
 
@@ -217,6 +224,11 @@ export default {
 	width: @width;
 	height: @height;
 	background-size: @width @height;
+}
+.left-menu {
+	.el-menu{
+		border-radius: 0;
+	}
 }
 .menu-list{
 	.el-submenu__title{
