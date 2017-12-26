@@ -4,7 +4,7 @@
 		<div style="position: relative">
 			<el-row :gutter="24">
 				<el-col :span="3" style="padding-right: 0; ">
-					<el-input v-model="listParams.router_id"></el-input>
+					<el-input v-model="listParams.router_id" placeholder="router_id"></el-input>
 				</el-col>
 				<el-col :span="2" style="padding-right: 0; ">
 					<el-button type="primary" @click="getRouterList()">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
@@ -105,10 +105,11 @@
 	</div>
 </template>
 <script>
-import * as namespace from '../../store/namespace';
-import { mapGetters, mapActions } from 'vuex';
-import '../../lib/util.js';
+import * as namespace from '../../store/namespace'
+import { mapGetters, mapActions } from 'vuex'
+import '../../lib/util.js'
 import router_list_json from '../../json/routerList.json'
+import { Message } from 'element-ui'
 export default {
     components: {
 	},
@@ -131,7 +132,8 @@ export default {
                 device_sn: '',
                 device_mac: '',
                 device_state: '',
-                device_params: ''
+                device_params: '',
+				router_id: ''
 			},
             rulesAddEdit: {
                 device_name: [
@@ -180,8 +182,12 @@ export default {
 		this.getRouterList(1);
 	},
 	methods: {
-        openEditLayer () {
-
+        openEditLayer (dataObj) {
+            this.addEditFlag = false
+			let currentData = this.AddEditForm
+			for (let attr in currentData) {
+                currentData[arrt] = dataObj[attr]
+			}
 		},
 		delRouter (id) {
             const obj  = this
@@ -191,8 +197,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 obj.$store.dispatch('deleteRouter', {router_id: id}).then((result) => {
-                    debugger
-                    if (result) {
+                    if (result.code === 0) {
                         obj.$message({
                             type: 'success',
                             message: '删除成功!'
@@ -251,15 +256,26 @@ export default {
 			}
 			return text
 		},
-		// 新增路由
+		// 新增/编辑路由
         addEditConfirm (formName) {
             let obj = this
             obj.$refs[formName].validate((valid) => {
                 if (valid) {
-                    obj.$store.dispatch('addRouter', obj.AddEditForm).then((result) => {
-                        if (result.data.code === 0) {
+                    let currentAction = obj.addEditFlag ? 'addRouter' : 'editRouter'
+					let currentParam = JSON.parse(JSON.stringify(obj.AddEditForm))
+					if (obj.addEditFlag) {
+					   delete currentParam.router_id
+					}
+                    obj.$store.dispatch(currentAction, currentParam).then((result) => {
+                        if (result.list && (result.list[0].code === 0)) {
+                            Message({
+                                message: obj.addEditFlag ? '添加成功' : '编辑成功',
+                                type: 'success'
+                            })
                             obj.addEditLayer = false
-                        }
+                        }else {
+
+						}
                     })
                 } else {
                     return false

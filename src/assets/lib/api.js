@@ -12,6 +12,7 @@ export const OPS_API = {
     operaList: API_MASTER + 'iotuser/operlist',  //子设备操作流水
     routerList: API_MASTER + 'iotrouter/lists',  //获取路由列表
     addRouter: API_MASTER + 'iotrouter/add',  //添加路由
+    editRouter: API_MASTER + 'iotrouter/edit',  //编辑路由
     deleteRouter: API_MASTER + 'iotrouter/del',  //删除路由
     importRouter: API_MASTER + 'iotrouter/import'  //路由批量导入
 }

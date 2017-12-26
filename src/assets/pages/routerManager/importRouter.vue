@@ -36,6 +36,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import { Message } from 'element-ui'
 export default {
 	data () {
 		return {
@@ -60,25 +61,34 @@ export default {
         goBack () {
             history.go(-1)
 		},
-        importRouter (formName) {
-            const obj = this
-
-		},
         getUploadData (val) {
-            debugger
-		    this.importList.tableData = val.result && val.result.list
+            if (val.code === 0 || val.code === 200) {
+                Message({
+                    message: '导入成功',
+                    type: 'success'
+                })
+			}else {
+                Message({
+                    message: '导入失败',
+                    type: 'error'
+                })
+                if (val.result && val.result.list && val.result.list.length) {
+                    this.hasList = true
+                    this.importList.tableData = val.result.list
+                }
+			}
 		},
         beforeAvatarUpload (file) {
             // const isRight = (file.type === 'application/zip' || file.type === 'application/rar');
-            const isLt2M = file.size / 1024 / 1024 < 100;
+            const isLt100M = file.size / 1024 / 1024 < 100;
 
 //            if (!isRight) {
 //                this.$message.error('上传只能是 zip|rar 格式!');
 //            }
-            if (!isLt2M) {
+            if (!isLt100M) {
                 this.$message.error('上传文件大小不能超过 100MB!');
             }
-            return isLt2M;
+            return isLt100M;
         }
 	},
     computed: {

@@ -142,10 +142,19 @@ const actions = {
             })
         })
     },
+    editRouter({commit, state}, params) {
+        return new Promise((resolve, reject) => {
+            axios.post(OPS_API.editRouter, params).then((response) => {
+                resolve(response.data.result)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
+    },
     deleteRouter({commit, state}, params) {
         return new Promise((resolve, reject) => {
             axios.post(OPS_API.deleteRouter, params).then((response) => {
-                resolve(response.data.result)
+                resolve(response.data)
             }).catch((error) => {
                 console.log(error)
             })
