@@ -184,10 +184,20 @@ export default {
 	methods: {
         openEditLayer (dataObj) {
             this.addEditFlag = false
-			let currentData = this.AddEditForm
-			for (let attr in currentData) {
-                currentData[arrt] = dataObj[attr]
-			}
+            this.addEditLayer = true
+            this.$nextTick(() => {
+                let currentData = this.AddEditForm
+//                for (let attr in currentData) {
+//                    currentData[attr] = dataObj[attr]
+//                }
+                currentData['device_name'] = dataObj['name']
+                currentData['device_uuid'] = dataObj['router_uuid']
+                currentData['device_sn'] = dataObj['sn_number']
+                currentData['device_mac'] = dataObj['mac_address']
+                currentData['router_id'] = dataObj['router_id']
+                currentData['device_params'] = dataObj['device_attr_ext']
+                currentData['device_state'] = dataObj['state']
+            })
 		},
 		delRouter (id) {
             const obj  = this
@@ -273,6 +283,7 @@ export default {
                                 type: 'success'
                             })
                             obj.addEditLayer = false
+							obj.getRouterList(1)
                         }else {
 
 						}
