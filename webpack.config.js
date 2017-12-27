@@ -62,7 +62,7 @@ module.exports = (options = {}) => ({
   },
   devServer: {
     host: '127.0.0.1',
-    port: 8088,
+    port: 8081,
     proxy: {
       '/api/index.php/*': {
         target: 'http://beeossdev.egtest.cn:7777',
@@ -70,7 +70,14 @@ module.exports = (options = {}) => ({
           /*pathRewrite: {
             '^/api': ''
           }*/
-      }
+      },
+        '/api.php/*': {
+            target: 'http://iot-dev-upgrade-center.egtest.cn:7777',
+            changeOrigin: true
+            /*pathRewrite: {
+              '^/api': ''
+            }*/
+        }
     },
     historyApiFallback: {
       index: url.parse(options.dev ? '/assets/' : publicPath).pathname

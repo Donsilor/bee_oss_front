@@ -390,7 +390,10 @@ export default {
 				type: ''
 			},
 			listParams: {
-                page: 1
+                page: 1,
+                limit: 10,
+                level: 1,
+				method: 'list_versions'
 			},
 			filterParams: {
 				// token: '',

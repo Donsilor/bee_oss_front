@@ -1,5 +1,6 @@
 const API_ROOT = ''
 const API_MASTER = '/api/index.php/'
+const API_UPGRADE = '/api.php/'
 export const OPS_API = {
     getTerminalList: API_ROOT + '../src/assets/json/terminalList.json',  // 终端列表
     getMemberList: API_ROOT + '../src/assets/json/members.json',  // 成员列表
@@ -22,7 +23,9 @@ export const UPGRADE_API = {
     importSubmitAction: API_MASTER + 'version/input',  //版本录入
     pushUpdateAction: API_MASTER + 'version/release',  //版本推送
     getPushHistoryList: API_MASTER + 'version/released',  //版本推送历史
-    getVersionDetailAction: API_MASTER + 'version/info'  //版本详情
+    getVersionDetailAction: API_MASTER + 'version/info',  //版本详情
+
+    // getVersions: API_UPGRADE,  // 版本列表
 }
 export const THROUGH_API = {
     throughDatas: API_MASTER + 'analyzer/index',  // 经分数据统计

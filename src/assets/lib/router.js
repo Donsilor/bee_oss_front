@@ -58,22 +58,22 @@ const routes = [{
             },
 			{
                 path: 'appRouterData',
-                name: 'appRouterData',
+                name: 'hasParent/main/throughData',
                 component: Pages.AppRouterData,
 			},
             {
                 path: 'devicesData',
-                name: 'devicesData',
+                name: 'hasParent/main/throughData',
                 component: Pages.DevicesData,
             },
             {
                 path: 'logRegData',
-                name: 'logRegData',
+                name: 'hasParent/main/throughData',
                 component: Pages.LogRegData,
             },
             {
                 path: 'qpsData',
-                name: 'qpsData',
+                name: 'hasParent/main/throughData',
                 component: Pages.QpsData,
             }
 		]
@@ -105,7 +105,7 @@ const routes = [{
             },
             {
                 path: 'import',
-                name: 'import',
+                name: 'hasParent/main/routerManager',
                 component: Pages.ImportRouter,
             }
         ]

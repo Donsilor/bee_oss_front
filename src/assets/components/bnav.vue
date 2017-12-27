@@ -198,7 +198,12 @@ export default {
         if (obj.default) {
             obj.defaultActive = obj.default
         } else {
-            obj.defaultActive = obj.$route.path
+	        if (/hasParent/.test(obj.$route.name)) {
+                obj.defaultActive = obj.$route.name.substr(9)
+			} else {
+                obj.defaultActive = obj.$route.path
+			}
+
         }
 	},
 	methods: {
