@@ -11,12 +11,15 @@ const CODE = {
 
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
-    let info = localStorage.getItem('localData') &&
-        JSON.parse(localStorage.getItem('localData')).user &&
-        JSON.parse(localStorage.getItem('localData')).user.info || {}
+  let info = localStorage.getItem('localData') &&
+      JSON.parse(localStorage.getItem('localData')).user &&
+      JSON.parse(localStorage.getItem('localData')).user.info || {}
   config.withCredentials = true
   // config.headers['Content-Type'] = 'application/json'
-  config.data['token'] = info.token || ''
+  if (!/\/api.php/.test(config.url)) {
+      config.data['token'] = info.token || ''
+  }
+
   NProgress.start()
   if (config.method === 'post' || config.method === 'put') {
     var params = {}

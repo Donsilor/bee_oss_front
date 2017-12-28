@@ -15,10 +15,14 @@ const routes = [{
 		name: 'home',
 		component: Pages.Home
 	}, {
-		path: 'config',
-		name: 'config',
-		component: Pages.Config
+		path: 'versionManager',
+		name: 'versionManager',
+		component: Pages.VersionManager
 	}, {
+        path: 'pushManager',
+        name: 'pushManager',
+        component: Pages.PushManager
+    }, {
 		path: 'ops',
 		name: 'ops',
 		component: Pages.OPS

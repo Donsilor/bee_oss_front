@@ -12,52 +12,8 @@
 						</el-option>
 					</el-select>
 				</el-col>
-				<!--<el-col :span="9" v-if="pushForm.tab===1">-->
-					<!--<el-select v-model="pushForm.system" placeholder="操作系统"  @change="sysChangeEvent">-->
-						<!--<el-option-->
-								<!--v-for="item in systemOptions"-->
-								<!--:key="item.value"-->
-								<!--:label="item.label"-->
-								<!--:value="item.value">-->
-						<!--</el-option>-->
-					<!--</el-select>-->
-				<!--</el-col>-->
 			</el-row>
 		</el-form-item>
-		<!--<el-form-item label="选择子设备" prop="product_id" v-if="pushForm.type===3">-->
-			<!--<el-row class="cpf-line" :gutter="24">-->
-				<!--<el-col :span="8" style="padding:0;">-->
-					<!--<el-select v-model="pushForm.brand_id" placeholder="品牌">-->
-						<!--<el-option-->
-								<!--v-for="item in brandIDOptionsChild"-->
-								<!--:key="item.value"-->
-								<!--:label="item.label"-->
-								<!--:value="item.value">-->
-						<!--</el-option>-->
-					<!--</el-select>-->
-				<!--</el-col>-->
-				<!--<el-col :span="6" style="padding-right: 0">-->
-					<!--<el-select v-model="pushForm.type_id" placeholder="类型">-->
-						<!--<el-option-->
-								<!--v-for="item in typeIDOptionsChild"-->
-								<!--:key="item.value"-->
-								<!--:label="item.label"-->
-								<!--:value="item.value">-->
-						<!--</el-option>-->
-					<!--</el-select>-->
-				<!--</el-col>-->
-				<!--<el-col :span="6" style="padding-right: 0">-->
-					<!--<el-select v-model="pushForm.product_id" prop="product_id" placeholder="产品">-->
-						<!--<el-option-->
-								<!--v-for="item in productIDOptionsChild"-->
-								<!--:key="item.value"-->
-								<!--:label="item.label"-->
-								<!--:value="item.value">-->
-						<!--</el-option>-->
-					<!--</el-select>-->
-				<!--</el-col>-->
-			<!--</el-row>-->
-		<!--</el-form-item>-->
 		<el-form-item label="选择版本" prop="version">
 			<el-row class="cpf-line" :gutter="24">
 				<el-col :span="8" style="padding:0">
@@ -85,14 +41,6 @@
 								:value="item.value">
 						</el-option>
 					</el-select>
-					<!--<el-select v-model="pushForm.version"  placeholder="选择版本" v-if="pushForm.tab === 3">-->
-						<!--<el-option-->
-								<!--v-for="item in subset"-->
-								<!--:key="item.value"-->
-								<!--:label="item.label"-->
-								<!--:value="item.value">-->
-						<!--</el-option>-->
-					<!--</el-select>-->
 				</el-col>
 			</el-row>
 		</el-form-item>
@@ -131,7 +79,7 @@
 	</el-form>
 </template>
 <script>
-import * as namespace from '../store/namespace';
+import * as namespace from '../../../store/namespace';
 export default {
     props: ['brandIDOptions','typeIDOptions',
 		'productIDOptions','router','subset',

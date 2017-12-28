@@ -3,6 +3,7 @@ import {
 	PREFIX
 } from '../../lib/util';
 import axios from 'axios';
+const API_UPGRADE = '/api.php'
 
 export default {
 	state: {
@@ -11,7 +12,6 @@ export default {
         appAndroid: [],
 		router: [],
 		subset: [],
-
 	},
 
 	getters: {
@@ -47,12 +47,13 @@ export default {
 
 	mutations: {
 		[namespace.GETAPPIOS](state, payload) {
-            axios.post(PREFIX + 'version/typelist', {
+            axios.post(API_UPGRADE, {
                 token: payload.token,
+				method: 'released_versions',
                 type: 4
             }).then(res => {
                 const json = res.data;
-                if (json.code === 200) {
+                if (json.code === 0) {
                     const list = json.result;
                     if (list.length) {
                         state.appIos = list.map(x => {
@@ -71,12 +72,13 @@ export default {
         },
 
         [namespace.GETAPPANDROID](state, payload) {
-            axios.post(PREFIX + 'version/typelist', {
+            axios.post(API_UPGRADE, {
                 token: payload.token,
+                method: 'released_versions',
                 type: 1
             }).then(res => {
                 const json = res.data;
-                if (json.code === 200) {
+                if (json.code === 0) {
                     const list = json.result;
                     if (list.length) {
                         state.appAndroid = list.map(x => {
@@ -95,12 +97,13 @@ export default {
         },
 
 		[namespace.GETROUTER](state, payload) {
-			axios.post(PREFIX + 'version/typelist', {
+			axios.post(API_UPGRADE, {
 				token: payload.token,
+                method: 'released_versions',
 				type: 2
 			}).then(res => {
 				const json = res.data;
-				if (json.code === 200) {
+				if (json.code === 0) {
 					const list = json.result;
 					if (list.length) {
 						state.router = list.map(x => {
@@ -120,13 +123,14 @@ export default {
 		},
 
 		[namespace.GETSUBSET](state, payload) {
-			axios.post(PREFIX + 'version/typelist', {
+			axios.post(API_UPGRADE, {
 				token: payload.token,
+                method: 'released_versions',
 				type: 3,
 				product_id: payload.product_id
 			}).then(res => {
 				const json = res.data;
-				if (json.code === 200) {
+				if (json.code === 0) {
 					const list = json.result;
 					if (list && list.length) {
 						state.subset = list.map(x => {

@@ -30,7 +30,7 @@
 <script>
 import echarts from 'echarts';
 import {mapActions} from 'vuex';
-import '../lib/util'
+import '../../lib/util'
 export default {
 	data () {
 		return {

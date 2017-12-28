@@ -3,31 +3,31 @@
 		<el-form-item label="版本title" prop="title">
 			<el-input type="text" v-model="importForm.title" />
 		</el-form-item>
-		<el-form-item label="版本类型" prop="type">
-			<el-row>
-				<el-col :span="8">
-					<el-select v-model="importForm.type" placeholder="终端" @change="typeChangeEvent">
-						<el-option
-								v-for="item in typeOptions"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value">
-						</el-option>
-					</el-select>
-				</el-col>
-				<el-col :span="7" :offset="1" v-if="importForm.type === 1">
-					<el-select v-model="importForm.system" placeholder="操作系统">
-						<el-option
-								v-for="item in systemOptions"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value">
-						</el-option>
-					</el-select>
-				</el-col>
-			</el-row>
-		</el-form-item>
-		<el-form-item label="子设备" prop="product_id" v-if="importForm.type !== 1">
+		<!--<el-form-item label="版本类型" prop="type">-->
+			<!--<el-row>-->
+				<!--<el-col :span="8">-->
+					<!--<el-select v-model="importForm.type" placeholder="终端" @change="typeChangeEvent">-->
+						<!--<el-option-->
+								<!--v-for="item in typeOptions"-->
+								<!--:key="item.value"-->
+								<!--:label="item.label"-->
+								<!--:value="item.value">-->
+						<!--</el-option>-->
+					<!--</el-select>-->
+				<!--</el-col>-->
+				<!--<el-col :span="7" :offset="1" v-if="importForm.type === 1">-->
+					<!--<el-select v-model="importForm.system" placeholder="操作系统">-->
+						<!--<el-option-->
+								<!--v-for="item in systemOptions"-->
+								<!--:key="item.value"-->
+								<!--:label="item.label"-->
+								<!--:value="item.value">-->
+						<!--</el-option>-->
+					<!--</el-select>-->
+				<!--</el-col>-->
+			<!--</el-row>-->
+		<!--</el-form-item>-->
+		<el-form-item label="子设备" prop="product_id" v-if="inputType !== 1 && inputType !== 4">
 			<el-row>
 				<el-col :span="8">
 					<el-select v-model="importForm.brand_id" placeholder="品牌">
@@ -78,7 +78,7 @@
 					placeholder="选择日期">
 			</el-date-picker>
 		</el-form-item>
-		<el-form-item label="支持路由" prop="routersList" v-if="importForm.type === 1">
+		<el-form-item label="支持路由" prop="routersList" v-if="inputType === 1 || inputType === 4">
 			<el-select style="width: 100%;" multiple v-model="importForm.routersList" placeholder="路由">
 				<el-option
 						v-for="item in router"
@@ -88,7 +88,7 @@
 				</el-option>
 			</el-select>
 		</el-form-item>
-		<el-form-item label="支持子设备" prop="productsList" v-if="importForm.type === 2">
+		<el-form-item label="支持子设备" prop="productsList" v-if="inputType === 2">
 			<el-select style="width: 100%;" multiple v-model="importForm.productsList" placeholder="子设备">
 				<el-option
 						v-for="item in subset"
@@ -98,7 +98,7 @@
 				</el-option>
 			</el-select>
 		</el-form-item>
-		<el-form-item label="支持路由" prop="productsList" v-if="importForm.type === 3">
+		<el-form-item label="支持路由" prop="productsList" v-if="inputType === 3 || inputType === 5">
 			<el-select style="width: 100%;" multiple v-model="importForm.routersList" placeholder="路由">
 				<el-option
 						v-for="item in router"
@@ -108,7 +108,10 @@
 				</el-option>
 			</el-select>
 		</el-form-item>
-		<el-form-item label="上传固件包" prop="download_url_object">
+		<el-form-item label="appstore链接" prop="download_url_object" v-if="inputType === 4">
+			<el-input type="text" v-model="importForm.download_url_object" />
+		</el-form-item>
+		<el-form-item label="上传固件包" prop="download_url_object" v-if="inputType !== 4">
 			<!--<el-input type="text" v-model="importForm.download_url_object" />-->
 			<el-upload
 					ref="uploadFile"
@@ -152,10 +155,10 @@
 	</el-form>
 </template>
 <script>
-import * as namespace from '../store/namespace';
+import * as namespace from '../../../store/namespace';
 import { mapGetters, mapActions } from 'vuex';
 export default {
-    props: ['brandIDOptions','typeIDOptions','productIDOptions','appIos','router','type','product'],
+    props: ['brandIDOptions','type','typeIDOptions','productIDOptions','appIos','router','inputType','product'],
 	data () {
 		return {
             brandIDOptionsChild: this.brandIDOptions,
@@ -189,9 +192,7 @@ export default {
                 token: JSON.parse(localStorage.getItem('localData')).user.info.token
             },
             importForm: {
-                type: 1,
                 title: '',
-                system: 'Android',
                 version: '',
                 release_tm: '',
                 routersList: [],
@@ -208,9 +209,6 @@ export default {
                 note: ''
             },
             rulesImport: {
-                type: [
-                    { required: true, message: '请选择版本类型' }
-                ],
 				version: [
                     { required: true, message: '请输入版本号' }
                 ],
@@ -275,18 +273,14 @@ export default {
 	methods: {
         resetImportForm () {
             this.$refs['importForm'].resetFields()
-            this.$refs['uploadFile'].clearFiles()
+			if (this.inputType !== 4) {
+                this.$refs['uploadFile'].clearFiles()
+			}
             this.$refs['uploadFileImg'].clearFiles()
 
             let form = this.importForm
 			for (let attr in form) {
                 switch (attr){
-					case 'system':
-                        form[attr] = 'Android'
-					    break
-                    case 'type':
-                        form[attr] = 1
-                        break
                     case 'routersList':
                     case 'productsList':
                         form[attr] = []

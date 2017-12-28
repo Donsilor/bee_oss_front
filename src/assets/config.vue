@@ -342,14 +342,14 @@
 	</div>
 </template>
 <script>
-import * as namespace from '../store/namespace';
+import * as namespace from '../../store/namespace';
 import { mapGetters, mapActions } from 'vuex';
 import '../lib/util.js';
-import version_first_json from '../json/versions.json'
-import versions_children_json from '../json/versionsChildren.json'
-import push_history_json from '../json/pushHistory.json'
-import version_input from '../components/versionInputLayer.vue'
-import push_update from '../components/pushUpdateLayer.vue'
+import version_first_json from '../../json/versions.json'
+import versions_children_json from '../../json/versionsChildren.json'
+import push_history_json from '../../json/pushHistory.json'
+import version_input from '../../components/versionInputLayer.vue'
+import push_update from '../../components/pushUpdateLayer.vue'
 export default {
     components: {
         'version-input': version_input,
@@ -390,10 +390,10 @@ export default {
 				type: ''
 			},
 			listParams: {
+                method: 'list_versions',
                 page: 1,
-                limit: 10,
-                level: 1,
-				method: 'list_versions'
+                limit: 5,
+                level: 1
 			},
 			filterParams: {
 				// token: '',
@@ -715,7 +715,7 @@ export default {
 			this.listParams.page = page
 			const obj  = this
             obj.$store.dispatch('getVersions', obj.listParams).then((result) => {
-                if (result.code === 200) {
+                if (result.code === 0) {
                     obj.firstTableShow = true
                     obj.childTableHeaderShow = false
                     let currentData = result.result

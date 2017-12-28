@@ -19,7 +19,7 @@
 				<el-row class="user_msg_con">
 					<el-col :span="3">
 						<div class="first-img">
-							<img src="../images/u2978.png" width="95" height="130">
+							<img src="../../images/u2978.png" width="95" height="130">
 						</div>
 					</el-col>
 					<el-col :span="21">
@@ -90,7 +90,7 @@
 						<!--家庭-基本信息-->
 						<el-row class="user_msg_con" v-show="activeName==='first'">
 							<el-col :span="2">
-								<img src="../images/u2978.png">
+								<img src="../../images/u2978.png">
 							</el-col>
 							<el-col :span="22">
 								<el-form label-width="100px" class="user_msg">
@@ -264,17 +264,17 @@
 	</div>
 </template>
 <script>
-import { PREFIX } from '../lib/util';
-import * as namespace from '../store/namespace';
+import { PREFIX } from '../../lib/util';
+import * as namespace from '../../store/namespace';
 import {mapActions} from 'vuex';
-import terminalLists from '../json/terminalList.json'
-import deviceLists from '../json/devices.json'
-import logOutLists from '../json/logOut.json'
-import memberLists from '../json/members.json'
-import routerLists from '../json/routers.json'
-import operLists from '../json/operList.json'
-import '../lib/util'
-import pager from '../components/pagination/livePagination.vue'
+import terminalLists from '../../json/terminalList.json'
+import deviceLists from '../../json/devices.json'
+import logOutLists from '../../json/logOut.json'
+import memberLists from '../../json/members.json'
+import routerLists from '../../json/routers.json'
+import operLists from '../../json/operList.json'
+import '../../lib/util'
+import pager from '../../components/pagination/livePagination.vue'
 export default {
 	computed: {
 	},

@@ -55,8 +55,20 @@ export default {
                 },
                 {
                     title: '升级中心',
-                    path: '/main/config',
-                    icon: 'config'
+                    path: 'sjzx',
+                    icon: 'config',
+                    children: [
+                        {
+                            title: '版本管理',
+                            path: '/main/versionManager',
+                            icon: ''
+                        },
+                        {
+                            title: '推送管理',
+                            path: '/main/pushManager',
+                            icon: ''
+                        }
+                    ]
 
                 },
                 {
@@ -65,7 +77,7 @@ export default {
                     icon: 'ops',
                     children: [
                         {
-                            title: '路由管理',
+                            title: '路由器管理',
                             path: '/main/routerManager',
                             icon: ''
                         },

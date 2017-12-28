@@ -16,7 +16,7 @@
 					<el-input v-model="rootLogForm.method" placeholder="method"></el-input>
 				</el-col>
 				<el-col :span="3" style="padding-right: 0; ">
-					<el-input v-model="rootLogForm.device_id" placeholder="svr_id"></el-input>
+					<el-input v-model="rootLogForm.svr_id" placeholder="svr_id"></el-input>
 				</el-col>
 				<el-col :span="3" style="padding-right: 0; ">
 					<el-input v-model="rootLogForm.user_id" placeholder="user_id"></el-input>
@@ -104,8 +104,8 @@
 </template>
 <script>
 import {mapActions} from 'vuex';
-import errLogJson from '../json/errLogs.json'
-import '../lib/util'
+import rootLogJson from '../../json/rootLogs.json'
+import '../../lib/util'
 export default {
 	computed: {
 	},
@@ -118,11 +118,11 @@ export default {
                 uuid: '',
 				select_date: new Date(),
                 user_id: '',
-                device_id: '',
+				svr_id: '',
                 router_id: '',
                 msg_tag: '',
+				method: '',
 				code: '',
-                method: '',
                 session_id: '',
 				limit: 15,
                 start_end_time: []
@@ -131,15 +131,11 @@ export default {
 			currentPage: 1,
             rootLogData: {},
             logDetail: {
-                _id: '',
                 log_type: '',
-                file_num: '',
                 channel: '',
                 method: '',
-                level: '',
                 msg_tag: '',
                 session_id: '',
-                module: '',
                 host_name: '',
                 client_info: '',
                 svr_id: '',
@@ -153,6 +149,7 @@ export default {
                 msg: '',
                 req_time: '',
                 process_time: '',
+                rcv_time: '',
                 rsp_time: '',
                 queue_cost_time: '',
                 process_cost_time: '',
@@ -160,7 +157,7 @@ export default {
 				code: '',
                 cost_time: '',
                 created_time: '',
-                req_id: '',
+				req_id: '',
                 req: ''
 
 			}
@@ -203,10 +200,10 @@ export default {
                     param[attr] = currentForm[attr]
 				}
 			}
-            obj.$store.dispatch('errLogs',param).then((result) => {
+            obj.$store.dispatch('rootLogs',param).then((result) => {
                 // obj.terminalList = result
-                errLogJson.tableData = result.data
-				this.rootLogData = errLogJson
+                rootLogJson.tableData = result.data
+				this.rootLogData = rootLogJson
 				this.totalItem = result.total
             })
         },
@@ -241,7 +238,7 @@ export default {
 		}
 	},
     ...mapActions([
-		'errLogs'
+		'rootLogs'
     ])
 }
 </script>

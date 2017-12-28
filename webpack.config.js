@@ -62,7 +62,7 @@ module.exports = (options = {}) => ({
   },
   devServer: {
     host: '127.0.0.1',
-    port: 8081,
+    port: 8080,
     proxy: {
       '/api/index.php/*': {
         target: 'http://beeossdev.egtest.cn:7777',
@@ -71,7 +71,7 @@ module.exports = (options = {}) => ({
             '^/api': ''
           }*/
       },
-        '/api.php/*': {
+        '/api.php': {
             target: 'http://iot-dev-upgrade-center.egtest.cn:7777',
             changeOrigin: true
             /*pathRewrite: {

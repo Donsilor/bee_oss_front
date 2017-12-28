@@ -67,8 +67,8 @@
 </template>
 <script>
 import {mapActions} from 'vuex';
-import rootLogJson from '../json/warnList.json'
-import '../lib/util'
+import rootLogJson from '../../json/warnList.json'
+import '../../lib/util'
 export default {
 	computed: {
 	},
