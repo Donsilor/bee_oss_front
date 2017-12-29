@@ -28,7 +28,7 @@
 								 :width="'auto'"
 				>
 					<template scope="scope">
-						<div v-if="item.prop == 'state'" >{{getStatusText(scope.row.device_state)}}</div>
+						<div v-if="item.prop == 'state'" >{{getStatusText(scope.row.state)}}</div>
 						<div v-else>{{scope.row[item.prop]}}</div>
 					</template>
 				</el-table-column>
@@ -256,13 +256,22 @@ export default {
 		    let text = ''
 		    switch(type) {
 				case 1:
-				    text = '正常'
+				    text = '工厂测试'
 					break
-                case 0:
-                    text = '禁用'
+                case 2:
+                    text = '库存'
+                    break
+                case 3:
+                    text = '销售出'
+                    break
+                case 5:
+                    text = '返修'
+                    break
+                case 6:
+                    text = '失效'
                     break
                 default:
-                    text = ''
+                    text = '未知'
                     break
 			}
 			return text

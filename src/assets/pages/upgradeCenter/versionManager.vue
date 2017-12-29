@@ -66,10 +66,10 @@
 					<template scope="scope">
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="getVersionDetail(scope.row)">查看</el-button>
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="versionEdit(scope.row)">编辑</el-button>
-						<el-button v-if="!firstTableShow" type="text" size="small" @click="startStopVerion(scope.row)">停用</el-button>
-						<el-button v-if="!firstTableShow" type="text" size="small" @click="getVersionDetail(scope.row)">推送</el-button>
-						<el-button v-if="!firstTableShow" type="text" size="small" @click="getVersionDetail(scope.row)">操作日志</el-button>
-						<el-button v-if="!firstTableShow" type="text" size="small" @click="getVersionDetail(scope.row)">删除</el-button>
+						<el-button v-if="!firstTableShow" type="text" size="small" @click="startStopVerion(scope.row)">{{scope.row['status']?'禁用':'启用'}}</el-button>
+						<el-button v-if="!firstTableShow" type="text" size="small" @click="pushUpdate(scope.row)">推送</el-button>
+						<el-button v-if="!firstTableShow" type="text" size="small" @click="getOperateLog(scope.row)">操作日志</el-button>
+						<el-button v-if="!firstTableShow" type="text" size="small" @click="deleteVersion(scope.row)">删除</el-button>
 						<el-button v-if="firstTableShow" type="text" size="small" @click="getVersionHistory(scope.row)">查看历史版本</el-button>
 					</template>
 				</el-table-column>
@@ -225,6 +225,17 @@
 			>
 			</push-update>
 		</el-dialog>
+		<!--操作日志-->
+		<el-dialog
+				title="登录登出日志"
+				:visible.sync="operateLog">
+			<operate_log
+					:operateLogList="operateLogList"
+			></operate_log>
+			<span slot="footer" class="dialog-footer">
+               <el-button @click="logOutLayer = false" style="border:none;">取 消</el-button>
+            </span>
+		</el-dialog>
 	</div>
 </template>
 <script>
@@ -238,12 +249,14 @@ import version_input from './component/versionInputLayer.vue'
 import push_update from './component/pushUpdateLayer.vue'
 import version_edit from './component/versionEdit.vue'
 import version_detail from './component/versionDetail.vue'
+import operate_log from './component/operateLogs.vue'
 export default {
     components: {
         'version-input': version_input,
 		'push-update': push_update,
         'version_edit': version_edit,
-        'version_detail': version_detail
+        'version_detail': version_detail,
+		'operate_log': operate_log
 	},
 	data () {
 		return {
@@ -331,7 +344,10 @@ export default {
             rulesDetail: {},
             suportDevice: [],
             pushHistoryList: {},
-            secondTitle: ''
+            secondTitle: '',
+            currentDataObj: {},
+            operateLog: false,
+            operateLogList: {}
 		}
 	},
 	filters: {
@@ -433,7 +449,59 @@ export default {
 			}
 		},
         versionEdit () {},
-        startStopVerion () {},
+        startStopVerion (dataObj) {
+            let obj = this
+            obj.$confirm('确定此操作吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                let param = {
+                    type: dataObj.type,
+                    version: dataObj.version,
+					user_id: dataObj.user_id,
+                    product_id: dataObj.product_id,
+                    method: dataObj['status'] ? 'disable' : 'enable'
+                }
+
+                obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
+                    if (result.code === 0) {
+                        obj.$message({
+                            type: 'success',
+                            message: '操作成功!'
+                        });
+                        obj.getVersionHistory(obj.currentDataObj)
+					}
+                })
+            })
+        },
+        getOperateLog () {},
+        deleteVersion (dataObj) {
+            let obj = this
+            obj.$confirm('确定此操作吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                let param = {
+                    type: dataObj.type,
+                    version: dataObj.version,
+                    user_id: dataObj.user_id,
+                    product_id: dataObj.product_id,
+                    method: 'del_version'
+                }
+
+                obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
+                    if (result.code === 0) {
+                        obj.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                        obj.getVersionHistory(obj.currentDataObj)
+                    }
+                })
+            })
+		},
         getVersionDetail (dataObj) {
             this.infoBoxFlag = true
 			let param = {
@@ -451,7 +519,6 @@ export default {
 				}
             })
 		},
-
 		filterClearAll () {
 			for (let name in this.filterForm) {
 				this.filterForm[name] = '';
@@ -725,6 +792,7 @@ export default {
             })
         },
         getVersionHistory (dataObj) {
+            this.currentDataObj = dataObj  //此操作是为了进入列表，进行各种操作时需要重新刷新列表
             this.inputType = dataObj.type
             this.secondTitle = dataObj.name ? dataObj.name + '-版本历史' :  '子设备-product_id/h5-product_id-版本历史'
             this.getVersionHistoryList(1, dataObj.type, dataObj.product_id)
