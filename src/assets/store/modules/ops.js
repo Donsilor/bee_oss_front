@@ -145,7 +145,7 @@ const actions = {
     editRouter({commit, state}, params) {
         return new Promise((resolve, reject) => {
             axios.post(OPS_API.editRouter, params).then((response) => {
-                resolve(response.data.result)
+                resolve(response.data)
             }).catch((error) => {
                 console.log(error)
             })

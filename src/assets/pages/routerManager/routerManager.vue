@@ -231,6 +231,7 @@ export default {
 			}
 		},
 		openLayer () {
+            this.addEditFlag = true
             this.addEditLayer = true
             this.$nextTick(() => {
                 this.$refs['AddEditForm'].resetFields()
@@ -277,15 +278,29 @@ export default {
 					   delete currentParam.router_id
 					}
                     obj.$store.dispatch(currentAction, currentParam).then((result) => {
-                        if ((result && result.code === 0) || (result && result.list && (result.list[0].code === 0))) {
-                            Message({
-                                message: obj.addEditFlag ? '添加成功' : '编辑成功',
-                                type: 'success'
-                            })
-                            obj.addEditLayer = false
-							obj.getRouterList(1)
-                        }else {
-
+                        if (!obj.addEditFlag) {
+							if (result && result.code === 0) {
+                                Message({
+                                    message:  '编辑成功',
+                                    type: 'success'
+                                })
+                                obj.addEditLayer = false
+                                obj.getRouterList(1)
+							}
+						} else {
+                            if (result && result.list && (result.list[0].code === 0)) {
+                                Message({
+                                    message:  '新增成功',
+                                    type: 'success'
+                                })
+                                obj.addEditLayer = false
+                                obj.getRouterList(1)
+							} else {
+                                Message({
+                                    message: result.list[0].detail,
+                                    type: 'error'
+                                })
+							}
 						}
                     })
                 } else {
