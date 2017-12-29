@@ -227,13 +227,13 @@
 		</el-dialog>
 		<!--操作日志-->
 		<el-dialog
-				title="登录登出日志"
-				:visible.sync="operateLog">
+				title="操作日志"
+				:visible.sync="operateLogLayer">
 			<operate_log
 					:operateLogList="operateLogList"
 			></operate_log>
 			<span slot="footer" class="dialog-footer">
-               <el-button @click="logOutLayer = false" style="border:none;">取 消</el-button>
+               <el-button @click="operateLogLayer = false" style="border:none;">取 消</el-button>
             </span>
 		</el-dialog>
 	</div>
@@ -245,6 +245,7 @@ import '../../lib/util.js';
 import version_first_json from '../../json/versions.json'
 import versions_children_json from '../../json/versionsChildren.json'
 import push_history_json from '../../json/pushHistory.json'
+import operation_log_json from '../../json/operateLogList.json'
 import version_input from './component/versionInputLayer.vue'
 import push_update from './component/pushUpdateLayer.vue'
 import version_edit from './component/versionEdit.vue'
@@ -346,7 +347,7 @@ export default {
             pushHistoryList: {},
             secondTitle: '',
             currentDataObj: {},
-            operateLog: false,
+            operateLogLayer: false,
             operateLogList: {}
 		}
 	},
@@ -448,7 +449,7 @@ export default {
                 return date.Format('yyyy-MM-dd hh:mm:ss')
 			}
 		},
-        versionEdit () {},
+        versionEdit (dataObj) {},
         startStopVerion (dataObj) {
             let obj = this
             obj.$confirm('确定此操作吗?', '提示', {
@@ -475,7 +476,22 @@ export default {
                 })
             })
         },
-        getOperateLog () {},
+        getOperateLog (dataObj) {
+            this.operateLogLayer = true
+			this.operateLogList= operation_log_json
+			let obj = this
+			let param = {
+                type: dataObj.type,
+                version: dataObj.version,
+                product_id: dataObj.product_id,
+                method: 'history_operation_logs'
+			}
+            obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
+                if (result.code === 0) {
+                    obj.operateLogList.tableData = result.result.items
+                }
+            })
+		},
         deleteVersion (dataObj) {
             let obj = this
             obj.$confirm('确定此操作吗?', '提示', {
@@ -806,7 +822,6 @@ export default {
         'selectVersion',
 		'importSubmitAction',
 		'pushUpdateAction',
-		'getPushHistoryList',
 		'getVersionDetailAction',
 		'pubilcCorsAction'
     ]),

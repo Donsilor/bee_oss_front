@@ -1,18 +1,18 @@
 <template>
 	<div class="edit_form versionDetail">
-		<div style="padding-bottom:15px">
-			<el-date-picker
-					v-model="logOutForm.date"
-					@change="changeSelectLogOutDate"
-					placeholder="今天"
-			>
-			</el-date-picker>
-		</div>
+		<!--<div style="padding-bottom:15px">-->
+			<!--<el-date-picker-->
+					<!--v-model="date"-->
+					<!--@change="changeSelectLogOutDate"-->
+					<!--placeholder="今天"-->
+			<!--&gt;-->
+			<!--</el-date-picker>-->
+		<!--</div>-->
 		<div class="childDevice">
 			<el-table
-					:data="logOutList.tableData"
+					:data="operateLogList.tableData"
 					style="width: 100%">
-				<el-table-column v-for="item in logOutList.tableColumn" :key="item.prop"
+				<el-table-column v-for="item in operateLogList.tableColumn" :key="item.prop"
 								 :prop="item.prop"
 								 :label="item.label"
 				>
@@ -22,9 +22,9 @@
 				</el-table-column>
 			</el-table>
 		</div>
-		<div class="page-line">
-			<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="10" :current-page.sync="currentPage"></el-pagination>
-		</div>
+		<!--<div class="page-line">-->
+			<!--<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="10" :current-page.sync="currentPage"></el-pagination>-->
+		<!--</div>-->
 	</div>
 </template>
 <script>
@@ -33,12 +33,15 @@ export default {
     props: ['operateLogList'],
 	data () {
 		return {
-
+		    date: ''
 		}
 	},
 	mounted () {
 	},
 	methods: {
+        changeSelectLogOutDate () {
+
+		}
 	},
     computed: {
         ...mapGetters({
