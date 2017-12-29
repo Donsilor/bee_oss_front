@@ -214,7 +214,7 @@
 									 :label="item.label"
 					>
 						<template scope="scope">
-							<div>{{scope.row[item.prop]}}</div>
+							<div :title="scope.row[item.prop]">{{scope.row[item.prop]}}</div>
 						</template>
 					</el-table-column>
 				</el-table>

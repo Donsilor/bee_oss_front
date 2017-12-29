@@ -186,10 +186,10 @@ export default {
             this.addEditFlag = false
             this.addEditLayer = true
             this.$nextTick(() => {
+                this.rulesAddEdit.device_auth_key = [
+                    { required: false }
+                ]
                 let currentData = this.AddEditForm
-//                for (let attr in currentData) {
-//                    currentData[attr] = dataObj[attr]
-//                }
                 currentData['device_name'] = dataObj['name']
                 currentData['device_uuid'] = dataObj['router_uuid']
                 currentData['device_sn'] = dataObj['sn_number']
