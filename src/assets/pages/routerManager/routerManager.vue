@@ -277,7 +277,7 @@ export default {
 					   delete currentParam.router_id
 					}
                     obj.$store.dispatch(currentAction, currentParam).then((result) => {
-                        if (result && result.list && (result.list[0].code === 0)) {
+                        if ((result && result.code === 0) || (result && result.list && (result.list[0].code === 0))) {
                             Message({
                                 message: obj.addEditFlag ? '添加成功' : '编辑成功',
                                 type: 'success'
