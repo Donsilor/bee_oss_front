@@ -18,6 +18,8 @@ axios.interceptors.request.use(function (config) {
   // config.headers['Content-Type'] = 'application/json'
   if (!/\/api.php/.test(config.url)) {
       config.data['token'] = info.token || ''
+  } else {
+    config.url = 'http://iot-dev-upgrade-center.egtest.cn:7777' + config.url
   }
 
   NProgress.start()

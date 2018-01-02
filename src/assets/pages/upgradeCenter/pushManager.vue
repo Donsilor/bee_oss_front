@@ -239,8 +239,7 @@ export default {
             this.pushHistoryList = push_history_json
 			let obj = this
 			let param = {
-                method: 'released_versions',
-				type: 1
+                method: 'released_versions'
 			}
             obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
                 obj.pushHistoryList.tableData = result.result
