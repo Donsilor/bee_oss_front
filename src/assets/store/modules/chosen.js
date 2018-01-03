@@ -150,7 +150,7 @@ export default {
 
 		[namespace.GETPRODUCT](state, payload) {
 			axios.post(PREFIX + 'version/product', {
-				token: payload.token,
+                token: payload.token
 			}).then(res => {
 				const json = res.data;
 				if (json.code === 200) {

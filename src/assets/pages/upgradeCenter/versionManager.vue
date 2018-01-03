@@ -65,9 +65,9 @@
 						label="操作">
 					<template scope="scope">
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="getVersionDetail(scope.row)">查看</el-button>
-						<el-button v-if="!firstTableShow" type="text" size="small" @click="versionEdit(scope.row)">编辑</el-button>
+						<el-button v-if="!firstTableShow" type="text" size="small" @click="openVersionEdit(scope.row)">编辑</el-button>
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="startStopVerion(scope.row)">{{scope.row['status']?'禁用':'启用'}}</el-button>
-						<el-button v-if="!firstTableShow" type="text" size="small" @click="pushUpdate(scope.row)">推送</el-button>
+						<el-button v-if="!firstTableShow" type="text" size="small" @click="openPushLayer(scope.row)">推送</el-button>
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="getOperateLog(scope.row)">操作日志</el-button>
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="deleteVersion(scope.row)">删除</el-button>
 						<el-button v-if="firstTableShow" type="text" size="small" @click="getVersionHistory(scope.row)">查看历史版本</el-button>
@@ -184,6 +184,7 @@
 			<version_detail
 					ref="versionDetails"
 					:ruleFormDetail="ruleFormDetail"
+					:versionDeviceList="versionDeviceList"
 			>
 			</version_detail>
 			<div style="text-align: right; margin: 0">
@@ -191,8 +192,9 @@
 			</div>
 		</el-dialog>
 		<!--版本录入-->
-		<el-dialog title="录入版本" :visible.sync="importBoxFlag">
+		<el-dialog :title="this.addEditFlag?'录入版本':'编辑版本'" :visible.sync="importBoxFlag">
 			<version-input
+					key="versionInputs"
 					ref="versionInputs"
 					@importSubmitParent="importSubmit"
 					@closeImportBox="importBoxFlag = false;"
@@ -205,6 +207,9 @@
 					:appIos="appIos"
 					:router="router"
 					:subset="subset"
+					:addEditFlag="addEditFlag"
+					:editDataObj="editDataObj"
+					:releasedFlag="releasedFlag"
 			>
 			</version-input>
 		</el-dialog>
@@ -218,10 +223,12 @@
 					:typeIDOptions="typeIDOptions"
 					:productIDOptions="productIDOptions"
 					:type="type"
+					:inputType="inputType"
 					:product="product"
 					:router="router"
 					:appIos="appIos"
 					:appAndroid="appAndroid"
+					:pushDataObj="pushDataObj"
 			>
 			</push-update>
 		</el-dialog>
@@ -345,10 +352,22 @@ export default {
             rulesDetail: {},
             suportDevice: [],
             pushHistoryList: {},
+            pushDataObj: {},
             secondTitle: '',
             currentDataObj: {},
             operateLogLayer: false,
-            operateLogList: {}
+            operateLogList: {},
+            versionDeviceList: {
+                "tableColumn":[
+                    {"prop": "id", "label": "id"},
+                    {"prop": "uuid", "label": "设备标识uuid"},
+                    {"prop": "创建时间", "label": "created_at"}
+                ],
+                "tableData":[]
+            },
+            addEditFlag: true,
+            editDataObj: {},
+            releasedFlag: false  //已发布/未发布标识 || 版本编辑，已发布版本只能编辑几个字段
 		}
 	},
 	filters: {
@@ -449,7 +468,29 @@ export default {
                 return date.Format('yyyy-MM-dd hh:mm:ss')
 			}
 		},
-        versionEdit (dataObj) {},
+        openVersionEdit (dataObj) {
+            this.initBrandIDOptions()
+            this.filterPopoverFlag = false
+            let param = {
+                type: dataObj.type,
+                version: dataObj.version,
+                product_id: dataObj.product_id,
+                method: 'version_detail'
+            }
+            let obj = this
+            obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
+                let currentData = result.result
+                obj.releasedFlag = currentData.status === 1 ? true : false
+                obj.addEditFlag = false
+                obj.editDataObj = currentData
+                obj.importBoxFlag = true
+                obj.$nextTick(() => {
+                    obj.$refs['versionInputs'].resetImportForm()
+                    obj.$refs['versionInputs'].renderEditData()
+                })
+            })
+
+        },
         startStopVerion (dataObj) {
             let obj = this
             obj.$confirm('确定此操作吗?', '提示', {
@@ -518,6 +559,7 @@ export default {
                 })
             })
 		},
+		// 获取详情
         getVersionDetail (dataObj) {
             this.infoBoxFlag = true
 			let param = {
@@ -533,6 +575,15 @@ export default {
 				for (let attr in form) {
                     form[attr] = datas[attr]
 				}
+            })
+            let param_1 = {
+                type: dataObj.type,
+                version: dataObj.version,
+                product_id: dataObj.product_id,
+                method: 'get_uuids'
+            }
+            obj.$store.dispatch('pubilcCorsAction', param_1).then((result) => {
+                obj.versionDeviceList.tableData = result.result ? result.result.items : []
             })
 		},
 		filterClearAll () {
@@ -555,6 +606,8 @@ export default {
             }
 		},
 		openImportLayer() {
+            this.addEditFlag = true
+			this.releasedFlag = false
             this.initBrandIDOptions()
 			this.importBoxFlag = true;
 			this.filterPopoverFlag = false;
@@ -563,7 +616,8 @@ export default {
             })
 
 		},
-		openPushLayer () {
+		openPushLayer (dataObj) {
+            this.pushDataObj = dataObj
             this.initBrandIDOptions()
             this.pushBoxFlag = true
             this.$nextTick(() => {
@@ -581,10 +635,12 @@ export default {
             if (params.type === 1 || params.type === 4) {
                 params.routers = params.routersList
 				params.os_type = params.type === 1 ? 'android' : 'ios'
+				params.method = this.addEditFlag ? 'create_app_version' : 'update_app_version'
                 delete params.products
                 delete params.product_id
             } else if (params.type === 2) {
                 params.products = params.productsList
+                params.method = this.addEditFlag ? 'create_router_version' : 'update_router_version'
                 if (params.products.length) {
 					params.products = params.products.map(x => {
 					    let product_id = ''
@@ -599,18 +655,22 @@ export default {
 						}
 					})
                 }
-            } else if (params.type === 3 || params.type === 5) {
+            } else if (params.type === 3) {
+                params.method = this.addEditFlag ? 'create_device_version' : 'update_device_version'
                 params.routers = params.routersList
-            }
+            } else {  // type===5
+                params.method = this.addEditFlag ? 'create_h5_version' : 'update_h5_version'
+                params.products = params.productsList
+			}
             delete params.productsList
             delete params.routersList
             params.inputtype = this.inputType
 
             this.$store.dispatch('importSubmitAction', params).then((result) => {
                 if (result.code === 0) {
-                    this.$message.success('录入成功');
-                    this.importBoxFlag = false;
-                    this.getVersionList(1);
+                    this.$message.success(this.addEditFlag ? '录入成功' : '编辑成功')
+                    this.importBoxFlag = false
+                    this.getVersionList(1)
                 }
             })
         },
@@ -619,6 +679,8 @@ export default {
             let params = Object.assign({
             }, dataObj);
             params.uuid = params.uuid.split(',')
+			params.version = this.pushDataObj.version
+            params.type = this.inputType
             if (params.push_type === 1) {
                 delete params.list_type
 			}
@@ -626,7 +688,6 @@ export default {
             delete params.type_id
             delete params.productsList
             delete params.routersList
-            delete params.tab
 
             this.$store.dispatch('pushUpdateAction', params).then((result) => {
                 if (result.code === 0) {
@@ -768,23 +829,6 @@ export default {
             }
             return text
         },
-		// 获取详情
-        submitEditForm (formName) {
-            let obj = this
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-//                    obj.$store.dispatch('', obj.ruleFormDetail).then((result) => {
-//                        if (result.data.code === 0) {
-//                            obj.editDialogVisible = false
-//                            obj.search()
-//                        }
-//                    })
-					obj.infoBoxFlag = false
-                } else {
-                    return false
-                }
-            })
-		},
         // 历史版本
         getVersionHistoryList(page, type, product_id) {
             // this.filterParams.token = this.token

@@ -3,31 +3,7 @@
 		<el-form-item label="版本title" prop="title">
 			<el-input type="text" v-model="importForm.title" />
 		</el-form-item>
-		<!--<el-form-item label="版本类型" prop="type">-->
-			<!--<el-row>-->
-				<!--<el-col :span="8">-->
-					<!--<el-select v-model="importForm.type" placeholder="终端" @change="typeChangeEvent">-->
-						<!--<el-option-->
-								<!--v-for="item in typeOptions"-->
-								<!--:key="item.value"-->
-								<!--:label="item.label"-->
-								<!--:value="item.value">-->
-						<!--</el-option>-->
-					<!--</el-select>-->
-				<!--</el-col>-->
-				<!--<el-col :span="7" :offset="1" v-if="importForm.type === 1">-->
-					<!--<el-select v-model="importForm.system" placeholder="操作系统">-->
-						<!--<el-option-->
-								<!--v-for="item in systemOptions"-->
-								<!--:key="item.value"-->
-								<!--:label="item.label"-->
-								<!--:value="item.value">-->
-						<!--</el-option>-->
-					<!--</el-select>-->
-				<!--</el-col>-->
-			<!--</el-row>-->
-		<!--</el-form-item>-->
-		<el-form-item label="子设备" prop="product_id" v-if="inputType !== 1 && inputType !== 4">
+		<el-form-item label="子设备" prop="product_id" v-if="inputType !== 1 && inputType !== 4 && !releasedFlag">
 			<el-row>
 				<el-col :span="8">
 					<el-select v-model="importForm.brand_id" placeholder="品牌">
@@ -61,7 +37,7 @@
 				</el-col>
 			</el-row>
 		</el-form-item>
-		<el-form-item label="版本号" prop="version">
+		<el-form-item label="版本号" prop="version" v-if="!releasedFlag">
 			<el-input type="text" v-model="importForm.version" />
 		</el-form-item>
 		<el-form-item label="概要描述" prop="description">
@@ -70,7 +46,7 @@
 		<el-form-item label="详细事项" prop="note">
 			<el-input type="text" v-model="importForm.note" />
 		</el-form-item>
-		<el-form-item label="发布时间" prop="release_tm">
+		<el-form-item label="发布时间" prop="release_tm" v-if="!releasedFlag">
 			<el-date-picker
 					v-model="importForm.release_tm"
 					type="date"
@@ -78,7 +54,7 @@
 					placeholder="选择日期">
 			</el-date-picker>
 		</el-form-item>
-		<el-form-item label="支持路由" prop="routersList" v-if="inputType === 1 || inputType === 4">
+		<el-form-item label="支持路由" prop="routersList" v-if="(inputType === 1 || inputType === 4) && !releasedFlag">
 			<el-select style="width: 100%;" multiple v-model="importForm.routersList" placeholder="路由">
 				<el-option
 						v-for="item in router"
@@ -88,7 +64,7 @@
 				</el-option>
 			</el-select>
 		</el-form-item>
-		<el-form-item label="支持子设备" prop="productsList" v-if="inputType === 2">
+		<el-form-item label="支持子设备" prop="productsList" v-if="(inputType === 2 || inputType === 5) && !releasedFlag">
 			<el-select style="width: 100%;" multiple v-model="importForm.productsList" placeholder="子设备">
 				<el-option
 						v-for="item in subset"
@@ -98,7 +74,7 @@
 				</el-option>
 			</el-select>
 		</el-form-item>
-		<el-form-item label="支持路由" prop="productsList" v-if="inputType === 3 || inputType === 5">
+		<el-form-item label="支持路由" prop="productsList" v-if="inputType === 3 && !releasedFlag">
 			<el-select style="width: 100%;" multiple v-model="importForm.routersList" placeholder="路由">
 				<el-option
 						v-for="item in router"
@@ -108,20 +84,21 @@
 				</el-option>
 			</el-select>
 		</el-form-item>
-		<el-form-item label="appstore链接" prop="download_url_object" v-if="inputType === 4">
+		<el-form-item label="appstore链接" prop="download_url_object" v-if="inputType === 4 && !releasedFlag">
 			<el-input type="text" v-model="importForm.download_url_object" />
 		</el-form-item>
-		<el-form-item label="上传固件包" prop="download_url_object" v-if="inputType !== 4">
+		<el-form-item label="上传固件包" prop="download_url_object" v-if="inputType !== 4 && !releasedFlag">
 			<!--<el-input type="text" v-model="importForm.download_url_object" />-->
 			<el-upload
 					ref="uploadFile"
 					class="upload-demo"
-					action="/api/index.php/version/upload"
+					action="http://iot-dev-upgrade-center.egtest.cn:7777/oss_file_upload"
 					:data="uploadObj"
 					:before-upload="beforeAvatarUpload"
 					:on-success="getUploadData"
 					:on-preview="handlePreview"
 					:limit="1"
+					:file-list="fileListObj"
 					:on-remove="handleRemove"
 					>
 				<el-button size="small" type="primary">点击上传</el-button>
@@ -131,18 +108,19 @@
 			<el-upload
 					ref="uploadFileImg"
 					class="upload-demo"
-					action="/api/index.php/version/upload"
+					action="http://iot-dev-upgrade-center.egtest.cn:7777/oss_file_upload"
 					:before-upload="beforeAvatarUploadImg"
 					:on-success="getUploadDataImg"
 					:data="uploadObj"
 					:on-preview="handlePreviewImg"
 					:limit="1"
+					:file-list="fileListImg"
 					:on-remove="handleRemoveImg"
 					>
 				<el-button size="small" type="primary">点击上传</el-button>
 			</el-upload>
 		</el-form-item>
-		<el-form-item label="是否强制升级" prop="force">
+		<el-form-item label="是否强制升级" prop="force" v-if="releasedFlag">
 			<el-select style="width: 100%;" v-model="importForm.force" placeholder="请选择">
 				<el-option label="否" :value="0"></el-option>
 				<el-option label="是" :value="1"></el-option>
@@ -158,7 +136,8 @@
 import * as namespace from '../../../store/namespace';
 import { mapGetters, mapActions } from 'vuex';
 export default {
-    props: ['brandIDOptions','type','typeIDOptions','productIDOptions','appIos','router','inputType','product'],
+    props: ['brandIDOptions','type','typeIDOptions','productIDOptions','appIos',
+		'router','inputType','product','addEditFlag','editDataObj', 'releasedFlag'],
 	data () {
 		return {
             brandIDOptionsChild: this.brandIDOptions,
@@ -191,6 +170,8 @@ export default {
             uploadObj: {
                 token: JSON.parse(localStorage.getItem('localData')).user.info.token
             },
+            fileListObj: [],
+            fileListImg: [],
             importForm: {
                 title: '',
                 version: '',
@@ -201,7 +182,7 @@ export default {
                 img_url_object: '',
                 download_file_md5: '',
                 file_size: '',
-                force: 0,
+                force: 1,
                 brand_id: '',
                 type_id: '',
                 product_id: '',
@@ -271,9 +252,38 @@ export default {
 	mounted () {
 	},
 	methods: {
+        renderEditData () {
+            let attrObj = {
+                title: '',
+                download_file_md5: '',
+                force: '',
+                version: '',
+                description: '',
+                note: '',
+                download_url_object: ''
+            }
+            let thisForm = this.importForm
+            for (let attr in attrObj) {
+                thisForm[attr] = this.editDataObj[attr]
+            }
+
+            let imgName = this.editDataObj['img_url_object']
+            this.fileListImg = [{name: imgName, url: imgName}]
+            if (this.inputType !== 4) {
+                let objName = this.editDataObj['download_url_object']
+                this.fileListObj = [{name: objName, url: objName}]
+			}
+
+			if (this.inputType === 2 || this.inputType === 5) {
+                thisForm['productsList'] = this.editDataObj['products']
+			} else {
+                thisForm['routersList'] = this.editDataObj['routers']
+			}
+
+		},
         resetImportForm () {
             this.$refs['importForm'].resetFields()
-			if (this.inputType !== 4) {
+			if (this.inputType !== 4 && !this.releasedFlag) {
                 this.$refs['uploadFile'].clearFiles()
 			}
             this.$refs['uploadFileImg'].clearFiles()

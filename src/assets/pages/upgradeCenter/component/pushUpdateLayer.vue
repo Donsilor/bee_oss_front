@@ -1,49 +1,5 @@
 <template>
 	<el-form :model="pushForm" ref="pushForm" :rules="rules"  label-width="8em">
-		<el-form-item label="产品类型" prop="type">
-			<el-row :gutter="24" >
-				<el-col :span="8" style="padding: 0">
-					<el-select v-model="pushForm.type" placeholder="选择类型" @change="typeChangeEvent">
-						<el-option
-								v-for="item in typeOptions"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value">
-						</el-option>
-					</el-select>
-				</el-col>
-			</el-row>
-		</el-form-item>
-		<el-form-item label="选择版本" prop="version">
-			<el-row class="cpf-line" :gutter="24">
-				<el-col :span="8" style="padding:0">
-					<el-select v-model="pushForm.version"  placeholder="选择版本" v-if="pushForm.type === 1">
-						<el-option
-								v-for="item in appAndroid"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value">
-						</el-option>
-					</el-select>
-					<el-select v-model="pushForm.version"  placeholder="选择版本" v-if="pushForm.type === 4">
-						<el-option
-								v-for="item in appIos"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value">
-						</el-option>
-					</el-select>
-					<el-select v-model="pushForm.version"  placeholder="选择版本" v-if="pushForm.type === 2">
-						<el-option
-								v-for="item in router"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value">
-						</el-option>
-					</el-select>
-				</el-col>
-			</el-row>
-		</el-form-item>
 		<el-row>
 			<el-col :span="12" style="padding-right: 27px">
 				<el-form-item label="推送类型" prop="push_type">
@@ -83,7 +39,7 @@ import * as namespace from '../../../store/namespace';
 export default {
     props: ['brandIDOptions','typeIDOptions',
 		'productIDOptions','router','subset',
-		'type','product', 'appAndroid', 'appIos'],
+		'type','product', 'appAndroid', 'appIos','inputType','pushDataObj'],
 	data () {
 		return {
             brandIDOptionsChild: this.brandIDOptions,
@@ -104,22 +60,14 @@ export default {
                 }
             ],
             pushForm: {
-                type: 1,
                 push_type: '',
                 list_type: '',
-                version: '',
                 product_id: '',
                 brand_id: '',
                 type_id: '',
                 uuid: ''
             },
             rules: {
-                type: [
-                    { required: true, message: '请选择产品类型' }
-                ],
-                version: [
-                    { required: true, message: '请选择版本' }
-                ],
                 push_type: [
                     { required: true, message: '请选择推送类型' }
                 ],
@@ -180,27 +128,6 @@ export default {
 	mounted () {
 	},
 	methods: {
-        typeChangeEvent (val) {
-//			if (this.pushForm.system === 'IOS') {
-//                this.pushForm.type = 4
-//			}
-//            if (val === 3) {
-//                this.rules.product_id = [
-//                    { required: true, message: '请选择产品类型' }
-//                ]
-//			} else {
-//                this.rules.product_id = [
-//                    { required: false, message: '请选择产品类型' }
-//                ]
-//			}
-		},
-        sysChangeEvent (val) {
-            if (val === 'Android') {
-                this.pushForm.type = 1
-			} else {
-                this.pushForm.type = 4
-			}
-		},
         pushTypeChangeEvent (val) {
             if (val === 2) {
 				this.rules.list_type = [
@@ -244,12 +171,6 @@ export default {
             this.$refs['pushForm'].resetFields()
 			for (let attr in form) {
                 switch (attr){
-					case 'type':
-                        form[attr] = 1
-                        break
-//                    case 'system':
-//                        form[attr] = 'Android'
-//                        break
                     case 'routersList':
                     case 'productsList':
 					case 'uuid':

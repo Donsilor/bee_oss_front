@@ -88,13 +88,28 @@
 					</el-form-item>
 				</el-col>
 			</el-row>
+			<el-row style="padding: 20px 0">
+				<el-table
+						:data="versionDeviceList.tableData"
+						style="width: 100%; border-top:0 none">
+					<el-table-column v-for="item in versionDeviceList.tableColumn" :key="item.prop"
+									 :prop="item.prop"
+									 :label="item.label"
+									 :width="'auto'"
+					>
+						<template scope="scope">
+							<div>{{scope.row[item.prop]}}</div>
+						</template>
+					</el-table-column>
+				</el-table>
+			</el-row>
 		</el-form>
 	</div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
 export default {
-    props: ['ruleFormDetail'],
+    props: ['ruleFormDetail','versionDeviceList'],
 	data () {
 		return {
             uploadObj: {
