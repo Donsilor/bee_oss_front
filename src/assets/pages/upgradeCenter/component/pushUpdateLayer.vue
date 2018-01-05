@@ -18,7 +18,15 @@
 				</el-form-item>
 			</el-col>
 		</el-row>
-		<el-form-item label="uuid" prop="uuid">
+		<el-row>
+			<el-form-item label="推送客户端" prop="push_type">
+				<el-radio-group v-model="pushForm.terminal_type">
+					<el-radio :label="1">输入uuid</el-radio>
+					<el-radio :label="0">上传csv压缩包</el-radio>
+				</el-radio-group>
+			</el-form-item>
+		</el-row>
+		<el-form-item label="uuid" prop="uuid" v-if="pushForm.terminal_type">
 			<el-row :gutter="24">
 				<el-col :span="17" style="padding-left:0">
 					<el-input  v-model="pushForm.uuid"></el-input>
@@ -26,6 +34,23 @@
 			</el-row>
 			<el-row>
 				<span style="font-size: 12px; color: #999">可输入多个uuid，用逗号隔开</span>
+			</el-row>
+		</el-form-item>
+		<el-form-item label="uuid_csv" prop="uuid_csv" v-if="!pushForm.terminal_type">
+			<el-row :gutter="24">
+				<el-col :span="17" style="padding-left:0">
+					<el-upload
+							ref="uploadFile"
+							class="upload-demo"
+							action="http://iot-dev-upgrade-center.egtest.cn:7777/oss_file_upload"
+							:data="uploadObj"
+							:before-upload="beforeAvatarUpload"
+							:on-success="getUploadData"
+							:limit="1"
+					>
+						<el-button size="small" type="primary">点击上传</el-button>
+					</el-upload>
+				</el-col>
 			</el-row>
 		</el-form-item>
 		<el-form-item>
@@ -37,31 +62,31 @@
 <script>
 import * as namespace from '../../../store/namespace';
 export default {
-    props: ['brandIDOptions','typeIDOptions',
-		'productIDOptions','router','subset',
-		'type','product', 'appAndroid', 'appIos','inputType','pushDataObj'],
+    props: ['type','inputType','pushDataObj'],
 	data () {
 		return {
-            brandIDOptionsChild: this.brandIDOptions,
-            typeIDOptionsChild: this.typeIDOptions,
-            productIDOptionsChild: this.productIDOptions,
+            uploadObj: {
+                token: JSON.parse(localStorage.getItem('localData')).user.info.token
+            },
             pushForm: {
+                method: 'push_version',
                 push_type: '',
+				type: '',
                 list_type: '',
                 product_id: '',
-                brand_id: '',
-                type_id: '',
-                uuid: ''
+                uuid: '',
+                uuid_csv: '',
+                terminal_type: 1
             },
             rules: {
-                push_type: [
-                    { required: true, message: '请选择推送类型' }
-                ],
                 list_type: [
                     { required: false, message: '请选择类型' }
                 ],
                 product_id: [
                     { required: false, message: '请选择产品类型' }
+                ],
+                uuid_csv: [
+                    { required: true, message: '请输入uuid_csv' }
                 ],
                 uuid: [
                     { required: false, message: '请输入uuid' },
@@ -81,36 +106,7 @@ export default {
             }
 		}
 	},
-	watch: {
-        'pushForm.brand_id' (curVal, oldVal) {
-            this.pushForm.type_id = '';
-            this.pushForm.product_id = '';
-            this.typeIDOptionsChild = this.type.filter(x => x.brand_ids.indexOf(curVal*1) >= 0).map(x => {
-                return {
-                    label: x.type_name,
-                    value: x.type_id
-                }
-            });
-        },
-        'pushForm.type_id' (curVal, oldVal) {
-            this.pushForm.product_id = '';
-            const brandKey = this.pushForm.brand_id*1;
-            const typeKey = curVal*1;
-            this.productIDOptionsChild = this.product.filter(x => x.brand_id === brandKey && x.type_id === typeKey).map(x => {
-                return {
-                    label: x.product_id,
-                    value: x.product_id
-                }
-            })
-        },
-        'pushForm.product_id' (curVal, oldVal) {
-            this.$store.dispatch({
-                type: namespace.INITSUBSET,
-                token: this.token,
-                product_id: curVal
-            })
-        },
-	},
+	watch: {},
 	mounted () {
 	},
 	methods: {
@@ -157,10 +153,11 @@ export default {
             this.$refs['pushForm'].resetFields()
 			for (let attr in form) {
                 switch (attr){
-                    case 'routersList':
-                    case 'productsList':
-					case 'uuid':
-                        form[attr] = ''
+                    case 'terminal_type':
+                        form[attr] = 1
+                        break
+                    case 'method':
+                        form[attr] = 'push_version'
                         break
                     default:
                         form[attr] = ''
@@ -180,7 +177,24 @@ export default {
                     return false
                 }
             })
-		}
+		},
+        getUploadData (val) {
+            let data = val.result
+            this.pushForm.uuid_csv = data.object
+            this.$refs['pushForm'].validate((valid) => {})
+        },
+        beforeAvatarUpload (file) {
+            // const isRight = (file.type === 'application/zip' || file.type === 'application/rar');
+            const isLt2M = file.size / 1024 / 1024 < 100;
+
+//            if (!isRight) {
+//                this.$message.error('上传只能是 zip|rar 格式!');
+//            }
+            if (!isLt2M) {
+                this.$message.error('上传文件大小不能超过 100MB!');
+            }
+            return isLt2M;
+        },
 	},
 	computed: {
 	}

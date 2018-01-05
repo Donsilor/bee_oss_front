@@ -37,6 +37,16 @@
 				</el-col>
 			</el-row>
 		</el-form-item>
+		<el-form-item label="支持版本" prop="productsList" v-if="(inputType === 2 || inputType === 5) && !releasedFlag && importForm.selectRule">
+			<el-select style="width: 100%;" multiple v-model="importForm.productsList" placeholder="子设备">
+				<el-option
+						v-for="item in subsetProduct"
+						:key="item.value"
+						:label="item.label"
+						:value="item.value">
+				</el-option>
+			</el-select>
+		</el-form-item>
 		<el-form-item label="版本号" prop="version" v-if="!releasedFlag">
 			<el-input type="text" v-model="importForm.version" />
 		</el-form-item>
@@ -64,16 +74,6 @@
 			<el-select style="width: 100%;" multiple v-model="importForm.routersList" placeholder="路由">
 				<el-option
 						v-for="item in router"
-						:key="item.value"
-						:label="item.label"
-						:value="item.value">
-				</el-option>
-			</el-select>
-		</el-form-item>
-		<el-form-item label="支持版本" prop="productsList" v-if="(inputType === 2 || inputType === 5) && !releasedFlag && importForm.selectRule">
-			<el-select style="width: 100%;" multiple v-model="importForm.productsList" placeholder="子设备">
-				<el-option
-						v-for="item in subsetProduct"
 						:key="item.value"
 						:label="item.label"
 						:value="item.value">

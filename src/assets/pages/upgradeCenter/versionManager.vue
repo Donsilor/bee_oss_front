@@ -193,15 +193,8 @@
 					ref="pushUpdates"
 					@pushUpdateParent="pushUpdate"
 					@closePushBox="pushBoxFlag = false;"
-					:brandIDOptions="brandIDOptions"
-					:typeIDOptions="typeIDOptions"
-					:productIDOptions="productIDOptions"
 					:type="type"
 					:inputType="inputType"
-					:product="product"
-					:router="router"
-					:appIos="appIos"
-					:appAndroid="appAndroid"
 					:pushDataObj="pushDataObj"
 			>
 			</push-update>
@@ -645,19 +638,21 @@ export default {
         },
 		// 推送升级
         pushUpdate (dataObj) {
-            let params = Object.assign({
-            }, dataObj);
+            let params = Object.assign({}, dataObj);
             params.uuid = params.uuid.split(',')
 			params.version = this.pushDataObj.version
+            params.product_id = this.pushDataObj.product_id
             params.type = this.inputType
+            if (params.terminal_type) {
+                delete params.uuid_csv
+            } else {
+                delete params.uuid
+			}
             if (params.push_type === 1) {
                 delete params.list_type
 			}
-            delete params.brand_id
-            delete params.type_id
-            delete params.productsList
-            delete params.routersList
-
+			delete params.terminal_type
+			console.log(params)
             this.$store.dispatch('pubilcCorsAction', params).then((result) => {
                 if (result.code === 0) {
                     this.$message.success('推送成功');
