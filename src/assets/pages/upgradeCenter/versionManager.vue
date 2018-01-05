@@ -83,10 +83,10 @@
 		<el-dialog title="版本匹配搜索" :visible.sync="filterPopoverFlag">
 			<div class="cp-filterFormBox">
 				<el-row v-if="inputType!==2 && inputType!==5" class="cpf-line" :gutter="24">
-					<el-col :span="4" style="text-align:right; padding-left: 0" v-if="filterForm.tab===2">
+					<el-col :span="4" style="text-align:right; padding-left: 0">
 						<label>选择版本</label>
 					</el-col>
-					<el-col :span="7" v-if="filterForm.tab===2">
+					<el-col :span="14">
 						<el-select v-model="filterForm.version" placeholder="选择版本" clearable @clear="filterClearAll">
 							<el-option
 									v-for="item in router"
@@ -265,10 +265,14 @@ export default {
 			typeIDOptions: [],
 			productIDOptions: [],
 			filterForm: {
+                method: 'list_versions',
 				brand_id: '',
 				product_id: '',
                 type_id: '',
+                page: 1,
 				version: '',
+				limit: 10,
+				level: 2,
 				type: ''
 			},
 			listParams: {
@@ -276,13 +280,6 @@ export default {
                 page: 1,
                 limit: 10,
                 level: 1
-			},
-			filterParams: {
-				// token: '',
-				page: 1,
-                version: '',
-                product_id: '',
-                type: 2
 			},
             terminalOptions: [
                 {
@@ -661,7 +658,7 @@ export default {
             delete params.productsList
             delete params.routersList
 
-            this.$store.dispatch('pushUpdateAction', params).then((result) => {
+            this.$store.dispatch('pubilcCorsAction', params).then((result) => {
                 if (result.code === 0) {
                     this.$message.success('推送成功');
                     this.pushBoxFlag = false;
@@ -674,30 +671,25 @@ export default {
 		},
 		// 版本匹配搜索
         filterVersions () {
-            if (!this.filterForm.version) {
-                this.$message.error('请选择版本')
+            if (this.inputType !== 2 && this.inputType !== 5 && !this.filterForm.version) {
+                this.$message.error('请选择路由版本')
+                return
+            } else if ((this.inputType === 2 || this.inputType === 5) && !this.filterForm.version) {
+                this.$message.error('请选择子设备版本')
                 return
 			}
-            if (!this.filterForm.type) {
-                this.$message.error('请选择支持设备')
-                return
-            }
-            if (this.filterForm.tab === 3 && !this.filterForm.product_id) {
-                this.$message.error('请选择子设备')
-                return
-            }
 		    const obj = this
 			obj.currentPage = 1
-            let currentParam =  obj.filterParams
-			for (let attr in currentParam) {
-		        if(attr !== 'page') {
-                    currentParam[attr] = obj.filterForm[attr]
-				}
+            let currentParam = Object.assign({}, obj.filterForm);
+            currentParam.type = obj.inputType
+			if (obj.inputType !== 2 &&  obj.inputType !== 5) {
+                delete currentParam.product_id
+			} else {
+                currentParam.version = currentParam.version.split('-')[0]
 			}
-			if (obj.filterForm.tab === 2) {
-                // delete currentParam.product_id
-			}
-            obj.$store.dispatch('selectVersion', currentParam).then((result) => {
+            delete currentParam.brand_id
+            delete currentParam.type_id
+            obj.$store.dispatch('pubilcCorsAction', currentParam).then((result) => {
 		        if (result.code === 0) {
                     obj.filterPopoverFlag = false
                     obj.firstTableShow = false
@@ -709,6 +701,19 @@ export default {
 				}
             })
         },
+		resetFilterForm () {
+            this.filterForm = {
+                method: 'list_versions',
+                brand_id: '',
+                product_id: '',
+                type_id: '',
+                page: 1,
+                version: '',
+                limit: 10,
+                level: 2,
+                type: ''
+			}
+		},
         // 获取所有版本列表
 		getVersionList(page) {
 			// this.filterParams.token = this.token
@@ -804,7 +809,6 @@ export default {
         },
         // 历史版本
         getVersionHistoryList(page, type, product_id) {
-            // this.filterParams.token = this.token
             this.listParams.page = page
 			let param = {
                 page: page,
@@ -827,6 +831,7 @@ export default {
         getVersionHistory (dataObj) {
             this.currentDataObj = dataObj  //此操作是为了进入列表，进行各种操作时需要重新刷新列表
             this.inputType = dataObj.type
+			this.resetFilterForm()
             this.secondTitle = dataObj.name ? dataObj.name + '-版本历史' :  '子设备-product_id/h5-product_id-版本历史'
             this.getVersionHistoryList(1, dataObj.type, dataObj.product_id)
 		},
