@@ -353,15 +353,15 @@ export default {
 			})
 		},
         typeChangeEvent (val) {
-            if (val === 1) {
-                this.rulesImport.product_id = [
-                    { required: false }
-                ]
-            } else {
-                this.rulesImport.product_id = [
-                    { required: true, message: '请选择产品类型' }
-                ]
-			}
+//            if (val === 1) {
+//                this.rulesImport.product_id = [
+//                    { required: false }
+//                ]
+//            } else {
+//                this.rulesImport.product_id = [
+//                    { required: true, message: '请选择产品类型' }
+//                ]
+//			}
         },
         importSubmitForm (formName) {
             const obj = this

@@ -301,7 +301,7 @@ export default {
 			listParams: {
                 method: 'list_versions',
                 page: 1,
-                limit: 5,
+                limit: 10,
                 level: 1
 			},
 			filterParams: {
@@ -653,11 +653,12 @@ export default {
 				} else {
                     params.method = this.addEditFlag ? 'create_h5_version' : 'update_h5_version'
 				}
-               
+
 			}
             delete params.productsList
             delete params.routersList
-            // params.inputtype = this.inputType
+            delete params.product_id
+            console.log(params)
             this.$store.dispatch('importSubmitAction', params).then((result) => {
                 if (result.code === 0) {
                     this.$message.success(this.addEditFlag ? '录入成功' : '编辑成功')
@@ -744,8 +745,9 @@ export default {
                     if(!(obj.versionsFirst.tableData && obj.versionsFirst.tableData.length)) {
                         obj.setFirstVersionList(currentData)
                     }
-                    versions_children_json.tableData = currentData.device_version.data.items
-                    obj.totalItem = currentData.device_version.data.page.total
+                    versions_children_json.tableData = currentData.other_version.data ?
+						currentData.other_version.data.items : []
+                    obj.totalItem = currentData.other_version.data.page.total
 				}
             })
 		},
@@ -753,7 +755,7 @@ export default {
         setFirstVersionList (dataObj) {
             this.versionsFirst.tableData = []
 		    for (let attr in dataObj) {
-		        if(attr !== 'device_version') {
+		        if(attr !== 'other_version') {
                     this.versionsFirst.tableData.push(dataObj[attr])
 				}
 			}
