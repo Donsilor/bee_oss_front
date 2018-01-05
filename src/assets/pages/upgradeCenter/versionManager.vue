@@ -206,7 +206,6 @@
 					:type="type"
 					:appIos="appIos"
 					:router="router"
-					:subset="subset"
 					:addEditFlag="addEditFlag"
 					:editDataObj="editDataObj"
 					:releasedFlag="releasedFlag"
@@ -629,43 +628,36 @@ export default {
             let params = Object.assign({
                 // token: this.token
             }, dataObj);
+            let currentType = this.inputType
             params.release_tm = params.release_tm && params.release_tm.Format('yyyy-MM-dd hh:mm:ss')
             delete params.brand_id
             delete params.type_id
-            if (params.type === 1 || params.type === 4) {
+            if (currentType === 1 || currentType === 4) {
                 params.routers = params.routersList
 				params.os_type = params.type === 1 ? 'android' : 'ios'
 				params.method = this.addEditFlag ? 'create_app_version' : 'update_app_version'
-                delete params.products
                 delete params.product_id
-            } else if (params.type === 2) {
-                params.products = params.productsList
-                params.method = this.addEditFlag ? 'create_router_version' : 'update_router_version'
-                if (params.products.length) {
-					params.products = params.products.map(x => {
-					    let product_id = ''
-//					    this.router.forEach(y => {
-//					        if (y.value === x) {
-//                                product_id = y.product_id
-//							}
-//						})
-						return {
-							version: x,
-							product_id: params.product_id
-						}
-					})
-                }
-            } else if (params.type === 3) {
+            } else if (currentType === 3) {
                 params.method = this.addEditFlag ? 'create_device_version' : 'update_device_version'
                 params.routers = params.routersList
-            } else {  // type===5
-                params.method = this.addEditFlag ? 'create_h5_version' : 'update_h5_version'
-                params.products = params.productsList
+            } else {
+                params.products = params.productsList.map((item) => {
+                    let arr = item.split('--')
+                    return {
+                        product_id: arr[1],
+                        version: arr[0]
+                    }
+                })
+                if (currentType === 2) {
+                    params.method = this.addEditFlag ? 'create_router_version' : 'update_router_version'
+				} else {
+                    params.method = this.addEditFlag ? 'create_h5_version' : 'update_h5_version'
+				}
+               
 			}
             delete params.productsList
             delete params.routersList
-            params.inputtype = this.inputType
-
+            // params.inputtype = this.inputType
             this.$store.dispatch('importSubmitAction', params).then((result) => {
                 if (result.code === 0) {
                     this.$message.success(this.addEditFlag ? '录入成功' : '编辑成功')

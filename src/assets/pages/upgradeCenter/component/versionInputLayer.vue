@@ -54,7 +54,13 @@
 					placeholder="选择日期">
 			</el-date-picker>
 		</el-form-item>
-		<el-form-item label="支持路由" prop="routersList" v-if="(inputType === 1 || inputType === 4) && !releasedFlag">
+		<el-form-item label="是否限制规则"  v-if="!releasedFlag">
+			<el-radio-group v-model="selectRule">
+				<el-radio :label="1">是</el-radio>
+				<el-radio :label="0">否</el-radio>
+			</el-radio-group>
+		</el-form-item>
+		<el-form-item label="支持路由" prop="routersList" v-if="(inputType === 1 || inputType === 4) && !releasedFlag && selectRule">
 			<el-select style="width: 100%;" multiple v-model="importForm.routersList" placeholder="路由">
 				<el-option
 						v-for="item in router"
@@ -64,20 +70,20 @@
 				</el-option>
 			</el-select>
 		</el-form-item>
-		<el-form-item label="支持子设备" prop="productsList" v-if="(inputType === 2 || inputType === 5) && !releasedFlag">
+		<el-form-item label="支持版本" prop="productsList" v-if="(inputType === 2 || inputType === 5) && !releasedFlag && selectRule">
 			<el-select style="width: 100%;" multiple v-model="importForm.productsList" placeholder="子设备">
 				<el-option
-						v-for="item in subset"
+						v-for="item in subsetProduct"
 						:key="item.value"
 						:label="item.label"
 						:value="item.value">
 				</el-option>
 			</el-select>
 		</el-form-item>
-		<el-form-item label="支持路由" prop="productsList" v-if="inputType === 3 && !releasedFlag">
+		<el-form-item label="支持路由" prop="productsList" v-if="inputType === 3 && !releasedFlag && selectRule">
 			<el-select style="width: 100%;" multiple v-model="importForm.routersList" placeholder="路由">
 				<el-option
-						v-for="item in router"
+						v-for="item in subsetProduct"
 						:key="item.value"
 						:label="item.label"
 						:value="item.value">
@@ -214,16 +220,18 @@ export default {
                 productsList: [
                     { required: false, message: '请选择支持版本' }
                 ],
-                download_url_object: [
-                    { required: true, message: '请上传固件包' }
-                ],
-                img_url_object: [
-                    { required: true, message: '请上传img图片' }
-                ],
+//                download_url_object: [
+//                    { required: true, message: '请上传固件包' }
+//                ],
+//                img_url_object: [
+//                    { required: true, message: '请上传img图片' }
+//                ],
                 force: [
                     { required: true, message: '请选择是否强制升级' }
                 ]
-			}
+			},
+            subsetProduct: [],
+            selectRule: 1
 		}
 	},
 	watch: {
@@ -275,9 +283,21 @@ export default {
 			}
 
 			if (this.inputType === 2 || this.inputType === 5) {
-                thisForm['productsList'] = this.editDataObj['products']
+                let currentProducts = this.editDataObj['products']
+                if (currentProducts.length ===1 && currentProducts[0].version === '*') {
+                    this.selectRule = 0
+				} else {
+                    currentProducts.forEach((item) => {
+                        thisForm['productsList'].push(item.version + '--' + item.product_id)
+					})
+				}
 			} else {
-                thisForm['routersList'] = this.editDataObj['routers']
+                let currentRouters = this.editDataObj['routers']
+				if (currentRouters.length === 1 && currentRouters[0] === '*') {
+                    this.selectRule = 0
+				} else {
+                    thisForm['routersList'] = currentRouters
+				}
 			}
 
 		},
@@ -287,6 +307,7 @@ export default {
                 this.$refs['uploadFile'].clearFiles()
 			}
             this.$refs['uploadFileImg'].clearFiles()
+            this.selectRule = 1
 
             let form = this.importForm
 			for (let attr in form) {
@@ -308,10 +329,28 @@ export default {
             this.$emit('closeImportBox')
 		},
 		productChange (val) {
-            this.$store.dispatch({
-                type: namespace.GETSUBSET,
+			let obj = this
+            obj.$store.dispatch('pubilcCorsAction',{
+                method: 'released_versions',
+                type: 3,
                 product_id: val
-            })
+            }).then((res) => {
+                if (res.code === 0) {
+                    let list = res.result;
+                    if (list && list.length) {
+                        obj.currentProductId = val
+                        obj.subsetProduct = list.map(x => {
+                            return {
+                                label: x.title,
+								product_id: x.product_id,
+                                value: `${x.version}--${x.product_id}`
+                            }
+                        })
+                    } else {
+                        obj.subsetProduct = [];
+                    }
+                }
+			})
 		},
         typeChangeEvent (val) {
             if (val === 1) {
@@ -384,9 +423,6 @@ export default {
 		}
 	},
     computed: {
-        ...mapGetters({
-            subset: namespace.SUBSET
-        })
     }
 }
 </script>
