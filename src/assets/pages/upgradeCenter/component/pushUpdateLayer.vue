@@ -45,20 +45,6 @@ export default {
             brandIDOptionsChild: this.brandIDOptions,
             typeIDOptionsChild: this.typeIDOptions,
             productIDOptionsChild: this.productIDOptions,
-            typeOptions: [
-                {
-                    value: 1,
-                    label: '安卓'
-                },
-                {
-                    value: 2,
-                    label: '路由器'
-                },
-                {
-                    value: 4,
-                    label: 'IOS'
-                }
-            ],
             pushForm: {
                 push_type: '',
                 list_type: '',

@@ -46,21 +46,21 @@
 		<el-form-item label="详细事项" prop="note">
 			<el-input type="text" v-model="importForm.note" />
 		</el-form-item>
-		<el-form-item label="发布时间" prop="release_tm" v-if="!releasedFlag">
+		<el-form-item label="发布时间" prop="release_time" v-if="!releasedFlag">
 			<el-date-picker
-					v-model="importForm.release_tm"
+					v-model="importForm.release_time"
 					type="date"
 					format="yyyy-MM-dd"
 					placeholder="选择日期">
 			</el-date-picker>
 		</el-form-item>
 		<el-form-item label="是否限制规则"  v-if="!releasedFlag">
-			<el-radio-group v-model="selectRule">
+			<el-radio-group v-model="importForm.selectRule" @change="ruleChange">
 				<el-radio :label="1">是</el-radio>
 				<el-radio :label="0">否</el-radio>
 			</el-radio-group>
 		</el-form-item>
-		<el-form-item label="支持路由" prop="routersList" v-if="(inputType === 1 || inputType === 4) && !releasedFlag && selectRule">
+		<el-form-item label="支持路由" prop="routersList" v-if="(inputType === 1 || inputType === 4) && !releasedFlag && importForm.selectRule">
 			<el-select style="width: 100%;" multiple v-model="importForm.routersList" placeholder="路由">
 				<el-option
 						v-for="item in router"
@@ -70,7 +70,7 @@
 				</el-option>
 			</el-select>
 		</el-form-item>
-		<el-form-item label="支持版本" prop="productsList" v-if="(inputType === 2 || inputType === 5) && !releasedFlag && selectRule">
+		<el-form-item label="支持版本" prop="productsList" v-if="(inputType === 2 || inputType === 5) && !releasedFlag && importForm.selectRule">
 			<el-select style="width: 100%;" multiple v-model="importForm.productsList" placeholder="子设备">
 				<el-option
 						v-for="item in subsetProduct"
@@ -80,7 +80,7 @@
 				</el-option>
 			</el-select>
 		</el-form-item>
-		<el-form-item label="支持路由" prop="productsList" v-if="inputType === 3 && !releasedFlag && selectRule">
+		<el-form-item label="支持路由" prop="productsList" v-if="inputType === 3 && !releasedFlag && importForm.selectRule">
 			<el-select style="width: 100%;" multiple v-model="importForm.routersList" placeholder="路由">
 				<el-option
 						v-for="item in subsetProduct"
@@ -179,21 +179,23 @@ export default {
             fileListObj: [],
             fileListImg: [],
             importForm: {
+                method: '',
                 title: '',
                 version: '',
-                release_tm: '',
+                release_time: '',
                 routersList: [],
                 productsList: [],
                 download_url_object: '',
                 img_url_object: '',
                 download_file_md5: '',
-                file_size: '',
+                size: '',
                 force: 1,
                 brand_id: '',
                 type_id: '',
                 product_id: '',
                 description: '',
-                note: ''
+                note: '',
+                selectRule: 1
             },
             rulesImport: {
 				version: [
@@ -211,27 +213,26 @@ export default {
                 product_id: [
                     { required: false, message: '请输入子设备' }
                 ],
-                release_tm: [
+                release_time: [
                     { required: true, message: '请选择发布时间' }
                 ],
                 routersList: [
-                    { required: false, message: '请选择支持版本' }
+                    { required: true, message: '请选择支持版本' }
                 ],
                 productsList: [
-                    { required: false, message: '请选择支持版本' }
+                    { required: true, message: '请选择支持版本' }
                 ],
-//                download_url_object: [
-//                    { required: true, message: '请上传固件包' }
-//                ],
-//                img_url_object: [
-//                    { required: true, message: '请上传img图片' }
-//                ],
+                download_url_object: [
+                    { required: true, message: '请上传固件包' }
+                ],
+                img_url_object: [
+                    { required: true, message: '请上传img图片' }
+                ],
                 force: [
                     { required: true, message: '请选择是否强制升级' }
                 ]
 			},
-            subsetProduct: [],
-            selectRule: 1
+            subsetProduct: []
 		}
 	},
 	watch: {
@@ -260,6 +261,23 @@ export default {
 	mounted () {
 	},
 	methods: {
+        ruleChange (val) {
+            if (val) {
+                this.rulesImport.productsList =  [
+                    { required: true, message: '请选择支持版本' }
+                ]
+                this.rulesImport.routersList =  [
+                    { required: true, message: '请选择支持版本' }
+                ]
+			} else {
+                this.rulesImport.productsList =  [
+                    { required: false }
+                ]
+                this.rulesImport.routersList =  [
+                    { required: false }
+                ]
+			}
+		},
         renderEditData () {
             let attrObj = {
                 title: '',
@@ -267,14 +285,16 @@ export default {
                 force: '',
                 version: '',
                 description: '',
+                img_url_object: '',
                 note: '',
+				size: '',
                 download_url_object: ''
             }
             let thisForm = this.importForm
             for (let attr in attrObj) {
                 thisForm[attr] = this.editDataObj[attr]
             }
-
+            thisForm['release_time'] = new Date(this.editDataObj['release_time']*1000)
             let imgName = this.editDataObj['img_url_object']
             this.fileListImg = [{name: imgName, url: imgName}]
             if (this.inputType !== 4) {
@@ -285,7 +305,7 @@ export default {
 			if (this.inputType === 2 || this.inputType === 5) {
                 let currentProducts = this.editDataObj['products']
                 if (currentProducts.length ===1 && currentProducts[0].version === '*') {
-                    this.selectRule = 0
+                    thisForm['selectRule'] = 0
 				} else {
                     currentProducts.forEach((item) => {
                         thisForm['productsList'].push(item.version + '--' + item.product_id)
@@ -294,7 +314,7 @@ export default {
 			} else {
                 let currentRouters = this.editDataObj['routers']
 				if (currentRouters.length === 1 && currentRouters[0] === '*') {
-                    this.selectRule = 0
+                    thisForm['selectRule'] = 0
 				} else {
                     thisForm['routersList'] = currentRouters
 				}
@@ -307,7 +327,7 @@ export default {
                 this.$refs['uploadFile'].clearFiles()
 			}
             this.$refs['uploadFileImg'].clearFiles()
-            this.selectRule = 1
+            this.importForm['selectRule'] = 1
 
             let form = this.importForm
 			for (let attr in form) {
@@ -318,6 +338,9 @@ export default {
                         break
                     case 'force':
                         form[attr] = 0
+                        break
+                    case 'selectRule':
+                        form[attr] = 1
                         break
                     default:
                         form[attr] = ''
@@ -367,6 +390,10 @@ export default {
             const obj = this
             obj.$refs[formName].validate((valid) => {
                 if (valid) {
+                    if (!obj.importForm['selectRule']) {
+                        obj.importForm['routersList'] = ['*']
+                        obj.importForm['productsList'] = [{product_id: "", version: "*"}]
+					}
                     obj.$emit('importSubmitParent',obj.importForm)
                 } else {
                     return false
@@ -389,7 +416,7 @@ export default {
 		    let data = val.result
 		    this.importForm.download_url_object = data.object
             this.importForm.download_file_md5 = data.md5
-            this.importForm.file_size = data.file_size
+            this.importForm.size = data.file_size
             this.$refs['importForm'].validate((valid) => {})
 		},
         getUploadDataImg (val) {

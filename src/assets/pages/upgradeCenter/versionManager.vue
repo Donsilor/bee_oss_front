@@ -82,20 +82,7 @@
 		<!--版本匹配搜索-->
 		<el-dialog title="版本匹配搜索" :visible.sync="filterPopoverFlag">
 			<div class="cp-filterFormBox">
-				<el-row class="cpf-line" :gutter="24">
-					<el-col :span="5" style="text-align:right;">
-						<label>选择设备</label>
-					</el-col>
-					<el-col :span="8">
-						<el-select v-model="filterForm.tab" placeholder="设备">
-							<el-option
-									v-for="item in filterTypeOptions"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value">
-							</el-option>
-						</el-select>
-					</el-col>
+				<el-row v-if="inputType!==2 && inputType!==5" class="cpf-line" :gutter="24">
 					<el-col :span="4" style="text-align:right; padding-left: 0" v-if="filterForm.tab===2">
 						<label>选择版本</label>
 					</el-col>
@@ -110,7 +97,7 @@
 						</el-select>
 					</el-col>
 				</el-row>
-				<el-row v-if="filterForm.tab===3" class="cpf-line" :gutter="24">
+				<el-row v-if="inputType===2 || inputType===5" class="cpf-line" :gutter="24">
 					<el-col :span="5" style="text-align:right;">
 						<label>选择子设备</label>
 					</el-col>
@@ -145,7 +132,7 @@
 						</el-select>
 					</el-col>
 				</el-row>
-				<el-row v-if="filterForm.tab===3" class="cpf-line" :gutter="24">
+				<el-row v-if="inputType===2 || inputType===5" class="cpf-line" :gutter="24">
 					<el-col :span="5" style="text-align:right;">
 						<label>选择版本</label>
 					</el-col>
@@ -158,18 +145,6 @@
 									:value="item.value">
 							</el-option>
 						</el-select>
-					</el-col>
-				</el-row>
-				<el-row class="cpf-line" :gutter="24">
-					<el-col :span="5" style="text-align:right;">
-						<label>查询支持设备</label>
-					</el-col>
-					<el-col :span="19" style="text-align:left;">
-						<el-radio-group v-model="filterForm.type">
-							<el-radio :label="2" v-if="filterForm.tab===3">路由器</el-radio>
-							<el-radio :label="1" v-if="filterForm.tab===2">APP</el-radio>
-							<el-radio :label="3" v-if="filterForm.tab===2">子设备</el-radio>
-						</el-radio-group>
 					</el-col>
 				</el-row>
 				<el-row class="cpf-line" :gutter="24">
@@ -290,8 +265,6 @@ export default {
 			typeIDOptions: [],
 			productIDOptions: [],
 			filterForm: {
-				tab: 2,
-				//system: '',
 				brand_id: '',
 				product_id: '',
                 type_id: '',
@@ -463,8 +436,9 @@ export default {
             if (!val) {
                 return '------'
 			} else {
-                let date = new Date(val*1000)
-                return date.Format('yyyy-MM-dd hh:mm:ss')
+                return val
+//                let date = new Date(val*1000)
+//                return date.Format('yyyy-MM-dd hh:mm:ss')
 			}
 		},
         openVersionEdit (dataObj) {
@@ -629,7 +603,7 @@ export default {
                 // token: this.token
             }, dataObj);
             let currentType = this.inputType
-            params.release_tm = params.release_tm && params.release_tm.Format('yyyy-MM-dd hh:mm:ss')
+            params.release_time = params.release_time && params.release_time.Format('yyyy-MM-dd hh:mm:ss')
             delete params.brand_id
             delete params.type_id
             if (currentType === 1 || currentType === 4) {
@@ -641,13 +615,18 @@ export default {
                 params.method = this.addEditFlag ? 'create_device_version' : 'update_device_version'
                 params.routers = params.routersList
             } else {
-                params.products = params.productsList.map((item) => {
-                    let arr = item.split('--')
-                    return {
-                        product_id: arr[1],
-                        version: arr[0]
-                    }
-                })
+                if (params.selectRule) {
+                    params.products = params.productsList.map((item) => {
+                        let arr = item.split('--')
+                        return {
+                            product_id: arr[1],
+                            version: arr[0]
+                        }
+                    })
+				} else {
+                    params.products = params.productsList
+				}
+
                 if (currentType === 2) {
                     params.method = this.addEditFlag ? 'create_router_version' : 'update_router_version'
 				} else {
@@ -658,8 +637,8 @@ export default {
             delete params.productsList
             delete params.routersList
             delete params.product_id
-            console.log(params)
-            this.$store.dispatch('importSubmitAction', params).then((result) => {
+			delete params.selectRule
+            this.$store.dispatch('pubilcCorsAction', params).then((result) => {
                 if (result.code === 0) {
                     this.$message.success(this.addEditFlag ? '录入成功' : '编辑成功')
                     this.importBoxFlag = false
