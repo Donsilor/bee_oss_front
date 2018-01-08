@@ -5,7 +5,7 @@
 			<el-col :span="12">
 				<el-button-group>
 					<el-button @click="openImportLayer">录入版本 <i class="el-icon-caret-bottom"></i></el-button>
-					<el-button @click="filterPopoverFlag=true" >匹配搜索 <i class="el-icon-caret-bottom"></i></el-button>
+					<el-button @click="openFilterFormLayer" >匹配搜索 <i class="el-icon-caret-bottom"></i></el-button>
 					<!--<el-button @click="openPushLayer">推送升级 <i class="el-icon-caret-bottom"></i></el-button>-->
 				</el-button-group>
 			</el-col>
@@ -81,85 +81,27 @@
 		</div>
 		<!--版本匹配搜索-->
 		<el-dialog title="版本匹配搜索" :visible.sync="filterPopoverFlag">
-			<div class="cp-filterFormBox">
-				<el-row v-if="inputType!==2 && inputType!==5" class="cpf-line" :gutter="24">
-					<el-col :span="4" style="text-align:right; padding-left: 0">
-						<label>选择版本</label>
-					</el-col>
-					<el-col :span="14">
-						<el-select v-model="filterForm.version" placeholder="选择版本" clearable @clear="filterClearAll">
-							<el-option
-									v-for="item in router"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value">
-							</el-option>
-						</el-select>
-					</el-col>
-				</el-row>
-				<el-row v-if="inputType===2 || inputType===5" class="cpf-line" :gutter="24">
-					<el-col :span="5" style="text-align:right;">
-						<label>选择子设备</label>
-					</el-col>
-					<el-col :span="8">
-						<el-select v-model="filterForm.brand_id" placeholder="品牌">
-							<el-option
-									v-for="item in brandIDOptions"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value">
-							</el-option>
-						</el-select>
-					</el-col>
-					<el-col :span="5" style="padding: 0">
-						<el-select v-model="filterForm.type_id" placeholder="类型">
-							<el-option
-									v-for="item in typeIDOptions"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value">
-							</el-option>
-						</el-select>
-					</el-col>
-					<el-col :span="5">
-						<el-select v-model="filterForm.product_id" placeholder="产品">
-							<el-option
-									v-for="item in productIDOptions"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value">
-							</el-option>
-						</el-select>
-					</el-col>
-				</el-row>
-				<el-row v-if="inputType===2 || inputType===5" class="cpf-line" :gutter="24">
-					<el-col :span="5" style="text-align:right;">
-						<label>选择版本</label>
-					</el-col>
-					<el-col :span="8">
-						<el-select v-model="filterForm.version" placeholder="版本">
-							<el-option
-									v-for="item in subset"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value">
-							</el-option>
-						</el-select>
-					</el-col>
-				</el-row>
-				<el-row class="cpf-line" :gutter="24">
-					<el-col :span="24" style="text-align:right; padding-top: 20px">
-						<el-button type="primary" size="" @click="filterVersions">查询</el-button>
-					</el-col>
-				</el-row>
-			</div>
+			<filter-form
+					key="filterForms"
+					ref="filterForms"
+					@filterVersionsParent="filterVersions"
+					@closeFilterBox="filterPopoverFlag = false;"
+					:type="type"
+					:brandIDOptions="brandIDOptions"
+					:typeIDOptions="typeIDOptions"
+					:productIDOptions="productIDOptions"
+					:inputType="inputType"
+					:product="product"
+					:router="router"
+			>
+			</filter-form>
 		</el-dialog>
 		<!--版本详情-->
 		<el-dialog title="版本详情" :visible.sync="infoBoxFlag">
 			<version_detail
 					ref="versionDetails"
 					:ruleFormDetail="ruleFormDetail"
-					:versionDeviceList="versionDeviceList"
+					:deviceObj="currentDetailObj"
 			>
 			</version_detail>
 			<div style="text-align: right; margin: 0">
@@ -225,13 +167,15 @@ import push_update from './component/pushUpdateLayer.vue'
 import version_edit from './component/versionEdit.vue'
 import version_detail from './component/versionDetail.vue'
 import operate_log from './component/operateLogs.vue'
+import filter_form from './component/filterLayer.vue'
 export default {
     components: {
         'version-input': version_input,
 		'push-update': push_update,
         'version_edit': version_edit,
         'version_detail': version_detail,
-		'operate_log': operate_log
+		'operate_log': operate_log,
+        'filter-form': filter_form,
 	},
 	data () {
 		return {
@@ -257,17 +201,6 @@ export default {
 			brandIDOptions: [],
 			typeIDOptions: [],
 			productIDOptions: [],
-			filterForm: {
-                method: 'list_versions',
-				brand_id: '',
-				product_id: '',
-                type_id: '',
-                page: 1,
-				version: '',
-				limit: 10,
-				level: 2,
-				type: ''
-			},
 			listParams: {
                 method: 'list_versions',
                 page: 1,
@@ -317,16 +250,9 @@ export default {
             pushDataObj: {},
             secondTitle: '',
             currentDataObj: {},
+            currentDetailObj: {},
             operateLogLayer: false,
             operateLogList: {},
-            versionDeviceList: {
-                "tableColumn":[
-                    {"prop": "id", "label": "id"},
-                    {"prop": "uuid", "label": "设备标识uuid"},
-                    {"prop": "创建时间", "label": "created_at"}
-                ],
-                "tableData":[]
-            },
             addEditFlag: true,
             editDataObj: {},
             releasedFlag: false  //已发布/未发布标识 || 版本编辑，已发布版本只能编辑几个字段
@@ -352,36 +278,6 @@ export default {
 		}
 	},
 	watch: {
-		'filterForm.brand_id' (curVal, oldVal) {
-			this.filterForm.type_id = '';
-			this.filterForm.product_id = '';
-			this.filterForm.version = '';
-			this.typeIDOptions = this.type.filter(x => x.brand_ids.indexOf(curVal*1) >= 0).map(x => {
-				return {
-					label: x.type_name,
-					value: x.type_id
-				}
-			});
-		},
-		'filterForm.type_id' (curVal, oldVal) {
-			this.filterForm.product_id = '';
-			this.filterForm.version = '';
-			const brandKey = this.filterForm.brand_id*1;
-			const typeKey = curVal*1;
-			this.productIDOptions = this.product.filter(x => x.brand_id === brandKey && x.type_id === typeKey).map(x => {
-				return {
-					label: x.product_id,
-					value: x.product_id
-				}
-			})
-		},
-		'filterForm.product_id' (curVal, oldVal) {
-            this.$store.dispatch({
-                type: namespace.INITSUBSET,
-                token: this.token,
-                product_id: curVal
-            })
-		},
 		'filterPopoverFlag' (curVal, oldVal) {
 			if (curVal) {
 				if (!this.brandIDOptions.length) {
@@ -394,16 +290,7 @@ export default {
 				}
 				this.versionOptions = this.router;
 			}
-		},
-		'filterForm.brand_id' (curVal, oldVal) {
-			this.filterForm.type_id = '';
-			this.typeIDOptions = this.type.filter(x => x.brand_ids.indexOf(curVal*1) >= 0).map(x => {
-				return {
-					label: x.type_name,
-					value: x.type_id
-				}
-			});
-		},
+		}
 	},
 	mounted () {
         this.$store.dispatch({
@@ -422,6 +309,12 @@ export default {
 		this.getVersionList(1);
 	},
 	methods: {
+        openFilterFormLayer () {
+            this.filterPopoverFlag=true
+            this.$nextTick(() => {
+                this.$refs['filterForms'].resetFilterForm()
+            })
+		},
         formatTime (val) {
             if (!val) {
                 return '------'
@@ -525,6 +418,7 @@ export default {
 		// 获取详情
         getVersionDetail (dataObj) {
             this.infoBoxFlag = true
+			this.currentDetailObj = dataObj
 			let param = {
                 type: dataObj.type,
                 version: dataObj.version,
@@ -539,20 +433,14 @@ export default {
                     form[attr] = datas[attr]
 				}
             })
-            let param_1 = {
-                type: dataObj.type,
-                version: dataObj.version,
-                product_id: dataObj.product_id,
-                method: 'get_uuids'
-            }
-            obj.$store.dispatch('pubilcCorsAction', param_1).then((result) => {
-                obj.versionDeviceList.tableData = result.result ? result.result.items : []
+            obj.$nextTick(() => {
+                obj.$refs['versionDetails'].resetList()
             })
 		},
 		filterClearAll () {
-			for (let name in this.filterForm) {
-				this.filterForm[name] = '';
-			}
+//			for (let name in this.filterForm) {
+//				this.filterForm[name] = '';
+//			}
 		},
 		rowChosed (scope) {
 			this.infoBoxFlag = true;
@@ -665,26 +553,9 @@ export default {
 			this.getVersionList(this.currentPage)
 		},
 		// 版本匹配搜索
-        filterVersions () {
-            if (this.inputType !== 2 && this.inputType !== 5 && !this.filterForm.version) {
-                this.$message.error('请选择路由版本')
-                return
-            } else if ((this.inputType === 2 || this.inputType === 5) && !this.filterForm.version) {
-                this.$message.error('请选择子设备版本')
-                return
-			}
-		    const obj = this
-			obj.currentPage = 1
-            let currentParam = Object.assign({}, obj.filterForm);
-            currentParam.type = obj.inputType
-			if (obj.inputType !== 2 &&  obj.inputType !== 5) {
-                delete currentParam.product_id
-			} else {
-                currentParam.version = currentParam.version.split('-')[0]
-			}
-            delete currentParam.brand_id
-            delete currentParam.type_id
-            obj.$store.dispatch('pubilcCorsAction', currentParam).then((result) => {
+        filterVersions (params) {
+            let obj = this
+            obj.$store.dispatch('pubilcCorsAction', params).then((result) => {
 		        if (result.code === 0) {
                     obj.filterPopoverFlag = false
                     obj.firstTableShow = false
@@ -696,19 +567,6 @@ export default {
 				}
             })
         },
-		resetFilterForm () {
-            this.filterForm = {
-                method: 'list_versions',
-                brand_id: '',
-                product_id: '',
-                type_id: '',
-                page: 1,
-                version: '',
-                limit: 10,
-                level: 2,
-                type: ''
-			}
-		},
         // 获取所有版本列表
 		getVersionList(page) {
 			// this.filterParams.token = this.token
@@ -826,9 +684,22 @@ export default {
         getVersionHistory (dataObj) {
             this.currentDataObj = dataObj  //此操作是为了进入列表，进行各种操作时需要重新刷新列表
             this.inputType = dataObj.type
-			this.resetFilterForm()
-            this.secondTitle = dataObj.name ? dataObj.name + '-版本历史' :  '子设备-product_id/h5-product_id-版本历史'
+            this.secondTitle = this.getVersionTitle(dataObj)
             this.getVersionHistoryList(1, dataObj.type, dataObj.product_id)
+		},
+		getVersionTitle(dataObj) {
+            let title = ''
+            if (dataObj.name) {
+                title = dataObj.name + '-版本历史'
+			} else {
+                if (dataObj.type === 3) {
+                    title = '子设备-' + dataObj.product_id + '-版本历史'
+				} else if (dataObj.type === 5) {
+                    title = 'H5-' + dataObj.product_id + '-版本历史'
+				}
+
+			}
+			return title
 		},
 		backToList () {
             this.getVersionList(1)

@@ -102,6 +102,9 @@
 						</template>
 					</el-table-column>
 				</el-table>
+				<div class="page-line">
+					<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="5" :current-page.sync="currentPage"></el-pagination>
+				</div>
 			</el-row>
 		</el-form>
 	</div>
@@ -109,34 +112,46 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 export default {
-    props: ['ruleFormDetail','versionDeviceList'],
+    props: ['ruleFormDetail','deviceObj'],
 	data () {
 		return {
-            uploadObj: {
-                token: JSON.parse(localStorage.getItem('localData')).user.info.token
+            versionDeviceList: {
+                "tableColumn":[
+                    {"prop": "id", "label": "id"},
+                    {"prop": "uuid", "label": "设备标识uuid"},
+                    {"prop": "创建时间", "label": "created_at"}
+                ],
+                "tableData":[]
             },
-            importForm: {
-                title: '',
-                version: '',
-                release_tm: '',
-                routersList: [],
-                productsList: [],
-                download_url_object: '',
-                img_url_object: '',
-                download_file_md5: '',
-                file_size: '',
-                force: 0,
-                brand_id: '',
-                type_id: '',
-                product_id: '',
-                description: '',
-                note: ''
-            },
+            totalItem: 0,
+            currentPage: 1
 		}
 	},
 	mounted () {
 	},
 	methods: {
+        resetList () {
+            this.getVersionDeviceList(1)
+		},
+        pageChange () {
+            this.getVersionDeviceList(this.currentPage)
+        },
+        getVersionDeviceList (page) {
+            let obj = this
+			let dataObj = this.deviceObj
+            let param_1 = {
+                type: dataObj.type,
+				page: page,
+				limit: 5,
+                version: dataObj.version,
+                product_id: dataObj.product_id,
+                method: 'get_uuids'
+            }
+            obj.$store.dispatch('pubilcCorsAction', param_1).then((result) => {
+                obj.versionDeviceList.tableData = result.result ? result.result.items : []
+				obj.totalItem = result.result && result.result.page && result.result.page.total || 0
+            })
+		}
 	},
     computed: {
         ...mapGetters({
