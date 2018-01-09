@@ -529,7 +529,7 @@ export default {
 		// 推送升级
         pushUpdate (dataObj) {
             let params = Object.assign({}, dataObj);
-            params.uuid = params.uuid.split(',')
+            params.uuid = params.uuid ? params.uuid.split(',') : []
 			params.version = this.pushDataObj.version
             params.product_id = this.pushDataObj.product_id
             params.type = this.inputType
@@ -542,7 +542,6 @@ export default {
                 delete params.list_type
 			}
 			delete params.terminal_type
-			console.log(params)
             this.$store.dispatch('pubilcCorsAction', params).then((result) => {
                 if (result.code === 0) {
                     this.$message.success('推送成功');
