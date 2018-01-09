@@ -4,12 +4,12 @@
 			<el-col :span="12" style="padding-right: 27px">
 				<el-form-item label="推送类型" prop="push_type">
 					<el-select v-model="pushForm.push_type"  placeholder="选择类型" @change="pushTypeChangeEvent">
-						<el-option label="全量升级" :value="1"></el-option>
-						<el-option label="灰度升级" :value="2"></el-option>
+						<el-option label="全量升级" :value="0"></el-option>
+						<el-option label="灰度升级" :value="1"></el-option>
 					</el-select>
 				</el-form-item>
 			</el-col>
-			<el-col :span="7" :offset="1"  v-if="pushForm.push_type===2" style="margin-left: -15px">
+			<el-col :span="7" :offset="1"  v-if="pushForm.push_type===1" style="margin-left: -15px">
 				<el-form-item label="" prop="list_type" label-width="0">
 					<el-select v-model="pushForm.list_type"  placeholder="请选择">
 						<el-option label="白名单" :value="1"></el-option>

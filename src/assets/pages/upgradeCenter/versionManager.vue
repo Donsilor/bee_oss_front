@@ -538,7 +538,7 @@ export default {
             } else {
                 delete params.uuid
 			}
-            if (params.push_type === 1) {
+            if (params.push_type === 0) {
                 delete params.list_type
 			}
 			delete params.terminal_type
