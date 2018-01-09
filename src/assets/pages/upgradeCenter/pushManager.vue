@@ -106,7 +106,7 @@ export default {
                 "tableColumn":[
                     {"prop": "id", "label": "id"},
                     {"prop": "uuid", "label": "设备标识uuid"},
-                    {"prop": "created_at", "label": "推送时间"},
+                    {"prop": "created_at", "label": "升级成功时间"},
                     {"prop": "status", "label": "推送状态"}
                 ],
                 "tableData":[]

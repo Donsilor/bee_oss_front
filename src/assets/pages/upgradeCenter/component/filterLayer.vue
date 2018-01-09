@@ -4,8 +4,8 @@
 			<el-col :span="4" style="text-align:right; padding-left: 0">
 				<label>选择版本</label>
 			</el-col>
-			<el-col :span="14">
-				<el-select v-model="filterForm.version" placeholder="选择版本">
+			<el-col :span="12">
+				<el-select style="width: 100%" v-model="filterForm.rules" multiple placeholder="选择版本">
 					<el-option
 							v-for="item in router"
 							:key="item.value"
@@ -19,7 +19,7 @@
 			<el-col :span="5" style="text-align:right;">
 				<label>选择子设备</label>
 			</el-col>
-			<el-col :span="8">
+			<el-col :span="6">
 				<el-select v-model="filterForm.brand_id" placeholder="品牌">
 					<el-option
 							v-for="item in brandIDOptionsChild"
@@ -29,7 +29,7 @@
 					</el-option>
 				</el-select>
 			</el-col>
-			<el-col :span="5" style="padding: 0">
+			<el-col :span="6">
 				<el-select v-model="filterForm.type_id" placeholder="类型">
 					<el-option
 							v-for="item in typeIDOptionsChild"
@@ -54,8 +54,8 @@
 			<el-col :span="5" style="text-align:right;">
 				<label>选择版本</label>
 			</el-col>
-			<el-col :span="16">
-				<el-select multiple v-model="filterForm.versions" placeholder="版本">
+			<el-col :span="17">
+				<el-select style="width: 100%" multiple v-model="filterForm.rules" placeholder="版本">
 					<el-option
 							v-for="item in subsetProducts"
 							:key="item.value"
@@ -90,8 +90,7 @@ export default {
                 product_id: '',
                 type_id: '',
                 page: 1,
-                version: '',
-                versions: [],
+                rules: [],
                 limit: 10,
                 level: 2,
                 type: ''
@@ -102,7 +101,7 @@ export default {
         'filterForm.brand_id' (curVal, oldVal) {
             this.filterForm.type_id = '';
             this.filterForm.product_id = '';
-            this.filterForm.versions = [];
+            this.filterForm.rules = [];
             this.typeIDOptionsChild = this.type.filter(x => x.brand_ids.indexOf(curVal*1) >= 0).map(x => {
                 return {
                     label: x.type_name,
@@ -112,7 +111,7 @@ export default {
         },
         'filterForm.type_id' (curVal, oldVal) {
             this.filterForm.product_id = '';
-            this.filterForm.versions = [];
+            this.filterForm.rules = [];
             const brandKey = this.filterForm.brand_id*1;
             const typeKey = curVal*1;
             this.productIDOptionsChild = this.product.filter(x => x.brand_id === brandKey && x.type_id === typeKey).map(x => {
@@ -139,7 +138,7 @@ export default {
                     case 'limit':
                         currentForm[attr] = 10
                         break
-                    case 'versions':
+                    case 'rules':
                         currentForm[attr] = []
                         break
                     case 'level':
@@ -166,76 +165,6 @@ export default {
                 this.rulesImport.routersList =  [
                     { required: false }
                 ]
-			}
-		},
-        renderEditData () {
-            let attrObj = {
-                title: '',
-                download_file_md5: '',
-                force: '',
-                version: '',
-                description: '',
-                img_url_object: '',
-                note: '',
-				size: '',
-                download_url_object: ''
-            }
-            let thisForm = this.importForm
-            for (let attr in attrObj) {
-                thisForm[attr] = this.editDataObj[attr]
-            }
-            thisForm['release_time'] = new Date(this.editDataObj['release_time']*1000)
-            let imgName = this.editDataObj['img_url_object']
-            this.fileListImg = [{name: imgName, url: imgName}]
-            if (this.inputType !== 4) {
-                let objName = this.editDataObj['download_url_object']
-                this.fileListObj = [{name: objName, url: objName}]
-			}
-
-			if (this.inputType === 2 || this.inputType === 5) {
-                let currentProducts = this.editDataObj['products']
-                if (currentProducts.length ===1 && currentProducts[0].version === '*') {
-                    thisForm['selectRule'] = 0
-				} else {
-                    currentProducts.forEach((item) => {
-                        thisForm['productsList'].push(item.version + '--' + item.product_id)
-					})
-				}
-			} else {
-                let currentRouters = this.editDataObj['routers']
-				if (currentRouters.length === 1 && currentRouters[0] === '*') {
-                    thisForm['selectRule'] = 0
-				} else {
-                    thisForm['routersList'] = currentRouters
-				}
-			}
-
-		},
-        resetImportForm () {
-            this.$refs['importForm'].resetFields()
-			if (this.inputType !== 4 && !this.releasedFlag) {
-                this.$refs['uploadFile'].clearFiles()
-			}
-            this.$refs['uploadFileImg'].clearFiles()
-            this.importForm['selectRule'] = 1
-
-            let form = this.importForm
-			for (let attr in form) {
-                switch (attr){
-                    case 'routersList':
-                    case 'productsList':
-                        form[attr] = []
-                        break
-                    case 'force':
-                        form[attr] = 0
-                        break
-                    case 'selectRule':
-                        form[attr] = 1
-                        break
-                    default:
-                        form[attr] = ''
-                        break
-				}
 			}
 		},
         closeParentFlow () {
@@ -266,10 +195,10 @@ export default {
 			})
 		},
         submitFilter () {
-            if (this.inputType !== 2 && this.inputType !== 5 && !this.filterForm.version) {
+            if (this.inputType !== 2 && this.inputType !== 5 && !this.filterForm.rules.length) {
                 this.$message.error('请选择路由版本')
                 return
-            } else if ((this.inputType === 2 || this.inputType === 5) && !this.filterForm.versions) {
+            } else if ((this.inputType === 2 || this.inputType === 5) && !this.filterForm.rules.length) {
                 this.$message.error('请选择子设备版本')
                 return
             }
@@ -280,11 +209,10 @@ export default {
             if (obj.inputType !== 2 &&  obj.inputType !== 5) {
                 delete currentParam.product_id
             } else {
-                currentParam.version = currentParam.versions.map((item) => {
+                currentParam.rules = currentParam.rules.map((item) => {
                     return item.split('-')[0]
                 })
             }
-            delete currentParam.versions
             delete currentParam.brand_id
             delete currentParam.type_id
             obj.$emit('filterVersionsParent', currentParam)
@@ -295,4 +223,8 @@ export default {
 }
 </script>
 <style lang="less">
+	.cp-filterFormBox{
+
+	}
+
 </style>

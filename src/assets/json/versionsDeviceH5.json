@@ -1,10 +1,10 @@
 {
   "tableColumn":[
-    {"prop": "title", "label": "版本Title", "width": 239},
+    {"prop": "type", "label": "产品类型"},
+    {"prop": "title", "label": "版本Title"},
     {"prop": "version", "label": "版本号"},
     {"prop": "release_time", "label": "发布时间"},
     {"prop": "status", "label": "版本状态"},
-    {"prop": "is_pre_release", "label": "灰度版本标识"},
     {"prop": "force", "label": "是否强制升级"}
   ],
   "tableData":[]

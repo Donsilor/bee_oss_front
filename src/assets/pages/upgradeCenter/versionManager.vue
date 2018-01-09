@@ -56,6 +56,7 @@
 						<div v-if="item.prop == 'type'" >{{getTypeText(scope.row.type)}}</div>
 						<div v-else-if="item.prop == 'status'" >{{getStatusText(scope.row.status)}}</div>
 						<div v-else-if="item.prop == 'force'" >{{getForceText(scope.row.force)}}</div>
+						<div v-else-if="item.prop == 'is_pre_release'" >{{getPreReleaseText(scope.row.is_pre_release)}}</div>
 						<div v-else-if="item.prop === 'release_time'" >{{formatTime(scope.row['release_time'])}}</div>
 						<div v-else>{{scope.row[item.prop]}}</div>
 					</template>
@@ -76,7 +77,7 @@
 			</el-table>
 			<!--子设备翻页-->
 			<div class="page-line">
-				<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="20" :current-page.sync="currentPage"></el-pagination>
+				<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="10" :current-page.sync="currentPage"></el-pagination>
 			</div>
 		</div>
 		<!--版本匹配搜索-->
@@ -160,6 +161,7 @@ import { mapGetters, mapActions } from 'vuex';
 import '../../lib/util.js';
 import version_first_json from '../../json/versions.json'
 import versions_children_json from '../../json/versionsChildren.json'
+import versions_device_h5_json from '../../json/versionsDeviceH5.json'
 import push_history_json from '../../json/pushHistory.json'
 import operation_log_json from '../../json/operateLogList.json'
 import version_input from './component/versionInputLayer.vue'
@@ -186,7 +188,7 @@ export default {
 			importBoxFlag: false,
 			filterPopoverFlag: false,
 			infoBoxFlag: false,
-			totalItem: 20,
+			totalItem: 0,
 			currentPage: 1,
 			filterTypeOptions: [
 				{
@@ -572,7 +574,7 @@ export default {
 			// this.filterParams.token = this.token
 			this.listParams.page = page
 			this.versionsFirst = version_first_json
-            this.versionList = versions_children_json
+            this.versionList = versions_device_h5_json
 			const obj  = this
             obj.$store.dispatch('getVersions', obj.listParams).then((result) => {
                 if (result.code === 0) {
@@ -582,7 +584,7 @@ export default {
                     if(!(obj.versionsFirst.tableData && obj.versionsFirst.tableData.length)) {
                         obj.setFirstVersionList(currentData)
                     }
-                    versions_children_json.tableData = currentData.other_version.data ?
+                    versions_device_h5_json.tableData = currentData.other_version.data ?
 						currentData.other_version.data.items : []
                     obj.totalItem = currentData.other_version.data.page.total
 				}
@@ -660,6 +662,20 @@ export default {
             }
             return text
         },
+        getPreReleaseText (type) {
+            let text = ''
+            switch(type) {
+                case 1:
+                    text = '灰度版本'
+                    break
+                case 0:
+                    text = '正式版本'
+                    break
+                default:
+                    break
+            }
+            return text
+		},
         // 历史版本
         getVersionHistoryList(page, type, product_id) {
             this.listParams.page = page
