@@ -10,10 +10,10 @@
 				</el-form-item>
 			</el-col>
 			<el-col :span="7" :offset="1"  v-if="pushForm.push_type===1" style="margin-left: -15px">
-				<el-form-item label="" prop="list_type" label-width="0">
-					<el-select v-model="pushForm.list_type"  placeholder="请选择">
-						<el-option label="白名单" :value="1"></el-option>
-						<el-option label="黑名单" :value="2"></el-option>
+				<el-form-item label="" prop="is_black" label-width="0">
+					<el-select v-model="pushForm.is_black"  placeholder="请选择">
+						<el-option label="白名单" :value="0"></el-option>
+						<el-option label="黑名单" :value="1"></el-option>
 					</el-select>
 				</el-form-item>
 			</el-col>
@@ -72,14 +72,14 @@ export default {
                 method: 'push_version',
                 push_type: '',
 				type: '',
-                list_type: '',
+                is_black: '',
                 product_id: '',
                 uuid_list: '',
                 uuid_csv: '',
                 terminal_type: 1
             },
             rules: {
-                list_type: [
+                is_black: [
                     { required: false, message: '请选择类型' }
                 ],
                 product_id: [
@@ -111,8 +111,8 @@ export default {
 	},
 	methods: {
         pushTypeChangeEvent (val) {
-            if (val === 2) {
-				this.rules.list_type = [
+            if (val === 1) {
+				this.rules.is_black = [
                     { required: true, message: '请选择类型' }
                 ]
 				this.rules.uuid_list =  [

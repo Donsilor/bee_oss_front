@@ -539,7 +539,7 @@ export default {
                 delete params.uuid
 			}
             if (params.push_type === 0) {
-                delete params.list_type
+                delete params.is_black
 			}
 			delete params.terminal_type
             this.$store.dispatch('pubilcCorsAction', params).then((result) => {
