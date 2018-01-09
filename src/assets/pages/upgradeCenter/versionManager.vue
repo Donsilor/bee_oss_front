@@ -529,7 +529,7 @@ export default {
 		// 推送升级
         pushUpdate (dataObj) {
             let params = Object.assign({}, dataObj);
-            params.uuid = params.uuid ? params.uuid.split(',') : []
+            params.uuid_list = params.uuid_list ? params.uuid_list.split(',') : []
 			params.version = this.pushDataObj.version
             params.product_id = this.pushDataObj.product_id
             params.type = this.inputType

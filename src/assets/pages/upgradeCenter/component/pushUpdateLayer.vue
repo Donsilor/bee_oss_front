@@ -26,10 +26,10 @@
 				</el-radio-group>
 			</el-form-item>
 		</el-row>
-		<el-form-item label="uuid" prop="uuid" v-if="pushForm.terminal_type">
+		<el-form-item label="uuid_list" prop="uuid_list" v-if="pushForm.terminal_type">
 			<el-row :gutter="24">
 				<el-col :span="17" style="padding-left:0">
-					<el-input  v-model="pushForm.uuid"></el-input>
+					<el-input  v-model="pushForm.uuid_list"></el-input>
 				</el-col>
 			</el-row>
 			<el-row>
@@ -74,7 +74,7 @@ export default {
 				type: '',
                 list_type: '',
                 product_id: '',
-                uuid: '',
+                uuid_list: '',
                 uuid_csv: '',
                 terminal_type: 1
             },
@@ -88,7 +88,7 @@ export default {
                 uuid_csv: [
                     { required: true, message: '请输入uuid_csv' }
                 ],
-                uuid: [
+                uuid_list: [
                     { required: false, message: '请输入uuid' },
                     {
                         validator: (rule, value, callback) => {
@@ -115,7 +115,7 @@ export default {
 				this.rules.list_type = [
                     { required: true, message: '请选择类型' }
                 ]
-				this.rules.uuid =  [
+				this.rules.uuid_list =  [
                     { required: true, message: '请输入uuid' },
                     {
                         validator: (rule, value, callback) => {
@@ -131,7 +131,7 @@ export default {
                     }
                 ]
             } else {
-                this.rules.uuid =  [
+                this.rules.uuid_list =  [
                     { required: false, message: '请输入uuid' },
                     {
                         validator: (rule, value, callback) => {
