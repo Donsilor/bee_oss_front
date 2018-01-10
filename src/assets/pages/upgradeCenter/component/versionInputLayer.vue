@@ -56,6 +56,9 @@
 		<el-form-item label="详细事项" prop="note">
 			<el-input type="text" v-model="importForm.note" />
 		</el-form-item>
+		<el-form-item label="备注" prop="extra_note">
+			<el-input type="text" v-model="importForm.extra_note" />
+		</el-form-item>
 		<el-form-item label="发布时间" prop="release_time" v-if="!releasedFlag">
 			<el-date-picker
 					v-model="importForm.release_time"
@@ -195,6 +198,7 @@ export default {
                 product_id: '',
                 description: '',
                 note: '',
+				extra_note: '',
                 selectRule: 1
             },
             rulesImport: {
@@ -209,6 +213,9 @@ export default {
                 ],
                 note: [
                     { required: true, message: '请输入详细事项' }
+                ],
+                extra_note: [
+                    { required: false, message: '请输入详细事项' }
                 ],
                 product_id: [
                     { required: false, message: '请输入子设备' }
