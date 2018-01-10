@@ -294,6 +294,7 @@ export default {
                 description: '',
                 img_url_object: '',
                 note: '',
+				extra_note: '',
 				size: '',
                 download_url_object: ''
             }
