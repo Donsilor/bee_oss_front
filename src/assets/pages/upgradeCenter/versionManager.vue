@@ -488,7 +488,7 @@ export default {
             delete params.type_id
             if (currentType === 1 || currentType === 4) {
                 params.routers = params.routersList
-				params.os_type = params.type === 1 ? 'android' : 'ios'
+				params.os_type = currentType === 1 ? 'android' : 'ios'
 				params.method = this.addEditFlag ? 'create_app_version' : 'update_app_version'
                 delete params.product_id
             } else if (currentType === 3) {
@@ -533,6 +533,7 @@ export default {
 			params.version = this.pushDataObj.version
             params.product_id = this.pushDataObj.product_id
             params.type = this.inputType
+			params.user_id = this.pushDataObj.user_id
             if (params.terminal_type) {
                 delete params.uuid_csv
             } else {
