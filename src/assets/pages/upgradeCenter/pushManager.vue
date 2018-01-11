@@ -12,6 +12,8 @@
 				>
 					<template scope="scope">
 						<div v-if="item.prop == 'type'" >{{getTypeText(scope.row.type)}}</div>
+						<div v-else-if="item.prop == 'push_type'" >{{scope.row.type ? '灰度' : '全量'}}</div>
+						<div v-else-if="item.prop == 'total_nums'" >{{scope.row.total_nums + '/' + scope.row.success_nums}}</div>
 						<div v-else-if="item.prop == 'status'" >{{getStatusTextPush(scope.row.status)}}</div>
 						<div v-else>{{scope.row[item.prop]}}</div>
 					</template>
@@ -25,6 +27,9 @@
 					</template>
 				</el-table-column>
 			</el-table>
+			<div class="page-line">
+				<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="10" :current-page.sync="currentPage"></el-pagination>
+			</div>
 		</div>
 		<!--推送详情-->
 		<el-dialog title="推送详情" :visible.sync="pushDetailFlag">
@@ -49,7 +54,7 @@
 			</div>
 		</el-dialog>
 		<!--查看名单-->
-		<el-dialog title="推送名单" :visible.sync="pushNameListFlag">
+		<el-dialog :title="'推送名单('+(currentPushData.is_black ? '黑名单' : '白名单')+ ')'" :visible.sync="pushNameListFlag">
 			<div class="edit_form">
 				<el-table
 						:data="pushNameList.tableData"
@@ -97,7 +102,8 @@ export default {
 				status: ''
 			},
 			infoBoxFlag: false,
-			totalItem: 20,
+			totalItem: 0,
+			currentPushData: {},
 			currentPage: 1,
             pushHistoryList: {},
             ruleFormDetail: {},
@@ -125,6 +131,9 @@ export default {
 		this.getPushList(1);
 	},
 	methods: {
+        pageChange () {
+            this.getPushList(this.currentPage)
+        },
         formatTime (val) {
             if (!val) {
                 return '------'
@@ -196,15 +205,18 @@ export default {
             }
             return text
         },
-		getPushList () {
+		getPushList (page) {
             this.pushHistoryList = push_history_json
 			let obj = this
 			let param = {
-                method: 'history_push_logs'
+                method: 'history_push_logs',
+				limit: 10,
+				page: page
 			}
             obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
                 obj.pushHistoryList.tableData = result.result ? result.result.items : []
                 // 翻页效果
+				obj.totalItem =  result.result ? result.result.page.total : 0
             })
 		},
         getPushDetail (dataObj) {
@@ -223,6 +235,7 @@ export default {
             })
 		},
         getPushNameList (dataObj) {
+            this.currentPushData = dataObj
             this.pushNameListFlag = true
             let obj = this
             let param = {

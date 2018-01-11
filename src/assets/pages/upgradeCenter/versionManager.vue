@@ -70,8 +70,9 @@
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="startStopVerion(scope.row)">{{scope.row['status']?'禁用':'启用'}}</el-button>
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="openPushLayer(scope.row)">推送</el-button>
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="getOperateLog(scope.row)">操作日志</el-button>
+						<el-button v-if="!firstTableShow" type="text" size="small" @click="rollBackVersion(scope.row)">回滚</el-button>
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="deleteVersion(scope.row)">删除</el-button>
-						<el-button v-if="firstTableShow" type="text" size="small" @click="getVersionHistory(scope.row)">查看历史版本</el-button>
+						<el-button v-if="firstTableShow" type="text" size="small" @click="getVersionHistory(scope.row)">历史版本</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -417,6 +418,32 @@ export default {
                 })
             })
 		},
+        rollBackVersion (dataObj) {
+            let obj = this
+            obj.$confirm('确定此操作吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                let param = {
+                    type: dataObj.type,
+                    version: dataObj.version,
+                    user_id: dataObj.user_id,
+                    product_id: dataObj.product_id,
+                    method: 'rollback'
+                }
+
+                obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
+                    if (result.code === 0) {
+                        obj.$message({
+                            type: 'success',
+                            message: '回滚成功!'
+                        });
+                        obj.getVersionHistory(obj.currentDataObj)
+                    }
+                })
+            })
+        },
 		// 获取详情
         getVersionDetail (dataObj) {
             this.infoBoxFlag = true
@@ -543,6 +570,10 @@ export default {
                 delete params.is_black
 			}
 			delete params.terminal_type
+			if (!params.push_type) {
+                params.is_black = 0
+                params.uuid_list = []
+			}
             this.$store.dispatch('pubilcCorsAction', params).then((result) => {
                 if (result.code === 0) {
                     this.$message.success('推送成功');

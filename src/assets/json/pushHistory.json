@@ -1,9 +1,11 @@
 {
   "tableColumn":[
-    {"prop": "type", "label": "推送类型"},
+    {"prop": "type", "label": "推送设备"},
+    {"prop": "push_type", "label": "推送类型"},
     {"prop": "version", "label": "版本号"},
     {"prop": "created_at", "label": "推送时间"},
-    {"prop": "status", "label": "成功与否"}
+    {"prop": "status", "label": "成功与否"},
+    {"prop": "total_nums", "label": "推送结果(总数/成功数)"}
   ],
   "tableData":[]
 }

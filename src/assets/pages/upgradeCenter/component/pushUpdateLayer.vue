@@ -18,7 +18,7 @@
 				</el-form-item>
 			</el-col>
 		</el-row>
-		<el-row>
+		<el-row v-if="pushForm.push_type">
 			<el-form-item label="推送客户端" prop="push_type">
 				<el-radio-group v-model="pushForm.terminal_type">
 					<el-radio :label="1">输入uuid</el-radio>
@@ -26,7 +26,7 @@
 				</el-radio-group>
 			</el-form-item>
 		</el-row>
-		<el-form-item label="uuid_list" prop="uuid_list" v-if="pushForm.terminal_type">
+		<el-form-item label="uuid_list" prop="uuid_list" v-if="pushForm.terminal_type && pushForm.push_type">
 			<el-row :gutter="24">
 				<el-col :span="17" style="padding-left:0">
 					<el-input  v-model="pushForm.uuid_list"></el-input>
@@ -36,7 +36,7 @@
 				<span style="font-size: 12px; color: #999">可输入多个uuid，用逗号隔开</span>
 			</el-row>
 		</el-form-item>
-		<el-form-item label="uuid_csv" prop="uuid_csv" v-if="!pushForm.terminal_type">
+		<el-form-item label="uuid_csv" prop="uuid_csv" v-if="!pushForm.terminal_type && pushForm.push_type">
 			<el-row :gutter="24">
 				<el-col :span="17" style="padding-left:0">
 					<el-upload
@@ -70,7 +70,7 @@ export default {
             },
             pushForm: {
                 method: 'push_version',
-                push_type: '',
+                push_type: 0,
 				type: '',
                 is_black: '',
                 product_id: '',
@@ -158,6 +158,9 @@ export default {
                         break
                     case 'method':
                         form[attr] = 'push_version'
+                        break
+                    case 'push_type':
+                        form[attr] = 0
                         break
                     default:
                         form[attr] = ''
