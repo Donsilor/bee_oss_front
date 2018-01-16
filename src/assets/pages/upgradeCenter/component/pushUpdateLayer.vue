@@ -42,7 +42,7 @@
 					<el-upload
 							ref="uploadFile"
 							class="upload-demo"
-							action="http://iot-dev-upgrade-center.egtest.cn:7777/oss_file_upload"
+							action="http://iot-dev-upgrade-center.egtest.cn:7777/uuid_upload"
 							:data="uploadObj"
 							:before-upload="beforeAvatarUpload"
 							:on-success="getUploadData"
@@ -182,8 +182,7 @@ export default {
             })
 		},
         getUploadData (val) {
-            let data = val.result
-            this.pushForm.uuid_csv = data.object
+            this.pushForm.uuid_csv = val.result
             this.$refs['pushForm'].validate((valid) => {})
         },
         beforeAvatarUpload (file) {

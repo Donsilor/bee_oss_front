@@ -3,7 +3,13 @@
 		<el-form-item label="版本title" prop="title">
 			<el-input type="text" v-model="importForm.title" />
 		</el-form-item>
-		<el-form-item label="子设备" prop="product_id" v-if="inputType !== 1 && inputType !== 4 && !releasedFlag">
+		<el-form-item label="是否限制规则"  v-if="!releasedFlag">
+			<el-radio-group v-model="importForm.selectRule" @change="ruleChange">
+				<el-radio :label="1">是</el-radio>
+				<el-radio :label="0">否</el-radio>
+			</el-radio-group>
+		</el-form-item>
+		<el-form-item label="子设备" prop="product_id" v-if="inputType !== 1  && inputType !== 4 && !releasedFlag">
 			<el-row>
 				<el-col :span="8">
 					<el-select v-model="importForm.brand_id" placeholder="品牌">
@@ -37,10 +43,20 @@
 				</el-col>
 			</el-row>
 		</el-form-item>
-		<el-form-item label="支持版本" prop="productsList" v-if="(inputType === 2 || inputType === 5) && !releasedFlag && importForm.selectRule">
+		<el-form-item label="支持版本" prop="productsList" v-if="(inputType === 2  || inputType === 5) && !releasedFlag && importForm.selectRule">
 			<el-select style="width: 100%;" multiple v-model="importForm.productsList" placeholder="子设备">
 				<el-option
 						v-for="item in subsetProduct"
+						:key="item.value"
+						:label="item.label"
+						:value="item.value">
+				</el-option>
+			</el-select>
+		</el-form-item>
+		<el-form-item label="支持路由" prop="routersList" v-if="inputType !== 2 && inputType !== 5 && !releasedFlag && importForm.selectRule">
+			<el-select style="width: 100%;" multiple v-model="importForm.routersList" placeholder="路由">
+				<el-option
+						v-for="item in router"
 						:key="item.value"
 						:label="item.label"
 						:value="item.value">
@@ -66,32 +82,6 @@
 					format="yyyy-MM-dd"
 					placeholder="选择日期">
 			</el-date-picker>
-		</el-form-item>
-		<el-form-item label="是否限制规则"  v-if="!releasedFlag">
-			<el-radio-group v-model="importForm.selectRule" @change="ruleChange">
-				<el-radio :label="1">是</el-radio>
-				<el-radio :label="0">否</el-radio>
-			</el-radio-group>
-		</el-form-item>
-		<el-form-item label="支持路由" prop="routersList" v-if="(inputType === 1 || inputType === 4) && !releasedFlag && importForm.selectRule">
-			<el-select style="width: 100%;" multiple v-model="importForm.routersList" placeholder="路由">
-				<el-option
-						v-for="item in router"
-						:key="item.value"
-						:label="item.label"
-						:value="item.value">
-				</el-option>
-			</el-select>
-		</el-form-item>
-		<el-form-item label="支持路由" prop="productsList" v-if="inputType === 3 && !releasedFlag && importForm.selectRule">
-			<el-select style="width: 100%;" multiple v-model="importForm.routersList" placeholder="路由">
-				<el-option
-						v-for="item in subsetProduct"
-						:key="item.value"
-						:label="item.label"
-						:value="item.value">
-				</el-option>
-			</el-select>
 		</el-form-item>
 		<el-form-item label="appstore链接" prop="download_url_object" v-if="inputType === 4 && !releasedFlag">
 			<el-input type="text" v-model="importForm.download_url_object" />
@@ -146,7 +136,7 @@ import * as namespace from '../../../store/namespace';
 import { mapGetters, mapActions } from 'vuex';
 export default {
     props: ['brandIDOptions','type','typeIDOptions','productIDOptions','appIos',
-		'router','inputType','product','addEditFlag','editDataObj', 'releasedFlag'],
+		'router','inputType','product','addEditFlag','editDataObj', 'releasedFlag', 'deviceProductId'],
 	data () {
 		return {
             brandIDOptionsChild: this.brandIDOptions,
@@ -192,7 +182,7 @@ export default {
                 img_url_object: '',
                 download_file_md5: '',
                 size: '',
-                force: 1,
+                force: 0,
                 brand_id: '',
                 type_id: '',
                 product_id: '',
@@ -269,21 +259,21 @@ export default {
 	},
 	methods: {
         ruleChange (val) {
-            if (val) {
-                this.rulesImport.productsList =  [
-                    { required: true, message: '请选择支持版本' }
-                ]
-                this.rulesImport.routersList =  [
-                    { required: true, message: '请选择支持版本' }
-                ]
-			} else {
-                this.rulesImport.productsList =  [
-                    { required: false }
-                ]
-                this.rulesImport.routersList =  [
-                    { required: false }
-                ]
-			}
+//            if (val) {
+//                this.rulesImport.productsList =  [
+//                    { required: true, message: '请选择支持版本' }
+//                ]
+//                this.rulesImport.routersList =  [
+//                    { required: true, message: '请选择支持版本' }
+//                ]
+//			} else {
+//                this.rulesImport.productsList =  [
+//                    { required: false }
+//                ]
+//                this.rulesImport.routersList =  [
+//                    { required: false }
+//                ]
+//			}
 		},
         renderEditData () {
             let attrObj = {
@@ -330,13 +320,20 @@ export default {
 
 		},
         resetImportForm () {
+            if (this.inputType === 3) {
+                this.rulesImport.product_id = [
+                    { required: true, message: '请输入子设备' }
+                ]
+			} else {
+                this.rulesImport.product_id = [
+                    { required: false, message: '请输入子设备' }
+                ]
+			}
             this.$refs['importForm'].resetFields()
 			if (this.inputType !== 4 && !this.releasedFlag) {
                 this.$refs['uploadFile'].clearFiles()
 			}
             this.$refs['uploadFileImg'].clearFiles()
-            this.importForm['selectRule'] = 1
-
             let form = this.importForm
 			for (let attr in form) {
                 switch (attr){
@@ -350,6 +347,13 @@ export default {
                     case 'selectRule':
                         form[attr] = 1
                         break
+                    case 'product_id':
+                        if (this.inputType === 3) {
+                            form[attr] = this.deviceProductId
+						} else {
+                            form[attr] = ''
+						}
+                        break
                     default:
                         form[attr] = ''
                         break
@@ -361,6 +365,9 @@ export default {
 		},
 		productChange (val) {
 			let obj = this
+			if (this.inputType === 3) {
+			    return
+			}
             obj.$store.dispatch('pubilcCorsAction',{
                 method: 'released_versions',
                 type: 3,

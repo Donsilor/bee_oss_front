@@ -128,6 +128,7 @@
 					:addEditFlag="addEditFlag"
 					:editDataObj="editDataObj"
 					:releasedFlag="releasedFlag"
+					:deviceProductId="deviceProductId"
 			>
 			</version-input>
 		</el-dialog>
@@ -239,13 +240,11 @@ export default {
 				force: '',
 				size: '',
 				status: '',
-				rule: '',
                 download_file_md5: '',
                 download_url_object: '',
                 img_url_object: '',
                 created_at: '',
                 updated_at: '',
-                delete_at: ''
 			},
             rulesDetail: {},
             suportDevice: [],
@@ -258,7 +257,8 @@ export default {
             operateLogList: {},
             addEditFlag: true,
             editDataObj: {},
-            releasedFlag: false  //已发布/未发布标识 || 版本编辑，已发布版本只能编辑几个字段
+            releasedFlag: false, //已发布/未发布标识 || 版本编辑，已发布版本只能编辑几个字段
+            deviceProductId: ''
 		}
 	},
 	filters: {
@@ -541,9 +541,11 @@ export default {
 				}
 
 			}
+			if (currentType !== 3) {
+                delete params.product_id
+			}
             delete params.productsList
             delete params.routersList
-            delete params.product_id
 			delete params.selectRule
             this.$store.dispatch('pubilcCorsAction', params).then((result) => {
                 if (result.code === 0) {
@@ -556,24 +558,25 @@ export default {
 		// 推送升级
         pushUpdate (dataObj) {
             let params = Object.assign({}, dataObj);
-            params.uuid_list = params.uuid_list ? params.uuid_list.split(',') : []
+            if (!params.terminal_type) {
+                params.uuid_list = params.uuid_csv || []
+			} else {
+                params.uuid_list = params.uuid_list.split(',') || []
+			}
 			params.version = this.pushDataObj.version
             params.product_id = this.pushDataObj.product_id
             params.type = this.inputType
 			params.user_id = this.pushDataObj.user_id
-            if (params.terminal_type) {
-                delete params.uuid_csv
-            } else {
-                delete params.uuid
-			}
+
             if (params.push_type === 0) {
                 delete params.is_black
 			}
-			delete params.terminal_type
-			if (!params.push_type) {
+            if (!params.push_type) {
                 params.is_black = 0
                 params.uuid_list = []
-			}
+            }
+            delete params.uuid_csv
+			delete params.terminal_type
             this.$store.dispatch('pubilcCorsAction', params).then((result) => {
                 if (result.code === 0) {
                     this.$message.success('推送成功');
@@ -730,6 +733,7 @@ export default {
         },
         getVersionHistory (dataObj) {
             this.currentDataObj = dataObj  //此操作是为了进入列表，进行各种操作时需要重新刷新列表
+			this.deviceProductId = dataObj.product_id || ''
             this.inputType = dataObj.type
             this.secondTitle = this.getVersionTitle(dataObj)
             this.getVersionHistoryList(1, dataObj.type, dataObj.product_id)
