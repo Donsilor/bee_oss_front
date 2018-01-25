@@ -53,6 +53,7 @@ axios.interceptors.response.use(function (response) {
       // console.error(response.data)
       if (response.data.code === CODE.NO_LOGIN) {
         // 未登录的情况
+        localStorage.setItem('localData', '')
         window.location.hash = '/'
       } else {
         Message({

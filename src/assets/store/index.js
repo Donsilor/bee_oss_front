@@ -8,6 +8,7 @@ import getters from './getters';
 import mutations from './mutations';
 import actions from './actions';
 import upgrade from './modules/upgrade'
+import family from './modules/familys'
 
 export default new Vuex.Store({
     state,
@@ -19,6 +20,7 @@ export default new Vuex.Store({
         website,
         chosen,
         ops,
-        upgrade
+        upgrade,
+        family
     }
 });

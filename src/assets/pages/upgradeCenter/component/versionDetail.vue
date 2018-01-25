@@ -119,7 +119,7 @@ export default {
                 "tableColumn":[
                     {"prop": "id", "label": "id"},
                     {"prop": "uuid", "label": "设备标识uuid"},
-                    {"prop": "创建时间", "label": "created_at"}
+                    {"prop": "created_at", "label": "创建时间"}
                 ],
                 "tableData":[]
             },

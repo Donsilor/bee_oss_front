@@ -62,13 +62,14 @@
 					</template>
 				</el-table-column>
 				<el-table-column
-						:width="!firstTableShow ? 300 : 180"
+						:width="!firstTableShow ? 320 : 180"
 						label="操作">
 					<template scope="scope">
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="getVersionDetail(scope.row)">查看</el-button>
+						<el-button v-if="!firstTableShow" type="text" size="small" @click="openSupportLayer(scope.row)">支持版本</el-button>
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="openVersionEdit(scope.row)">编辑</el-button>
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="startStopVerion(scope.row)">{{scope.row['status']?'禁用':'启用'}}</el-button>
-						<el-button v-if="!firstTableShow" type="text" size="small" @click="openPushLayer(scope.row)">推送</el-button>
+						<el-button style="margin-left: 0" v-if="!firstTableShow" type="text" size="small" @click="openPushLayer(scope.row)">推送</el-button>
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="getOperateLog(scope.row)">操作日志</el-button>
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="rollBackVersion(scope.row)">回滚</el-button>
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="deleteVersion(scope.row)">删除</el-button>
@@ -155,6 +156,32 @@
                <el-button @click="operateLogLayer = false" style="border:none;">取 消</el-button>
             </span>
 		</el-dialog>
+		<!--支持版本-->
+		<el-dialog
+				title="支持版本"
+				:visible.sync="supportLayer">
+			<div>
+				<ul v-if="routersTable" class="support-routers">
+					<li v-for="item in routersTableData">{{item}}</li>
+				</ul>
+				<el-table v-if="productsTable"
+						:data="productsTableData.tableData"
+						style="width: 100%">
+					<el-table-column v-for="item in productsTableData.tableColumn" :key="item.prop"
+									 :prop="item.prop"
+									 :label="item.label"
+									 :width="'auto'"
+					>
+						<template scope="scope">
+							<div>{{scope.row[item.prop]}}</div>
+						</template>
+					</el-table-column>
+				</el-table>
+			</div>
+			<span slot="footer" class="dialog-footer">
+               <el-button @click="supportLayer = false" style="border:none;">取 消</el-button>
+            </span>
+		</el-dialog>
 	</div>
 </template>
 <script>
@@ -183,6 +210,17 @@ export default {
 	},
 	data () {
 		return {
+            supportLayer: false,
+            productsTable: false,
+            routersTable: false,
+            routersTableData: [],
+            productsTableData: {
+                "tableColumn":[
+                    {"prop": "product_id", "label": "产品id"},
+                    {"prop": "version", "label": "版本号"}
+                ],
+                "tableData":[]
+			},
             firstTableShow: true,
             childTableHeaderShow: false,
             pushBoxFlag: false,
@@ -312,6 +350,36 @@ export default {
 		this.getVersionList(1);
 	},
 	methods: {
+        openSupportLayer (dataObj) {
+            this.supportLayer = true
+            let param = {
+                type: dataObj.type,
+                version: dataObj.version,
+                product_id: dataObj.product_id,
+                method: 'version_detail'
+            }
+            let obj = this
+            obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
+                let datas = result.result
+				switch (this.inputType) {
+					case 1:
+					case 3:
+					case 4:
+                        obj.routersTable = true
+                        obj.productsTable = false
+                        obj.routersTableData = datas.routers || []
+					    break
+					case 2:
+					case 5:
+                        obj.routersTable = false
+                        obj.productsTable = true
+                        obj.productsTableData.tableData = datas.products || []
+					    break
+					default:
+					    break
+				}
+            })
+		},
         openFilterFormLayer () {
             this.filterPopoverFlag=true
             this.$nextTick(() => {
@@ -813,6 +881,19 @@ export default {
 		position: absolute;
 		right: 10px;
 		top: 10px;
+	}
+	.support-routers{
+		border: 1px solid #d8d8d8;
+		li{
+			line-height: 35px;
+			padding-left: 30px;
+			height: 35px;
+			list-style: none;
+			border-bottom: 1px solid #d8d8d8;
+		}
+		li:last-of-type{
+			border-bottom: 0
+		}
 	}
 }
 </style>

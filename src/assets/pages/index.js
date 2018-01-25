@@ -22,6 +22,7 @@ import RouterIndex from './routerManager/index.vue';
 import RouterManager from './routerManager/routerManager.vue';
 import ImportRouter from './routerManager/importRouter.vue';
 import FamilyList from './familyList.vue';
+import FamilyImgList from './familyImg/index.vue';
 
 export {
 	Login,
@@ -47,5 +48,6 @@ export {
     ErrLog,
     RouterIndex,
     RouterManager,
-    ImportRouter
+    ImportRouter,
+    FamilyImgList
 };

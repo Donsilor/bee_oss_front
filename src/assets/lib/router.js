@@ -113,7 +113,12 @@ const routes = [{
                 component: Pages.ImportRouter,
             }
         ]
-    }]
+    },{
+        path: 'familyImgList',
+        name: 'familyImgList',
+        component: Pages.FamilyImgList
+    }
+  ]
 }];
 
 const router = new VueRouter({

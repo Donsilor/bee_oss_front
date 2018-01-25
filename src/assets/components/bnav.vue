@@ -137,6 +137,11 @@ export default {
                             isSelected: false
                         }
 					]
+                },
+                {
+                    title: '家庭背景图',
+                    path: '/main/familyImgList',
+                    icon: 'facility'
                 }
 			],
 			navs: [

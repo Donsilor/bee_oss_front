@@ -33,3 +33,10 @@ export const THROUGH_API = {
     warnData: API_MASTER + 'monitor/statistics',  // 按告警名称、服务器Id统计数量
     warnDataSearch: API_MASTER + 'monitor/lists'  // 告警信息列表
 }
+export const FAMILY_API = {
+    imgList: API_MASTER + 'bgimage/lists',
+    addImgs: API_MASTER + 'bgimage/add',
+    deleteImgs: API_MASTER + 'bgimage/del',
+    editImgs: API_MASTER + 'bgimage/edit',
+    sortImgs: API_MASTER + 'bgimage/sort',
+}
