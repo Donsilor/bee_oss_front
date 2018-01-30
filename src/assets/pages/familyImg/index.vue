@@ -13,24 +13,25 @@
 			<el-table
 					:data="imgList.tableData"
 					style="width: 100%; border-top:0 none">
-				<el-table-column v-for="item in imgList.tableColumn" :key="item.prop"
-								 :prop="item.prop"
-								 :label="item.label"
-								 :width="'auto'"
-				>
-					<template scope="scope">
-						<div v-if="item.prop == 'image_url'" ><img :src="scope.row['image_url']" width="20" height="20"></div>
-						<div v-else>{{scope.row[item.prop]}}</div>
-					</template>
-				</el-table-column>
-				<el-table-column
-						width="180"
-						label="操作">
-					<template scope="scope">
-						<el-button  type="text" size="small" @click="openEditLayer(scope.row)">编辑</el-button>
-						<el-button  type="text" size="small" @click="deleteImg(scope.row)">删除</el-button>
-					</template>
-				</el-table-column>
+					<el-table-column v-for="item in imgList.tableColumn" :key="item.prop"
+									 :prop="item.prop"
+									 :label="item.label"
+									 :width="'auto'"
+					>
+						<template scope="scope">
+							<div v-if="item.prop == 'image_url'" ><img :src="scope.row['image_url']" width="20" height="20"></div>
+							<div v-else>{{scope.row[item.prop]}}</div>
+						</template>
+					</el-table-column>
+					<el-table-column
+							width="180"
+							label="操作">
+						<template scope="scope">
+							<el-button  type="text" size="small" @click="openEditLayer(scope.row)">编辑</el-button>
+							<el-button  type="text" size="small" @click="deleteImg(scope.row)">删除</el-button>
+							<i class="icon-rank"></i>
+						</template>
+					</el-table-column>
 			</el-table>
 			<div class="page-line">
 				<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="10" :current-page.sync="currentPage"></el-pagination>
@@ -40,22 +41,25 @@
 		<el-dialog :title="addEditFlag?'添加路由':'编辑路由'" :visible.sync="addEditLayer">
 			<div class="edit_form">
 				<el-form :model="AddEditForm" :rules="rulesAddEdit" ref="AddEditForm" label-width="100px" >
-					<el-form-item label="上传图片" prop="f_img">
+					<el-form-item label="上传图片">
 						<el-upload
 								ref="uploadFile"
 								class="upload-demo"
 								action="http://iot-dev-upgrade-center.egtest.cn:7777/oss_file_upload"
 								:data="uploadObj"
+								:before-upload="beforeAvatarUpload"
 								:on-success="getUploadData"
-								:on-preview="handlePreview"
 								:limit="1"
 								:file-list="fileListObj"
+								:on-remove="handleRemoveImg"
 						>
 							<el-button size="small" type="primary">点击上传</el-button>
 						</el-upload>
 					</el-form-item>
-					<el-form-item label="图片预览" prop="f_img">
-						<el-input v-model="AddEditForm.f_img" placeholder=""></el-input>
+					<el-form-item label="图片预览" prop="image_url">
+						<div class="img-con">
+							<img v-if="AddEditForm.image_url" :src="AddEditForm.image_url" />
+						</div>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -71,6 +75,7 @@ import * as namespace from '../../store/namespace'
 import { mapGetters, mapActions } from 'vuex'
 import '../../lib/util.js'
 import { Message } from 'element-ui'
+import Sortable  from 'sortablejs'
 export default {
 	data () {
 	    return {
@@ -94,72 +99,117 @@ export default {
             },
             addEditFlag: true,
             AddEditForm: {
-               f_img: ''
+               image_url: '',
+			   id: '',
+			   image_url_object: ''
             },
             rulesAddEdit: {
-                f_img: [
+                image_url: [
                     { required: true, message: '请上传图片' }
                 ]
-            }
+            },
+            sortArr: []
 		}
 	},
+    components:{
+        Sortable
+    },
     mounted () {
         this.getImgList(1);
+
+        let table = document.querySelectorAll('.el-table__body-wrapper > table > tbody')[0]
+        let obj = this
+        Sortable.create(table, {
+            onEnd({ newIndex, oldIndex }) {
+//                const targetRow = self.imgList.tableData.splice(oldIndex, 1)[0]
+//                self.imgList.tableData.splice(newIndex, 0, targetRow)
+				let temp_new = obj.sortArr[newIndex]
+                let temp_old = obj.sortArr[oldIndex]
+				obj.sortArr[newIndex] = temp_old
+                obj.sortArr[oldIndex] = temp_new
+                obj.$store.dispatch('sortImgs', {id_list: obj.sortArr}).then((result) => {
+
+                })
+            }
+        })
     },
 	methods: {
+        getdata () {
+            console.log('移动中.....')
+		},
         openAddEditLayer () {
+            this.addEditFlag = true
             this.addEditLayer = true
+            this.$nextTick(() => {
+                this.$refs['uploadFile'].clearFiles()
+				let currentForm = this.AddEditForm
+				for (let attr in currentForm) {
+                    currentForm[attr] = ''
+				}
+            })
 		},
         pageChange () {
             this.getImgList(this.currentPage)
         },
-        deleteImg (id) {
+        deleteImg (dataObj) {
             const obj  = this
             this.$confirm('确定删除吗?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                obj.$store.dispatch('deleteRouter', {router_id: id}).then((result) => {
-                    if (result.code === 0) {
+                obj.$store.dispatch('deleteImgs', {id: dataObj.id}).then((result) => {
+                    if (result.code === 200) {
                         obj.$message({
                             type: 'success',
                             message: '删除成功!'
                         });
-                        obj.getRouterList(1)
+                        obj.getImgList(obj.currentPage)
                     }
                 })
             }).catch(() => {
 
             });
         },
+        openEditLayer (dataObj) {
+            this.addEditFlag = false
+            this.addEditLayer = true
+            this.$nextTick(() => {
+                let currentData = this.AddEditForm
+				for (let attr in currentData) {
+                    currentData[attr] = dataObj[attr]
+				}
+                this.fileListObj = [{name: dataObj['image_url_object'], url: dataObj['image_url_object']}]
+            })
+        },
         addEditConfirm (formName) {
             let obj = this
             obj.$refs[formName].validate((valid) => {
                 if (valid) {
-                    let currentAction = obj.addEditFlag ? 'addImg' : 'editImg'
+                    let currentAction = obj.addEditFlag ? 'addImgs' : 'editImgs'
                     let currentParam = JSON.parse(JSON.stringify(obj.AddEditForm))
+                    delete currentParam.image_url
                     if (obj.addEditFlag) {
-                        delete currentParam.router_id
+                        delete currentParam.id
                     }
                     obj.$store.dispatch(currentAction, currentParam).then((result) => {
                         if (!obj.addEditFlag) {
-                            if (result && result.code === 0) {
+                            if (result && result.code === 200) {
                                 Message({
                                     message:  '编辑成功',
                                     type: 'success'
                                 })
                                 obj.addEditLayer = false
-                                obj.getRouterList(1)
+                                obj.getImgList(obj.currentPage)
                             }
                         } else {
-                            if (result && result.list && (result.list[0].code === 0)) {
+                            if (result && result.code === 200) {
                                 Message({
                                     message:  '新增成功',
                                     type: 'success'
                                 })
                                 obj.addEditLayer = false
-                                obj.getRouterList(1)
+                                obj.getImgList(obj.currentPage)
                             } else {
                                 Message({
                                     message: result.list[0].detail,
@@ -178,15 +228,21 @@ export default {
             const obj  = this
             obj.$store.dispatch('imgList', obj.listParams).then((result) => {
                 if (result && result.result && result.result.length) {
-                    obj.imgList.tableData = result.result
+                    let currentArr = result.result
+                    obj.imgList.tableData = currentArr
                     obj.totalItem = result.total || 0
+                    obj.sortArr = []
+                    currentArr.forEach((item) => {
+                        obj.sortArr.push(item.id)
+					})
                 }
             })
 		},
         getUploadData (val) {
             let data = val.result
-            this.importForm.download_url_object = data.object
-            this.$refs['importForm'].validate((valid) => {})
+            this.AddEditForm.image_url = data.download_url
+			this.AddEditForm.image_url_object = data.object
+            this.$refs['AddEditForm'].validate((valid) => {})
         },
         beforeAvatarUpload (file) {
             // const isRight = (file.type === 'application/zip' || file.type === 'application/rar');
@@ -199,6 +255,14 @@ export default {
                 this.$message.error('上传文件大小不能超过 100MB!');
             }
             return isLt2M;
+        },
+        handleRemoveImg(file, fileList) {
+            let currentForm = this.AddEditForm
+			for (let attr in currentForm) {
+                if (attr !== 'id') {
+                    currentForm[attr] = ''
+				}
+			}
         },
 
 	},
@@ -213,3 +277,25 @@ export default {
     }
 }
 </script>
+<style lang="less">
+	.icon-rank{
+		position: relative;
+		left: 10px;
+		top: 8px;
+		display: inline-block;
+		width: 30px;
+		height: 30px;
+		background-color: #333;
+		background-image: url("../../../assets/images/icon-rank.png");
+		background-size: 100% 100%;
+	}
+	.img-con{
+		max-width: 100%;
+		max-height: 100%;
+		overflow: hidden;
+		img{
+			max-width: 100%;
+			max-height: 100%;
+		}
+	}
+</style>
