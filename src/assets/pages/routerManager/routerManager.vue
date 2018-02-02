@@ -6,6 +6,9 @@
 				<el-col :span="3" style="padding-right: 0; ">
 					<el-input v-model="listParams.router_id" placeholder="router_id"></el-input>
 				</el-col>
+				<el-col :span="3" style="padding-right: 0; ">
+					<el-input v-model="listParams.device_uuid" placeholder="device_uuid"></el-input>
+				</el-col>
 				<el-col :span="2" style="padding-right: 0; ">
 					<el-button type="primary" @click="getRouterList()">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
 				</el-col>
@@ -28,7 +31,7 @@
 								 :width="'auto'"
 				>
 					<template scope="scope">
-						<div v-if="item.prop == 'state'" >{{getStatusText(scope.row.state)}}</div>
+						<div v-if="item.prop == 'device_state'" >{{getStatusText(scope.row.device_state)}}</div>
 						<div v-else>{{scope.row[item.prop]}}</div>
 					</template>
 				</el-table-column>
@@ -37,7 +40,7 @@
 						label="操作">
 					<template scope="scope">
 						<el-button  type="text" size="small" @click="openEditLayer(scope.row)">编辑</el-button>
-						<el-button  type="text" size="small" @click="delRouter(scope.row['router_id'])">删除</el-button>
+						<el-button  type="text" size="small" @click="delRouter(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -122,7 +125,8 @@ export default {
 			listParams: {
                 page: 1,
 				limit: 10,
-                router_id: ''
+                router_id: '',
+                device_uuid: ''
 			},
             routerList: {},
             AddEditForm: {
@@ -190,23 +194,23 @@ export default {
                     { required: false }
                 ]
                 let currentData = this.AddEditForm
-                currentData['device_name'] = dataObj['name']
-                currentData['device_uuid'] = dataObj['router_uuid']
-                currentData['device_sn'] = dataObj['sn_number']
-                currentData['device_mac'] = dataObj['mac_address']
-                currentData['router_id'] = dataObj['router_id']
-                currentData['device_params'] = dataObj['device_attr_ext']
-                currentData['device_state'] = dataObj['state']
+				for (let attr in currentData) {
+                    currentData[attr] = dataObj[attr] || ''
+				}
             })
 		},
-		delRouter (id) {
+		delRouter (dataObj) {
             const obj  = this
+			let currentParam = {
+                router_id: dataObj.router_id,
+                device_uuid: dataObj.device_uuid
+            }
             this.$confirm('确定删除吗?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                obj.$store.dispatch('deleteRouter', {router_id: id}).then((result) => {
+                obj.$store.dispatch('deleteRouter', currentParam).then((result) => {
                     if (result.code === 0) {
                         obj.$message({
                             type: 'success',
