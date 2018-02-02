@@ -202,9 +202,11 @@ export default {
 		delRouter (dataObj) {
             const obj  = this
 			let currentParam = {
-                router_id: dataObj.router_id,
-                device_uuid: dataObj.device_uuid
-            }
+                router_list: [{
+                    router_id: dataObj.router_id,
+                    device_uuid: dataObj.device_uuid
+                }]
+			}
             this.$confirm('确定删除吗?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
