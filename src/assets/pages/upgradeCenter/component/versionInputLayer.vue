@@ -91,7 +91,7 @@
 			<el-upload
 					ref="uploadFile"
 					class="upload-demo"
-					action="http://iot-dev-upgrade-center.egtest.cn:7777/oss_file_upload"
+					:action="corsUrls"
 					:data="uploadObj"
 					:before-upload="beforeAvatarUpload"
 					:on-success="getUploadData"
@@ -107,7 +107,7 @@
 			<el-upload
 					ref="uploadFileImg"
 					class="upload-demo"
-					action="http://iot-dev-upgrade-center.egtest.cn:7777/oss_file_upload"
+					:action="corsUrls"
 					:before-upload="beforeAvatarUploadImg"
 					:on-success="getUploadDataImg"
 					:data="uploadObj"
@@ -134,6 +134,7 @@
 <script>
 import * as namespace from '../../../store/namespace';
 import { mapGetters, mapActions } from 'vuex';
+import getCorsUrl from '../../../lib/corsconfig'
 export default {
     props: ['brandIDOptions','type','typeIDOptions','productIDOptions','appIos',
 		'router','inputType','product','addEditFlag','editDataObj', 'releasedFlag', 'deviceProductId'],
@@ -229,7 +230,8 @@ export default {
                     { required: true, message: '请选择是否强制升级' }
                 ]
 			},
-            subsetProduct: []
+            subsetProduct: [],
+			corsUrls: getCorsUrl() + '/oss_file_upload'
 		}
 	},
 	watch: {

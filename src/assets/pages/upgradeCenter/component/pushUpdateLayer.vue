@@ -42,7 +42,7 @@
 					<el-upload
 							ref="uploadFile"
 							class="upload-demo"
-							action="http://iot-dev-upgrade-center.egtest.cn:7777/uuid_upload"
+							:action="corsUrls"
 							:data="uploadObj"
 							:before-upload="beforeAvatarUpload"
 							:on-success="getUploadData"
@@ -61,6 +61,7 @@
 </template>
 <script>
 import * as namespace from '../../../store/namespace';
+import getCorsUrl from '../../../lib/corsconfig'
 export default {
     props: ['type','inputType','pushDataObj'],
 	data () {
@@ -103,7 +104,8 @@ export default {
                         trigger: 'blur'
                     }
                 ]
-            }
+            },
+            corsUrls: getCorsUrl() + '/oss_file_upload'
 		}
 	},
 	watch: {},

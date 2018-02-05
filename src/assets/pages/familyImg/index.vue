@@ -38,14 +38,14 @@
 			</div>
 		</div>
 		<!--添加修改-->
-		<el-dialog :title="addEditFlag?'添加路由':'编辑路由'" :visible.sync="addEditLayer">
+		<el-dialog :title="addEditFlag?'添加图片':'编辑图片'" :visible.sync="addEditLayer">
 			<div class="edit_form">
 				<el-form :model="AddEditForm" :rules="rulesAddEdit" ref="AddEditForm" label-width="100px" >
 					<el-form-item label="上传图片">
 						<el-upload
 								ref="uploadFile"
 								class="upload-demo"
-								action="http://iot-dev-upgrade-center.egtest.cn:7777/oss_file_upload"
+								:action="corsUrls"
 								:data="uploadObj"
 								:before-upload="beforeAvatarUpload"
 								:on-success="getUploadData"
@@ -76,6 +76,7 @@ import { mapGetters, mapActions } from 'vuex'
 import '../../lib/util.js'
 import { Message } from 'element-ui'
 import Sortable  from 'sortablejs'
+import getCorsUrl from '../../lib/corsconfig'
 export default {
 	data () {
 	    return {
@@ -108,7 +109,8 @@ export default {
                     { required: true, message: '请上传图片' }
                 ]
             },
-            sortArr: []
+            sortArr: [],
+            corsUrls: getCorsUrl() + '/oss_file_upload'
 		}
 	},
     components:{

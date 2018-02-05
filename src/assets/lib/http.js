@@ -2,6 +2,8 @@ import axios from 'axios'
 import NProgress from 'nprogress'
 import '../../../node_modules/nprogress/nprogress.css'
 import { Message } from 'element-ui'
+import getCorsUrl from './corsconfig'
+
 
 const CODE = {
   SUCCEE: 200,
@@ -19,7 +21,7 @@ axios.interceptors.request.use(function (config) {
   if (!/\/api.php/.test(config.url)) {
       config.data['token'] = info.token || ''
   } else {
-      config.url = 'http://iot-dev-upgrade-center-tice.egtest.cn:9000' + config.url
+      config.url = getCorsUrl() + config.url
   }
 
   NProgress.start()
