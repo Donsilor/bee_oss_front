@@ -119,7 +119,7 @@
 				<el-button size="small" type="primary">点击上传</el-button>
 			</el-upload>
 		</el-form-item>
-		<el-form-item label="是否强制升级" prop="force" v-if="releasedFlag">
+		<el-form-item label="是否强制升级" prop="force">
 			<el-select style="width: 100%;" v-model="importForm.force" placeholder="请选择">
 				<el-option label="否" :value="0"></el-option>
 				<el-option label="是" :value="1"></el-option>
