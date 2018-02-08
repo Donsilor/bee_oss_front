@@ -160,24 +160,11 @@
 		<el-dialog
 				title="支持版本"
 				:visible.sync="supportLayer">
-			<div>
-				<ul v-if="routersTable" class="support-routers">
-					<li v-for="item in routersTableData">{{item}}</li>
-				</ul>
-				<el-table v-if="productsTable"
-						:data="productsTableData.tableData"
-						style="width: 100%">
-					<el-table-column v-for="item in productsTableData.tableColumn" :key="item.prop"
-									 :prop="item.prop"
-									 :label="item.label"
-									 :width="'auto'"
-					>
-						<template scope="scope">
-							<div>{{scope.row[item.prop]}}</div>
-						</template>
-					</el-table-column>
-				</el-table>
-			</div>
+			<version-mapping
+					ref="supportLayer"
+					:inputType="inputType"
+			>
+			</version-mapping>
 			<span slot="footer" class="dialog-footer">
                <el-button @click="supportLayer = false" style="border:none;">取 消</el-button>
             </span>
@@ -199,6 +186,7 @@ import version_edit from './component/versionEdit.vue'
 import version_detail from './component/versionDetail.vue'
 import operate_log from './component/operateLogs.vue'
 import filter_form from './component/filterLayer.vue'
+import version_mapping from './component/versionMapping.vue'
 export default {
     components: {
         'version-input': version_input,
@@ -207,20 +195,11 @@ export default {
         'version_detail': version_detail,
 		'operate_log': operate_log,
         'filter-form': filter_form,
+		'version-mapping' : version_mapping
 	},
 	data () {
 		return {
             supportLayer: false,
-            productsTable: false,
-            routersTable: false,
-            routersTableData: [],
-            productsTableData: {
-                "tableColumn":[
-                    {"prop": "product_id", "label": "产品id"},
-                    {"prop": "version", "label": "版本号"}
-                ],
-                "tableData":[]
-			},
             firstTableShow: true,
             childTableHeaderShow: false,
             pushBoxFlag: false,
@@ -296,7 +275,8 @@ export default {
             addEditFlag: true,
             editDataObj: {},
             releasedFlag: false, //已发布/未发布标识 || 版本编辑，已发布版本只能编辑几个字段
-            deviceProductId: ''
+            deviceProductId: '',
+            mappingData: {} //各设备对应映射关系
 		}
 	},
 	filters: {
@@ -352,33 +332,9 @@ export default {
 	methods: {
         openSupportLayer (dataObj) {
             this.supportLayer = true
-            let param = {
-                type: dataObj.type,
-                version: dataObj.version,
-                product_id: dataObj.product_id,
-                method: 'version_detail'
-            }
-            let obj = this
-            obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
-                let datas = result.result
-				switch (this.inputType) {
-					case 1:
-					case 3:
-					case 4:
-                        obj.routersTable = true
-                        obj.productsTable = false
-                        obj.routersTableData = datas.routers || []
-					    break
-					case 2:
-					case 5:
-                        obj.routersTable = false
-                        obj.productsTable = true
-                        obj.productsTableData.tableData = datas.products || []
-					    break
-					default:
-					    break
-				}
-            })
+            this.$nextTick(() => {
+                this.$refs['supportLayer'].renderData(dataObj)
+			})
 		},
         openFilterFormLayer () {
             this.filterPopoverFlag=true
@@ -581,9 +537,12 @@ export default {
             params.release_time = params.release_time && params.release_time.Format('yyyy-MM-dd hh:mm:ss')
             delete params.brand_id
             delete params.type_id
-            if (currentType === 1 || currentType === 4) {
+            if (currentType === 1 || currentType === 6 || currentType === 4) {
                 params.routers = params.routersList
-				params.os_type = currentType === 1 ? 'android' : 'ios'
+				params.os_type = (currentType === 1) ?
+					'android' : (currentType === 6) ?
+					'Android_Pad' :
+					'ios'
 				params.method = this.addEditFlag ? 'create_app_version' : 'update_app_version'
                 delete params.product_id
             } else if (currentType === 3) {
@@ -686,9 +645,9 @@ export default {
                     if(!(obj.versionsFirst.tableData && obj.versionsFirst.tableData.length)) {
                         obj.setFirstVersionList(currentData)
                     }
-                    versions_device_h5_json.tableData = currentData.other_version.data ?
-						currentData.other_version.data.items : []
-                    obj.totalItem = currentData.other_version.data.page.total
+                    versions_device_h5_json.tableData = currentData.other.data ?
+						currentData.other.data.items : []
+                    obj.totalItem = currentData.other.data.page.total
 				}
             })
 		},
@@ -696,7 +655,7 @@ export default {
         setFirstVersionList (dataObj) {
             this.versionsFirst.tableData = []
 		    for (let attr in dataObj) {
-		        if(attr !== 'other_version') {
+		        if(attr !== 'other') {
                     this.versionsFirst.tableData.push(dataObj[attr])
 				}
 			}
@@ -705,8 +664,11 @@ export default {
 		    let text = ''
 		    switch(type) {
 				case 1:
-				    text = 'app'
+				    text = 'Android app'
 					break
+                case 6:
+                    text = 'Android PAD'
+                    break
                 case 2:
                     text = '路由器'
                     break

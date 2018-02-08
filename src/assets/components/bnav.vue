@@ -281,7 +281,7 @@ export default {
 		color: #fff;
 		background: #3b3b53;
 	}
-	height: 100vh;
+	min-height: 100vh;
 	background: #2B2B37;
 
 	li{

@@ -9,7 +9,7 @@
 				<el-radio :label="0">否</el-radio>
 			</el-radio-group>
 		</el-form-item>
-		<el-form-item label="子设备" prop="product_id" v-if="inputType !== 1  && inputType !== 4 && !releasedFlag">
+		<el-form-item label="子设备" prop="product_id" v-if="inputType !== 1  && inputType !== 6  && inputType !== 4 && !releasedFlag">
 			<el-row>
 				<el-col :span="8">
 					<el-select v-model="importForm.brand_id" placeholder="品牌">
