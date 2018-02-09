@@ -1,14 +1,16 @@
 <template>
-	<div>
-		<div class="title">
-			<span class="label-name">{{getTypeName(currentDataObj.type)}}版本图</span>当前版本：{{currentDataObj.version}}
+	<div class="versions-mapping">
+		<div class="title m-b-20">
+			<span class="label-name">{{getTypeName(currentDataObj.type)}}版本图</span><span style="color: #999">当前版本：</span>{{currentDataObj.version}}
 		</div>
+		<!--111111-->
+		<!--111111-->
 		<!--111111-->
 		<div class="version-list-line" v-if="inputType === 1 || inputType === 4 || inputType === 6">
 			<span class="label-name">适配路由器版本:</span>
 			<span class="version-list" v-for="item in currenData.router">{{item}}</span>
 		</div>
-		<div v-if="inputType === 2">
+		<div v-if="inputType === 2" class="m-b-20">
 			<div>
 				<span class="label-name">android app版本：</span>
 				<span class="version-list" v-for="item in currenData.android">{{item}}</span>
@@ -19,11 +21,13 @@
 			</div>
 			<div>
 				<span class="label-name">android pad版本：</span>
-				<span class="version-list" v-for="item in currenData.androidPad">{{item}}</span>
+				<span class="version-list" v-for="item in currenData.android_pad">{{item}}</span>
 			</div>
 		</div>
 		<!--2222222-->
-		<div v-for="item in currenData.device"  v-if="inputType === 1 || inputType === 2 || inputType === 4 || inputType === 6">
+		<!--2222222-->
+		<!--2222222-->
+		<div class="m-b-20" v-for="item in currenData.device"  v-if="inputType === 1 || inputType === 2 || inputType === 4 || inputType === 6">
 			<div class="title">
 				<span class="label-name">子设备</span>{{item.product_id}}
 			</div>
@@ -32,6 +36,45 @@
 			</div>
 			<div class="version-list-line">
 				<span class="label-name">适配H5版本号: </span><span class="version-list" v-for="inner in item.h5">{{inner}}</span>
+			</div>
+		</div>
+		<div v-if="inputType === 3">
+			<div class="m-b-20">
+				<div><span class="label-name">适配路由：</span></div>
+				<div v-for="item in currenData.router">
+					<div class="version-list-line">
+						<span class="label-name">适配路由器版本号: </span>{{item.version}}
+					</div>
+					<div class="version-list-line">
+						<span class="label-name">android app: </span><span class="version-list" v-for="inner in item.andorid">{{inner}}</span>
+					</div>
+					<div class="version-list-line">
+						<span class="label-name">android pad: </span><span class="version-list" v-for="inner in item.andorid_pad">{{inner}}</span>
+					</div>
+					<div class="version-list-line">
+						<span class="label-name">ios app: </span><span class="version-list" v-for="inner in item.ios">{{inner}}</span>
+					</div>
+				</div>
+			</div>
+			<div class="version-list-line">
+				<span class="label-name">适配H5版本号: </span><span class="version-list" v-for="inner in currenData.h5">{{inner}}</span>
+			</div>
+		</div>
+		<div v-for="item in currenData.device"  v-if="inputType === 5">
+			<div class="title">
+				<span class="label-name">版本</span>{{item.version}}
+			</div>
+			<div class="version-list-line">
+				<span class="label-name">适配路由器版本号: </span>{{item.router.version}}
+			</div>
+			<div class="version-list-line">
+				<span class="label-name">android app: </span><span class="version-list" v-for="inner in item.router.andorid">{{inner}}</span>
+			</div>
+			<div class="version-list-line">
+				<span class="label-name">android pad: </span><span class="version-list" v-for="inner in item.router.andorid_pad">{{inner}}</span>
+			</div>
+			<div class="version-list-line">
+				<span class="label-name">ios app: </span><span class="version-list" v-for="inner in item.router.ios">{{inner}}</span>
 			</div>
 		</div>
 	</div>
@@ -87,8 +130,7 @@ export default {
                     break
             }
             obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
-
-
+                obj.currenData = result.result
             })
 
 		},
@@ -125,10 +167,22 @@ export default {
 }
 </script>
 <style lang="less">
-	.version-list{
-		padding: 5px 10px;
-		background: #f00;
-		color: #fff;
-		margin-right: 20px;
+	.versions-mapping{
+		line-height: 35px;
+		.version-list{
+			padding: 5px 10px;
+			background: #f00;
+			color: #fff;
+			margin-right: 20px;
+		}
+		.label-name{
+			display: inline-block;
+			width: 180px;
+			color: #999;
+		}
+		.m-b-20{
+			margin-bottom: 20px;
+		}
 	}
+
 </style>
