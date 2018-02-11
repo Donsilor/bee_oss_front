@@ -171,7 +171,7 @@ export default {
 		line-height: 35px;
 		.version-list{
 			padding: 5px 10px;
-			background: #f00;
+			background: #4db3ff;
 			color: #fff;
 			margin-right: 20px;
 		}
