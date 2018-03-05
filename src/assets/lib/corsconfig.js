@@ -6,7 +6,7 @@ export default  () => {
     const curUrl = window.location.href
     if (/beeossdev/.test(curUrl) || /localhost/.test(curUrl)) {
         return dev_url
-    } else if (/iot-dev-upgrade-center-hardware/.test(curUrl)) {
+    } else if (/hardtest-oss.evergrande.me/.test(curUrl)) {
         return hardware_url
     }else {
         return bees_url
