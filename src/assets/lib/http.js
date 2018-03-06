@@ -59,7 +59,7 @@ axios.interceptors.response.use(function (response) {
         window.location.hash = '/'
       } else {
         Message({
-          message: response.data.msg,
+          message: response.data.msg || response.data.message,
           type: 'error'
         })
       }

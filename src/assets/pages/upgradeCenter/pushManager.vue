@@ -157,8 +157,11 @@ export default {
                 case 4:
                     text = 'IOS APP'
                     break
+				case 5:
+				    text = 'H5'
+					break
                 default:
-                    text = 'H5'
+                    text = 'Android_Pad'
                     break
 			}
 			return text

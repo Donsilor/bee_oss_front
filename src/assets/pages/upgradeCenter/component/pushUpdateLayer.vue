@@ -105,7 +105,7 @@ export default {
                     }
                 ]
             },
-            corsUrls: getCorsUrl() + '/oss_file_upload'
+            corsUrls: getCorsUrl() + '/uuid_upload'
 		}
 	},
 	watch: {},
