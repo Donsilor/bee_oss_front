@@ -54,7 +54,7 @@
 			</div>
 		</el-dialog>
 		<!--查看名单-->
-		<el-dialog :title="'推送名单('+(currentPushData.is_black ? '黑名单' : '白名单')+ ')'" :visible.sync="pushNameListFlag">
+		<el-dialog title="推送名单" :visible.sync="pushNameListFlag">
 			<div class="edit_form">
 				<el-table
 						:data="pushNameList.tableData"
