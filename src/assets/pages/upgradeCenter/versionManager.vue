@@ -73,7 +73,7 @@
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="getOperateLog(scope.row)">操作日志</el-button>
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="rollBackVersion(scope.row)">回滚</el-button>
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="deleteVersion(scope.row)">删除</el-button>
-						<el-button v-if="firstTableShow" type="text" size="small" @click="getVersionHistory(scope.row)">历史版本</el-button>
+						<el-button v-if="firstTableShow" type="text" size="small" @click="getVersionHistory(scope.row)">查看版本列表</el-button>
 					</template>
 				</el-table-column>
 			</el-table>

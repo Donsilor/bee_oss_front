@@ -139,9 +139,16 @@ export default {
 					]
                 },
                 {
-                    title: '家庭背景图',
-                    path: '/main/familyImgList',
-                    icon: 'facility'
+                    title: '配置管理',
+                    path: 'pzgl',
+                    icon: 'cloud',
+                    children: [
+						{
+                            title: '家庭背景图',
+                            path: '/main/familyImgList',
+                            icon: 'facility'
+						}
+                    ]
                 }
 			],
 			navs: [
