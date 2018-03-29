@@ -38,7 +38,7 @@
 						width="180"
 						label="操作">
 					<template scope="scope">
-						<el-button  type="text" size="small" @click="getVersionHistory(scope.row)">查看版本列表</el-button>
+						<el-button  type="text" size="small" @click="getVersionHistory(scope.row,1)">查看版本列表</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -73,13 +73,16 @@
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="getOperateLog(scope.row)">操作日志</el-button>
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="rollBackVersion(scope.row)">回滚</el-button>
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="deleteVersion(scope.row)">删除</el-button>
-						<el-button v-if="firstTableShow" type="text" size="small" @click="getVersionHistory(scope.row)">查看版本列表</el-button>
+						<el-button v-if="firstTableShow" type="text" size="small" @click="getVersionHistory(scope.row,1)">查看版本列表</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
 			<!--子设备翻页-->
-			<div class="page-line">
+			<div class="page-line" v-show="firstTableShow">
 				<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="10" :current-page.sync="currentPage"></el-pagination>
+			</div>
+			<div class="page-line" v-show="!firstTableShow">
+				<el-pagination small layout="prev, pager, next" :total="totalItem_two" @current-change="pageChange_two" :page-size="10" :current-page.sync="currentPage_two"></el-pagination>
 			</div>
 		</div>
 		<!--版本匹配搜索-->
@@ -208,7 +211,9 @@ export default {
 			filterPopoverFlag: false,
 			infoBoxFlag: false,
 			totalItem: 0,
+            totalItem_two: 0,
 			currentPage: 1,
+            currentPage_two: 1,
 			filterTypeOptions: [
 				{
 					value: 2,
@@ -395,7 +400,7 @@ export default {
                             type: 'success',
                             message: '操作成功!'
                         });
-                        obj.getVersionHistory(obj.currentDataObj)
+                        obj.getVersionHistory(obj.currentDataObj,1)
 					}
                 })
             })
@@ -437,7 +442,7 @@ export default {
                             type: 'success',
                             message: '删除成功!'
                         });
-                        obj.getVersionHistory(obj.currentDataObj)
+                        obj.getVersionHistory(obj.currentDataObj,1)
                     }
                 })
             })
@@ -463,7 +468,7 @@ export default {
                             type: 'success',
                             message: '回滚成功!'
                         });
-                        obj.getVersionHistory(obj.currentDataObj)
+                        obj.getVersionHistory(obj.currentDataObj,1)
                     }
                 })
             })
@@ -615,6 +620,9 @@ export default {
 		pageChange () {
 			this.getVersionList(this.currentPage)
 		},
+        pageChange_two () {
+            this.getVersionHistory(this.currentDataObj,this.currentPage_two)
+        },
 		// 版本匹配搜索
         filterVersions (params) {
             let obj = this
@@ -634,20 +642,22 @@ export default {
 		getVersionList(page) {
 			// this.filterParams.token = this.token
 			this.listParams.page = page
-			this.versionsFirst = version_first_json
-            this.versionList = versions_device_h5_json
+			this.versionsFirst = Object.assign({}, version_first_json)
+            this.versionList = Object.assign({}, versions_device_h5_json)
 			const obj  = this
             obj.$store.dispatch('getVersions', obj.listParams).then((result) => {
                 if (result.code === 0) {
                     obj.firstTableShow = true
                     obj.childTableHeaderShow = false
-                    let currentData = result.result
-                    if(!(obj.versionsFirst.tableData && obj.versionsFirst.tableData.length)) {
-                        obj.setFirstVersionList(currentData)
-                    }
-                    versions_device_h5_json.tableData = currentData.other.data ?
-						currentData.other.data.items : []
-                    obj.totalItem = currentData.other.data.page.total
+					obj.$nextTick(() => {
+                        let currentData = result.result
+                        if(!(obj.versionsFirst.tableData && obj.versionsFirst.tableData.length)) {
+                            obj.setFirstVersionList(currentData)
+                        }
+                        obj.versionList.tableData = currentData.other.data ?
+                            currentData.other.data.items : []
+                        obj.totalItem = currentData.other.data.page.total
+					})
 				}
             })
 		},
@@ -742,9 +752,10 @@ export default {
 		},
         // 历史版本
         getVersionHistoryList(page, type, product_id) {
-            this.listParams.page = page
+            // this.listParams.page = page
 			let param = {
                 page: page,
+                limit: 10,
                 level: 2,
                 type: type,
 				product_id: product_id || ''
@@ -756,17 +767,18 @@ export default {
                     obj.firstTableShow = false
                     obj.childTableHeaderShow = true
                     versions_children_json.tableData = currentData.items
-                    obj.versionList = versions_children_json
-                    obj.totalItem = currentData.page.total
+                    obj.versionList = Object.assign({
+                    }, versions_children_json)
+                    obj.totalItem_two = currentData.page.total
 				}
             })
         },
-        getVersionHistory (dataObj) {
+        getVersionHistory (dataObj,page) {
             this.currentDataObj = dataObj  //此操作是为了进入列表，进行各种操作时需要重新刷新列表
 			this.deviceProductId = dataObj.product_id || ''
             this.inputType = dataObj.type
             this.secondTitle = this.getVersionTitle(dataObj)
-            this.getVersionHistoryList(1, dataObj.type, dataObj.product_id)
+            this.getVersionHistoryList(page, dataObj.type, dataObj.product_id)
 		},
 		getVersionTitle(dataObj) {
             let title = ''
