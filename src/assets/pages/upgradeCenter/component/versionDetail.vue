@@ -16,7 +16,7 @@
 			<el-row>
 				<el-col :span="12">
 					<el-form-item label="概略描述" prop="description">
-						<div>{{ruleFormDetail.description}}</div>
+						<div>{{ruleFormDetail.note}}</div>
 					</el-form-item>
 				</el-col>
 				<el-col :span="12">
@@ -60,7 +60,7 @@
 				</el-col>
 				<el-col :span="12">
 					<el-form-item label="发布时间" prop="release_tm">
-						<div>{{ruleFormDetail.release_tm}}</div>
+						<div>{{ruleFormDetail.release_time}}</div>
 					</el-form-item>
 				</el-col>
 			</el-row>
