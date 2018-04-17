@@ -67,10 +67,10 @@
 			<el-input type="text" v-model="importForm.version" />
 		</el-form-item>
 		<el-form-item label="概要描述" prop="description">
-			<el-input type="text" v-model="importForm.description" />
+			<el-input type="text" v-model="importForm.note" />
 		</el-form-item>
 		<el-form-item label="详细事项" prop="note">
-			<el-input type="text" v-model="importForm.note" />
+			<el-input type="text" v-model="importForm.description" />
 		</el-form-item>
 		<el-form-item label="备注" prop="extra_note">
 			<el-input type="text" v-model="importForm.extra_note" />
