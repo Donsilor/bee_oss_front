@@ -177,7 +177,29 @@ export default {
             const obj = this
             obj.$refs[formName].validate((valid) => {
                 if (valid) {
-                    obj.$emit('pushUpdateParent',obj.pushForm)
+                    let params = Object.assign({}, obj.pushForm);
+                    if (!params.terminal_type) {
+                        params.uuid_list = params.uuid_csv || []
+                    } else {
+                        params.uuid_list = params.uuid_list.split(',') || []
+                    }
+                    params.version = this.pushDataObj.version
+                    params.product_id = this.pushDataObj.product_id
+                    params.type = this.inputType
+                    params.user_id = this.pushDataObj.user_id
+                    params.os_type = this.pushDataObj.os_type || ''
+                    params.router_pid = this.pushDataObj.router_pid || ''
+
+                    if (params.push_type === 0) {
+                        delete params.is_black
+                    }
+                    if (!params.push_type) {
+                        params.is_black = 0
+                        params.uuid_list = []
+                    }
+                    delete params.uuid_csv
+                    delete params.terminal_type
+                    obj.$emit('pushUpdateParent',params)
                 } else {
                     return false
                 }

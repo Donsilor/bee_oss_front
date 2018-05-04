@@ -3,13 +3,29 @@
 		<el-form-item label="版本title" prop="title">
 			<el-input type="text" v-model="importForm.title" />
 		</el-form-item>
+		<el-form-item label="路由器pid" prop="router_pid" v-if="inputType === 2 && addEditFlag">
+			<el-input type="text" v-model="importForm.router_pid" />
+		</el-form-item>
 		<el-form-item label="是否限制规则"  v-if="!releasedFlag">
 			<el-radio-group v-model="importForm.selectRule" @change="ruleChange">
 				<el-radio :label="1">是</el-radio>
 				<el-radio :label="0">否</el-radio>
 			</el-radio-group>
 		</el-form-item>
-		<el-form-item label="子设备" prop="product_id" v-if="inputType !== 1  && inputType !== 6  && inputType !== 4 && !releasedFlag">
+		<el-form-item label="product_id" prop="product_id" v-if="(inputType === 3 || inputType === 5)  && addEditFlag">
+			<el-input type="text" v-model="importForm.product_id" />
+		</el-form-item>
+		<el-form-item label="路由pid" v-if="inputType !== 2  && !releasedFlag && importForm.selectRule">
+			<el-select style="width: 100%;" v-model="importForm.router_pid" placeholder="路由pid" @change="routerPidChange">
+				<el-option
+						v-for="item in routerPidList"
+						:key="item.value"
+						:label="item.label"
+						:value="item.value">
+				</el-option>
+			</el-select>
+		</el-form-item>
+		<el-form-item label="子设备" prop="product_id" v-if="inputType === 2 && !releasedFlag">
 			<el-row>
 				<el-col :span="8">
 					<el-select v-model="importForm.brand_id" placeholder="品牌">
@@ -43,7 +59,7 @@
 				</el-col>
 			</el-row>
 		</el-form-item>
-		<el-form-item label="支持版本" prop="productsList" v-if="(inputType === 2  || inputType === 5) && !releasedFlag && importForm.selectRule">
+		<el-form-item label="支持版本" prop="productsList" v-if="inputType === 2  && !releasedFlag && importForm.selectRule">
 			<el-select style="width: 100%;" multiple v-model="importForm.productsList" placeholder="子设备">
 				<el-option
 						v-for="item in subsetProduct"
@@ -53,7 +69,7 @@
 				</el-option>
 			</el-select>
 		</el-form-item>
-		<el-form-item label="支持路由" prop="routersList" v-if="inputType !== 2 && inputType !== 5 && !releasedFlag && importForm.selectRule">
+		<el-form-item label="支持路由" prop="routersList" v-if="inputType !== 2  && !releasedFlag && importForm.selectRule">
 			<el-select style="width: 100%;" multiple v-model="importForm.routersList" placeholder="路由">
 				<el-option
 						v-for="item in router"
@@ -66,23 +82,23 @@
 		<el-form-item label="版本号" prop="version" v-if="!releasedFlag">
 			<el-input type="text" v-model="importForm.version" />
 		</el-form-item>
-		<el-form-item label="概要描述" prop="description">
+		<el-form-item label="概要描述" prop="note">
 			<el-input type="text" v-model="importForm.note" />
 		</el-form-item>
-		<el-form-item label="详细事项" prop="note">
+		<el-form-item label="详细事项" prop="description">
 			<el-input type="text" v-model="importForm.description" />
 		</el-form-item>
 		<el-form-item label="备注" prop="extra_note">
 			<el-input type="text" v-model="importForm.extra_note" />
 		</el-form-item>
-		<el-form-item label="发布时间" prop="release_time" v-if="!releasedFlag">
-			<el-date-picker
-					v-model="importForm.release_time"
-					type="date"
-					format="yyyy-MM-dd"
-					placeholder="选择日期">
-			</el-date-picker>
-		</el-form-item>
+		<!--<el-form-item label="发布时间" prop="release_time" v-if="!releasedFlag">-->
+			<!--<el-date-picker-->
+					<!--v-model="importForm.release_time"-->
+					<!--type="date"-->
+					<!--format="yyyy-MM-dd"-->
+					<!--placeholder="选择日期">-->
+			<!--</el-date-picker>-->
+		<!--</el-form-item>-->
 		<el-form-item label="appstore链接" prop="download_url_object" v-if="inputType === 4 && !releasedFlag">
 			<el-input type="text" v-model="importForm.download_url_object" />
 		</el-form-item>
@@ -136,8 +152,8 @@ import * as namespace from '../../../store/namespace';
 import { mapGetters, mapActions } from 'vuex';
 import getCorsUrl from '../../../lib/corsconfig'
 export default {
-    props: ['brandIDOptions','type','typeIDOptions','productIDOptions','appIos',
-		'router','inputType','product','addEditFlag','editDataObj', 'releasedFlag', 'deviceProductId'],
+    props: ['brandIDOptions','type','typeIDOptions','productIDOptions','routerPidList',
+		'inputType','product','addEditFlag','editDataObj', 'releasedFlag', 'deviceProductId','os_type'],
 	data () {
 		return {
             brandIDOptionsChild: this.brandIDOptions,
@@ -173,10 +189,11 @@ export default {
             fileListObj: [],
             fileListImg: [],
             importForm: {
+                router_pid: '',
                 method: '',
                 title: '',
                 version: '',
-                release_time: '',
+                //release_time: '',
                 routersList: [],
                 productsList: [],
                 download_url_object: '',
@@ -193,6 +210,9 @@ export default {
                 selectRule: 1
             },
             rulesImport: {
+                router_pid:  [
+                    { required: true, message: '请输入路由器product_id' }
+                ],
 				version: [
                     { required: true, message: '请输入版本号' }
                 ],
@@ -209,11 +229,11 @@ export default {
                     { required: false, message: '请输入详细事项' }
                 ],
                 product_id: [
-                    { required: false, message: '请输入子设备' }
+                    { required: true, message: '请输入子设备' }
                 ],
-                release_time: [
-                    { required: true, message: '请选择发布时间' }
-                ],
+//                release_time: [
+//                    { required: true, message: '请选择发布时间' }
+//                ],
                 routersList: [
                     { required: true, message: '请选择支持版本' }
                 ],
@@ -231,6 +251,8 @@ export default {
                 ]
 			},
             subsetProduct: [],
+            router: [],
+            router_pid: '',
 			corsUrls: getCorsUrl() + '/oss_file_upload'
 		}
 	},
@@ -290,47 +312,55 @@ export default {
 				size: '',
                 download_url_object: ''
             }
+            if (this.inputType === 2) {
+                attrObj['router_pid'] = ''
+            }
+            if (this.inputType === 3 || this.inputType === 5) {
+                attrObj['product_id'] = ''
+			}
             let thisForm = this.importForm
             for (let attr in attrObj) {
-                thisForm[attr] = this.editDataObj[attr]
+                let value = this.editDataObj[attr]
+                thisForm[attr] = (value || value === 0) ? value : ''
             }
-            thisForm['release_time'] = new Date(this.editDataObj['release_time']*1000)
+            // thisForm['release_time'] = new Date(this.editDataObj['release_time']*1000)
             let imgName = this.editDataObj['img_url_object']
             this.fileListImg = [{name: imgName, url: imgName}]
             if (this.inputType !== 4) {
                 let objName = this.editDataObj['download_url_object']
                 this.fileListObj = [{name: objName, url: objName}]
 			}
-
-			if (this.inputType === 2 || this.inputType === 5) {
-                let currentProducts = this.editDataObj['products']
-                if (currentProducts.length ===1 && currentProducts[0].version === '*') {
+			if (this.inputType === 2) {
+                let currentProducts = this.editDataObj['rules']
+                if (currentProducts.length ===1 && currentProducts[0].rule === '*') {
                     thisForm['selectRule'] = 0
 				} else {
                     currentProducts.forEach((item) => {
-                        thisForm['productsList'].push(item.version + '--' + item.product_id)
+                        thisForm['productsList'].push(item.rule + '--' + item.product_id)
 					})
 				}
 			} else {
-                let currentRouters = this.editDataObj['routers']
-				if (currentRouters.length === 1 && currentRouters[0] === '*') {
+                let currentRouters = this.editDataObj['rules']
+				if (currentRouters.length === 1 && currentRouters[0].rule === '*') {
                     thisForm['selectRule'] = 0
 				} else {
-                    thisForm['routersList'] = currentRouters
+                    currentRouters.forEach((item) => {
+                        thisForm['routersList'].push(item.rule + '--' + item.router_pid)
+                    })
 				}
 			}
 
 		},
         resetImportForm () {
-            if (this.inputType === 3) {
-                this.rulesImport.product_id = [
-                    { required: true, message: '请输入子设备' }
-                ]
-			} else {
-                this.rulesImport.product_id = [
-                    { required: false, message: '请输入子设备' }
-                ]
-			}
+//            if (this.inputType === 2) {
+//                this.rulesImport.product_id = [
+//                    { required: false, message: '请输入子设备' }
+//                ]
+//			} else {
+//                this.rulesImport.product_id = [
+//                    { required: true, message: '请输入子设备' }
+//                ]
+//			}
             this.$refs['importForm'].resetFields()
 			if (this.inputType !== 4 && !this.releasedFlag) {
                 this.$refs['uploadFile'].clearFiles()
@@ -351,7 +381,7 @@ export default {
                         break
                     case 'product_id':
                         if (this.inputType === 3) {
-                            form[attr] = this.deviceProductId
+                            // form[attr] = this.deviceProductId
 						} else {
                             form[attr] = ''
 						}
@@ -403,17 +433,90 @@ export default {
 //                ]
 //			}
         },
+		//录入
         importSubmitForm (formName) {
             const obj = this
             obj.$refs[formName].validate((valid) => {
                 if (valid) {
                     if (!obj.importForm['selectRule']) {
-                        obj.importForm['routersList'] = ['*']
-                        obj.importForm['productsList'] = [{product_id: "", version: "*"}]
+                        obj.importForm['routersList'] = [{router_pid: "", rule: "*"}]
+                        obj.importForm['productsList'] = [{product_id: "", rule: "*"}]
+                    }
+                    let params = Object.assign({
+                        // token: this.token
+                    }, obj.importForm);
+                    let currentType = obj.inputType
+                    // params.release_time = params.release_time && params.release_time.Format('yyyy-MM-dd hh:mm:ss')
+                    delete params.brand_id
+                    delete params.type_id
+
+                    let attrName = currentType === 2 ? 'product_id' : 'router_pid'
+                    let ruleName = currentType === 2 ? 'productsList' : 'routersList'
+                    if (params.selectRule) {
+                        params.rules = params[ruleName].map((item) => {
+                            let arr = item.split('--')
+                            return {
+                                [attrName]: arr[0],
+                                rule: arr[1]
+                            }
+                        })
+                    } else {
+                        params.rules = params[ruleName]
+                    }
+                    switch (currentType) {
+						case 1:
+                            params.os_type = this.os_type
+                            params.method = this.addEditFlag ? 'create_app_version' : 'update_app_version'
+							break
+                        case 2:
+                            params.method = this.addEditFlag ? 'create_router_version' : 'update_router_version'
+                            break
+                        case 3:
+                            params.method = this.addEditFlag ? 'create_device_version' : 'update_device_version'
+                            break
+                        case 5:
+                            params.os_type = this.os_type
+                            params.method = this.addEditFlag ? 'create_h5_version' : 'update_h5_version'
+                            break
+                        case 7:
+                            params.method = this.addEditFlag ? 'create_android_system_version' : 'update_android_system_version'
+                            break
+                        default:
+                            break
 					}
-                    obj.$emit('importSubmitParent',obj.importForm)
+
+                    if (currentType !== 3 && currentType !== 5) {
+                        delete params.product_id
+                    }
+                    if (currentType !== 2) {
+                        delete params.router_pid
+                    }
+                    delete params.productsList
+                    delete params.routersList
+                    delete params.selectRule
+
+                    obj.$emit('importSubmitParent',params)
                 } else {
                     return false
+                }
+            })
+		},
+        routerPidChange(val) {
+            let param = {
+                method: 'released_versions',
+                router_pid: val,
+                type: 2
+            }
+            const obj  = this
+            obj.$store.dispatch('getChoseList', param).then((result) => {
+                if (result.code === 0) {
+                    obj.router = result.result.map(x => {
+                        return {
+                            label: x.title,
+                            value: `${x.router_pid}--${x.version}`,
+                            product_id: x.product_id
+                        }
+                    })
                 }
             })
 		},
@@ -421,15 +524,13 @@ export default {
             console.log(file, fileList);
         },
         handlePreview(file) {
-            console.log(file);
         },
         handleRemoveImg(file, fileList) {
-            console.log(file, fileList);
         },
         handlePreviewImg(file) {
-            console.log(file);
         },
         getUploadData (val) {
+            debugger
 		    let data = val.result
 		    this.importForm.download_url_object = data.object
             this.importForm.download_file_md5 = data.md5

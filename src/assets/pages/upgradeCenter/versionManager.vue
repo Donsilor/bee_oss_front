@@ -18,7 +18,7 @@
 		<div>
 			<!--固定版本列表-->
 			<el-table
-					v-if="firstTableShow"
+					v-show="firstTableShow"
 					:data="versionsFirst.tableData"
 					style="width: 100%">
 				<el-table-column v-for="item in versionsFirst.tableColumn" :key="item.prop"
@@ -27,7 +27,7 @@
 								 :width="'auto'"
 				>
 					<template scope="scope">
-						<div v-if="item.prop === 'type'" >{{getTypeText(scope.row.type)}}</div>
+						<div v-if="item.prop === 'type'" >{{getTypeText(scope.row.type, scope.row.os_type)+getPidName(scope.row)}}</div>
 						<div v-else-if="item.prop === 'status'" >{{getStatusText(scope.row.status)}}</div>
 						<div v-else-if="item.prop === 'force'" >{{getForceText(scope.row.force)}}</div>
 						<div v-else-if="item.prop === 'release_time'" >{{formatTime(scope.row['release_time'])}}</div>
@@ -44,7 +44,7 @@
 			</el-table>
 			<!--子设备列表-->
 			<el-table
-					:show-header="childTableHeaderShow"
+					v-if="!firstTableShow"
 					:data="versionList.tableData"
 					style="width: 100%; border-top:0 none">
 				<el-table-column v-for="item in versionList.tableColumn" :key="item.prop"
@@ -53,7 +53,7 @@
 								 :width="'auto'"
 				>
 					<template scope="scope">
-						<div v-if="item.prop == 'type'" >{{getTypeText(scope.row.type)}}</div>
+						<div v-if="item.prop == 'type'" >{{getTypeText(scope.row.type, scope.row.os_type)}}</div>
 						<div v-else-if="item.prop == 'status'" >{{getStatusText(scope.row.status)}}</div>
 						<div v-else-if="item.prop == 'force'" >{{getForceText(scope.row.force)}}</div>
 						<div v-else-if="item.prop == 'is_pre_release'" >{{getPreReleaseText(scope.row.is_pre_release)}}</div>
@@ -77,10 +77,6 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<!--子设备翻页-->
-			<div class="page-line" v-show="firstTableShow">
-				<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="10" :current-page.sync="currentPage"></el-pagination>
-			</div>
 			<div class="page-line" v-show="!firstTableShow">
 				<el-pagination small layout="prev, pager, next" :total="totalItem_two" @current-change="pageChange_two" :page-size="10" :current-page.sync="currentPage_two"></el-pagination>
 			</div>
@@ -127,12 +123,12 @@
 					:inputType="inputType"
 					:product="product"
 					:type="type"
-					:appIos="appIos"
-					:router="router"
+					:os_type="os_type"
 					:addEditFlag="addEditFlag"
 					:editDataObj="editDataObj"
 					:releasedFlag="releasedFlag"
 					:deviceProductId="deviceProductId"
+					:routerPidList="routerPidList"
 			>
 			</version-input>
 		</el-dialog>
@@ -204,7 +200,6 @@ export default {
 		return {
             supportLayer: false,
             firstTableShow: true,
-            childTableHeaderShow: false,
             pushBoxFlag: false,
 			info: {},
 			importBoxFlag: false,
@@ -283,7 +278,15 @@ export default {
             editDataObj: {},
             releasedFlag: false, //已发布/未发布标识 || 版本编辑，已发布版本只能编辑几个字段
             deviceProductId: '',
-            mappingData: {} //各设备对应映射关系
+            mappingData: {}, //各设备对应映射关系
+			router: [],
+            os_type: '',
+            routerPidList: [],
+			os_type_text: {
+                1: 'android_app',
+				4: 'ios_app',
+				6: 'android_pad'
+			}
 		}
 	},
 	filters: {
@@ -361,11 +364,31 @@ export default {
         openVersionEdit (dataObj) {
             this.initBrandIDOptions()
             this.filterPopoverFlag = false
+			let cur_os_type = ''
+			if (dataObj.os_type) {
+                switch (dataObj.os_type) {
+					case 1:
+                        cur_os_type = 'android_app'
+					    break
+                    case 4:
+                        cur_os_type = 'ios_app'
+                        break
+                    case 6:
+                        cur_os_type = 'android_pad'
+                        break
+					default:
+                        cur_os_type = dataObj.os_type
+					    break
+                }
+			}
+
             let param = {
+                method: 'version_detail',
                 type: dataObj.type,
                 version: dataObj.version,
-                product_id: dataObj.product_id,
-                method: 'version_detail'
+                product_id: dataObj.product_id || '',
+                os_type: cur_os_type,
+                router_pid: dataObj.router_pid || '',
             }
             let obj = this
             obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
@@ -391,6 +414,7 @@ export default {
                 let param = {
                     type: dataObj.type,
                     version: dataObj.version,
+					os_type: obj.os_type_text[dataObj.os_type] || '',
 					user_id: dataObj.user_id,
                     product_id: dataObj.product_id,
                     method: dataObj['status'] ? 'disable' : 'enable'
@@ -479,11 +503,31 @@ export default {
         getVersionDetail (dataObj) {
             this.infoBoxFlag = true
 			this.currentDetailObj = dataObj
+
+            let cur_os_type = ''
+            if (dataObj.os_type) {
+                switch (dataObj.os_type) {
+                    case 1:
+                        cur_os_type = 'android_app'
+                        break
+                    case 4:
+                        cur_os_type = 'ios_app'
+                        break
+                    case 6:
+                        cur_os_type = 'android_pad'
+                        break
+                    default:
+                        cur_os_type = dataObj.os_type
+                        break
+                }
+            }
 			let param = {
+                method: 'version_detail',
                 type: dataObj.type,
                 version: dataObj.version,
-                product_id: dataObj.product_id,
-				method: 'version_detail'
+                product_id: dataObj.product_id || '',
+                os_type: cur_os_type,
+                router_pid: dataObj.router_pid || '',
 			}
 			let obj = this
             obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
@@ -536,51 +580,9 @@ export default {
             })
 		},
 		// 版本录入
-        importSubmit (dataObj) {
-            let params = Object.assign({
-                // token: this.token
-            }, dataObj);
-            let currentType = this.inputType
-            params.release_time = params.release_time && params.release_time.Format('yyyy-MM-dd hh:mm:ss')
-            delete params.brand_id
-            delete params.type_id
-            if (currentType === 1 || currentType === 6 || currentType === 4) {
-                params.routers = params.routersList
-				params.os_type = (currentType === 1) ?
-					'android' : (currentType === 6) ?
-					'Android_Pad' :
-					'ios'
-				params.method = this.addEditFlag ? 'create_app_version' : 'update_app_version'
-                delete params.product_id
-            } else if (currentType === 3) {
-                params.method = this.addEditFlag ? 'create_device_version' : 'update_device_version'
-                params.routers = params.routersList
-            } else {
-                if (params.selectRule) {
-                    params.products = params.productsList.map((item) => {
-                        let arr = item.split('--')
-                        return {
-                            product_id: arr[1],
-                            version: arr[0]
-                        }
-                    })
-				} else {
-                    params.products = params.productsList
-				}
+        importSubmit (params) {
+            console.log(params)
 
-                if (currentType === 2) {
-                    params.method = this.addEditFlag ? 'create_router_version' : 'update_router_version'
-				} else {
-                    params.method = this.addEditFlag ? 'create_h5_version' : 'update_h5_version'
-				}
-
-			}
-			if (currentType !== 3) {
-                delete params.product_id
-			}
-            delete params.productsList
-            delete params.routersList
-			delete params.selectRule
             this.$store.dispatch('pubilcCorsAction', params).then((result) => {
                 if (result.code === 0) {
                     this.$message.success(this.addEditFlag ? '录入成功' : '编辑成功')
@@ -590,27 +592,7 @@ export default {
             })
         },
 		// 推送升级
-        pushUpdate (dataObj) {
-            let params = Object.assign({}, dataObj);
-            if (!params.terminal_type) {
-                params.uuid_list = params.uuid_csv || []
-			} else {
-                params.uuid_list = params.uuid_list.split(',') || []
-			}
-			params.version = this.pushDataObj.version
-            params.product_id = this.pushDataObj.product_id
-            params.type = this.inputType
-			params.user_id = this.pushDataObj.user_id
-
-            if (params.push_type === 0) {
-                delete params.is_black
-			}
-            if (!params.push_type) {
-                params.is_black = 0
-                params.uuid_list = []
-            }
-            delete params.uuid_csv
-			delete params.terminal_type
+        pushUpdate (params) {
             this.$store.dispatch('pubilcCorsAction', params).then((result) => {
                 if (result.code === 0) {
                     this.$message.success('推送成功');
@@ -632,7 +614,6 @@ export default {
 		        if (result.code === 0) {
                     obj.filterPopoverFlag = false
                     obj.firstTableShow = false
-                    obj.childTableHeaderShow = true
                     let currentData = result.result
                     obj.versionList.tableData = currentData.items
                     obj.versionList = versions_children_json
@@ -645,50 +626,57 @@ export default {
 			// this.filterParams.token = this.token
 			this.listParams.page = page
 			this.versionsFirst = Object.assign({}, version_first_json)
-            this.versionList = Object.assign({}, versions_device_h5_json)
 			const obj  = this
             obj.$store.dispatch('getVersions', obj.listParams).then((result) => {
                 if (result.code === 0) {
                     obj.firstTableShow = true
-                    obj.childTableHeaderShow = false
 					obj.$nextTick(() => {
                         let currentData = result.result
                         if(!(obj.versionsFirst.tableData && obj.versionsFirst.tableData.length)) {
                             obj.setFirstVersionList(currentData)
                         }
-                        obj.versionList.tableData = currentData.other.data ?
-                            currentData.other.data.items : []
-                        obj.totalItem = currentData.other.data.page.total
 					})
 				}
             })
 		},
-		// 渲染固定的四行表格
+		// 渲染首列数据
         setFirstVersionList (dataObj) {
             this.versionsFirst.tableData = []
 		    for (let attr in dataObj) {
-		        if(attr !== 'other') {
+                if (attr === 'android' || attr === 'android_pad' || attr === 'android_system' || attr === 'ios') {
                     this.versionsFirst.tableData.push(dataObj[attr])
+				} else {
+                    for (let innerAttr in dataObj[attr]) {
+                        this.versionsFirst.tableData.push(dataObj[attr][innerAttr])
+					}
+					//路由pid列表
+					if (attr === 'router') {
+                        this.routerPidList = []
+                        for (let routerAttr in dataObj[attr]) {
+                            this.routerPidList.push({
+								label:routerAttr,
+								value:routerAttr
+							})
+                        }
+					}
 				}
+
 			}
 		},
-        getTypeText (type) {
+        getTypeText (type, os_type) {
 		    let text = ''
 		    switch(type) {
 				case 1:
-				    text = 'Android app'
+				    text = os_type
 					break
-                case 6:
-                    text = 'Android PAD'
-                    break
                 case 2:
                     text = '路由器'
                     break
                 case 3:
                     text = '子设备'
                     break
-                case 4:
-                    text = 'IOS APP'
+                case 7:
+                    text = 'Android system'
                     break
                 default:
                     text = 'H5'
@@ -753,21 +741,22 @@ export default {
             return text
 		},
         // 历史版本
-        getVersionHistoryList(page, type, product_id) {
+        getVersionHistoryList(page, dataObj) {
             // this.listParams.page = page
 			let param = {
                 page: page,
                 limit: 10,
                 level: 2,
-                type: type,
-				product_id: product_id || ''
+                os_type: dataObj.os_type || '',
+                router_pid: dataObj.router_pid || '',
+                type: dataObj.type,
+				product_id: dataObj.product_id || ''
 			}
             const obj  = this
             obj.$store.dispatch('getVersions', param).then((result) => {
                 if (result.code === 0) {
                     let currentData = result.result
                     obj.firstTableShow = false
-                    obj.childTableHeaderShow = true
                     versions_children_json.tableData = currentData.items
                     obj.versionList = Object.assign({
                     }, versions_children_json)
@@ -779,8 +768,9 @@ export default {
             this.currentDataObj = dataObj  //此操作是为了进入列表，进行各种操作时需要重新刷新列表
 			this.deviceProductId = dataObj.product_id || ''
             this.inputType = dataObj.type
+			this.os_type = dataObj.os_type || ''
             this.secondTitle = this.getVersionTitle(dataObj)
-            this.getVersionHistoryList(page, dataObj.type, dataObj.product_id)
+            this.getVersionHistoryList(page, dataObj)
 		},
 		getVersionTitle(dataObj) {
             let title = ''
@@ -798,6 +788,13 @@ export default {
 		},
 		backToList () {
             this.getVersionList(1)
+		},
+        getPidName(dataObj) {
+            if (dataObj.type === 3 || dataObj.type === 5) {
+                return '--' + dataObj.product_id
+			} else {
+                return ''
+			}
 		}
 	},
     ...mapActions([
@@ -812,11 +809,7 @@ export default {
 		...mapGetters({
 			brand: namespace.BRAND,
 			type: namespace.TYPE,
-			product: namespace.PRODUCT,
-			router: namespace.ROUTER,
-			subset: namespace.SUBSET,
-			appIos: namespace.APPIOS,
-            appAndroid: namespace.APPANDROID
+			product: namespace.PRODUCT
         })
 	}
 }

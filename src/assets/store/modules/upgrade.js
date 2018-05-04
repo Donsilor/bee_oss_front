@@ -53,6 +53,15 @@ const actions = {
                 console.log(error)
             })
         })
+    },
+    getChoseList({commit, state}, params) {
+        return new Promise((resolve, reject) => {
+            axios.post(API_UPGRADE, params).then((response) => {
+                resolve(response.data)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
     }
 }
 export default {

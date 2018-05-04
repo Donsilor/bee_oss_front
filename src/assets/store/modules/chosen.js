@@ -99,6 +99,7 @@ export default {
 		[namespace.GETROUTER](state, payload) {
 			axios.post(API_UPGRADE, {
 				token: payload.token,
+                router_pid: payload.router_pid,
                 method: 'released_versions',
 				type: 2
 			}).then(res => {
@@ -110,7 +111,8 @@ export default {
 							return {
 								label: x.title,
 								value: x.version,
-								product_id: x.product_id
+								product_id: x.product_id,
+                                pid_value: `${x.router_pid}-${x.version}`
 							}
 						})
 					} else {
@@ -210,7 +212,8 @@ export default {
 		}, payload) {
 			commit({
 				type: namespace.GETROUTER,
-				token: payload.token
+				token: payload.token,
+                router_pid: payload.router_pid
 			});
 		},
 
