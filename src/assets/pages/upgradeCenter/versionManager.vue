@@ -286,7 +286,13 @@ export default {
                 1: 'android_app',
 				4: 'ios_app',
 				6: 'android_pad'
-			}
+			},
+            device_type_text: {
+                2: '路由器',
+                3: '子设备',
+                5: 'H5',
+                7: 'Android system'
+            }
 		}
 	},
 	filters: {
@@ -642,46 +648,43 @@ export default {
 		// 渲染首列数据
         setFirstVersionList (dataObj) {
             this.versionsFirst.tableData = []
+            let deviceType = {
+                router: 2,
+                h5: 5,
+                device: 3
+            }
 		    for (let attr in dataObj) {
                 if (attr === 'android' || attr === 'android_pad' || attr === 'android_system' || attr === 'ios') {
                     this.versionsFirst.tableData.push(dataObj[attr])
 				} else {
-                    for (let innerAttr in dataObj[attr]) {
-                        this.versionsFirst.tableData.push(dataObj[attr][innerAttr])
-					}
-					//路由pid列表
-					if (attr === 'router') {
-                        this.routerPidList = []
-                        for (let routerAttr in dataObj[attr]) {
-                            this.routerPidList.push({
-								label:routerAttr,
-								value:routerAttr
-							})
+                    if (JSON.stringify(dataObj[attr]) === '{}') {
+                        this.versionsFirst.tableData.push({type:deviceType[attr]})
+                    } else {
+                        for (let innerAttr in dataObj[attr]) {
+                            this.versionsFirst.tableData.push(dataObj[attr][innerAttr])
                         }
-					}
+                        //路由pid列表
+                        if (attr === 'router') {
+                            this.routerPidList = []
+                            for (let routerAttr in dataObj[attr]) {
+                                this.routerPidList.push({
+                                    label:routerAttr,
+                                    value:routerAttr
+                                })
+                            }
+                        }
+                    }
 				}
 
 			}
 		},
         getTypeText (type, os_type) {
 		    let text = ''
-		    switch(type) {
-				case 1:
-				    text = os_type
-					break
-                case 2:
-                    text = '路由器'
-                    break
-                case 3:
-                    text = '子设备'
-                    break
-                case 7:
-                    text = 'Android system'
-                    break
-                default:
-                    text = 'H5'
-                    break
-			}
+            if (type === 1) {
+                text = os_type
+            } else {
+                text = this.device_type_text[type]
+            }
 			return text
 		},
         getStatusTextPush(type) {
@@ -791,8 +794,18 @@ export default {
 		},
         getPidName(dataObj) {
             if (dataObj.type === 3 || dataObj.type === 5) {
-                return '--' + dataObj.product_id
-			} else {
+                if (dataObj.product_id) {
+                    return '--' + dataObj.product_id
+                } else {
+                    return ''
+                }
+			} else if (dataObj.type === 2) {
+                if (dataObj.router_pid) {
+                    return '--' + dataObj.router_pid
+                } else {
+                    return ''
+                }
+            } else {
                 return ''
 			}
 		}

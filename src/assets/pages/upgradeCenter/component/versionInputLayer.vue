@@ -25,7 +25,7 @@
 				</el-option>
 			</el-select>
 		</el-form-item>
-		<el-form-item label="子设备" prop="product_id" v-if="inputType === 2 && !releasedFlag">
+		<el-form-item label="子设备" prop="product_id" v-if="inputType === 2 && !releasedFlag && importForm.selectRule">
 			<el-row>
 				<el-col :span="8">
 					<el-select v-model="importForm.brand_id" placeholder="品牌">
