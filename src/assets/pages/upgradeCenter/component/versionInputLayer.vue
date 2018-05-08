@@ -253,7 +253,12 @@ export default {
             subsetProduct: [],
             router: [],
             router_pid: '',
-			corsUrls: getCorsUrl() + '/oss_file_upload'
+			corsUrls: getCorsUrl() + '/oss_file_upload',
+			editData: {
+                user_id: '',
+				status: '',
+				id: ''
+			}
 		}
 	},
 	watch: {
@@ -350,6 +355,11 @@ export default {
 				}
 			}
 
+			// 由于接口设计，要求编辑的时候带上详情的几个字段
+			for (let attr in this.editData) {
+                this.editData[attr] = this.editDataObj[attr]
+			}
+
 		},
         resetImportForm () {
 //            if (this.inputType === 2) {
@@ -439,8 +449,8 @@ export default {
             obj.$refs[formName].validate((valid) => {
                 if (valid) {
                     if (!obj.importForm['selectRule']) {
-                        obj.importForm['routersList'] = [{router_pid: "", rule: "*"}]
-                        obj.importForm['productsList'] = [{product_id: "", rule: "*"}]
+                        obj.importForm['routersList'] = [{router_pid: "*", rule: "*"}]
+                        obj.importForm['productsList'] = [{product_id: "*", rule: "*"}]
                     }
                     let params = Object.assign({
                         // token: this.token
@@ -494,6 +504,12 @@ export default {
                     delete params.productsList
                     delete params.routersList
                     delete params.selectRule
+
+					if (!this.addEditFlag) {
+                        for (let attr in this.editData) {
+                            params[attr] = this.editData[attr]
+                        }
+					}
 
                     obj.$emit('importSubmitParent',params)
                 } else {

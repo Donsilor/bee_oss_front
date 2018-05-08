@@ -57,6 +57,7 @@
 						<div v-else-if="item.prop == 'status'" >{{getStatusText(scope.row.status)}}</div>
 						<div v-else-if="item.prop == 'force'" >{{getForceText(scope.row.force)}}</div>
 						<div v-else-if="item.prop == 'is_pre_release'" >{{getPreReleaseText(scope.row.is_pre_release)}}</div>
+						<div v-else-if="item.prop == 'gray'" >{{getGrayStatus[scope.row.gray]}}</div>
 						<div v-else-if="item.prop === 'release_time'" >{{formatTime(scope.row['release_time'])}}</div>
 						<div v-else>{{scope.row[item.prop]}}</div>
 					</template>
@@ -292,7 +293,13 @@ export default {
                 3: '子设备',
                 5: 'H5',
                 7: 'Android system'
-            }
+            },
+            getGrayStatus: {
+                0: '无',
+                1: '白名单',
+                2: '黑名单',
+                3: '全量'
+			}
 		}
 	},
 	filters: {
@@ -464,7 +471,9 @@ export default {
                     type: dataObj.type,
                     version: dataObj.version,
                     user_id: dataObj.user_id,
-                    product_id: dataObj.product_id,
+                    product_id: dataObj.product_id || '',
+					os_type: dataObj.os_type || '',
+                    router_pid: dataObj.router_pid || '',
                     method: 'del_version'
                 }
 

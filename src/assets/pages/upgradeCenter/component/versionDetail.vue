@@ -144,7 +144,9 @@ export default {
 				page: page,
 				limit: 5,
                 version: dataObj.version,
-                product_id: dataObj.product_id,
+				os_type: dataObj.os_type || '',
+                product_id: dataObj.product_id || '',
+				router_pid: dataObj.router_pid || '',
                 method: 'get_uuids'
             }
             obj.$store.dispatch('pubilcCorsAction', param_1).then((result) => {

@@ -5,6 +5,7 @@
     {"prop": "release_time", "label": "发布时间"},
     {"prop": "status", "label": "版本状态"},
     {"prop": "is_pre_release", "label": "灰度版本标识"},
+    {"prop": "gray", "label": "名单标识"},
     {"prop": "force", "label": "是否强制升级"}
   ],
   "tableData":[]
