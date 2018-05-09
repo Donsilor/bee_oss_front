@@ -105,7 +105,12 @@ export default {
                     }
                 ]
             },
-            corsUrls: getCorsUrl() + '/uuid_upload'
+            corsUrls: getCorsUrl() + '/uuid_upload',
+            os_type_text: {
+                1: 'android_app',
+                4: 'ios_app',
+                6: 'android_pad'
+            }
 		}
 	},
 	watch: {},
@@ -187,7 +192,7 @@ export default {
                     params.product_id = this.pushDataObj.product_id
                     params.type = this.inputType
                     params.user_id = this.pushDataObj.user_id
-                    params.os_type = this.pushDataObj.os_type || ''
+                    params.os_type = this.os_type_text[this.pushDataObj.os_type] || ''
                     params.router_pid = this.pushDataObj.router_pid || ''
 
                     if (params.push_type === 0) {

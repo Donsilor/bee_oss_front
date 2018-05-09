@@ -341,7 +341,7 @@ export default {
                     thisForm['selectRule'] = 0
 				} else {
                     currentProducts.forEach((item) => {
-                        thisForm['productsList'].push(item.rule + '--' + item.product_id)
+                        thisForm['productsList'].push(item.product_id + '--' + item.rule)
 					})
 				}
 			} else {
@@ -350,7 +350,7 @@ export default {
                     thisForm['selectRule'] = 0
 				} else {
                     currentRouters.forEach((item) => {
-                        thisForm['routersList'].push(item.rule + '--' + item.router_pid)
+                        thisForm['routersList'].push(item.router_pid + '--' + item.rule)
                     })
 				}
 			}

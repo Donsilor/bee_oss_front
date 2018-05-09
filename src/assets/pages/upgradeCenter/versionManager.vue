@@ -337,15 +337,15 @@ export default {
 		}
 	},
 	mounted () {
-        this.$store.dispatch({
-            type: namespace.INITAPPIOS
-        })
-        this.$store.dispatch({
-            type: namespace.INITAPPANDROID
-        })
-		this.$store.dispatch({
-			type: namespace.INITROUTER
-		})
+//        this.$store.dispatch({
+//            type: namespace.INITAPPIOS
+//        })
+//        this.$store.dispatch({
+//            type: namespace.INITAPPANDROID
+//        })
+//		this.$store.dispatch({
+//			type: namespace.INITROUTER
+//		})
 		this.$store.dispatch({
 			type: namespace.INITPRODUCT
 			// token: this.token

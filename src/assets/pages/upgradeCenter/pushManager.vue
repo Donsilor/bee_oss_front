@@ -12,7 +12,7 @@
 				>
 					<template scope="scope">
 						<div v-if="item.prop == 'type'" >{{getTypeText(scope.row.type)}}</div>
-						<div v-else-if="item.prop == 'push_type'" >{{scope.row.push_type ? '灰度' : '全量'}}</div>
+						<div v-else-if="item.prop == 'is_black'" >{{scope.row.is_black ? '黑名单' : '白名单'}}</div>
 						<div v-else-if="item.prop == 'total_nums'" >{{scope.row.total_nums + '/' + scope.row.success_nums}}</div>
 						<div v-else-if="item.prop == 'status'" >{{getStatusTextPush(scope.row.status)}}</div>
 						<div v-else>{{scope.row[item.prop]}}</div>
