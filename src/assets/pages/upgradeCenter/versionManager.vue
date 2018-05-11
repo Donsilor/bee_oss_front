@@ -11,7 +11,7 @@
 			</el-col>
 		</el-row>
 		<div class="p-r" v-if="!firstTableShow" style="height: 40px; padding-top: 10px">
-			<div style="line-height: 40px; height: 40px">{{secondTitle}}</div>
+			<!--<div style="line-height: 40px; height: 40px">{{secondTitle}}</div>-->
 			<el-button type="text"  @click="backToList" class="btn-back">返回上一级</el-button>
 		</div>
 		<!--版本列表-->
@@ -128,7 +128,6 @@
 					:addEditFlag="addEditFlag"
 					:editDataObj="editDataObj"
 					:releasedFlag="releasedFlag"
-					:deviceProductId="deviceProductId"
 					:routerPidList="routerPidList"
 			>
 			</version-input>
@@ -278,7 +277,6 @@ export default {
             addEditFlag: true,
             editDataObj: {},
             releasedFlag: false, //已发布/未发布标识 || 版本编辑，已发布版本只能编辑几个字段
-            deviceProductId: '',
             mappingData: {}, //各设备对应映射关系
 			router: [],
             os_type: '',
@@ -430,6 +428,7 @@ export default {
 					os_type: obj.os_type_text[dataObj.os_type] || '',
 					user_id: dataObj.user_id,
                     product_id: dataObj.product_id,
+					router_pid: dataObj.router_pid,
                     method: dataObj['status'] ? 'disable' : 'enable'
                 }
 
@@ -778,7 +777,6 @@ export default {
         },
         getVersionHistory (dataObj,page) {
             this.currentDataObj = dataObj  //此操作是为了进入列表，进行各种操作时需要重新刷新列表
-			this.deviceProductId = dataObj.product_id || ''
             this.inputType = dataObj.type
 			this.os_type = dataObj.os_type || ''
             this.secondTitle = this.getVersionTitle(dataObj)
