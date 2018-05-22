@@ -23,6 +23,10 @@ import RouterManager from './routerManager/routerManager.vue';
 import ImportRouter from './routerManager/importRouter.vue';
 import FamilyList from './familyList.vue';
 import FamilyImgList from './familyImg/index.vue';
+import Permission from './permission/index.vue'
+import User from './permission/user.vue'
+import Role from './permission/role.vue'
+import Menu from './permission/menu.vue'
 
 export {
 	Login,
@@ -49,5 +53,9 @@ export {
     RouterIndex,
     RouterManager,
     ImportRouter,
-    FamilyImgList
+    FamilyImgList,
+    Permission,
+    User,
+    Role,
+    Menu
 };

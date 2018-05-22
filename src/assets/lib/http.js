@@ -19,6 +19,7 @@ axios.interceptors.request.use(function (config) {
   config.withCredentials = true
   // config.headers['Content-Type'] = 'application/json'
   if (!/\/api.php/.test(config.url)) {
+      if(!config.data) config.data = {}
       config.data['token'] = info.token || ''
   } else {
       config.url = getCorsUrl() + config.url
@@ -62,6 +63,8 @@ axios.interceptors.response.use(function (response) {
           message: response.data.msg || response.data.message,
           type: 'error'
         })
+        NProgress.done()
+        return Promise.reject(response.data)
       }
     } else if (response.config.method === 'post' || response.config.method === 'put' || response.config.method === 'delete') {
       // Message({

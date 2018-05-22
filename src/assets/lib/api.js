@@ -40,3 +40,20 @@ export const FAMILY_API = {
     editImgs: API_MASTER + 'bgimage/edit',
     sortImgs: API_MASTER + 'bgimage/sort',
 }
+
+export const PERMISSION_API = {   
+    //用户
+    userList: API_MASTER + 'user/getUserList',
+    getUser: API_MASTER + 'user/userdetail',
+    addUser: API_MASTER + 'user/addUser',
+    editUser: API_MASTER + 'user/editUser',
+    deleteUser: API_MASTER + 'user/delUser',
+    //角色
+    roleList: API_MASTER + 'role/getRole',
+    getRole: API_MASTER + 'role/getRoleDetail',
+    addRole: API_MASTER + 'role/addRolePermission',
+    editRole: API_MASTER + 'role/editRolePermission',
+    deleteRole: API_MASTER + 'role/delRolePermission',
+    //菜单
+    menuList: API_MASTER + 'menu/getMenulist'
+}

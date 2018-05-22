@@ -149,70 +149,28 @@ export default {
                             icon: 'facility'
 						}
                     ]
-                }
-			],
-			navs: [
-				{
-					title: '首页',
-					id: 'home',
-					className: 'home',
-					url: '/main'
 				},
 				{
-					title: '升级中心',
-					id: 'config',
-					className: 'config',
-					url: '/main/config'
-				},
-				{
-					title: '设备OPS',
-					id: 'ops',
-					className: 'ops',
-					url: '/main/ops'
-				},
-//				{
-//					title: '设备管理',
-//					id: 'facility',
-//					className: 'facility',
-//					url: '/main/facility'
-//				},
-				{
-					title: '经分数据',
-					id: 'throughData',
-					className: 'cloud',
-					url: '/main/throughData'
-				},
-                {
-                    title: '告警管理',
-                    id: 'warnManage',
-                    className: 'cloud',
-                    url: '/main/warnManage',
-					children: [
-                        {
-                            title: '萨芬的大幅',
-                            id: 'dddd',
-                            className: '',
-                            url: '/main/ewewe'
-                        },
-                        {
-                            title: '沙发sad',
-                            id: 'ssss',
-                            className: '',
-                            url: '/main/sddf'
-                        },
-					]
-                },
-//				{
-//					title: 'CMDB',
-//					id: 'cmdb',
-//					className: 'cmdb',
-//					url: '/main/cmdb'
-//				},
-                {
-                    title: '云平台日志',
-                    id: 'rootLog',
-                    className: 'cmdb',
-                    url: '/main/rootLog'
+                    title: '权限设置',
+                    path: 'permission',
+                    icon: 'family',
+                    children: [
+						{
+                            title: '用户管理',
+                            path: '/main/permission/user',
+                            icon: 'facility'
+						},
+						{
+                            title: '角色管理',
+                            path: '/main/permission/role',
+                            icon: 'facility'
+						},
+						// {
+                        //     title: '菜单管理',
+                        //     path: '/main/permission/menu',
+                        //     icon: 'facility'
+						// },
+                    ]
                 }
 			]
 		};
@@ -333,96 +291,13 @@ export default {
 			background-image: url('../images/u59.png');
 			.iconStyle(20px, 20px);
 		}
+
+		.family:before{
+			background-image: url('../images/family.png');
+			.iconStyle(20px, 20px);
+		}
+
 	}
 
-}
-.bnav{
-	height: 100vh;
-	background: #2B2B37;
-	position: relative;
-	margin-top: -80px;
-	&:before{
-		content: ' ';
-		display: block;
-		height: 80px;
-	}
-	li{
-		.inner-ul{
-			a{
-				font-size: 14px;
-				padding-left: 42px;
-			}
-		}
-		&.actived{
-			background: #3B3B53;
-			a {
-				color: #ffffff;
-			}
-		}
-		a{
-			color: #95959b;
-			padding-left: 1.5em;
-			display: block;
-			height: 45px;
-			width: 100%;
-			box-sizing: border-box;
-			line-height: 45px;
-			&.router-link-exact-active{
-				background: #3B3B53;
-				color: #ffffff;
-			}
-			&:before{
-				display: inline-block;
-				content: ' ';
-				background-repeat: no-repeat;
-				background-position: 0 0;
-				margin-right: .75em;
-				vertical-align: middle;
-			}
-
-			&.home{
-				&:before{
-					background-image: url('../images/u48.png');
-					.iconStyle;
-				}
-			}
-
-			&.config{
-				&:before{
-					background-image: url('../images/u50.png');
-					.iconStyle(16px, 18px);
-				}
-			}
-
-			&.ops{
-				&:before{
-					background-image: url('../images/u43.png');
-					.iconStyle;
-				}
-			}
-
-			&.facility{
-				&:before{
-					background-image: url('../images/u65.png');
-					.iconStyle(16px, 16px);
-				}
-			}
-
-			&.cloud{
-				&:before{
-					background-image: url('../images/u52.png');
-					.iconStyle;
-				}
-			}
-
-			&.cmdb{
-				&:before{
-					background-image: url('../images/u59.png');
-					.iconStyle(14px, 16px);
-				}
-			}
-
-		}
-	}
 }
 </style>
