@@ -43,11 +43,14 @@ export const FAMILY_API = {
 
 export const PERMISSION_API = {   
     //用户
+    searchUserList: API_MASTER + 'user/searchUserList',
     userList: API_MASTER + 'user/getUserList',
     getUser: API_MASTER + 'user/userdetail',
     addUser: API_MASTER + 'user/addUser',
     editUser: API_MASTER + 'user/editUser',
     deleteUser: API_MASTER + 'user/delUser',
+    updatePwd: API_MASTER + 'user/modify',
+    resetPwd: API_MASTER + 'user/resetPassword',
     //角色
     roleList: API_MASTER + 'role/getRole',
     getRole: API_MASTER + 'role/getRoleDetail',
@@ -56,4 +59,8 @@ export const PERMISSION_API = {
     deleteRole: API_MASTER + 'role/delRolePermission',
     //菜单
     menuList: API_MASTER + 'menu/getMenulist'
+}
+
+export const USER_API = {
+    userPermissionList: API_MASTER + 'user/menu',
 }

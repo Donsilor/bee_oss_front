@@ -1,8 +1,10 @@
 import * as namespace from '../namespace';
+import API from '../../service/user.js'
 
 export default {
     state: {
-        info: localStorage.getItem('localData') && JSON.parse(localStorage.getItem('localData')).user && JSON.parse(localStorage.getItem('localData')).user.info || {}
+        info: localStorage.getItem('localData') && JSON.parse(localStorage.getItem('localData')).user && JSON.parse(localStorage.getItem('localData')).user.info || {},
+        permission_list: []
     },
     getters: {
         [namespace.USER](state) {
@@ -21,7 +23,10 @@ export default {
         },
         [namespace.DELUSER](state, payload) {
             state.info = {}
-        }
+        },
+        getPermissionList(state, payload) { 
+            state.permission_list = payload
+        } 
     },
     actions: {
         /*[namespace.INITUSER]({
@@ -56,6 +61,13 @@ export default {
             commit({
                 type: namespace.DELUSER
             })
+        },
+        getUserPermissionList({commit, state}) { 
+            if(state.info.token){   
+                API.getUserPermissionList().then(res => {
+                    commit('getPermissionList', res.data.result.permission_list)
+                })
+            }
         }
     }
 };

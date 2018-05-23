@@ -33,17 +33,17 @@
 		</div>
 		<!--添加修改-->
 		<el-dialog :title="dialogTitle" :visible.sync="dialogVisible">
-			      <el-form label-width="100px">
-                <el-form-item label="角色名称">
+			      <el-form :model="formdata" :rules="rules" label-width="100px">
+                <el-form-item label="角色名称" prop="name">
                   <el-input v-model="formdata.name" :disabled="isEdit" />
                 </el-form-item>
-                <el-form-item label="显示名称">
+                <el-form-item label="显示名称" prop="display_name">
                   <el-input v-model="formdata.display_name" />
                 </el-form-item>
-                <el-form-item label="描述">
+                <el-form-item label="描述" prop="description">
                   <el-input v-model="formdata.description" />
                 </el-form-item>
-                <el-form-item label="选择权限">
+                <el-form-item label="选择权限" prop="checkList">
                   <el-checkbox-group v-model="formdata.checkList">
                   <div class="menulist" v-for="menu in menuList" :key="menu.id"><!-- v-if="menu.children" -->
                     <div class="hd">
@@ -76,7 +76,21 @@ export default {
       dialogVisible: false,
       roleList: [],
       menuList: [],
-      formdata: {}
+      formdata: {},
+      rules: {
+          name: [
+              { required: true, message: '请输入角色名', trigger: 'blur' }
+          ],
+          display_name: [
+              { required: true, message: '请输入显示名称', trigger: 'blur' }
+          ],
+          description: [
+              { required: true, message: '请输入备注', trigger: 'blur' }
+          ],
+          checkList: [
+              { required: true, message: '请选择权限', trigger: 'blur' }
+          ]
+      }
     };
   },
   computed: {

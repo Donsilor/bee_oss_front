@@ -26,7 +26,9 @@ import FamilyImgList from './familyImg/index.vue';
 import Permission from './permission/index.vue'
 import User from './permission/user.vue'
 import Role from './permission/role.vue'
-import Menu from './permission/menu.vue'
+import ResetPwd from './permission/resetPwd.vue'
+import UpdatePwd from './permission/updatePwd.vue'
+// import Menu from './permission/menu.vue'
 
 export {
 	Login,
@@ -57,5 +59,7 @@ export {
     Permission,
     User,
     Role,
-    Menu
+    UpdatePwd,
+    ResetPwd
+    // Menu
 };

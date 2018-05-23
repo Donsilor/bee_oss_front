@@ -3,6 +3,9 @@ import { PERMISSION_API } from "~/assets/lib/api";
 
 const api = {
   //用户权限
+  searchUserList(params) {
+    return axios.post(PERMISSION_API.searchUserList, params);
+  },
   userList(params) {
     return axios.post(PERMISSION_API.userList, params);
   },
@@ -17,6 +20,12 @@ const api = {
   },
   deleteUser(user_ids) {
     return axios.post(PERMISSION_API.deleteUser, { user_ids });
+  },
+  updatePwd(params) { 
+    return axios.post(PERMISSION_API.updatePwd, params);
+  },
+  resetPwd(params) {  
+    return axios.post(PERMISSION_API.resetPwd, params);
   },
   //角色管理
   roleList(params) {

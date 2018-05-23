@@ -157,19 +157,24 @@ export default {
                     children: [
 						{
                             title: '用户管理',
-                            path: '/main/permission/user',
+                            path: '/main/user',
                             icon: 'facility'
 						},
 						{
                             title: '角色管理',
-                            path: '/main/permission/role',
+                            path: '/main/role',
                             icon: 'facility'
 						},
-						// {
-                        //     title: '菜单管理',
-                        //     path: '/main/permission/menu',
-                        //     icon: 'facility'
-						// },
+						{
+                            title: '密码修改',
+                            path: '/main/updatePassword',
+                            icon: 'facility'
+						},
+						{
+                            title: '密码重置',
+                            path: '/main/resetPassword',
+                            icon: 'facility'
+						},
                     ]
                 }
 			]

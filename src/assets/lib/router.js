@@ -138,26 +138,24 @@ const routes = [
         component: Pages.FamilyImgList
       },
       {
-        path: "permission",
-        name: "permission",
-        component: Pages.Permission,
-        children: [
-          {
-            path: "user",
-            name: "user",
-            component: Pages.User
-          },
-          {
-            path: "role",
-            name: "role",
-            component: Pages.Role
-          },
-          {
-            path: "menu",
-            name: "menu",
-            component: Pages.Menu
-          }
-        ]
+        path: "user",
+        name: "user",
+        component: Pages.User
+      },
+      {
+        path: "role",
+        name: "role",
+        component: Pages.Role
+      },
+      {
+        path: "updatePassword",
+        name: "updatePassword",
+        component: Pages.UpdatePwd
+      },
+      {
+        path: "resetPassword",
+        name: "resetPassword",
+        component: Pages.ResetPwd
       }
     ]
   }
