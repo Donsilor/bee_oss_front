@@ -5,11 +5,9 @@
 				<template v-if="item.children" >
 					<el-submenu :index="item.path">
 						<template slot="title"><i class="icon-pp" :class="item.icon"></i>{{item.title}}</template>
-						<div v-for="subItem in item.children" style="overflow: hidden">
+						<div v-for="subItem in item.children" style="overflow: hidden"  v-show="!subItem.needAdmin || (subItem.needAdmin && isAdmin)">
 							<a target="_blank" v-if="subItem.elseUrl" class="href-a"  :href="subItem.path">{{subItem.title}}</a>
-							<el-menu-item :index="subItem.path" v-else
-										  :key="subItem.path"
-										  :route="{ path: subItem.path }">{{subItem.title}}
+							<el-menu-item :index="subItem.path" v-if="!subItem.elseUrl" :key="subItem.path" :route="{ path: subItem.path }">{{subItem.title}}
 							</el-menu-item>
 						</div>
 					</el-submenu>
@@ -20,21 +18,7 @@
 			</template>
 		</el-menu>
 	</div>
-	<!--<div class="bnav">-->
-		<!--<ul>-->
-			<!--<li v-for="item in navs" :class="{'active': actived === item.id}">-->
-				<!--<div v-if="item.children">-->
-					<!--<router-link :to="item.url" :class="item.className">{{item.title}}</router-link>-->
-					<!--<ul class="inner-ul">-->
-						<!--<li v-for="child in item.children">-->
-							<!--<router-link :to="child.url">{{child.title}}</router-link>-->
-						<!--</li>-->
-					<!--</ul>-->
-				<!--</div>-->
-				<!--<router-link :to="item.url" :class="item.className" v-else>{{item.title}}</router-link>-->
-			<!--</li>-->
-		<!--</ul>-->
-	<!--</div>-->
+
 </template>
 <script>
 export default {
@@ -173,7 +157,8 @@ export default {
 						{
                             title: '密码重置',
                             path: '/main/resetPassword',
-                            icon: 'facility'
+							icon: 'facility',
+							needAdmin: true
 						},
                     ]
                 }

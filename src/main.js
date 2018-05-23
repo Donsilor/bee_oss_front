@@ -14,6 +14,11 @@ Vue.use(ElementUI);
 Vue.use(VueRouter);
 
 Vue.mixin({
+	computed: {	
+		isAdmin() {	
+			return this.$store.state.user.info && this.$store.state.user.info.isAdmin === true
+		}
+	},
 	methods: {	
 		hasPermission(name) {	
 			let permission_list = this.$store.state.user.permission_list
