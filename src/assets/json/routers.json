@@ -2,6 +2,7 @@
   "tableColumn":[
     {"prop": "F_router_id", "label": "内部ID"},
     {"prop": "F_device_name", "label": "设备名称"},
+    {"prop": "F_router_version", "label": "固件版本号"},
     {"prop": "F_device_id", "label": "UUID"},
     {"prop": "F_device_sn", "label": "串号"},
     {"prop": "F_device_mac", "label": "mac地址"},

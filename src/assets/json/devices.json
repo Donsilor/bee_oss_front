@@ -4,6 +4,7 @@
     {"prop": "F_room_name", "label": "房间名称"},
     {"prop": "F_device_id", "label": "子设备uuid"},
     {"prop": "F_device_name", "label": "子设备名称"},
+    {"prop": "F_device_version", "label": "版本号"},
     {"prop": "F_category_id", "label": "产品id"},
     {"prop": "F_business_id", "label": "企业内部ID"},
     {"prop": "F_status_name", "label": "设备状态"},
