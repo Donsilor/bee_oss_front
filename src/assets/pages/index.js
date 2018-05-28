@@ -23,12 +23,11 @@ import RouterManager from './routerManager/routerManager.vue';
 import ImportRouter from './routerManager/importRouter.vue';
 import FamilyList from './familyList.vue';
 import FamilyImgList from './familyImg/index.vue';
-import Permission from './permission/index.vue'
 import User from './permission/user.vue'
 import Role from './permission/role.vue'
 import ResetPwd from './permission/resetPwd.vue'
 import UpdatePwd from './permission/updatePwd.vue'
-// import Menu from './permission/menu.vue'
+import Error from './error.vue'
 
 export {
 	Login,
@@ -56,10 +55,9 @@ export {
     RouterManager,
     ImportRouter,
     FamilyImgList,
-    Permission,
     User,
     Role,
     UpdatePwd,
-    ResetPwd
-    // Menu
+    ResetPwd,
+    Error
 };

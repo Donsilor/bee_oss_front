@@ -158,6 +158,11 @@ const routes = [
         component: Pages.ResetPwd
       }
     ]
+  },
+  {
+      path: "*",
+      name: "error",
+      component: Pages.Error
   }
 ];
 
