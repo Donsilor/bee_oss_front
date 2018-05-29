@@ -216,15 +216,15 @@ export default {
         },
         beforeAvatarUpload (file) {
             // const isRight = (file.type === 'application/zip' || file.type === 'application/rar');
-            const isLt2M = file.size / 1024 / 1024 < 100;
+            //const isLt2M = file.size / 1024 / 1024 < 100;
 
 //            if (!isRight) {
 //                this.$message.error('上传只能是 zip|rar 格式!');
 //            }
-            if (!isLt2M) {
-                this.$message.error('上传文件大小不能超过 100MB!');
-            }
-            return isLt2M;
+//            if (!isLt2M) {
+//                this.$message.error('上传文件大小不能超过 100MB!');
+//            }
+//            return isLt2M;
         },
 	},
 	computed: {
