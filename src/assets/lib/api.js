@@ -1,5 +1,6 @@
 const API_ROOT = ''
 const API_MASTER = '/api/index.php/'
+export const BASE_URL = API_MASTER
 export const OPS_API = {
     getTerminalList: API_ROOT + '../src/assets/json/terminalList.json',  // 终端列表
     getMemberList: API_ROOT + '../src/assets/json/members.json',  // 成员列表
@@ -59,8 +60,4 @@ export const PERMISSION_API = {
     deleteRole: API_MASTER + 'role/delRolePermission',
     //菜单
     menuList: API_MASTER + 'menu/getMenulist'
-}
-
-export const USER_API = {
-    userPermissionList: API_MASTER + 'user/menu',
 }

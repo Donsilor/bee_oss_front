@@ -28,6 +28,7 @@ import Role from './permission/role.vue'
 import ResetPwd from './permission/resetPwd.vue'
 import UpdatePwd from './permission/updatePwd.vue'
 import Error from './error.vue'
+import UserData from './analyzer/userData.vue'
 
 export {
 	Login,
@@ -59,5 +60,6 @@ export {
     Role,
     UpdatePwd,
     ResetPwd,
-    Error
+    Error,
+    UserData
 };

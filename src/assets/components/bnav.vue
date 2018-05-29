@@ -161,7 +161,19 @@ export default {
 							needAdmin: true
 						},
                     ]
-                }
+				},
+				{
+                    title: '数据统计',
+                    path: 'analyzer',
+                    icon: 'family',
+                    children: [
+						{
+                            title: '用户运营',
+                            path: '/main/analyzer',
+                            icon: 'facility'
+						}
+                    ]
+                },
 			]
 		};
 	},

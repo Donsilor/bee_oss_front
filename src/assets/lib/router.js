@@ -156,7 +156,19 @@ const routes = [
         path: "resetPassword",
         name: "resetPassword",
         component: Pages.ResetPwd
-      }
+      },
+      {
+        path: "analyzer",
+        name: "analyzer",
+        component: Pages.RouterIndex,
+        children: [
+          {
+            path: "",
+            name: "userData",
+            component: Pages.UserData
+          },
+        ]
+      },
     ]
   },
   {
