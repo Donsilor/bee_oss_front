@@ -101,10 +101,10 @@
 		<el-form-item label="备注" prop="extra_note">
 			<el-input type="text" v-model="importForm.extra_note" />
 		</el-form-item>
-		<el-form-item label="appstore链接" prop="download_url_object" v-if="inputType === 4 && !releasedFlag">
+		<el-form-item label="appstore链接" prop="download_url_object" v-if="os_type === 'ios' && !releasedFlag">
 			<el-input type="text" v-model="importForm.download_url_object" />
 		</el-form-item>
-		<el-form-item label="上传固件包" prop="download_url_object" v-if="inputType !== 4 && !releasedFlag">
+		<el-form-item label="上传固件包" prop="download_url_object" v-if="os_type !== 'ios' && !releasedFlag">
 			<!--<el-input type="text" v-model="importForm.download_url_object" />-->
 			<el-upload
 					ref="uploadFile"
@@ -357,7 +357,7 @@ export default {
             // thisForm['release_time'] = new Date(this.editDataObj['release_time']*1000)
             let imgName = this.editDataObj['img_url_object']
             this.fileListImg = [{name: imgName, url: imgName}]
-            if (this.inputType !== 4) {
+            if (this.os_type !== 'ios') {
                 let objName = this.editDataObj['download_url_object']
                 this.fileListObj = [{name: objName, url: objName}]
 			}
@@ -400,7 +400,7 @@ export default {
                 ]
 			}
             this.$refs['importForm'].resetFields()
-            if (this.inputType !== 4 && !this.releasedFlag) {
+            if (this.os_type !== 'ios' && !this.releasedFlag) {
                 this.$refs['uploadFile'].clearFiles()
             }
             this.$refs['uploadFileImg'].clearFiles()
@@ -521,6 +521,10 @@ export default {
                         for (let attr in this.editData) {
                             params[attr] = this.editData[attr]
                         }
+					}
+					if (this.inputType === 1 && this.os_type === 'ios') {
+                        params.size = 0
+						params.download_file_md5 = 'default'
 					}
 
                     obj.$emit('importSubmitParent',params)
