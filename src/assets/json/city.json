@@ -128,7 +128,8 @@
                 "city_id": "2163"
             }
         ],
-        "name": "内蒙古自治区"
+        "name": "内蒙古自治区",
+        "name_py": "neimengguzizhiqu"
     },
     {
         "list": [
@@ -161,7 +162,8 @@
                 "city_id": "3164"
             }
         ],
-        "name": "西藏自治区"
+        "name": "西藏自治区",
+        "name_py": "xizangzizhiqu"
     },
     {
         "list": [
@@ -257,7 +259,8 @@
                 "city_id": "3071"
             }
         ],
-        "name": "贵州省"
+        "name": "贵州省",
+        "name_py": "guizhousheng"
     },
     {
         "list": [
@@ -479,7 +482,8 @@
                 "city_id": "1898"
             }
         ],
-        "name": "河北省"
+        "name": "河北省",
+        "name_py": "hebeisheng"
     },
     {
         "list": [
@@ -491,7 +495,8 @@
                 "city_id": "2"
             }
         ],
-        "name": "北京市"
+        "name": "北京市",
+        "name_py": "beijingshi"
     },
     {
         "list": [
@@ -818,7 +823,8 @@
                 "city_id": "1536"
             }
         ],
-        "name": "山东省"
+        "name": "山东省",
+        "name_py": "shandongsheng"
     },
     {
         "list": [
@@ -1089,7 +1095,8 @@
                 "city_id": "534"
             }
         ],
-        "name": "河南省"
+        "name": "河南省",
+        "name_py": "henansheng"
     },
     {
         "list": [
@@ -1248,7 +1255,8 @@
                 "city_id": "883"
             }
         ],
-        "name": "广西壮族自治区"
+        "name": "广西壮族自治区",
+        "name_py": "guangxizhuangzuzizhiqu"
     },
     {
         "list": [
@@ -1379,7 +1387,8 @@
                 "city_id": "285329"
             }
         ],
-        "name": "新疆维吾尔自治区"
+        "name": "新疆维吾尔自治区",
+        "name_py": "xinjiangweiwuerzuzizhiqu"
     },
     {
         "list": [
@@ -1538,7 +1547,8 @@
                 "city_id": "1733"
             }
         ],
-        "name": "福建省"
+        "name": "福建省",
+        "name_py": "fujiansheng"
     },
     {
         "list": [
@@ -1739,7 +1749,8 @@
                 "city_id": "242"
             }
         ],
-        "name": "吉林省"
+        "name": "吉林省",
+        "name_py": "jilinsheng"
     },
     {
         "list": [
@@ -1891,7 +1902,8 @@
                 "city_id": "284963"
             }
         ],
-        "name": "江西省"
+        "name": "江西省",
+        "name_py": "jiangxisheng"
     },
     {
         "list": [
@@ -2141,7 +2153,8 @@
                 "city_id": "285083"
             }
         ],
-        "name": "湖北省"
+        "name": "湖北省",
+        "name_py": "hubeisheng"
     },
     {
         "list": [
@@ -2349,7 +2362,8 @@
                 "city_id": "773"
             }
         ],
-        "name": "湖南省"
+        "name": "湖南省",
+        "name_py": "hunansheng"
     },
     {
         "list": [
@@ -2508,7 +2522,8 @@
                 "city_id": "2023"
             }
         ],
-        "name": "山西省"
+        "name": "山西省",
+        "name_py": "shanxisheng"
     },
     {
         "list": [
@@ -2758,7 +2773,8 @@
                 "city_id": "1177"
             }
         ],
-        "name": "江苏省"
+        "name": "江苏省",
+        "name_py": "jiangsusheng"
     },
     {
         "list": [
@@ -2980,7 +2996,8 @@
                 "city_id": "1276"
             }
         ],
-        "name": "浙江省"
+        "name": "浙江省",
+        "name_py": "zhejiangsheng"
     },
     {
         "list": [
@@ -3020,7 +3037,8 @@
                 "city_id": "285302"
             }
         ],
-        "name": "青海省"
+        "name": "青海省",
+        "name_py": "qinghaisheng"
     },
     {
         "list": [
@@ -3074,7 +3092,8 @@
                 "city_id": "2325"
             }
         ],
-        "name": "宁夏回族自治区"
+        "name": "宁夏回族自治区",
+        "name_py": "ningxiahuizuzizhiqu"
     },
     {
         "list": [
@@ -3366,7 +3385,8 @@
                 "city_id": "1015"
             }
         ],
-        "name": "广东省"
+        "name": "广东省",
+        "name_py": "guangdongsheng"
     },
     {
         "list": [
@@ -3434,7 +3454,8 @@
                 "city_id": "1041"
             }
         ],
-        "name": "海南省"
+        "name": "海南省",
+        "name_py": "hainansheng"
     },
     {
         "list": [
@@ -3586,7 +3607,8 @@
                 "city_id": "285256"
             }
         ],
-        "name": "云南省"
+        "name": "云南省",
+        "name_py": "yunnansheng"
     },
     {
         "list": [
@@ -3598,7 +3620,8 @@
                 "city_id": "52"
             }
         ],
-        "name": "重庆市"
+        "name": "重庆市",
+        "name_py": "chongqingshi"
     },
     {
         "list": [
@@ -3610,7 +3633,8 @@
                 "city_id": "39"
             }
         ],
-        "name": "上海市"
+        "name": "上海市",
+        "name_py": "shanghaishi"
     },
     {
         "list": [
@@ -3622,7 +3646,8 @@
                 "city_id": "24"
             }
         ],
-        "name": "天津市"
+        "name": "天津市",
+        "name_py": "tianjinshi"
     },
     {
         "list": [
@@ -3718,7 +3743,8 @@
                 "city_id": "2287"
             }
         ],
-        "name": "陕西省"
+        "name": "陕西省",
+        "name_py": "shanxisheng"
     },
     {
         "list": [
@@ -3835,7 +3861,8 @@
                 "city_id": "285295"
             }
         ],
-        "name": "甘肃省"
+        "name": "甘肃省",
+        "name_py": "gansusheng"
     },
     {
         "list": [
@@ -4050,7 +4077,8 @@
                 "city_id": "362"
             }
         ],
-        "name": "黑龙江省"
+        "name": "黑龙江省",
+        "name_py": "heilongjiangsheng"
     },
     {
         "list": [
@@ -4265,7 +4293,8 @@
                 "city_id": "177"
             }
         ],
-        "name": "辽宁省"
+        "name": "辽宁省",
+        "name_py": "liaoningsheng"
     },
     {
         "list": [
@@ -4424,7 +4453,8 @@
                 "city_id": "1646"
             }
         ],
-        "name": "安徽省"
+        "name": "安徽省",
+        "name_py": "anhuisheng"
     },
     {
         "list": [
@@ -4667,6 +4697,7 @@
                 "city_id": "2807"
             }
         ],
-        "name": "四川省"
+        "name": "四川省",
+        "name_py": "sichuansheng"
     }
 ]

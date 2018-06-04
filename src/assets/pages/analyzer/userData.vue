@@ -18,8 +18,7 @@
           </el-form-item>
 
           <el-form-item>
-            <el-cascader :options="cityData" :props="cityForProps" placeholder="请选择地区">
-            </el-cascader>
+            <city-picker v-model="area"></city-picker>{{area}}
           </el-form-item>
 
           <el-form-item style="margin-bottom:0">
@@ -31,7 +30,6 @@
 
 
     <div style="margin-top: 20px">
-
       <ve-line :data="chartData" :settings="chartSettings"></ve-line>
     </div>
 
@@ -39,21 +37,19 @@
 </template>
 
 <script>
-import CityData from "../../json/city.json";
+import CityPicker from '../../components/cityPicker.vue'
 
 export default {
+  components: { 
+    CityPicker
+  },
   data() {
     this.chartSettings = {
         stack: { '用户': ['访问用户', '下单用户'] },
         area: true
       }
     return {
-      cityData: CityData,
-      cityForProps : { 
-        value: 'name',
-        label: 'name',
-        children: 'list'
-      },
+      area: '',
       formdata: {
         date: "",
         platform: "",
