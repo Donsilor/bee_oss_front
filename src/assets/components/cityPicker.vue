@@ -1,5 +1,5 @@
 <template>
-    <el-cascader v-model="value" :options="cityData" :props="cityForProps" placeholder="请选择地区">
+    <el-cascader v-model="selectVal" :options="cityData" :props="cityForProps" placeholder="请选择地区">
     </el-cascader>
 </template>
 
@@ -9,7 +9,7 @@
 import cityData from '../json/city.json'
 
 export default {
-    props: ["value"],
+    props: ["value", ],
     data() {
         return {
             cityData: cityData,
@@ -17,12 +17,13 @@ export default {
                 value: 'name_py',
                 label: 'name',
                 children: 'list'
-            }
+            },
+            selectVal: []
         }
     },
     watch: {    
-        value(val) {   
-            this.$emit('input', val)
+        selectVal(val) {
+            this.$emit('input', val[1].replace('shi', ''))
         }
     }
 }

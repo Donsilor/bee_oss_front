@@ -21,7 +21,7 @@ const api = {
 
 Object.assign(api, {
     getUserAnalyzeData: function(params) {
-        return axios.all([api.getOnlineUser(params), api.getRegisterUser(params), api.getActiveUser(params), api.getLoginUser(params), api.getActivePercent(params)]);
+        return axios.all([api.getOnlineUser(params), api.getRegisterUser(params), api.getActiveUser(params), api.getLoginUser(params)]);
     }
 });
 
