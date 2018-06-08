@@ -34,6 +34,11 @@ const routes = [
         component: Pages.OPS
       },
       {
+        path: "muser",
+        name: "muser",
+        component: Pages.MUSER
+      },
+      {
         path: "ops/:id",
         name: "ops",
         component: Pages.OPS

@@ -69,6 +69,11 @@ export default {
                             title: '用户信息',
                             path: '/main/ops',
                             icon: ''
+						},
+						{
+                            title: '重点用户信息',
+                            path: '/main/muser',
+                            icon: ''
                         },
                         {
                             title: '家庭信息',

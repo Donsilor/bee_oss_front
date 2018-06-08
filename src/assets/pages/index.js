@@ -8,6 +8,7 @@ import upgrade from './upgradeCenter.vue';
 import VersionManager from './upgradeCenter/versionManager.vue';
 import PushManager from './upgradeCenter/pushManager.vue';
 import OPS from './userData/ops.vue';
+import MUSER from './userData/muser/index.vue';
 import ThroughData from './throughData/index.vue';
 import AllThroughData from './throughData/allData.vue';
 import AppRouterData from './throughData/appRouterData.vue';
@@ -34,7 +35,8 @@ export {
 	Login,
 	Main,
 	Home,
-	OPS,
+    OPS,
+    MUSER,
     VersionManager,
     PushManager,
 	Facility,
