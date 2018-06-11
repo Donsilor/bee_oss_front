@@ -91,7 +91,7 @@
             <div>{{chartData.columns && chartData.columns[1]}}</div>
             <div>单位: 个</div>
           </el-col>
-          <el-col :span="4" :offset="4" style="text-align: right;">
+          <!-- <el-col :span="4" :offset="4" style="text-align: right;">
             <ul>
               <li>
                 <a href="">日</a>
@@ -99,7 +99,7 @@
                 <a href="">月</a>
               </li>
             </ul>
-          </el-col>
+          </el-col> -->
         </el-row>
         <ve-line :data="chartData" :settings="chartSettings"></ve-line>
       </el-card>

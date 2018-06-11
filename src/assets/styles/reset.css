@@ -76,4 +76,5 @@ body{
    scrollbar-track-color: #d0d0d0;
     scrollbar-arrow-color:  #d0d0d0;
    scrollbar-3dlight-color: #d0d0d0;
+   overflow: hidden;
   }

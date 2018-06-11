@@ -69,14 +69,14 @@
 				<!--家庭详情-->
 				<el-row class="p_r">
 					<h3 class="h3_pp">家庭详情</h3>
-					<el-dropdown class="family_tab" @command="handleCommand">
+					<el-dropdown class="family_tab" @command="handleCommand" trigger="click">
 						<el-button type="" size="small">
-							{{allFamily.length && allFamily[0].name}}<i class="el-icon-arrow-down el-icon--right"></i>
+							{{allFamily.length && allFamily[allFamilyIndex].name}}<i class="el-icon-arrow-down el-icon--right"></i>
 						</el-button>
 						<!--<span class="el-dropdown-link">-->
 						  <!--{{allFamily.length && allFamily[0].name}}<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
 						<!--</span>-->
-						<el-dropdown-menu slot="dropdown">
+						<el-dropdown-menu slot="dropdown" style="max-height:250px;overflow-y:auto">
 							<el-dropdown-item :command="item.value" v-for="item in allFamily">{{item.name}}</el-dropdown-item>
 						</el-dropdown-menu>
 					</el-dropdown>
