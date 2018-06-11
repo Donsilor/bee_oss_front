@@ -8,7 +8,7 @@ export default {
     addMUser(params) {
         return axios.post(`${BASE_URL}iotuser/savemuser`, params);
     },
-    deleteMUser(params) {
-        return axios.post(`${BASE_URL}iotuser/delmuser`, params);
+    deleteMUser(user_ids) {
+        return axios.post(`${BASE_URL}iotuser/delmuser`, {user_ids});
     }
 };

@@ -113,7 +113,9 @@ export default {
             console.log('success');
         },
         handleDelete(id) {
-            API.deleteMUser({id}).then(res => {
+            const ids = [id];
+            API.deleteMUser(JSON.stringify(ids)).then(res => {
+                this.$message('删除成功!');
                 this.getMUserList();
             })
         }

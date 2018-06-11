@@ -15,7 +15,7 @@
 				<muser-list :dataChanged="dataChanged" :searchMobile="searchMobile"></muser-list>
 			</div>
 			<div>
-				<muser-add :dialogVisible="addMuser" @setDialog="closeDialog"></muser-add>
+				<muser-add :dialogVisible="addMuser" :dataChanged="dataChanged" @setDataChanged="changeData" @setDialog="closeDialog"></muser-add>
 			</div>
 		</div>
 	</div>
@@ -47,6 +47,9 @@ export default {
 		},
 		closeDialog() {
 			this.addMuser = false;
+		},
+		changeData() {
+			this.dataChanged++;
 		}
     }
 }

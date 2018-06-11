@@ -15,7 +15,7 @@
 <script>
 import API from '../../../service/index.js'
     export default {
-        props: ['dialogVisible'],
+        props: ['dialogVisible', 'dataChanged'],
         data() {
             return {
                 formdata: {
@@ -40,6 +40,7 @@ import API from '../../../service/index.js'
                     phone_num: userData.tel
                 }).then(res => {
                     this.$message("添加成功");
+                    this.$emit('setDataChanged');
                     this.closeDialog();
                 })
             },
