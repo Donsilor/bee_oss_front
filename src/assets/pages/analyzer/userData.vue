@@ -35,7 +35,7 @@
     <el-row :gutter="24" class="analyzer-data">
 
       <el-col :span="4">
-        <el-card shadow="never" @click.native="setChartData(registerUserChartData)">
+        <el-card shadow="hover" @click.native="setChartData(registerUserChartData)" class="select">
           <div class="data-list">
             <el-row :gutter="24">
               <el-col :span="16">{{registerUserAnalyzer.text}}</el-col>
@@ -59,7 +59,7 @@
         </el-card>
       </el-col> -->
       <el-col :span="4">
-        <el-card shadow="never" @click.native="setChartData(loginUserChartData)">
+        <el-card shadow="hover" @click.native="setChartData(loginUserChartData)" class="select">
           <div class="data-list">
             <el-row :gutter="24">
               <el-col :span="16">{{loginUserAnalyzer.text}}</el-col>
@@ -130,6 +130,9 @@
 
 <style lang="less">
 .analyzer-data {
+  .select {
+    cursor: pointer;
+  }
   .data-list > div {
     margin: 15px 0;
     font-size: 14px;
@@ -220,7 +223,7 @@ export default {
       loginUserAnalyzer: {
         totalCount: 0,
         lastDate: null,
-        text: '登陆用户数'
+        text: '登录用户数'
       },
       
       onlineUserChartData: {
@@ -236,7 +239,7 @@ export default {
         rows: []
       },
       loginUserChartData: {
-        columns: ['日期', '登陆用户数'],
+        columns: ['日期', '登录用户数'],
         rows: []
       },
       chartData: {}
