@@ -34,9 +34,7 @@ import API from '../../../service/index.js'
         methods: {
             formSubmit() {
                 const userData = this.formdata;
-                const token = JSON.parse(localStorage.getItem('localData')).user.info.token;
                 API.addMUser({
-                    token,
                     phone_num: userData.tel
                 }).then(res => {
                     this.$message("添加成功");

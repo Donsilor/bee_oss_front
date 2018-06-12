@@ -220,6 +220,10 @@ export default {
 	background-size: @width @height;
 }
 .left-menu {
+	overflow-y: auto;
+	height: calc(~"100vh - 80px");
+	background-color: #2B2B37;
+
 	.el-menu{
 		border-radius: 0;
 	}
@@ -253,7 +257,7 @@ export default {
 		color: #fff;
 		background: #3b3b53;
 	}
-	min-height: 100vh;
+	// min-height: 100vh;
 	background: #2B2B37;
 
 	li{
