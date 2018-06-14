@@ -294,7 +294,7 @@ export default {
           totalCount: registerUserData.data.result.total_register_num,
           lastDate: registerUserData.data.result.list && registerUserData.data.result.list[0] && registerUserData.data.result.list[0].stat_date
         });
-        this.bindChart(registerUserData.data.result.list, 'registerUserChartData');
+        this.bindChart(registerUserData.data.result.list || [], 'registerUserChartData');
 
         // Object.assign(this.activeUserAnalyzer, {
         //   totalCount: activeUserData.data.result.total_active_user_num,
@@ -306,7 +306,7 @@ export default {
           totalCount: loginUserData.data.result.total_login_user_num,
           lastDate: loginUserData.data.result.list && loginUserData.data.result.list[0] && loginUserData.data.result.list[0].stat_date
         });
-        this.bindChart(loginUserData.data.result.list, 'loginUserChartData');
+        this.bindChart(loginUserData.data.result.list || [], 'loginUserChartData');
 
         this.setChartData(this.registerUserChartData)
 
