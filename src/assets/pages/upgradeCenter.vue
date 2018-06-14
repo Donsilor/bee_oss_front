@@ -153,7 +153,7 @@
 					<el-table-column prop="status" label="状态"></el-table-column>
 					<el-table-column prop="guarantee" label="保修状态"></el-table-column>
 					<el-table-column  label="操作" width="180" >
-						<template scope="scope">
+						<template slot-scope="scope">
 							<el-button @click="console.log(scope.row)" type="text">查看日志</el-button>
 							<el-button @click="console.log(scope.row)" type="text">下载日志</el-button>
 						</template>

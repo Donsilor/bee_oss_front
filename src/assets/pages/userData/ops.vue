@@ -48,7 +48,7 @@
 										 :label="item.label"
 										 :width="'auto'"
 						>
-							<template scope="scope">
+							<template slot-scope="scope">
 								<div v-if="item.prop === 'F_device_state'">
 									{{getStatusText(scope.row['F_status'])}}
 								</div>
@@ -58,7 +58,7 @@
 						<el-table-column
 								width="auto"
 								label="日志">
-							<template scope="scope">
+							<template slot-scope="scope">
 								<el-button  type="text" size="small" @click="openLogOutLayer(scope.row)">登录登出日志</el-button>
 								<!--<el-button  type="text" size="small" @click="errLogLayer=true">错误日志</el-button>-->
 							</template>
@@ -128,7 +128,7 @@
 												 :label="item.label"
 												 :width="'auto'"
 								>
-									<template scope="scope">
+									<template slot-scope="scope">
 										<div v-if="item.prop === 'F_device_state'">
 											{{getRouterStatusText(scope.row['F_device_state'])}}
 										</div>
@@ -147,7 +147,7 @@
 													 :width="'auto'"
 													 sortable
 									>
-										<template scope="scope">
+										<template slot-scope="scope">
 											<div v-if="item.prop === 'F_device_state'">
 												{{getStatusText(scope.row['F_device_state'])}}
 											</div>
@@ -213,7 +213,7 @@
 									 :prop="item.prop"
 									 :label="item.label"
 					>
-						<template scope="scope">
+						<template slot-scope="scope">
 							<div :title="scope.row[item.prop]">{{scope.row[item.prop]}}</div>
 						</template>
 					</el-table-column>
@@ -246,7 +246,7 @@
 									 :prop="item.prop"
 									 :label="item.label"
 					>
-						<template scope="scope">
+						<template slot-scope="scope">
 							<div v-if="scope.row[item.prop]==='created_time'" :title="scope.row[item.prop].Format('yyyy-MM-dd')">{{scope.row[item.prop].Format('yyyy-MM-dd')}}</div>
 							<div v-else-if="scope.row[item.prop]==='rsp_time'" :title="scope.row[item.prop].Format('yyyy-MM-dd')">{{scope.row[item.prop].Format('yyyy-MM-dd')}}</div>
 							<div v-else :title="scope.row[item.prop]">{{scope.row[item.prop]}}</div>

@@ -57,7 +57,7 @@
 					:data="rootLogData.tableData"
 					style="width: 100%">
 				<el-table-column label="操作" :width="60">
-					<template scope="scope">
+					<template slot-scope="scope">
 						<el-button type="text" @click="getDetail(scope.row)">详情</el-button>
 					</template>
 				</el-table-column>
@@ -68,7 +68,7 @@
 								 :width="getWidth(item.prop)"
 								 sortable
 				>
-					<template scope="scope">
+					<template slot-scope="scope">
 						<div :title="scope.row[item.prop]">{{scope.row[item.prop]}}</div>
 					</template>
 				</el-table-column>

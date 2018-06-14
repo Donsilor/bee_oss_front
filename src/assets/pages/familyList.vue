@@ -35,7 +35,7 @@
 								 :width="'auto'"
 								 sortable
 				>
-					<template scope="scope">
+					<template slot-scope="scope">
 						<div :title="scope.row[item.prop]">{{scope.row[item.prop]}}</div>
 					</template>
 				</el-table-column>

@@ -29,7 +29,7 @@
 								 :label="item.label"
 								 :width="'auto'"
 				>
-					<template scope="scope">
+					<template slot-scope="scope">
 						<div v-if="item.prop === 'type'" >{{getTypeText(scope.row.type)}}</div>
 						<div v-else-if="item.prop === 'status'" >{{getStatusText(scope.row.status)}}</div>
 						<div v-else-if="item.prop === 'force'" >{{getForceText(scope.row.force)}}</div>
@@ -40,7 +40,7 @@
 				<el-table-column
 						width="180"
 						label="操作">
-					<template scope="scope">
+					<template slot-scope="scope">
 						<el-button  type="text" size="small" @click="getVersionHistory(scope.row)">查看版本历史</el-button>
 					</template>
 				</el-table-column>
@@ -55,7 +55,7 @@
 								 :label="item.label"
 								 :width="'auto'"
 				>
-					<template scope="scope">
+					<template slot-scope="scope">
 						<div v-if="item.prop == 'type'" >{{getTypeText(scope.row.type)}}</div>
 						<div v-else-if="item.prop == 'status'" >{{getStatusText(scope.row.status)}}</div>
 						<div v-else-if="item.prop == 'force'" >{{getForceText(scope.row.force)}}</div>
@@ -66,7 +66,7 @@
 				<el-table-column
 						width="180"
 						label="操作">
-					<template scope="scope">
+					<template slot-scope="scope">
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="getVersionDetail(scope.row)">查看详情</el-button>
 						<el-button v-if="firstTableShow" type="text" size="small" @click="getVersionHistory(scope.row)">查看历史版本</el-button>
 					</template>
@@ -87,7 +87,7 @@
 								 :label="item.label"
 								 :width="'auto'"
 				>
-					<template scope="scope">
+					<template slot-scope="scope">
 						<div v-if="item.prop == 'type'" >{{getTypeText(scope.row.type)}}</div>
 						<div v-else-if="item.prop == 'status'" >{{getStatusTextPush(scope.row.status)}}</div>
 						<div v-else>{{scope.row[item.prop]}}</div>
@@ -96,7 +96,7 @@
 				<el-table-column
 						width="180"
 						label="操作">
-					<template scope="scope">
+					<template slot-scope="scope">
 						<el-button  type="text" size="small" @click="getVersionDetail(scope.row)">查看详情</el-button>
 					</template>
 				</el-table-column>

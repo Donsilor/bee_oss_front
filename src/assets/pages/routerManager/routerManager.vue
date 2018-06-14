@@ -30,7 +30,7 @@
 								 :label="item.label"
 								 :width="'auto'"
 				>
-					<template scope="scope">
+					<template slot-scope="scope">
 						<div v-if="item.prop == 'device_state'" >{{getStatusText(scope.row.device_state)}}</div>
 						<div v-else>{{scope.row[item.prop]}}</div>
 					</template>
@@ -38,7 +38,7 @@
 				<el-table-column
 						width="180"
 						label="操作">
-					<template scope="scope">
+					<template slot-scope="scope">
 						<el-button  type="text" size="small" @click="openEditLayer(scope.row)">编辑</el-button>
 						<el-button  type="text" size="small" @click="delRouter(scope.row)">删除</el-button>
 					</template>

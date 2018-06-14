@@ -53,7 +53,7 @@
 								 :width="'auto'"
 								 sortable
 				>
-					<template scope="scope">
+					<template slot-scope="scope">
 						<div v-if="scope.row[item.prop]==='created_time'">{{scope.row[item.prop].Format('yyyy/MM/dd hh:mm')}}</div>
 						<div :title="scope.row[item.prop]" v-else>{{scope.row[item.prop]}}</div>
 					</template>

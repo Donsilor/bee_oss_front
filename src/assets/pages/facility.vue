@@ -18,7 +18,7 @@
 			<el-table-column prop="uuid" label="UUID"></el-table-column>
 			<el-table-column prop="status" label="状态"></el-table-column>
 			<el-table-column label="升级历史" >
-				<template scope="scope">
+				<template slot-scope="scope">
 					<el-button @click="console.log(scope.row)" type="text">详情</el-button>
 				</template>
 			</el-table-column>

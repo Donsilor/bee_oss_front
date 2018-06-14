@@ -26,7 +26,7 @@
 								 :label="item.label"
 								 :width="'auto'"
 				>
-					<template scope="scope">
+					<template slot-scope="scope">
 						<div v-if="item.prop === 'type'" >{{getTypeText(scope.row.type, scope.row.os_type)+getPidName(scope.row)}}</div>
 						<div v-else-if="item.prop === 'status'" >{{getStatusText(scope.row.status)}}</div>
 						<div v-else-if="item.prop === 'force'" >{{getForceText(scope.row.force)}}</div>
@@ -37,7 +37,7 @@
 				<el-table-column
 						width="180"
 						label="操作">
-					<template scope="scope">
+					<template slot-scope="scope">
 						<el-button  type="text" size="small" @click="getVersionHistory(scope.row,1)">查看版本列表</el-button>
 					</template>
 				</el-table-column>
@@ -52,7 +52,7 @@
 								 :label="item.label"
 								 :width="'auto'"
 				>
-					<template scope="scope">
+					<template slot-scope="scope">
 						<div v-if="item.prop == 'type'" >{{getTypeText(scope.row.type, scope.row.os_type)}}</div>
 						<div v-else-if="item.prop == 'status'" >{{getStatusText(scope.row.status)}}</div>
 						<div v-else-if="item.prop == 'force'" >{{getForceText(scope.row.force)}}</div>
@@ -65,7 +65,7 @@
 				<el-table-column
 						:width="!firstTableShow ? 320 : 180"
 						label="操作">
-					<template scope="scope">
+					<template slot-scope="scope">
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="getVersionDetail(scope.row)">查看</el-button>
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="openSupportLayer(scope.row)">支持版本</el-button>
 						<el-button v-if="!firstTableShow" type="text" size="small" @click="openVersionEdit(scope.row)">编辑</el-button>

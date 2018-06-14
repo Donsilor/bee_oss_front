@@ -16,14 +16,14 @@
 									 :label="item.label"
 									 :width="'auto'"
 					>
-						<template scope="scope">
+						<template slot-scope="scope">
 							{{scope.row[item.prop]}}
 						</template>
 					</el-table-column>
 					<el-table-column
 							width="180"
 							label="操作">
-						<template scope="scope">
+						<template slot-scope="scope">
 							<el-button v-if="scope.row.role_name!='Admin'"  type="text" size="small" @click="handleEdit(scope.row)">编辑</el-button>
 							<el-button v-if="scope.row.role_name!='Admin'"  type="text" size="small" @click="handleDelete(scope.row)">删除</el-button>
 						</template>

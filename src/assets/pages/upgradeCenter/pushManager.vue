@@ -10,7 +10,7 @@
 								 :label="item.label"
 								 :width="'auto'"
 				>
-					<template scope="scope">
+					<template slot-scope="scope">
 						<div v-if="item.prop == 'type'" >{{getTypeText(scope.row.type)}}</div>
 						<div v-else-if="item.prop == 'is_black'" >{{scope.row.is_black ? '黑名单' : '白名单'}}</div>
 						<div v-else-if="item.prop == 'total_nums'" >{{scope.row.total_nums + '/' + scope.row.success_nums}}</div>
@@ -21,7 +21,7 @@
 				<el-table-column
 						width="180"
 						label="操作">
-					<template scope="scope">
+					<template slot-scope="scope">
 						<el-button  type="text" size="small" @click="getPushDetail(scope.row)">推送详情</el-button>
 						<el-button  type="text" size="small" @click="getPushNameList(scope.row)">查看名单</el-button>
 					</template>
@@ -42,7 +42,7 @@
 									 :label="item.label"
 									 :width="'auto'"
 					>
-						<template scope="scope">
+						<template slot-scope="scope">
 							<div v-if="item.prop == 'status'" >{{getStatusTextPush(scope.row.status)}}</div>
 							<div v-else>{{scope.row[item.prop]}}</div>
 						</template>
@@ -64,7 +64,7 @@
 									 :label="item.label"
 									 :width="'auto'"
 					>
-						<template scope="scope">
+						<template slot-scope="scope">
 							<div>{{scope.row[item.prop]}}</div>
 						</template>
 					</el-table-column>

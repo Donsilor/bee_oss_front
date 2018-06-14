@@ -45,7 +45,7 @@
                 label="手机号码">
             </el-table-column>
             <el-table-column label="家庭">
-                <template scope="scope">
+                <template slot-scope="scope">
                     <el-table
                         :data="scope.row.familyList">
                         <el-table-column

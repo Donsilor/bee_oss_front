@@ -97,7 +97,7 @@
 									 :label="item.label"
 									 :width="'auto'"
 					>
-						<template scope="scope">
+						<template slot-scope="scope">
 							<div>{{scope.row[item.prop]}}</div>
 						</template>
 					</el-table-column>
