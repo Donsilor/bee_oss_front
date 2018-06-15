@@ -43,7 +43,7 @@
                 <div class="header-item">姓名: {{tableItem.name}}</div>
                 <div class="header-item header-item-2">手机号码: {{tableItem.phone}}</div>
                 <div class="header-item header-item-3">
-                    <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
+                    <el-button size="mini" type="danger" @click="handleDelete(tableItem.id)">删除</el-button>
                 </div>
             </div>
             <el-table border :data="tableItem.familyList" style="width: 100%"> 
