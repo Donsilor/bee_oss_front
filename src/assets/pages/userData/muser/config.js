@@ -1,5 +1,5 @@
 const pagerConfig = {
-    pagesize: 20
+    pageSize: 20
 };
 
 export default pagerConfig;

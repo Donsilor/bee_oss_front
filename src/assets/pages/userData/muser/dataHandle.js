@@ -21,7 +21,9 @@ export const getOnlyUserList = (data) => {
         item.family_list.map(fa => {
             const family = {
                 isOnline: fa.router_online ? '在线' : '离线',
-                total: 0
+                total: 0,
+                name: item.user_name,
+                phone: item.phone
             };
             if(fa.device_list.length > 0) {
                 fa.device_list.map(ca => {
