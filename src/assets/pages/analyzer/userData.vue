@@ -10,9 +10,10 @@
 
           <el-form-item>
             <el-select v-model="formdata.platform" placeholder="请选择平台">
-              <el-option label="Pad" value="pad"></el-option>
-              <el-option label="iOS" value="ios"></el-option>
-              <el-option label="android" value="android"></el-option>
+              <el-option label="Android_Pad" value="Android_Pad"></el-option>
+              <el-option label="IOS" value="IOS"></el-option>
+              <el-option label="Android" value="Android"></el-option>
+              <el-option label="IOS_Pad" value="IOS_Pad"></el-option>
               <el-option label="合计" value=""></el-option>
             </el-select>
           </el-form-item>
