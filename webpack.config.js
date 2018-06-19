@@ -61,8 +61,9 @@ module.exports = (options = {}) => ({
     }
   },
   devServer: {
-    host: '0.0.0.0',
+    host: 'localhost',
     port: 8080,
+    open: true,
     proxy: {
       '/api/index.php/*': {
         target: 'http://beeossdev.egtest.cn:7777',
