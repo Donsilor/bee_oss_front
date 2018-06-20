@@ -35,18 +35,26 @@
 
     <el-row :gutter="24" class="analyzer-data">
 
-      <el-col :span="4">
+    <el-col :span="6">
         <el-card shadow="hover" @click.native="setChartData(registerUserChartData)" class="select">
           <div class="data-list">
             <el-row :gutter="24">
-              <el-col :span="16">{{registerUserAnalyzer.text}}</el-col>
+                <el-col :span="16">
+                    <span>
+                        {{registerUserAnalyzer.text}}
+                    </span>
+                    <!-- <el-tooltip class="item" effect="dark" content="统计截止到某一天，在各个端App中注册的用户总数" placement="bottom">
+                        <i class="el-icon-information"></i>
+                    </el-tooltip>   -->
+                    <i class="icon-tendency"></i>
+                </el-col>
               <el-col :span="4" :offset="4"></el-col>
             </el-row>
             <div>{{registerUserAnalyzer.totalCount}}</div>
             <div>截止到{{registerUserAnalyzer.lastDate}}</div>
           </div>
         </el-card>
-      </el-col>
+    </el-col>
       <!-- <el-col :span="4">
         <el-card shadow="never" @click.native="setChartData(onlineUserChartData)">
           <div class="data-list">
@@ -59,11 +67,19 @@
           </div>
         </el-card>
       </el-col> -->
-      <el-col :span="4">
+      <el-col :span="6">
         <el-card shadow="hover" @click.native="setChartData(loginUserChartData)" class="select">
           <div class="data-list">
             <el-row :gutter="24">
-              <el-col :span="16">{{loginUserAnalyzer.text}}</el-col>
+              <el-col :span="16">
+                <span>
+                     {{loginUserAnalyzer.text}}
+                </span>  
+                <!-- <el-tooltip class="item" effect="dark" content="统计主动启动App，或者有唤醒语音路由（包括AI路由和mini路由）的去重用户数" placement="bottom">
+                    <i class="el-icon-information"></i>
+                </el-tooltip>   -->
+                <i class="icon-tendency"></i>
+              </el-col>
               <el-col :span="4" :offset="4"></el-col>
             </el-row>
             <div>{{loginUserAnalyzer.totalCount}}</div>
@@ -89,7 +105,13 @@
       <el-card shadow="never">
         <el-row :gutter="24">
           <el-col :span="16">
-            <div>{{chartData.columns && chartData.columns[1]}}</div>
+            <div>
+                <span>{{chartData.columns && chartData.columns[1]}}</span>
+                <el-tooltip class="item" effect="dark" content="统计截止到某一天，在各个端App中注册的用户总数" placement="bottom">
+                    <i class="el-icon-information"></i>
+                    <!-- <i class="icon-information"></i> -->
+                </el-tooltip>
+            </div>
             <div>单位: 个</div>
           </el-col>
           <!-- <el-col :span="4" :offset="4" style="text-align: right;">
@@ -143,7 +165,22 @@
     }
   }
 }
+.icon-information {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background-image: url(../../images/icn_explain.png);
+    background-size: 100% 100%;
+}
+.icon-tendency {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background-image: url(../../images/tendency.png);
+    background-size: 100% 100%;
+}
 </style>
+
 <script>
 import CityPicker from '../../components/cityPicker.vue'
 import API from "../../service/index.js";
@@ -180,28 +217,31 @@ export default {
           {
             text: "最近一周",
             onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", [start, end]);
+                const end = new Date();
+                const start = new Date();
+                end.setTime(end.getTime() - 3600 * 1000 * 24 * 1);
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                picker.$emit("pick", [start, end]);
             }
           },
           {
             text: "最近一个月",
             onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit("pick", [start, end]);
+                const end = new Date();
+                const start = new Date();
+                end.setTime(end.getTime() - 3600 * 1000 * 24 * 1);
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                picker.$emit("pick", [start, end]);
             }
           },
           {
             text: "最近三个月",
             onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit("pick", [start, end]);
+                const end = new Date();
+                const start = new Date();
+                end.setTime(end.getTime() - 3600 * 1000 * 24 * 1);
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                picker.$emit("pick", [start, end]);
             }
           }
         ]
@@ -318,6 +358,7 @@ export default {
 
     const end = new Date();
     const start = new Date();
+    end.setTime(end.getTime() - 3600 * 1000 * 24 * 1);
     start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
     this.formdata.date = [start, end]
 

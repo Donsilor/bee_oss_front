@@ -17,7 +17,6 @@ axios.interceptors.request.use(function (config) {
       JSON.parse(localStorage.getItem('localData')).user &&
       JSON.parse(localStorage.getItem('localData')).user.info || {}
   config.withCredentials = true
-  console.log(config, info);
   // config.headers['Content-Type'] = 'application/json'
   if (!/\/api.php/.test(config.url)) {
       if(!config.data) config.data = {}
