@@ -77,7 +77,7 @@
                 </span>  
                 <!-- <el-tooltip class="item" effect="dark" content="统计主动启动App，或者有唤醒语音路由（包括AI路由和mini路由）的去重用户数" placement="bottom">
                     <i class="el-icon-information"></i>
-                </el-tooltip>   -->
+                </el-tooltip> -->
                 <i class="icon-tendency"></i>
               </el-col>
               <el-col :span="4" :offset="4"></el-col>
@@ -107,7 +107,8 @@
           <el-col :span="16">
             <div>
                 <span>{{chartData.columns && chartData.columns[1]}}</span>
-                <el-tooltip class="item" effect="dark" content="统计截止到某一天，在各个端App中注册的用户总数" placement="bottom">
+                <el-tooltip placement="right">
+                    <div slot="content">统计截止到某一天，在各<br/>个端App中注册的用户总数</div>
                     <i class="el-icon-information"></i>
                     <!-- <i class="icon-information"></i> -->
                 </el-tooltip>
@@ -332,8 +333,8 @@ export default {
 
 
         Object.assign(this.registerUserAnalyzer, {
-          totalCount: registerUserData.data.result.total_register_num,
-          lastDate: registerUserData.data.result.list && registerUserData.data.result.list[0] && registerUserData.data.result.list[0].stat_date
+            totalCount: registerUserData.data.result.total_register_num,
+            lastDate: registerUserData.data.result.list && registerUserData.data.result.list[0] && registerUserData.data.result.list[0].stat_date
         });
         this.bindChart(registerUserData.data.result.list || [], 'registerUserChartData');
 
