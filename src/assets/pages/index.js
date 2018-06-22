@@ -30,6 +30,8 @@ import ResetPwd from './permission/resetPwd.vue'
 import UpdatePwd from './permission/updatePwd.vue'
 import Error from './error.vue'
 import UserData from './analyzer/userData.vue'
+import FeedbackList from './feedback/list.vue'
+import FeedbackDetail from './feedback/detail.vue'
 
 export {
 	Login,
@@ -63,5 +65,7 @@ export {
     UpdatePwd,
     ResetPwd,
     Error,
-    UserData
+    UserData,
+    FeedbackList,
+    FeedbackDetail
 };

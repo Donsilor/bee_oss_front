@@ -3,9 +3,10 @@
 		<el-menu :default-active="defaultActive" :router=true class="menu-list">
 			<template v-for="item in menuData">
 				<template v-if="item.children" >
-					<el-submenu :index="item.path">
+					<el-submenu :index="item.path" :key="item.path">
 						<template slot="title"><i class="icon-pp" :class="item.icon"></i>{{item.title}}</template>
-						<div v-for="subItem in item.children" style="overflow: hidden"  v-show="!subItem.needAdmin || (subItem.needAdmin && isAdmin)">
+						<div v-for="subItem in item.children" style="overflow: hidden" :key="subItem.path"
+                        v-show="!subItem.needAdmin || (subItem.needAdmin && isAdmin)">
 							<a target="_blank" v-if="subItem.elseUrl" class="href-a"  :href="subItem.path">{{subItem.title}}</a>
 							<el-menu-item :index="subItem.path" v-if="!subItem.elseUrl" :key="subItem.path" :route="{ path: subItem.path }">{{subItem.title}}
 							</el-menu-item>
@@ -179,6 +180,11 @@ export default {
 						}
                     ]
                 },
+                {
+                    title: '用户反馈',
+                    path: '/main/feedback/list',
+                    icon: 'family',
+                }
 			]
 		};
 	},

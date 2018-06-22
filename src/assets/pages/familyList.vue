@@ -63,6 +63,15 @@ export default {
             totalItem: 0,
 			currentPage: 1,
             rootLogData: {},
+            rootLogForm: {
+                log_type: '',
+                host_name: '',
+				select_date: new Date(),
+                svr_id: '',
+                monitor_name: '',
+				limit: 15,
+                start_end_time: []
+			},
 		}
 	},
 	mounted () {
@@ -81,7 +90,7 @@ export default {
         getRootLogs (page) {
             let obj = this
 			let param = {}
-			let currentForm =  obj.rootLogForm
+            let currentForm =  obj.rootLogForm
             currentForm.page = page
 			for (let attr in currentForm) {
                 if (attr === 'start_end_time') {
