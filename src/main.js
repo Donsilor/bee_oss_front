@@ -1,16 +1,12 @@
 import Vue from 'vue';
-// import ElementUI from 'element-ui';
 import router from './assets/lib/router';
-// import VueRouter from 'vue-router';
-// import axios from 'axios';
 import store from './assets/store/index.js';
 import cache from './assets/store/cache.js';
 import App from './App.vue';
 
-// Vue.prototype.$http = axios;
-
-// Vue.use(ElementUI);
-// Vue.use(VueRouter);
+//打开 mockjs拦截请求，返回mock数据
+// 关闭 请求服务器数据
+import mock from './assets/mockData';
 
 Vue.mixin({
 	computed: {	

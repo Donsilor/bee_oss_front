@@ -3,55 +3,56 @@
         <div>
             <el-row style="line-height:36px;">
                 <el-col :span="8">
-                    <el-checkbox v-model="unRead">只看未读</el-checkbox>
+                    <el-checkbox v-model="unRead" @change="seeUnRead">只看未读</el-checkbox>
                 </el-col>
                 <el-col :span="8">
                     <span>日期：</span>
-                    <el-date-picker v-model="date" type="daterange" placeholder="请选择日期范围"></el-date-picker>
+                    <el-date-picker v-model="date" :default-value="value2" 
+                    @change="changeDate" type="daterange" placeholder="请选择日期范围"></el-date-picker>
                 </el-col>
                 <el-col :span="6">
                     <el-input
                     placeholder="搜索关键字"
                     icon="search"
                     v-model="searchKey"
+                    @change="search"
                     :on-icon-click="search">
                     </el-input>
                 </el-col>
             </el-row>
         </div>
         <div style="margin: 20px 0">
-            <el-table :data="tableData" style="width: 100%" height="70px" :show-header="false">
+            <el-table :data="tableData" style="width: 100%" :show-header="false">
                 <el-table-column width="80">
                     <template slot-scope="scope">
-                        <img :src=" scope.row.img" alt="" class="avatar">
+                        <img :src="scope.row.small_img" alt="" class="avatar">
                     </template>
                 </el-table-column>
                 <el-table-column>
                     <template slot-scope="scope">
-                        <span class="summary point" @click="goDetail(scope.row.id)">{{ scope.row.summary }}</span>
+                        <span class="summary point" @click="goDetail(scope.row.id)" :class="{unRead: scope.row.is_read === '1'}">{{ scope.row.title }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column width="150">
                     <template slot-scope="scope">
-                        <span>{{ scope.row.version }}</span>
+                        <span>{{ scope.row.app_version }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column width="150">
+                <el-table-column width="180">
                     <template slot-scope="scope">
                         <ul>
-                            <li>{{ scope.row.sys }}</li>
-                            <li>{{ scope.row.sysVer }}</li>
+                            <li>{{ scope.row.terminal_type }}</li>
                         </ul>
                     </template>
                 </el-table-column>
                 <el-table-column width="150" :show-overflow-tooltip="true">
                     <template slot-scope="scope">
-                        <span>{{ scope.row.userName }}1212121212</span>
+                        <span>{{ scope.row.uname }}1212121212</span>
                     </template>
                 </el-table-column>
                 <el-table-column width="180">
                     <template slot-scope="scope">
-                        <span>{{ scope.row.date }}</span>
+                        <span>{{ scope.row.create_time }}</span>
                     </template>
                 </el-table-column>
             </el-table>
@@ -61,78 +62,106 @@
             <el-pagination
             class="pull-right"
             @current-change="handleCurrentChange"
-            :current-page.sync="currentPage"
-            :page-size="3"
+            :current-page="currentPage"
+            :page-size="pageSize"
             layout="prev, pager, next, jumper"
-            :total="4">
+            :total="total">
             </el-pagination>
         </div>
     </div>
 </template>
 
 <script>
+import axios from "~/assets/lib/http";
+import * as URL from "~/assets/lib/api";
+import { mapGetters } from 'vuex';
 export default {
     components: { 
     },
     data() {
         return {
             unRead: false,
-            date: '',
+            date: [],
             searchKey: '',
-            tableData: [{
-                img: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529588094405&di=567ad120af4e66490ab854d77a122a00&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F8b13632762d0f703c0e7705104fa513d2797c5e2.jpg',
-                summary: '上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄',
-                version: 'Ci 1.0.2',
-                sys: 'iPhone',
-                sysVer: 'IOS 10.3.3',
-                userName: 'adominadfsdf',
-                date: '2016-05-02 12:11',
-                id: 11
-            }, {
-                img: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529588094405&di=567ad120af4e66490ab854d77a122a00&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F8b13632762d0f703c0e7705104fa513d2797c5e2.jpg',
-                summary: '上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄',
-                version: 'Ci 1.0.2',
-                sys: 'iPhone',
-                sysVer: 'IOS 10.3.3',
-                userName: 'adominadfsdf',
-                date: '2016-05-02 12:11',
-                id: 12
-            }, {
-                img: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529588094405&di=567ad120af4e66490ab854d77a122a00&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F8b13632762d0f703c0e7705104fa513d2797c5e2.jpg',
-                summary: '上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄',
-                version: 'Ci 1.0.2',
-                sys: 'iPhone',
-                sysVer: 'IOS 10.3.3',
-                userName: 'adominadfsdf',
-                date: '2016-05-02',
-                id: 13
-            }, {
-                img: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529588094405&di=567ad120af4e66490ab854d77a122a00&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F8b13632762d0f703c0e7705104fa513d2797c5e2.jpg',
-                summary: '上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄',
-                version: 'Ci 1.0.2',
-                sys: 'iPhone',
-                sysVer: 'IOS 10.3.3',
-                userName: 'adominadfsdf',
-                date: '2016-05-02',
-                id: 14
-            }],
-            currentPage: 1
+            queryOption: {},
+            tableData: [],
+            pageSize: 2,
+            total: null,
+            currentPage: 1,
+            value2: []
         };
     },
-    methods: {
-        search () {
-            console.log(12);
-        },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
-        },
-        goDetail (id) {
-            this.$router.push({ name: 'feedbackDetail', params: { id: id }});
+    computed: {
+        ...mapGetters('feedback', [
+            'queryOptionStorage',
+            'needQueryOptionStorage'
+        ])
+    },
+    created () {
+        if (this.needQueryOptionStorage) {
+            this.queryOption = this.queryOptionStorage;
+            this.currentPage = this.queryOption.page;
+            this.searchKey = this.queryOption.keyword;
+            this.unRead = Boolean(this.queryOption.is_read);
+            this.date[0] = new Date(this.queryOption.start_time);
+            this.date[1] = new Date(this.queryOption.end_time);
+            this.$store.dispatch('feedback/setNeedQueryOptionStorage', false);
+        } else {
+            this.queryOption = {
+                page: this.currentPage,
+                limit: '', 
+                keyword: '',
+                is_read: '',
+                start_time: '',
+                end_time: ''  
+            }
         }
+        this.getFeedbackList();
     },
     watch: {
-        '$route' (val) {
-            console.log(val);
+    },
+    methods: {
+        goDetail (id) {
+            this.$store.dispatch('feedback/setQueryOptionStorage', this.queryOption).then(() => {
+                this.updateStatus(id).then(() => {
+                    this.$router.push({ name: 'feedbackDetail', params: { id: id }});
+                });
+            });
+        },
+        search () {
+            this.queryOption.keyword = this.searchKey;
+            this.queryOption.page = 1;
+            this.getFeedbackList();
+        },
+        seeUnRead () {
+            console.log(12);
+            this.queryOption.is_read = this.unRead ? 1 : 0;
+            this.queryOption.page = 1;
+            this.getFeedbackList();
+        },
+        changeDate (val) {
+            const start = this.date[0] ? this.date[0].getTime() : '';
+            const end = this.date[1] ? this.date[1].getTime() : '';
+            this.queryOption.start_time = start;
+            this.queryOption.end_time = end;
+            this.queryOption.page = 1;
+            this.getFeedbackList();
+        },
+        handleCurrentChange(val) {
+            this.queryOption.page = val;
+            this.getFeedbackList();
+        },
+        getFeedbackList () {
+            console.log(this.queryOption);
+            axios.post(URL.feedbackList, this.queryOption).then((res) => {
+                const result = res.data.result;
+                this.total = result.total;
+                this.tableData = result.data;
+            });
+        },
+        updateStatus (id) {
+            // console.log({ id: id });
+            return axios.post(URL.feedbackUpdateStatus, { id: id });
         }
     }
 }
@@ -156,6 +185,9 @@ export default {
     height: 32px;
     line-height: 32px;
     font-size: 14px;
+}
+.unRead {
+    font-weight: bold;
 }
 </style>
 

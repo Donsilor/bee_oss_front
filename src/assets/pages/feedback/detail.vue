@@ -1,68 +1,126 @@
 <template>
     <div class="page-content feedback-detail">
         <el-breadcrumb separator="/" class="item">
-            <el-breadcrumb-item :to="{ path: '../list' }">用户反馈中心</el-breadcrumb-item>
+            <el-breadcrumb-item><span @click="goList">用户反馈中心</span></el-breadcrumb-item>
             <el-breadcrumb-item>反馈详情</el-breadcrumb-item>
         </el-breadcrumb>
         <el-row class="item infos">
             <el-col :span="8" class="col col1">
                 <div>
                     <ul>
-                        <li>反馈用户名：zac</li>
-                        <li>反馈用户ID: {{ detailId }}</li>
-                        <li>反馈时间：2017-08-08 12:22</li>
+                        <li>反馈用户名：{{ detail.uname }}</li>
+                        <li>反馈用户ID: {{ detail.id }}</li>
+                        <li>反馈时间：{{ detail.create_time }}</li>
                     </ul>
                 </div>
             </el-col>
             <el-col :span="8" class="col col2">
                 <div>
                     <ul>
-                        <li>终端名：zac‘s iphone</li>
-                        <li>终端类型: iphone iOS 12.33</li>
-                        <li>客户端版本号：1.2.22</li>
+                        <li>终端名：{{ detail.terminal_name }}</li>
+                        <li>终端类型: {{ detail.terminal_type }}</li>
+                        <li>客户端版本号：{{ detail.client_version }}</li>
                     </ul>
                 </div>
             </el-col>
             <el-col :span="8" class="col col3">
                 <div>
-                    <el-button>上一条</el-button>
-                    <el-button type="primary">下一条</el-button>
+                    <el-button @click="detailPrev" :disabled="prevDisabled">上一条</el-button>
+                    <el-button type="primary" @click="detailNext" :disabled="nextDisabled">下一条</el-button>
                 </div>
             </el-col>
         </el-row>
         <div class="item content">
             <p style="line-height: 30px;">
                 反馈内容：<br>
-                地方是范德地方是范德萨发的地萨发的地方是范德萨发的地方是范德萨发的地方是范德萨发的地方是范德萨发萨发的地方是范德萨发的地方是范德萨发的地方是范德萨发的地方是范德萨发萨发的地方是范德萨发的地方是范德萨发的地方是范德萨发的地方是范德萨发萨发的地方是范德萨发的地方是范德萨发的地方是范德萨发的地方是范德萨发萨发的地方是范德萨发的地方是范德萨发的地方是范德萨发的地方是范德萨发萨发的地方是范德萨发的地方是范德萨发的地方是范德萨发的地方是范德萨发萨发的地方是范德萨发的地方是范德萨发的地方是范德萨发的地方是范德萨发方是范德萨发的地方是范德萨发的地方是范德萨发的地方是范德萨发的地方是范德萨发的地方是范德萨发的萨发的
+                {{ detail.content }}
             </p>
         </div>
         <div class="item imgs">
-            <img preview="1" preview-text="" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529588094405&di=567ad120af4e66490ab854d77a122a00&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F8b13632762d0f703c0e7705104fa513d2797c5e2.jpg" alt="">
-            <img preview="1" preview-text="" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529588094405&di=567ad120af4e66490ab854d77a122a00&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F8b13632762d0f703c0e7705104fa513d2797c5e2.jpg" alt="">
-            <img preview="1" preview-text="" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529588094405&di=567ad120af4e66490ab854d77a122a00&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F8b13632762d0f703c0e7705104fa513d2797c5e2.jpg" alt="">
-            <img preview="1" preview-text="" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529588094405&di=567ad120af4e66490ab854d77a122a00&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F8b13632762d0f703c0e7705104fa513d2797c5e2.jpg" alt="">
-            <img preview="1" preview-text="" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529588094405&di=567ad120af4e66490ab854d77a122a00&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F8b13632762d0f703c0e7705104fa513d2797c5e2.jpg" alt="">
-            <img preview="1" preview-text="" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529588094405&di=567ad120af4e66490ab854d77a122a00&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F8b13632762d0f703c0e7705104fa513d2797c5e2.jpg" alt="">
-            <img preview="1" preview-text="" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529588094405&di=567ad120af4e66490ab854d77a122a00&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F8b13632762d0f703c0e7705104fa513d2797c5e2.jpg" alt="">
+            <img v-for="(item, index) in detail.img_list" :key="index" :src="item" preview="1" preview-text="" alt="">
         </div>
     </div>
 </template>
 
 <script>
+import axios from "~/assets/lib/http";
+import * as URL from "~/assets/lib/api";
+import { mapGetters } from 'vuex';
 export default {
     components: { 
     },
     data() {
         return {
-            detailId: this.$route.params.id
+            detailId: this.$route.params.id,
+            queryOption: null,
+            detail: {},
+            prevDisabled: false,
+            nextDisabled: false
         };
     },
+    computed: {
+        ...mapGetters('feedback', [
+            'queryOptionStorage',
+            'needQueryOptionStorage'
+        ])
+    },
     mounted () {
-        console.log(this.detailId);
+        this.queryOption = {
+            id: this.detailId,
+            is_forward: 0
+        }
+        this.getFeedbackDetails(this.detailId, 0);
     },
     methods: {
-    },
-    watch: {
+        goList () {
+            this.$store.dispatch('feedback/setNeedQueryOptionStorage', true).then(() => {
+                this.$router.push({ name: 'feedbackList' });
+            });
+        },
+        getFeedbackDetails (detailId, is_forward) {
+            let params = null;
+            if (is_forward === 0) {
+                params = {
+                    id: this.detailId,
+                    is_forward: is_forward
+                };
+            } else {
+                // 点击上一条下一条 is_forward为1或者2 请求详情要带上列表页的筛选条件
+                params = {
+                    id: this.detailId,
+                    is_forward: is_forward,
+                    keyword: this.queryOptionStorage.keyword,
+                    is_read: this.queryOptionStorage.is_read,
+                    start_time: this.queryOptionStorage.start_time,
+                    end_time: this.queryOptionStorage.end_time  
+                }
+            }
+            // console.log(params);
+            axios.post(URL.feedbackDetails, params).then((res) => {
+                const result = res.data.result;
+                if (result) {
+                    this.detail = result.data;
+                    this.detail.img_list = this.detail.img_list ? this.detail.img_list.split(',') : [];
+                    this.$previewRefresh();
+                } else {
+                    if (is_forward === 1) {
+                        this.prevDisabled = true;
+                        this.$message('已经是最前面一条');
+                    } else if (is_forward === 2) {
+                        this.nextDisabled = true;
+                        this.$message('已经是最后面一条');
+                    }
+                }
+            });
+        },
+        // 上一条
+        detailPrev () {
+            this.getFeedbackDetails(this.detailId, 1);
+        },
+        // 下一条
+        detailNext () {
+            this.getFeedbackDetails(this.detailId, 2);
+        }
     }
 }
 </script>

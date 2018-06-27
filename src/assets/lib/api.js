@@ -61,3 +61,8 @@ export const PERMISSION_API = {
     //菜单
     menuList: API_MASTER + 'menu/getMenulist'
 }
+
+// feedback
+export const feedbackList = API_MASTER + 'feedback/list';
+export const feedbackUpdateStatus = API_MASTER + 'feedback/updateStatus';
+export const feedbackDetails = API_MASTER + 'feedback/details';

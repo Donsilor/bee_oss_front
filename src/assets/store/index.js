@@ -9,6 +9,7 @@ import mutations from './mutations';
 import actions from './actions';
 import upgrade from './modules/upgrade'
 import family from './modules/familys'
+import feedback from './modules/feedback'
 
 export default new Vuex.Store({
     state,
@@ -21,6 +22,7 @@ export default new Vuex.Store({
         chosen,
         ops,
         upgrade,
-        family
+        family,
+        feedback
     }
 });
