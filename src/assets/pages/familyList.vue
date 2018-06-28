@@ -4,12 +4,12 @@
 			<!--搜索框-->
 			<el-row :gutter="24" >
 				<el-col :span="3" style="padding-right: 0">
-					<el-select placeholder="请选择城市">
+					<el-select placeholder="请选择城市" value="">
 						<el-option label="暂无数据" value=""></el-option>
 					</el-select>
 				</el-col>
 				<el-col :span="3" style="padding-right: 0">
-					<el-select placeholder="请选择小区">
+					<el-select placeholder="请选择小区" value="">
 						<el-option label="暂无数据" value=""></el-option>
 					</el-select>
 				</el-col>
@@ -81,7 +81,7 @@ export default {
         getRootLogs (page) {
             let obj = this
 			let param = {}
-			let currentForm =  obj.rootLogForm
+			let currentForm =  obj.rootLogForm || {}
             currentForm.page = page
 			for (let attr in currentForm) {
                 if (attr === 'start_end_time') {

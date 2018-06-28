@@ -74,6 +74,7 @@ export default {
 	},
     components: {},
 	data () {
+		let startTime = new Date().setHours(0,0,0)
 		return {
             rootLogForm: {
                 log_type: '',
@@ -82,7 +83,7 @@ export default {
                 svr_id: '',
                 monitor_name: '',
 				limit: 15,
-                start_end_time: []
+				start_end_time: [new Date(startTime), new Date()]
 			},
             totalItem: 0,
 			currentPage: 1,

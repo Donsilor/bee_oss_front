@@ -33,8 +33,9 @@ import {mapActions} from 'vuex';
 import '../../lib/util'
 export default {
 	data () {
+		let startTime = new Date().setHours(0,0,0)
 		return {
-            start_end_time: [],
+            start_end_time: [new Date(startTime), new Date()],
             select_date: new Date(),
             group_type: 'svr_id',
 			group_by: ''

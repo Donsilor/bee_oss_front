@@ -25,7 +25,7 @@
 						      v-for="item in firmOptions"
 						      :key="item.value"
 						      :label="item.label"
-						      :value="item.value">
+						      :value="item.value"> 
 						    </el-option>
 						</el-select>
 					</el-col>

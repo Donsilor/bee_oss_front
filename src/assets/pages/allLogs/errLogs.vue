@@ -37,7 +37,7 @@
 					>
 					</el-date-picker>
 				</el-col>
-				<el-col :span="3" style="padding-right: 0; ">
+				<el-col :span="3" style="padding-right: 0; " class="time-box-col">
 					<el-time-picker
 							is-range
 							v-model="rootLogForm.start_end_time"
@@ -111,6 +111,7 @@ export default {
 	},
     components: {},
 	data () {
+		let startTime = new Date().setHours(0,0,0)
 		return {
             detailFlag:false,
             rootLogForm: {
@@ -125,7 +126,7 @@ export default {
                 method: '',
                 session_id: '',
 				limit: 15,
-                start_end_time: []
+                start_end_time: [new Date(startTime), new Date()]
 			},
             totalItem: 0,
 			currentPage: 1,
@@ -275,6 +276,11 @@ export default {
 			padding-top: 0;
 			padding-bottom: 0;
 			color: #999;
+		}
+	}
+	.time-box-col {
+		.el-date-editor {
+			width: 100%;
 		}
 	}
 </style>
