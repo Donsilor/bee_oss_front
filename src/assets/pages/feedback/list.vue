@@ -7,8 +7,7 @@
                 </el-col>
                 <el-col :span="8">
                     <span>日期：</span>
-                    <el-date-picker v-model="date" :default-value="value2" 
-                    @change="changeDate" type="daterange" placeholder="请选择日期范围"></el-date-picker>
+                    <el-date-picker v-model="date" @change="changeDate" type="daterange" placeholder="请选择日期范围"></el-date-picker>
                 </el-col>
                 <el-col :span="6">
                     <el-input
@@ -87,8 +86,7 @@ export default {
             tableData: [],
             pageSize: 2,
             total: null,
-            currentPage: 1,
-            value2: []
+            currentPage: 1
         };
     },
     computed: {
@@ -134,7 +132,6 @@ export default {
             this.getFeedbackList();
         },
         seeUnRead () {
-            console.log(12);
             this.queryOption.is_read = this.unRead ? 1 : 0;
             this.queryOption.page = 1;
             this.getFeedbackList();
