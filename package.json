@@ -10,11 +10,11 @@
   "dependencies": {
     "axios": "^0.17.0",
     "echarts": "^3.8.5",
-    "element-ui": "^1.4.13",
+    "element-ui": "^2.4.2",
     "mockjs": "^1.0.1-beta3",
     "v-charts": "^1.16.19",
-    "vue": "^2.4.2",
     "vue-photo-preview": "^1.0.9",
+    "vue": "2.5.3",
     "vue-router": "^2.2.1",
     "vuex": "^3.0.0"
   },
@@ -46,7 +46,7 @@
     "url-loader": "^0.5.8",
     "vue-loader": "^13.0.4",
     "vue-style-loader": "^2.0.3",
-    "vue-template-compiler": "^2.4.2",
+    "vue-template-compiler": "2.5.3",
     "vuedraggable": "^2.16.0",
     "webpack": "^2.4.1",
     "webpack-dev-server": "^2.4.2",

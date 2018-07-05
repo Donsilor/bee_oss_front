@@ -499,7 +499,8 @@ export default {
                     version: dataObj.version,
                     user_id: dataObj.user_id,
                     product_id: dataObj.product_id,
-                    method: 'rollback'
+                    method: 'rollback',
+                    os_type: dataObj.os_type
                 }
 
                 obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
