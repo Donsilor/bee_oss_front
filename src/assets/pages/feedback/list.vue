@@ -2,10 +2,10 @@
     <div class="page-content config-page">
         <div>
             <el-row style="line-height:36px;">
-                <el-col :span="8">
+                <el-col :span="6">
                     <el-checkbox v-model="unRead" @change="seeUnRead">只看未读</el-checkbox>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="12">
                     <span>日期：</span>
                     <el-date-picker v-model="date" @change="changeDate" type="daterange" placeholder="请选择日期范围"></el-date-picker>
                 </el-col>
@@ -57,7 +57,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        <div class="block">
+        <div class="block" style="overflow: hidden">
             <span class="info gray">共{{ total }}条记录，其中{{ unReadTotal }}条未读</span>
             <el-pagination
             class="pull-right"
@@ -85,7 +85,7 @@ export default {
             searchKey: '',
             queryOption: {},
             tableData: [],
-            pageSize: 3,
+            pageSize: 20,
             total: null,
             currentPage: 1,
             unReadTotal: null
