@@ -10,7 +10,7 @@
                     <ul>
                         <li>反馈用户名：{{ detail.uname }}</li>
                         <li>反馈用户ID: {{ detail.id }}</li>
-                        <li>反馈时间：{{ detail.create_time }}</li>
+                        <li>反馈时间：{{ detail.created_at }}</li>
                     </ul>
                 </div>
             </el-col>
@@ -51,8 +51,6 @@ export default {
     },
     data() {
         return {
-            detailId: this.$route.params.id,
-            queryOption: null,
             detail: {},
             prevDisabled: false,
             nextDisabled: false
@@ -65,14 +63,12 @@ export default {
         ])
     },
     mounted () {
-        this.queryOption = {
-            id: this.detailId,
-            is_forward: 0
-        }
-        this.getFeedbackDetails(this.detailId, 0);
+        // 点击列表页某条反馈进来
+        this.getFeedbackDetails(this.$route.params.id, 0);
     },
     methods: {
         goList () {
+            // needQueryOptionStorage为true
             this.$store.dispatch('feedback/setNeedQueryOptionStorage', true).then(() => {
                 this.$router.push({ name: 'feedbackList' });
             });
@@ -80,14 +76,15 @@ export default {
         getFeedbackDetails (detailId, is_forward) {
             let params = null;
             if (is_forward === 0) {
+                // 点击列表某条反馈进来
                 params = {
-                    id: this.detailId,
+                    id: detailId,
                     is_forward: is_forward
                 };
             } else {
-                // 点击上一条下一条 is_forward为1或者2 请求详情要带上列表页的筛选条件
+                // 点击上一条下一条 is_forward为1或者2 请求详情要带上列表页的筛选条件(存储在queryOptionStorage)
                 params = {
-                    id: this.detailId,
+                    id: detailId,
                     is_forward: is_forward,
                     keyword: this.queryOptionStorage.keyword,
                     is_read: this.queryOptionStorage.is_read,
@@ -95,14 +92,15 @@ export default {
                     end_time: this.queryOptionStorage.end_time  
                 }
             }
-            // console.log(params);
             axios.post(URL.feedbackDetails, params).then((res) => {
                 const result = res.data.result;
+                this.prevDisabled = false;
+                this.nextDisabled = false;
                 if (result) {
-                    this.detail = result.data;
-                    this.detail.img_list = this.detail.img_list ? this.detail.img_list.split(',') : [];
+                    this.detail = result;
                     this.$previewRefresh();
                 } else {
+                    // 如果没有返回数据 所以是最前或者最后一条 不更新界面 只disable按钮
                     if (is_forward === 1) {
                         this.prevDisabled = true;
                         this.$message('已经是最前面一条');
@@ -115,11 +113,11 @@ export default {
         },
         // 上一条
         detailPrev () {
-            this.getFeedbackDetails(this.detailId, 1);
+            this.getFeedbackDetails(this.detail.id, 1);
         },
         // 下一条
         detailNext () {
-            this.getFeedbackDetails(this.detailId, 2);
+            this.getFeedbackDetails(this.detail.id, 2);
         }
     }
 }

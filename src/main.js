@@ -6,7 +6,7 @@ import App from './App.vue';
 
 //打开 mockjs拦截请求，返回mock数据
 // 关闭 请求服务器数据
-import mock from './assets/mockData';
+// import mock from './assets/mockData';
 
 Vue.mixin({
 	computed: {	

@@ -1,3 +1,5 @@
+// var time1 = new Date('xxxx').Format("yyyy-MM-dd");
+// var time2 = new Date('xxxx').Format("yyyy-MM-dd hh:mm:ss");  
 Date.prototype.Format = function(fmt) { //author: meizz
     var o = {
         "M+": this.getMonth() + 1, //月份

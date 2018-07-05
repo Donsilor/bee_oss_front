@@ -24,12 +24,13 @@
             <el-table :data="tableData" style="width: 100%" :show-header="false">
                 <el-table-column width="80">
                     <template slot-scope="scope">
-                        <img :src="scope.row.small_img" alt="" class="avatar">
+                        <img v-if="scope.row.img_list.length" :src="scope.row.img_list[0]" alt="" class="avatar">
+                        <img v-else src="../../images/device.png" alt="" class="avatar">
                     </template>
                 </el-table-column>
                 <el-table-column>
                     <template slot-scope="scope">
-                        <span class="summary point" @click="goDetail(scope.row.id)" :class="{unRead: scope.row.is_read === '1'}">{{ scope.row.title }}</span>
+                        <span class="summary point" @click="goDetail(scope.row.id)" :class="{unRead: scope.row.is_read === 0}">{{ scope.row.title }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column width="150">
@@ -46,18 +47,18 @@
                 </el-table-column>
                 <el-table-column width="150" :show-overflow-tooltip="true">
                     <template slot-scope="scope">
-                        <span>{{ scope.row.uname }}1212121212</span>
+                        <span>{{ scope.row.uname }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column width="180">
                     <template slot-scope="scope">
-                        <span>{{ scope.row.create_time }}</span>
+                        <span>{{ scope.row.created_at }}</span>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
         <div class="block">
-            <span class="info gray">共xxx条记录，其中xx条未读</span>
+            <span class="info gray">共{{ total }}条记录，其中{{ unReadTotal }}条未读</span>
             <el-pagination
             class="pull-right"
             @current-change="handleCurrentChange"
@@ -84,9 +85,10 @@ export default {
             searchKey: '',
             queryOption: {},
             tableData: [],
-            pageSize: 2,
+            pageSize: 3,
             total: null,
-            currentPage: 1
+            currentPage: 1,
+            unReadTotal: null
         };
     },
     computed: {
@@ -97,17 +99,19 @@ export default {
     },
     created () {
         if (this.needQueryOptionStorage) {
+            // 如果是从详情页跳回列表页的 needQueryOptionStorage是true 拿出存在store的筛选条件queryOptionStorage
             this.queryOption = this.queryOptionStorage;
             this.currentPage = this.queryOption.page;
             this.searchKey = this.queryOption.keyword;
             this.unRead = Boolean(this.queryOption.is_read);
-            this.date[0] = new Date(this.queryOption.start_time);
-            this.date[1] = new Date(this.queryOption.end_time);
+            this.date[0] = this.queryOption.start_time ? new Date(this.queryOption.start_time * 1000) : '';
+            this.date[1] = this.queryOption.end_time ? new Date(this.queryOption.end_time * 1000) : '';
             this.$store.dispatch('feedback/setNeedQueryOptionStorage', false);
         } else {
+            // 点击侧栏导航进来的
             this.queryOption = {
                 page: this.currentPage,
-                limit: '', 
+                limit: this.pageSize, 
                 keyword: '',
                 is_read: '',
                 start_time: '',
@@ -120,10 +124,9 @@ export default {
     },
     methods: {
         goDetail (id) {
+            // 去详情页 store存入筛选条件queryOptionStorage
             this.$store.dispatch('feedback/setQueryOptionStorage', this.queryOption).then(() => {
-                this.updateStatus(id).then(() => {
-                    this.$router.push({ name: 'feedbackDetail', params: { id: id }});
-                });
+                this.$router.push({ name: 'feedbackDetail', params: { id: id }});
             });
         },
         search () {
@@ -137,8 +140,9 @@ export default {
             this.getFeedbackList();
         },
         changeDate (val) {
-            const start = this.date[0] ? this.date[0].getTime() : '';
-            const end = this.date[1] ? this.date[1].getTime() : '';
+            // 后端需要的时间戳是秒 前端UI组件的是毫秒 除以1000处理
+            const start = this.date && this.date[0] ? this.date[0].getTime() / 1000 : '';
+            const end = this.date && this.date[1] ? this.date[1].getTime() / 1000 : '';
             this.queryOption.start_time = start;
             this.queryOption.end_time = end;
             this.queryOption.page = 1;
@@ -149,15 +153,16 @@ export default {
             this.getFeedbackList();
         },
         getFeedbackList () {
-            console.log(this.queryOption);
+            // console.log(this.queryOption);
+            // this.queryOption全页面共享的筛选条件
             axios.post(URL.feedbackList, this.queryOption).then((res) => {
                 const result = res.data.result;
                 this.total = result.total;
+                this.unReadTotal = result.un_read_total || 0;
                 this.tableData = result.data;
             });
         },
         updateStatus (id) {
-            // console.log({ id: id });
             return axios.post(URL.feedbackUpdateStatus, { id: id });
         }
     }
