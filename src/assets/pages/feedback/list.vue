@@ -154,7 +154,7 @@ export default {
         },
         getFeedbackList () {
             // console.log(this.queryOption);
-            // this.queryOption全页面共享这个筛选条件
+            // this.queryOption全页面共享这个筛选条件1
             axios.post(URL.feedbackList, this.queryOption).then((res) => {
                 const result = res.data.result;
                 this.total = result.total;
