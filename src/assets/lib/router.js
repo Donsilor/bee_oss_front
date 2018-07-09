@@ -168,10 +168,15 @@ const routes = [
                 component: Pages.RouterIndex,
                 children: [
                     {
-                        path: "",
+                        path: "userData",
                         name: "userData",
                         component: Pages.UserData
                     },
+                    {
+                        path: "deviceData",
+                        name: "deviceData",
+                        component: Pages.DeviceData
+                    }
                 ]
             },
             {

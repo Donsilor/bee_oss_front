@@ -36,7 +36,7 @@
     <el-row :gutter="24" class="analyzer-data">
 
     <el-col :span="6">
-        <el-card shadow="hover" @click.native="setChartData(registerUserChartData)" class="select">
+        <el-card shadow="hover" @click.native="setChartData(registerUserChartData)" class="select-item">
           <div class="data-list">
             <el-row :gutter="24">
                 <el-col :span="16">
@@ -68,7 +68,7 @@
         </el-card>
       </el-col> -->
       <el-col :span="6">
-        <el-card shadow="hover" @click.native="setChartData(loginUserChartData)" class="select">
+        <el-card shadow="hover" @click.native="setChartData(loginUserChartData)" class="select-item">
           <div class="data-list">
             <el-row :gutter="24">
               <el-col :span="16">
@@ -87,18 +87,21 @@
           </div>
         </el-card>
       </el-col>
-      <!-- <el-col :span="4">
-        <el-card shadow="never" @click.native="setChartData(activeUserChartData)">
+      <el-col :span="6">
+        <el-card shadow="hover" @click.native="setChartData(activeUserChartData)" class="select-item">
           <div class="data-list">
             <el-row :gutter="24">
-              <el-col :span="16">{{activeUserAnalyzer.text}}</el-col>
+              <el-col :span="16">
+                  <span>{{activeUserAnalyzer.text}}</span>
+                  <i class="icon-tendency"></i>
+              </el-col>
               <el-col :span="4" :offset="4"></el-col>
             </el-row>
             <div>{{activeUserAnalyzer.totalCount}}</div>
             <div>截止到{{activeUserAnalyzer.lastDate}}</div>
           </div>
         </el-card>
-      </el-col> -->
+      </el-col>
     </el-row>
 
     <div style="margin-top: 20px">
@@ -154,17 +157,30 @@
 
 <style lang="less">
 .analyzer-data {
-  .select {
-    cursor: pointer;
-  }
-  .data-list > div {
-    margin: 15px 0;
-    font-size: 14px;
-    &:nth-child(2) {
-      color: #409eff;
-      font-size: 18px;
+    .select-item {
+        cursor: pointer;
+        position: relative;
     }
-  }
+    .active-item:after {
+        content: "";
+        width: 0;
+        height: 0;
+        border-top: 10px solid #eee;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        position: absolute;
+        top: 0px;
+        left: 50%;
+        margin-left: -4px;
+    }
+    .data-list > div {
+        margin: 15px 0;
+        font-size: 14px;
+        &:nth-child(2) {
+            color: #409eff;
+            font-size: 18px;
+        }
+    }
 }
 .icon-information {
     display: inline-block;
@@ -298,6 +314,7 @@ export default {
       const key = {
         loginUserChartData: "login_user_num",
         registerUserChartData: "reg_user_num",
+        activeUserChartData: "active_user_num"
       }[name]
 
       const temp = list.map(item => {
@@ -338,11 +355,11 @@ export default {
         });
         this.bindChart(registerUserData.data.result.list || [], 'registerUserChartData');
 
-        // Object.assign(this.activeUserAnalyzer, {
-        //   totalCount: activeUserData.data.result.total_active_user_num,
-        //   lastDate: activeUserData.data.result.list && activeUserData.data.result.list[0] && activeUserData.data.result.list[0].stat_date
-        // });
-        // this.bindChart(activeUserData.data.result.list, 'activeUserChartData');
+        Object.assign(this.activeUserAnalyzer, {
+          totalCount: activeUserData.data.result.total_active_user_num,
+          lastDate: activeUserData.data.result.list && activeUserData.data.result.list[0] && activeUserData.data.result.list[0].stat_date
+        });
+        this.bindChart(activeUserData.data.result.list, 'activeUserChartData');
 
         Object.assign(this.loginUserAnalyzer, {
           totalCount: loginUserData.data.result.total_login_user_num,
@@ -356,13 +373,11 @@ export default {
     }
   },
   mounted() {
-
     const end = new Date();
     const start = new Date();
     end.setTime(end.getTime() - 3600 * 1000 * 24 * 1);
     start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
     this.formdata.date = [start, end]
-
     this.getUserAnalyzeData({
       start_date: formatDate(start),
       end_date: formatDate(end),

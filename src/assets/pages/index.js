@@ -30,6 +30,7 @@ import ResetPwd from './permission/resetPwd.vue'
 import UpdatePwd from './permission/updatePwd.vue'
 import Error from './error.vue'
 import UserData from './analyzer/userData.vue'
+import DeviceData from './analyzer/deviceData.vue'
 import FeedbackList from './feedback/list.vue'
 import FeedbackDetail from './feedback/detail.vue'
 
@@ -67,5 +68,6 @@ export {
     Error,
     UserData,
     FeedbackList,
-    FeedbackDetail
+    FeedbackDetail,
+    DeviceData
 };
