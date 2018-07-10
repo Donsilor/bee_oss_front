@@ -143,6 +143,21 @@ const routes = [
                 component: Pages.FamilyImgList
             },
             {
+                path: "Strategy",
+                name: "Strategy",
+                component: Pages.Strategy
+            },
+            {
+                path: "StrategyUuid",
+                name: "StrategyUuid",
+                component: Pages.StrategyUuid
+            },
+            {
+                path: "StrategyConfig",
+                name: "StrategyConfig",
+                component: Pages.StrategyConfig
+            },
+            {
                 path: "user",
                 name: "user",
                 component: Pages.User

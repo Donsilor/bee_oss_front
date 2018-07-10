@@ -137,6 +137,21 @@ export default {
                             title: '家庭背景图',
                             path: '/main/familyImgList',
                             icon: 'facility'
+						},
+						{
+                            title: '策略组',
+                            path: '/main/Strategy',
+                            icon: 'facility'
+						},
+						{
+                            title: '策略组用户',
+                            path: '/main/StrategyUuid',
+                            icon: 'facility'
+						},
+						{
+                            title: '策略组配置',
+                            path: '/main/StrategyConfig',
+                            icon: 'facility'
 						}
                     ]
 				},

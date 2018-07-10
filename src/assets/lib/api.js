@@ -62,6 +62,13 @@ export const PERMISSION_API = {
     menuList: API_MASTER + 'menu/getMenulist'
 }
 
+export const STRATEGY_API = {
+    //策略组
+    strategyList: API_MASTER + 'Strategy/lists',
+    StrategyAdd: API_MASTER + 'Strategy/add',
+    StrategyEdit: API_MASTER + 'Strategy/edit',
+    StrategyDel: API_MASTER + 'Strategy/del'
+}
 // feedback
 export const feedbackList = API_MASTER + 'feedback/list';
 export const feedbackUpdateStatus = API_MASTER + 'feedback/updateStatus';

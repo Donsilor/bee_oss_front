@@ -32,6 +32,9 @@ import Error from './error.vue'
 import UserData from './analyzer/userData.vue'
 import FeedbackList from './feedback/list.vue'
 import FeedbackDetail from './feedback/detail.vue'
+import Strategy from './strategy/strategy.vue'
+import StrategyUuid from './strategy/strategyUuid.vue'
+import StrategyConfig from './strategy/strategyConfig.vue'
 
 export {
 	Login,
@@ -67,5 +70,8 @@ export {
     Error,
     UserData,
     FeedbackList,
-    FeedbackDetail
+    FeedbackDetail,
+    Strategy,
+    StrategyUuid,
+    StrategyConfig
 };
