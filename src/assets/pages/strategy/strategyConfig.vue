@@ -43,11 +43,29 @@
 				<el-form :model="AddEditForm" :rules="rulesAddEdit" ref="AddEditForm" label-width="100px" >
 					
 				<el-form-item label="字段类型">
-				    <el-input v-model="AddEditForm.F_type"></el-input>
+    				<el-select v-model="AddEditForm.F_type" placeholder="请选择">
+                        <el-option label="gray_host" value="gray_host">
+                        </el-option>
+                        <el-option label="strategy_switch" value="strategy_switch">
+                        </el-option>
+                    </el-select>
 				</el-form-item>
-				<el-form-item label="字段值">
+                
+
+				<el-form-item label="字段值" v-if="AddEditForm.F_type == 'gray_host'">
 				    <el-input v-model="AddEditForm.F_value"></el-input>
 				</el-form-item>
+
+                <el-form-item label="字段值" v-if="AddEditForm.F_type == 'strategy_switch'">
+                   
+                    <el-select v-model="AddEditForm.F_value" placeholder="请选择">
+                        <el-option label="on" value="on">
+                        </el-option>
+                        <el-option label="off" value="off">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
 				<el-form-item label="字段补充说明">
 				    <el-input v-model="AddEditForm.F_desc"></el-input>
 				</el-form-item>
