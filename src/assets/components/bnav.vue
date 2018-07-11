@@ -190,7 +190,12 @@ export default {
                     children: [
 						{
                             title: '用户运营',
-                            path: '/main/analyzer',
+                            path: '/main/analyzer/userData',
+                            icon: 'facility'
+                        },
+                        {
+                            title: '设备运营',
+                            path: '/main/analyzer/deviceData',
                             icon: 'facility'
 						}
                     ]
