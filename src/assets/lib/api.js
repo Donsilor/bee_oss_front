@@ -67,7 +67,18 @@ export const STRATEGY_API = {
     strategyList: API_MASTER + 'Strategy/lists',
     StrategyAdd: API_MASTER + 'Strategy/add',
     StrategyEdit: API_MASTER + 'Strategy/edit',
-    StrategyDel: API_MASTER + 'Strategy/del'
+    StrategyDel: API_MASTER + 'Strategy/del',
+    //策略组用户
+    StrategyUuidList:  API_MASTER + 'StrategyUuid/lists',
+    StrategyUuidAdd:  API_MASTER + 'StrategyUuid/add',
+    StrategyUuidEdit:  API_MASTER + 'StrategyUuid/edit',
+    StrategyUuidDel:  API_MASTER + 'StrategyUuid/del',
+    //策略组配置说明
+    StrategyConfiglists: API_MASTER + 'StrategyConfig/lists',
+    StrategyConfigAdd: API_MASTER + 'StrategyConfig/add',
+    StrategyConfigEdit: API_MASTER + 'StrategyConfig/edit',
+    StrategyConfigDel: API_MASTER + 'StrategyConfig/del',
+
 }
 // feedback
 export const feedbackList = API_MASTER + 'feedback/list';
