@@ -7,6 +7,7 @@ import state from './state';
 import getters from './getters';
 import mutations from './mutations';
 import actions from './actions';
+import strategy from './modules/strategy'
 import upgrade from './modules/upgrade'
 import family from './modules/familys'
 import feedback from './modules/feedback'
@@ -23,6 +24,7 @@ export default new Vuex.Store({
         ops,
         upgrade,
         family,
+        strategy,
         feedback
     }
 });
