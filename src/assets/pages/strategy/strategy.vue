@@ -46,8 +46,16 @@
 				    <el-input v-model="AddEditForm.F_strategy_name"></el-input>
 				</el-form-item>
 				<el-form-item label="字段类型">
-				    <el-input v-model="AddEditForm.F_type"></el-input>
+				    
+				    <el-select v-model="AddEditForm.F_type" placeholder="请选择">
+                        <el-option label="uuid" value="uuid">
+                        </el-option>
+                        <el-option label="common" value="common">
+                        </el-option>
+                    </el-select>
 				</el-form-item>
+
+
 				<el-form-item label="版本">
 				    <el-input v-model="AddEditForm.F_version"></el-input>
 				</el-form-item>
@@ -55,7 +63,12 @@
 				    <el-input v-model="AddEditForm.F_region"></el-input>
 				</el-form-item>
 				<el-form-item label="终端类型">
-				    <el-input v-model="AddEditForm.F_os_type"></el-input>
+				     <el-select v-model="AddEditForm.F_os_type" placeholder="请选择">
+                        <el-option label="Android " value="Android ">
+                        </el-option>
+                        <el-option label="IOS" value="Ios ">
+                        </el-option>
+                    </el-select>
 				</el-form-item>
 				<el-form-item label="host列表">
 				    <el-input v-model="AddEditForm.F_host_list"></el-input>
