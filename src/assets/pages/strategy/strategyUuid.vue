@@ -138,7 +138,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                obj.$store.dispatch('StrategyUuidDel', {F_strategy_id: dataObj.F_strategy_id}).then((result) => {
+                obj.$store.dispatch('StrategyUuidDel', {F_uuid: dataObj.F_uuid}).then((result) => {
                     if (result.code === 200) {
                         obj.$message({
                             type: 'success',
@@ -221,6 +221,8 @@ export default {
                     currentArr.forEach((item) => {
                         obj.sortArr.push(item.id)
 					})
+                }else{
+                	obj.imgList.tableData = []
                 }
             })
 		},
