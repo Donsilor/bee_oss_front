@@ -32,16 +32,14 @@
                 <el-col :span="16">
                     <div>
                         <span>控制设备家庭户数</span>
-                        <!-- 控制设备家庭统计 -->
-                        <!-- <el-tooltip placement="right">
-                            <div slot="content">统计截止到某一天，在各<br/>个端App中注册的用户总数</div>
-                            <i class="el-icon-question"></i>
-                        </el-tooltip> -->
+                        <span class="histogram" @click="changeCharType('chartSettings1', 'histogram')"></span>
+                        <span class="line"  @click="changeCharType('chartSettings1', 'line')"></span>
                     </div>
                     <div>单位: 户</div>
                 </el-col>
             </el-row>
-            <ve-histogram :data="chartData1" :extend="chartExtend" :settings="chartSettings"></ve-histogram>
+             <ve-chart :data="operFamilyCategoryCharData" :extend="chartExtend" :settings="chartSettings1"></ve-chart>
+            <!-- <ve-histogram :data="operFamilyCategoryCharData" :extend="chartExtend" :settings="chartSettings"></ve-histogram> -->
         </el-card>
     </div>
     <div style="margin: 20px">
@@ -50,11 +48,14 @@
                 <el-col :span="16">
                     <div>
                         <span>控制设备家庭比重</span>
+                        <span class="histogram" @click="changeCharType('chartSettings2', 'histogram')"></span>
+                        <span class="line"  @click="changeCharType('chartSettings2', 'line')"></span>
                     </div>
                     <div>单位: %</div>
                 </el-col>
             </el-row>
-            <ve-histogram :data="chartData2" :extend="chartExtend" :settings="chartSettings"></ve-histogram>
+            <ve-chart :data="operFamilyCategoryCharData" :extend="chartExtend" :settings="chartSettings2"></ve-chart>
+            <!-- <ve-histogram :data="operFamilyCategoryCharData" :extend="chartExtend" :settings="chartSettings"></ve-histogram> -->
         </el-card>
     </div>
     <div style="margin: 20px">
@@ -63,11 +64,14 @@
                 <el-col :span="16">
                     <div>
                         <span>控制设备次数</span>
+                        <span class="histogram" @click="changeCharType('chartSettings3', 'histogram')"></span>
+                        <span class="line"  @click="changeCharType('chartSettings3', 'line')"></span>
                     </div>
                     <div>单位: 次</div>
                 </el-col>
             </el-row>
-            <ve-histogram :data="chartData3" :extend="chartExtend" :settings="chartSettings"></ve-histogram>
+            <ve-chart :data="operStatCharData" :extend="chartExtend" :settings="chartSettings3"></ve-chart>
+            <!-- <ve-histogram :data="operStatCharData" :extend="chartExtend" :settings="chartSettings"></ve-histogram> -->
         </el-card>
     </div>
 </div>
@@ -77,6 +81,7 @@
 import CityPicker from '../../components/cityPicker.vue'
 import API from "../../service/index.js";
 import axios from 'axios';
+import * as URL from "~/assets/lib/api";
 
 const padZero = (num) => {
     num = num + ''
@@ -93,6 +98,7 @@ export default {
     },
     data () {
         this.chartExtend = {
+            // label设置查看echarts 2.x文档
             series: {
                 barWidth: 40,
                 itemStyle: {
@@ -101,18 +107,15 @@ export default {
                     }
                 }
             }
-            // series: {
-            //     barWidth: 40,
-            //     label: {show: true, position: 'top'}
-            // }
         };
-        this.chartSettings = {
-            labelMap: {
-                'oper_num': '次数',
-                'family_num': '户数',
-                'family_rate': '比重'
-            }
-        };
+        // this.chartSettings = {
+        //     // yAxisType: ['percent'],
+        //     labelMap: {
+        //         'oper_nu': '次数',
+        //         'family_num': '户数',
+        //         'family_rate': '比重'
+        //     }
+        // };
         return {
             area: '',
             formdata: {
@@ -155,38 +158,37 @@ export default {
                     }
                 ]
             },
-            chartData1: {
+            operFamilyCategoryCharData: {
                 columns: ['category_title', 'family_num'],
-                rows: [
-                    { "category_title": "电视", "family_num": 21, "family_rate": 0.12 },
-                    { "category_title": "窗帘", "family_num": 21, "family_rate": 0.11 },
-                    { "category_title": "空调", "family_num": 15, "family_rate": 0.08 },
-                    { "category_title": "吊灯", "family_num": 7, "family_rate": 0.22 },
-                    { "category_title": "灯带", "family_num": 10, "family_rate": 0.13 },
-                    { "category_title": "晾衣架", "family_num": 14, "family_rate": 0.15 }
-                ]
+                rows: []
             },
-            chartData2: {
-                columns: ['category_title', 'family_rate'],
-                rows: [
-                    { "category_title": "电视", "family_num": 21, "family_rate": 0.12 },
-                    { "category_title": "窗帘", "family_num": 21, "family_rate": 0.11 },
-                    { "category_title": "空调", "family_num": 15, "family_rate": 0.08 },
-                    { "category_title": "吊灯", "family_num": 7, "family_rate": 0.22 },
-                    { "category_title": "灯带", "family_num": 10, "family_rate": 0.13 },
-                    { "category_title": "晾衣架", "family_num": 14, "family_rate": 0.15 }
-                ]
-            },
-            chartData3: {
+            operStatCharData: {
                 columns: ['category_title', 'oper_num'],
-                rows: [
-                    { "category_title": "电视", "oper_num": 21 },
-                    { "category_title": "窗帘", "oper_num": 13 },
-                    { "category_title": "空调", "oper_num": 15 },
-                    { "category_title": "吊灯", "oper_num": 7 },
-                    { "category_title": "灯带", "oper_num": 10 },
-                    { "category_title": "晾衣架", "oper_num": 14 }
-                ]
+                rows: []
+            },
+            chartSettings1: {
+                type: 'histogram',
+                labelMap: {
+                    'oper_num': '次数',
+                    'family_num': '户数',
+                    'family_rate': '比重'
+                }
+            },
+            chartSettings2: {
+                type: 'histogram',
+                labelMap: {
+                    'oper_num': '次数',
+                    'family_num': '户数',
+                    'family_rate': '比重'
+                }
+            },
+            chartSettings3: {
+                type: 'histogram',
+                labelMap: {
+                    'oper_num': '次数',
+                    'family_num': '户数',
+                    'family_rate': '比重'
+                }
             }
         };
     },
@@ -201,8 +203,22 @@ export default {
                 app_version: ''
             })
         },
-        getUserAnalyzeData (obj) {
-            console.log(obj);
+        getUserAnalyzeData (params) {
+            console.log(params);
+            axios.all([this.getOperFamilyCategoryData(params), this.getOperStatData(params)])
+            .then(axios.spread((operFamilyCategoryData, operStatData) => {
+                this.operFamilyCategoryCharData.rows = operFamilyCategoryData.data.result.list,
+                this.operStatCharData.rows = operStatData.data.result.list
+            }));
+        },
+        getOperFamilyCategoryData (params) {
+            return axios.post(URL.operFamilyCategory, params);
+        },
+        getOperStatData (params) {
+            return axios.post(URL.operStat, params);
+        },
+        changeCharType (index, type) {
+            this[index].type = type;
         }
     },
     mounted() {
@@ -248,4 +264,22 @@ export default {
     background-image: url(../../images/tendency.png);
     background-size: 100% 100%;
 }
+.histogram {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    background-image: url(../../images/through.png);
+    background-size: 100% 100%;
+    margin: 0 10px;
+    cursor: pointer;
+}
+.line {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    background-image: url(../../images/QPS.png);
+    background-size: 100% 100%;
+    cursor: pointer;
+}
+
 </style>

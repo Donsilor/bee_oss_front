@@ -1,10 +1,12 @@
 <template>
-  <div class="page-content config-page">
+<div class="page-content config-page">
     <el-row>
       <el-col>
         <el-form :inline="true">
           <el-form-item>
-            <el-date-picker placeholder="请选择时间段" v-model="formdata.date" type="daterange" align="left" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
+            <el-date-picker placeholder="请选择时间段" v-model="formdata.date" @change="changeDate"
+            type="daterange" align="left" unlink-panels range-separator="至" 
+            start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
             </el-date-picker>
           </el-form-item>
 
@@ -152,10 +154,287 @@
         <ve-line :data="activePercentChartData" :settings="chartSettings"></ve-line>
       </el-card>
     </div> -->
-  </div>
+
+    <div style="margin-top: 20px">
+        <el-card shadow="never">
+            <el-row :gutter="24">
+                <el-col :span="24">
+                    <div class="pull-left">
+                        用户留存率统计
+                    </div>
+                    <div class="pull-right retain-filters">
+                        <el-button type="text" class="btn" :class="{'active': showRetainUnit === 0}"
+                        @click="searchRetainByUnit(0)">日</el-button>
+                        <el-button type="text" class="btn" :class="{'active': showRetainUnit === 1}"
+                        @click="searchRetainByUnit(1)" v-if="isShowUnitWeek">周</el-button>
+                        <el-button type="text" class="btn" :class="{'active': showRetainUnit === 2}"
+                        @click="searchRetainByUnit(2)" v-if="isShowUnitMon">月</el-button>
+                        <el-button type="text" class="btn" :class="{'active': showRetainNum}" 
+                        style="margin-left: 30px" @click="showRetainNum=true">#</el-button>
+                        <el-button type="text" class="btn" :class="{'active': !showRetainNum}"
+                        @click="showRetainNum=false">%</el-button>
+                    </div>
+                </el-col>
+            </el-row>
+            <template>
+                <el-table :data="tableData" style="width: 100%">
+                    <el-table-column prop="stat_day" label="日期" width="180"></el-table-column>
+                    <el-table-column prop="active_user_num" label="活跃用户" width="150"></el-table-column>
+                    <el-table-column v-for="(item, index) in colunmName" :key="index" :label="item">
+                        <template slot-scope="scope">
+                            <span v-if="showRetainNum">{{ scope.row.retain_list[index] && scope.row.retain_list[index].retain_num }}</span>
+                            <span v-else>{{ scope.row.retain_list[index] && scope.row.retain_list[index].retain_percent }}</span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </template>
+        </el-card>
+    </div>
+</div>
 </template>
 
-<style lang="less">
+<script>
+import CityPicker from '../../components/cityPicker.vue'
+import API from "../../service/index.js";
+import axios from 'axios';
+import * as URL from "~/assets/lib/api";
+
+const padZero = (num) => {
+    num = num + ''
+    return num.length == 1 ? '0' + num : num
+}
+
+const formatDate = (d) => {  
+    return d.getFullYear() + '-' + padZero(d.getMonth() + 1) + '-' + padZero(d.getDate())
+}
+
+export default {
+    components: { 
+        CityPicker
+    },
+    data() {
+        this.chartSettings = {
+            // stack: { '用户': ['访问用户', '下单用户'] },
+            // area: true
+        };
+        return {
+            // 是否显示留存按周月筛选的按钮
+            isShowUnitWeek: true,
+            isShowUnitMon: false,
+            // 留存展示类型（0日,1周,2月）
+            showRetainUnit: 0,
+            // 留存展示数字还是百分比
+            showRetainNum: true,
+            colunmName: [],
+            tableData: [],
+            area: '',
+            formdata: {
+                date: "",
+                platform: "",
+                project: "",
+                city: ""
+            },
+            pickerOptions: {
+                shortcuts: [
+                    {
+                        text: "最近一周",
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            end.setTime(end.getTime() - 3600 * 1000 * 24 * 1);
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit("pick", [start, end]);
+                        }
+                    },
+                    {
+                        text: "最近一个月",
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            end.setTime(end.getTime() - 3600 * 1000 * 24 * 1);
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                            picker.$emit("pick", [start, end]);
+                        }
+                    },
+                    {
+                        text: "最近三个月",
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            end.setTime(end.getTime() - 3600 * 1000 * 24 * 1);
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                            picker.$emit("pick", [start, end]);
+                        }
+                    }
+                ]
+            },
+            onlineUserAnalyzer: {
+                totalCount: 0,
+                lastDate: null,
+                text: '实时在线用户数'
+            },
+            activeUserAnalyzer: {
+                totalCount: 0,
+                lastDate: null,
+                text: '活跃用户数'
+            },
+            registerUserAnalyzer: {
+                totalCount: 0,
+                lastDate: null,
+                text: '累计注册用户数'
+            },
+            loginUserAnalyzer: {
+                totalCount: 0,
+                lastDate: null,
+                text: '登录用户数'
+            },
+            onlineUserChartData: {
+                columns: ['日期', '实时在线用户数'],
+                rows: []
+            },
+            activeUserChartData: {
+                columns: ['日期', '活跃用户数'],
+                rows: []
+            },
+            registerUserChartData: {
+                columns: ['日期', '累计注册用户数'],
+                rows: []
+            },
+            loginUserChartData: {
+                columns: ['日期', '登录用户数'],
+                rows: []
+            },
+            chartData: {}
+        };
+    },
+    methods: {
+        setChartData (data) {  
+            this.chartData = data
+        },
+        bindChart (list, name) {
+            const result = {};
+            const text = this[name].columns[1]
+            const key = {
+                loginUserChartData: "login_user_num",
+                registerUserChartData: "reg_user_num",
+                activeUserChartData: "active_user_num"
+            }[name]
+            const temp = list.map(item => {
+                return {
+                '日期': item.stat_date,
+                [text]: item[key] 
+                }
+            })
+            Object.assign(this[name], {
+                rows: temp
+            });
+        },
+        // 点击查询按钮
+        search () {
+            const { date, platform, city } = this.formdata;
+            this.getUserAnalyzeData({
+                start_date: formatDate(date[0]),
+                end_date: formatDate(date[1]),
+                city,
+                os_type: platform || '',
+                app_version: ''
+            });
+            // 留存展示重置为按日
+            this.showRetainUnit = 0;
+            this.getAnalyzerRetainDate({
+                start_date: formatDate(date[0]),
+                end_date: formatDate(date[1]),
+                city,
+                os_type: platform || '',
+                app_version: '',
+                show_type: this.showRetainUnit
+            });
+        },
+        // 注册登录活跃用户数
+        getUserAnalyzeData (params,) {
+            API.getUserAnalyzeData(params).then(axios.spread((onlineUserData, registerUserData , activeUserData, loginUserData, activePercentData) => {
+                // Object.assign(this.onlineUserAnalyzer, {
+                //   totalCount: onlineUserData.data.result.total_online_num,
+                //   lastDate: onlineUserData.data.result.list && onlineUserData.data.result.list[0] && onlineUserData.data.result.list[0].stat_date
+                // });
+                // this.bindChart(onlineUserData.data.result.list, 'onlineUserChartData');
+
+                Object.assign(this.registerUserAnalyzer, {
+                    totalCount: registerUserData.data.result.total_register_num,
+                    lastDate: registerUserData.data.result.list && registerUserData.data.result.list[0] && registerUserData.data.result.list[0].stat_date
+                });
+                this.bindChart(registerUserData.data.result.list || [], 'registerUserChartData');
+
+                Object.assign(this.activeUserAnalyzer, {
+                totalCount: activeUserData.data.result.total_active_user_num,
+                lastDate: activeUserData.data.result.list && activeUserData.data.result.list[0] && activeUserData.data.result.list[0].stat_date
+                });
+                this.bindChart(activeUserData.data.result.list, 'activeUserChartData');
+
+                Object.assign(this.loginUserAnalyzer, {
+                totalCount: loginUserData.data.result.total_login_user_num,
+                lastDate: loginUserData.data.result.list && loginUserData.data.result.list[0] && loginUserData.data.result.list[0].stat_date
+                });
+                this.bindChart(loginUserData.data.result.list || [], 'loginUserChartData');
+
+                this.setChartData(this.registerUserChartData);
+            }));
+        },
+        // 用户留存统计
+        getAnalyzerRetainDate (params) {
+            // console.log(params);
+            axios.post(URL.analyzerRetain, params).then((res) => {
+                const result = res.data.result.list;
+                this.tableData = result;
+                if (this.colunmName.length) return
+                this.tableData[0].retain_list.forEach((obj) => {
+                    this.colunmName.push(obj.day);
+                });
+            });
+        },
+        // 用户留存点击日周月
+        searchRetainByUnit (unit) {
+            this.showRetainUnit = unit;
+            const { date, platform, city } = this.formdata;
+            this.getAnalyzerRetainDate({
+                start_date: formatDate(date[0]),
+                end_date: formatDate(date[1]),
+                city,
+                os_type: platform || '',
+                app_version: '',
+                show_type: this.showRetainUnit
+            });
+        },
+        // 选择开始结束日后 决定是否显示留存筛选的周月
+        changeDate (date) {
+            const start = date[0].getTime();
+            const end = date[1].getTime();
+            const diff = end - start;
+            this.isShowUnitMon = diff > (1000 * 3600 * 24 * 30);
+            this.isShowUnitWeek = diff > (1000 * 3600 * 24 * 7);
+        }
+    },
+    mounted() {
+        const end = new Date();
+        const start = new Date();
+        end.setTime(end.getTime() - 3600 * 1000 * 24 * 1);
+        start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+        this.formdata.date = [start, end]
+        this.getUserAnalyzeData({
+            start_date: formatDate(start),
+            end_date: formatDate(end),
+            city: '',
+        });
+        this.getAnalyzerRetainDate({
+            start_date: formatDate(start),
+            end_date: formatDate(end),
+            city: '',
+        })
+    }
+};
+</script>
+
+<style lang="less" scoped>
 .analyzer-data {
     .select-item {
         cursor: pointer;
@@ -196,193 +475,14 @@
     background-image: url(../../images/tendency.png);
     background-size: 100% 100%;
 }
+.retain-filters > .btn{
+    margin: 0 3px;
+    padding: 0px 7px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #444;
+}
+.retain-filters > .active {
+    color: #409EFF;
+}
 </style>
-
-<script>
-import CityPicker from '../../components/cityPicker.vue'
-import API from "../../service/index.js";
-import axios from 'axios';
-
-const padZero = (num) => {
-  num = num + ''
-  return num.length == 1 ? '0' + num : num
-}
-
-const formatDate = (d) => {  
-  return d.getFullYear() + '-' + padZero(d.getMonth() + 1) + '-' + padZero(d.getDate())
-}
-
-export default {
-  components: { 
-    CityPicker
-  },
-  data() {
-    this.chartSettings = {
-      // stack: { '用户': ['访问用户', '下单用户'] },
-      // area: true
-    }
-    return {
-      area: '',
-      formdata: {
-        date: "",
-        platform: "",
-        project: "",
-        city: ""
-      },
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: "最近一周",
-            onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                end.setTime(end.getTime() - 3600 * 1000 * 24 * 1);
-                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: "最近一个月",
-            onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                end.setTime(end.getTime() - 3600 * 1000 * 24 * 1);
-                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: "最近三个月",
-            onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                end.setTime(end.getTime() - 3600 * 1000 * 24 * 1);
-                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                picker.$emit("pick", [start, end]);
-            }
-          }
-        ]
-      },
-      onlineUserAnalyzer: {
-        totalCount: 0,
-        lastDate: null,
-        text: '实时在线用户数'
-      },
-      activeUserAnalyzer: {
-        totalCount: 0,
-        lastDate: null,
-        text: '活跃用户数'
-      },
-      registerUserAnalyzer: {
-        totalCount: 0,
-        lastDate: null,
-        text: '累计注册用户数'
-      },
-      loginUserAnalyzer: {
-        totalCount: 0,
-        lastDate: null,
-        text: '登录用户数'
-      },
-      
-      onlineUserChartData: {
-        columns: ['日期', '实时在线用户数'],
-        rows: []
-      },
-      activeUserChartData: {
-        columns: ['日期', '活跃用户数'],
-        rows: []
-      },
-      registerUserChartData: {
-        columns: ['日期', '累计注册用户数'],
-        rows: []
-      },
-      loginUserChartData: {
-        columns: ['日期', '登录用户数'],
-        rows: []
-      },
-      chartData: {}
-    };
-  },
-  methods: {
-    setChartData(data) {  
-      this.chartData = data
-    },
-    bindChart(list, name) {
-      const result = {};
-      const text = this[name].columns[1]
-
-      const key = {
-        loginUserChartData: "login_user_num",
-        registerUserChartData: "reg_user_num",
-        activeUserChartData: "active_user_num"
-      }[name]
-
-      const temp = list.map(item => {
-        return {
-          '日期': item.stat_date,
-          [text]: item[key] 
-        }
-      })
-      
-      Object.assign(this[name], {
-        rows: temp
-      });
-    },
-    search: function() {
-      const { date, platform, city } = this.formdata;
-      
-      this.getUserAnalyzeData({
-        start_date: formatDate(date[0]),
-        end_date: formatDate(date[1]),
-        city,
-        os_type: platform || '',
-        app_version: ''
-      })
-    },
-    getUserAnalyzeData: function(params) {
-      API.getUserAnalyzeData(params).then(axios.spread((onlineUserData, registerUserData , activeUserData, loginUserData, activePercentData) => {
-
-        // Object.assign(this.onlineUserAnalyzer, {
-        //   totalCount: onlineUserData.data.result.total_online_num,
-        //   lastDate: onlineUserData.data.result.list && onlineUserData.data.result.list[0] && onlineUserData.data.result.list[0].stat_date
-        // });
-        // this.bindChart(onlineUserData.data.result.list, 'onlineUserChartData');
-
-
-        Object.assign(this.registerUserAnalyzer, {
-            totalCount: registerUserData.data.result.total_register_num,
-            lastDate: registerUserData.data.result.list && registerUserData.data.result.list[0] && registerUserData.data.result.list[0].stat_date
-        });
-        this.bindChart(registerUserData.data.result.list || [], 'registerUserChartData');
-
-        Object.assign(this.activeUserAnalyzer, {
-          totalCount: activeUserData.data.result.total_active_user_num,
-          lastDate: activeUserData.data.result.list && activeUserData.data.result.list[0] && activeUserData.data.result.list[0].stat_date
-        });
-        this.bindChart(activeUserData.data.result.list, 'activeUserChartData');
-
-        Object.assign(this.loginUserAnalyzer, {
-          totalCount: loginUserData.data.result.total_login_user_num,
-          lastDate: loginUserData.data.result.list && loginUserData.data.result.list[0] && loginUserData.data.result.list[0].stat_date
-        });
-        this.bindChart(loginUserData.data.result.list || [], 'loginUserChartData');
-
-        this.setChartData(this.registerUserChartData)
-
-      }));
-    }
-  },
-  mounted() {
-    const end = new Date();
-    const start = new Date();
-    end.setTime(end.getTime() - 3600 * 1000 * 24 * 1);
-    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-    this.formdata.date = [start, end]
-    this.getUserAnalyzeData({
-      start_date: formatDate(start),
-      end_date: formatDate(end),
-      city: ''
-    });
-  }
-};
-</script>

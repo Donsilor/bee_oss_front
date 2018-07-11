@@ -66,3 +66,11 @@ export const PERMISSION_API = {
 export const feedbackList = API_MASTER + 'feedback/list';
 export const feedbackUpdateStatus = API_MASTER + 'feedback/updateStatus';
 export const feedbackDetails = API_MASTER + 'feedback/details';
+
+// userData
+export const analyzerRetain = API_MASTER + 'analyzer/retain';
+
+// deviceData
+export const operFamilyCategory = API_MASTER + 'analyzer/oper_family_category';
+export const operFamilyStat = API_MASTER + 'analyzer/oper_family_stat';
+export const operStat = API_MASTER + 'analyzer/oper_stat';
