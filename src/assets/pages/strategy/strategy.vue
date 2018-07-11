@@ -90,7 +90,7 @@ export default {
                 "tableColumn":[
                     {"prop": "F_strategy_id", "label": "id"},
                     {"prop": "F_strategy_name", "label": "名称"},
-                    {"prop": "F_type", "label": "版本"},
+                    {"prop": "F_version", "label": "版本"},
                     {"prop": "F_region", "label": "地区"},
                     {"prop": "F_os_type", "label": "终端类型"},
                     {"prop": "F_create_time", "label": "创建时间"}
@@ -100,15 +100,13 @@ export default {
             addEditFlag: true,
             AddEditForm: {
                F_strategy_name: '',
+               F_version: '',
                F_type: '',
                F_region: '',
                F_os_type: '',
                F_host_list: ''
             },
             rulesAddEdit: {
-                image_url: [
-                    { required: true, message: '请上传图片' }
-                ]
             },
             sortArr: [],
 		}
@@ -127,7 +125,6 @@ export default {
             this.addEditFlag = true
             this.addEditLayer = true
             this.$nextTick(() => {
-                this.$refs['uploadFile'].clearFiles()
 				let currentForm = this.AddEditForm
 				for (let attr in currentForm) {
                     currentForm[attr] = ''
@@ -178,7 +175,7 @@ export default {
                         delete currentParam.id
                     }
                     if (!obj.addEditFlag) {
-                    obj.$store.dispatch('StrategyAdd', currentParam).then((result) => {
+                    obj.$store.dispatch('StrategyEdit', currentParam).then((result) => {
                         if (result && result.code === 200) {
                             Message({
                                 message:  '编辑成功',
@@ -190,7 +187,7 @@ export default {
                         
                     })
                 	}else{
-                    obj.$store.dispatch('StrategyEdit', currentParam).then((result) => {
+                    obj.$store.dispatch('StrategyAdd', currentParam).then((result) => {
                    
                             if (result && result.code === 200) {
                                 Message({
@@ -215,12 +212,13 @@ export default {
         },
 		getImgList (page) {
             this.listParams.page = page
+            this.listParams.limit = 10
             const obj  = this
             obj.$store.dispatch('strategyList', obj.listParams).then((result) => {
                 if (result && result.result && result.result.data.length) {
                     let currentArr = result.result.data
                     obj.imgList.tableData = currentArr
-                    obj.totalItem = result.total || 0
+                    obj.totalItem = result.result.total || 0
                     obj.sortArr = []
                     currentArr.forEach((item) => {
                         obj.sortArr.push(item.id)
