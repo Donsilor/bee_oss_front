@@ -44,9 +44,9 @@
 					
 				<el-form-item label="字段类型">
     				<el-select v-model="AddEditForm.F_type" placeholder="请选择">
-                        <el-option label="gray_host" value="gray_host">
+                        <el-option label="灰度服务器" value="gray_host">
                         </el-option>
-                        <el-option label="strategy_switch" value="strategy_switch">
+                        <el-option label="策略开关" value="strategy_switch">
                         </el-option>
                     </el-select>
 				</el-form-item>
