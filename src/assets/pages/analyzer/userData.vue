@@ -309,7 +309,7 @@ export default {
     },
     methods: {
         setChartData (data) {  
-            this.chartData = data
+            this.chartData = data;
         },
         bindChart (list, name) {
             const result = {};
@@ -351,7 +351,7 @@ export default {
             });
         },
         // 注册登录活跃用户数
-        getUserAnalyzeData (params,) {
+        getUserAnalyzeData (params) {
             API.getUserAnalyzeData(params).then(axios.spread((onlineUserData, registerUserData , activeUserData, loginUserData, activePercentData) => {
                 // Object.assign(this.onlineUserAnalyzer, {
                 //   totalCount: onlineUserData.data.result.total_online_num,

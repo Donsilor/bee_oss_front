@@ -54,7 +54,7 @@
                     <div>单位: %</div>
                 </el-col>
             </el-row>
-            <ve-chart :data="operFamilyCategoryCharData" :extend="chartExtend" :settings="chartSettings2"></ve-chart>
+            <ve-chart :data="operFamilyCategoryRateCharData" :extend="chartExtend" :settings="chartSettings2"></ve-chart>
             <!-- <ve-histogram :data="operFamilyCategoryCharData" :extend="chartExtend" :settings="chartSettings"></ve-histogram> -->
         </el-card>
     </div>
@@ -97,25 +97,6 @@ export default {
         CityPicker
     },
     data () {
-        this.chartExtend = {
-            // label设置查看echarts 2.x文档
-            series: {
-                barWidth: 40,
-                itemStyle: {
-                    normal: {
-                        label: {show: true, position: 'top'}
-                    }
-                }
-            }
-        };
-        // this.chartSettings = {
-        //     // yAxisType: ['percent'],
-        //     labelMap: {
-        //         'oper_nu': '次数',
-        //         'family_num': '户数',
-        //         'family_rate': '比重'
-        //     }
-        // };
         return {
             area: '',
             formdata: {
@@ -162,9 +143,24 @@ export default {
                 columns: ['category_title', 'family_num'],
                 rows: []
             },
+            operFamilyCategoryRateCharData: {
+                columns: ['category_title', 'family_rate'],
+                rows: []
+            },
             operStatCharData: {
                 columns: ['category_title', 'oper_num'],
                 rows: []
+            },
+            chartExtend: {
+                // label设置查看echarts 2.x文档
+                series: {
+                    barWidth: 40,
+                    itemStyle: {
+                        normal: {
+                            label: {show: true, position: 'top'}
+                        }
+                    }
+                }
             },
             chartSettings1: {
                 type: 'histogram',
@@ -175,6 +171,7 @@ export default {
                 }
             },
             chartSettings2: {
+                yAxisType: ['percent'],
                 type: 'histogram',
                 labelMap: {
                     'oper_num': '次数',
@@ -193,9 +190,9 @@ export default {
         };
     },
     methods: {
-        search: function() {
+        search () {
             const { date, platform, city } = this.formdata;
-            this.getUserAnalyzeData({
+            this.getDeviceAnalyzeData({
                 start_date: formatDate(date[0]),
                 end_date: formatDate(date[1]),
                 city,
@@ -203,12 +200,13 @@ export default {
                 app_version: ''
             })
         },
-        getUserAnalyzeData (params) {
-            console.log(params);
+        getDeviceAnalyzeData (params) {
+            // console.log(params);
             axios.all([this.getOperFamilyCategoryData(params), this.getOperStatData(params)])
             .then(axios.spread((operFamilyCategoryData, operStatData) => {
-                this.operFamilyCategoryCharData.rows = operFamilyCategoryData.data.result.list,
-                this.operStatCharData.rows = operStatData.data.result.list
+                this.operFamilyCategoryCharData.rows = operFamilyCategoryData.data.result.list;
+                this.operFamilyCategoryRateCharData.rows = operFamilyCategoryData.data.result.list;
+                this.operStatCharData.rows = operStatData.data.result.list;
             }));
         },
         getOperFamilyCategoryData (params) {
@@ -217,8 +215,9 @@ export default {
         getOperStatData (params) {
             return axios.post(URL.operStat, params);
         },
-        changeCharType (index, type) {
-            this[index].type = type;
+        // 点击图标转换图标类型
+        changeCharType (key, type) {
+            this[key].type = type;
         }
     },
     mounted() {
@@ -226,8 +225,8 @@ export default {
         const start = new Date();
         end.setTime(end.getTime() - 3600 * 1000 * 24 * 1);
         start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-        this.formdata.date = [start, end]
-        this.getUserAnalyzeData({
+        this.formdata.date = [start, end];
+        this.getDeviceAnalyzeData({
             start_date: formatDate(start),
             end_date: formatDate(end),
             city: ''
