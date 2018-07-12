@@ -51,8 +51,11 @@
 		<el-dialog :title="addEditFlag?'添加用户所在策略组':'编辑用户所在策略组'" :visible.sync="addEditLayer">
 			<div class="edit_form">
 				<el-form :model="AddEditForm" :rules="rulesAddEdit" ref="AddEditForm" label-width="80px" >
-					<el-form-item label="用户uuid">
+					<el-form-item label="用户uuid" v-if="addEditFlag == true">
 				    <el-input v-model="AddEditForm.F_uuid"></el-input>
+					</el-form-item>
+					<el-form-item label="用户uuid" v-if="addEditFlag == false">
+				    <el-input v-model="AddEditForm.F_uuid" :disabled="true"></el-input>
 					</el-form-item>
 					<el-form-item label="策略组id">
 					    <el-input v-model="AddEditForm.F_strategy_id"></el-input>
@@ -77,6 +80,7 @@ export default {
 	data () {
 	    return {
             addEditLayer: false,
+            is_edit: true,
             totalItem: 0,
             currentPage: 1,
             searchKey:'',
