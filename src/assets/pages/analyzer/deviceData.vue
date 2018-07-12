@@ -97,17 +97,6 @@ export default {
         CityPicker
     },
     data () {
-        this.chartExtend = {
-            // label设置查看echarts 2.x文档
-            series: {
-                barWidth: 40,
-                itemStyle: {
-                    normal: {
-                        label: {show: true, position: 'top'}
-                    }
-                }
-            }
-        };
         return {
             area: '',
             formdata: {
@@ -162,6 +151,17 @@ export default {
                 columns: ['category_title', 'oper_num'],
                 rows: []
             },
+            chartExtend: {
+                // label设置查看echarts 2.x文档
+                series: {
+                    barWidth: 40,
+                    itemStyle: {
+                        normal: {
+                            label: {show: true, position: 'top'}
+                        }
+                    }
+                }
+            },
             chartSettings1: {
                 type: 'histogram',
                 labelMap: {
@@ -190,9 +190,9 @@ export default {
         };
     },
     methods: {
-        search: function() {
+        search () {
             const { date, platform, city } = this.formdata;
-            this.getUserAnalyzeData({
+            this.getDeviceAnalyzeData({
                 start_date: formatDate(date[0]),
                 end_date: formatDate(date[1]),
                 city,
@@ -200,7 +200,7 @@ export default {
                 app_version: ''
             })
         },
-        getUserAnalyzeData (params) {
+        getDeviceAnalyzeData (params) {
             // console.log(params);
             axios.all([this.getOperFamilyCategoryData(params), this.getOperStatData(params)])
             .then(axios.spread((operFamilyCategoryData, operStatData) => {
@@ -225,8 +225,8 @@ export default {
         const start = new Date();
         end.setTime(end.getTime() - 3600 * 1000 * 24 * 1);
         start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-        this.formdata.date = [start, end]
-        this.getUserAnalyzeData({
+        this.formdata.date = [start, end];
+        this.getDeviceAnalyzeData({
             start_date: formatDate(start),
             end_date: formatDate(end),
             city: ''
