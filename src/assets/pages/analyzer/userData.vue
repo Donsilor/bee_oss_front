@@ -397,11 +397,11 @@ export default {
         },
         // 用户留存点击日周月
         searchRetainByUnit (unit) {
+            const { date, platform, city } = this.formdata;
             if (this.checkIsSameDate(date)) {
                 return this.$message({ message: '日期不能选择同一天', type: 'warning', showClose: true });
             }
             this.showRetainUnit = unit;
-            const { date, platform, city } = this.formdata;
             this.getAnalyzerRetainDate({
                 start_date: formatDate(date[0]),
                 end_date: formatDate(date[1]),
