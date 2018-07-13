@@ -5,7 +5,7 @@
         <el-form :inline="true">
           <el-form-item>
             <el-date-picker placeholder="请选择时间段" v-model="formdata.date" @change="changeDate"
-            type="daterange" align="left" unlink-panels range-separator="至"
+            type="daterange" align="left" unlink-panels range-separator="至" :clearable="false"
             start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
             </el-date-picker>
           </el-form-item>
@@ -332,16 +332,9 @@ export default {
         // 点击查询按钮
         search () {
             const { date, platform, city } = this.formdata;
-            const start = date ? date[0].getTime() : '';
-            const end = date ? date[1].getTime() : '';
-            const diff = end - start;
-            if (!start || !end) {
-                return this.$message('请选择日期');
+            if (this.checkIsSameDate(date)) {
+                return this.$message({ message: '日期不能选择同一天', type: 'warning', showClose: true });
             }
-            if (!diff) {
-                return this.$message('不能选择同一天');
-            }
-            console.log(1212);
             this.getUserAnalyzeData({
                 start_date: formatDate(date[0]),
                 end_date: formatDate(date[1]),
@@ -404,6 +397,9 @@ export default {
         },
         // 用户留存点击日周月
         searchRetainByUnit (unit) {
+            if (this.checkIsSameDate(date)) {
+                return this.$message({ message: '日期不能选择同一天', type: 'warning', showClose: true });
+            }
             this.showRetainUnit = unit;
             const { date, platform, city } = this.formdata;
             this.getAnalyzerRetainDate({
@@ -423,18 +419,12 @@ export default {
             this.isShowUnitMon = diff > (1000 * 3600 * 24 * 30);
             this.isShowUnitWeek = diff > (1000 * 3600 * 24 * 7);
         },
-        // 组织选择同一天
-        checkDate (date) {
-            console.log(date);
+        // 是否选择了同一天
+        checkIsSameDate (date) {
             const start = date ? date[0].getTime() : '';
             const end = date ? date[1].getTime() : '';
             const diff = end - start;
-            if (!start || !end) {
-                return this.$message('请选择日期');
-            }
-            if (!diff) {
-                return this.$message('不能选择同一天');
-            }
+            return !diff;
         }
     },
     mounted () {

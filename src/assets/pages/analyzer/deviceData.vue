@@ -4,7 +4,9 @@
         <el-col>
             <el-form :inline="true">
                 <el-form-item>
-                    <el-date-picker placeholder="请选择时间段" v-model="formdata.date" type="daterange" align="left" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
+                    <el-date-picker placeholder="请选择时间段" v-model="formdata.date" type="daterange" align="left" 
+                    unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" 
+                    :clearable="false" :picker-options="pickerOptions">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item>
