@@ -11,6 +11,7 @@ import strategy from './modules/strategy'
 import upgrade from './modules/upgrade'
 import family from './modules/familys'
 import feedback from './modules/feedback'
+import cmdata from './modules/cmdata'
 
 export default new Vuex.Store({
     state,
@@ -25,6 +26,7 @@ export default new Vuex.Store({
         upgrade,
         family,
         strategy,
-        feedback
+        feedback,
+        cmdata
     }
 });

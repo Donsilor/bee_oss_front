@@ -152,6 +152,11 @@ export default {
                             title: '策略组配置',
                             path: '/main/StrategyConfig',
                             icon: 'facility'
+						},
+						{
+                            title: '文案配置',
+                            path: '/main/CmData',
+                            icon: 'facility'
 						}
                     ]
 				},
