@@ -5,7 +5,7 @@
         <el-form :inline="true">
           <el-form-item>
             <el-date-picker placeholder="请选择时间段" v-model="formdata.date" @change="changeDate"
-            type="daterange" align="left" unlink-panels range-separator="至" 
+            type="daterange" align="left" unlink-panels range-separator="至" :clearable="false"
             start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
             </el-date-picker>
           </el-form-item>
@@ -332,6 +332,9 @@ export default {
         // 点击查询按钮
         search () {
             const { date, platform, city } = this.formdata;
+            if (this.checkIsSameDate(date)) {
+                return this.$message({ message: '日期不能选择同一天', type: 'warning', showClose: true });
+            }
             this.getUserAnalyzeData({
                 start_date: formatDate(date[0]),
                 end_date: formatDate(date[1]),
@@ -394,6 +397,9 @@ export default {
         },
         // 用户留存点击日周月
         searchRetainByUnit (unit) {
+            if (this.checkIsSameDate(date)) {
+                return this.$message({ message: '日期不能选择同一天', type: 'warning', showClose: true });
+            }
             this.showRetainUnit = unit;
             const { date, platform, city } = this.formdata;
             this.getAnalyzerRetainDate({
@@ -407,14 +413,21 @@ export default {
         },
         // 选择开始结束日后 决定是否显示留存筛选的周月
         changeDate (date) {
-            const start = date[0].getTime();
-            const end = date[1].getTime();
+            const start = date ? date[0].getTime() : '';
+            const end = date ? date[1].getTime() : '';
             const diff = end - start;
             this.isShowUnitMon = diff > (1000 * 3600 * 24 * 30);
             this.isShowUnitWeek = diff > (1000 * 3600 * 24 * 7);
+        },
+        // 是否选择了同一天
+        checkIsSameDate (date) {
+            const start = date ? date[0].getTime() : '';
+            const end = date ? date[1].getTime() : '';
+            const diff = end - start;
+            return !diff;
         }
     },
-    mounted() {
+    mounted () {
         const end = new Date();
         const start = new Date();
         end.setTime(end.getTime() - 3600 * 1000 * 24 * 1);

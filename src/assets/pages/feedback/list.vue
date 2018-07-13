@@ -149,7 +149,7 @@ export default {
             this.queryOption.page = 1;
             this.getFeedbackList();
         },
-        handleCurrentChange(val) {
+        handleCurrentChange (val) {
             this.queryOption.page = val;
             this.getFeedbackList();
         },
