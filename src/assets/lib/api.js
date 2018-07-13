@@ -78,7 +78,15 @@ export const STRATEGY_API = {
     StrategyConfigAdd: API_MASTER + 'StrategyConfig/add',
     StrategyConfigEdit: API_MASTER + 'StrategyConfig/edit',
     StrategyConfigDel: API_MASTER + 'StrategyConfig/del',
+    
+}
 
+export const CMDATA_API = {
+    //文案配置
+    CmDataList: API_MASTER + 'cmdata/lists',
+    CmDataAdd: API_MASTER + 'cmdata/add',
+    CmDataEdit: API_MASTER + 'cmdata/edit',
+    CmDataDel: API_MASTER + 'cmdata/del',
 }
 // feedback
 export const feedbackList = API_MASTER + 'feedback/list';
