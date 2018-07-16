@@ -98,6 +98,7 @@ export default {
                 this.nextDisabled = false;
                 if (result) {
                     this.detail = result;
+                    this.detail.img_list = result.img_list ? result.img_list.split(',') : [];
                     this.$previewRefresh();
                 } else {
                     // 如果没有返回数据 所以是最前或者最后一条 不更新界面 只disable按钮

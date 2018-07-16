@@ -24,7 +24,7 @@
             <el-table :data="tableData" style="width: 100%" :show-header="false">
                 <el-table-column width="80">
                     <template slot-scope="scope">
-                        <img v-if="scope.row.img_list.length" :src="scope.row.img_list[0]" alt="" class="avatar">
+                        <img v-if="scope.row.img_list" :src="scope.row.img_list.split(',')[0]" alt="" class="avatar">
                         <img v-else src="../../images/device.png" alt="" class="avatar">
                     </template>
                 </el-table-column>
