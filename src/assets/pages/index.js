@@ -36,6 +36,7 @@ import FeedbackDetail from './feedback/detail.vue'
 import Strategy from './strategy/strategy.vue'
 import StrategyUuid from './strategy/strategyUuid.vue'
 import StrategyConfig from './strategy/strategyConfig.vue'
+import CmData from './CmData.vue'
 
 export {
 	Login,
@@ -75,5 +76,6 @@ export {
     DeviceData,
     Strategy,
     StrategyUuid,
-    StrategyConfig
+    StrategyConfig,
+    CmData
 };

@@ -158,6 +158,11 @@ const routes = [
                 component: Pages.StrategyConfig
             },
             {
+                path: "CmData",
+                name: "CmData",
+                component: Pages.CmData
+            },
+            {
                 path: "user",
                 name: "user",
                 component: Pages.User
