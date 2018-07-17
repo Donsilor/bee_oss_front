@@ -204,10 +204,6 @@ const padZero = (num) => {
     return num.length == 1 ? '0' + num : num
 }
 
-const formatDate = (d) => {  
-    return d.getFullYear() + '-' + padZero(d.getMonth() + 1) + '-' + padZero(d.getDate())
-}
-
 export default {
     components: { 
         CityPicker
@@ -336,8 +332,8 @@ export default {
                 return this.$message({ message: '日期不能选择同一天', type: 'warning', showClose: true });
             }
             this.getUserAnalyzeData({
-                start_date: formatDate(date[0]),
-                end_date: formatDate(date[1]),
+                start_date: this.formatDate(date[0]),
+                end_date: this.formatDate(date[1]),
                 city,
                 os_type: platform || '',
                 app_version: ''
@@ -345,8 +341,8 @@ export default {
             // 留存展示重置为按日
             this.showRetainUnit = 0;
             this.getAnalyzerRetainDate({
-                start_date: formatDate(date[0]),
-                end_date: formatDate(date[1]),
+                start_date: this.formatDate(date[0]),
+                end_date: this.formatDate(date[1]),
                 city,
                 os_type: platform || '',
                 app_version: '',
@@ -364,19 +360,22 @@ export default {
 
                 Object.assign(this.registerUserAnalyzer, {
                     totalCount: registerUserData.data.result.total_register_num,
-                    lastDate: registerUserData.data.result.list && registerUserData.data.result.list[0] && registerUserData.data.result.list[0].stat_date
+                    // lastDate: registerUserData.data.result.list && registerUserData.data.result.list[0] && registerUserData.data.result.list[0].stat_date
+                    lastDate: this.formatDate(this.formdata.date[1])
                 });
                 this.bindChart(registerUserData.data.result.list || [], 'registerUserChartData');
 
                 Object.assign(this.activeUserAnalyzer, {
-                totalCount: activeUserData.data.result.total_active_user_num,
-                lastDate: activeUserData.data.result.list && activeUserData.data.result.list[0] && activeUserData.data.result.list[0].stat_date
+                    totalCount: activeUserData.data.result.total_active_user_num,
+                    // lastDate: activeUserData.data.result.list && activeUserData.data.result.list[0] && activeUserData.data.result.list[0].stat_date
+                    lastDate: this.formatDate(this.formdata.date[1])
                 });
                 this.bindChart(activeUserData.data.result.list, 'activeUserChartData');
 
                 Object.assign(this.loginUserAnalyzer, {
-                totalCount: loginUserData.data.result.total_login_user_num,
-                lastDate: loginUserData.data.result.list && loginUserData.data.result.list[0] && loginUserData.data.result.list[0].stat_date
+                    totalCount: loginUserData.data.result.total_login_user_num,
+                    // lastDate: loginUserData.data.result.list && loginUserData.data.result.list[0] && loginUserData.data.result.list[0].stat_date
+                    lastDate: this.formatDate(this.formdata.date[1])
                 });
                 this.bindChart(loginUserData.data.result.list || [], 'loginUserChartData');
 
@@ -403,8 +402,8 @@ export default {
             }
             this.showRetainUnit = unit;
             this.getAnalyzerRetainDate({
-                start_date: formatDate(date[0]),
-                end_date: formatDate(date[1]),
+                start_date: this.formatDate(date[0]),
+                end_date: this.formatDate(date[1]),
                 city,
                 os_type: platform || '',
                 app_version: '',
@@ -425,6 +424,9 @@ export default {
             const end = date ? date[1].getTime() : '';
             const diff = end - start;
             return !diff;
+        },
+        formatDate (d) {
+            return d ? d.getFullYear() + '-' + padZero(d.getMonth() + 1) + '-' + padZero(d.getDate()) : '';
         }
     },
     mounted () {
@@ -434,13 +436,13 @@ export default {
         start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
         this.formdata.date = [start, end]
         this.getUserAnalyzeData({
-            start_date: formatDate(start),
-            end_date: formatDate(end),
+            start_date: this.formatDate(start),
+            end_date: this.formatDate(end),
             city: '',
         });
         this.getAnalyzerRetainDate({
-            start_date: formatDate(start),
-            end_date: formatDate(end),
+            start_date: this.formatDate(start),
+            end_date: this.formatDate(end),
             city: '',
         })
     }
