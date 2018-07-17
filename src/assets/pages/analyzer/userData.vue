@@ -179,7 +179,7 @@
             <template>
                 <el-table :data="tableData" style="width: 100%">
                     <el-table-column prop="stat_day" label="日期" width="180"></el-table-column>
-                    <el-table-column prop="active_user_num" label="活跃用户" width="150"></el-table-column>
+                    <el-table-column prop="active_user_num" label="新增用户数" width="150"></el-table-column>
                     <el-table-column v-for="(item, index) in colunmName" :key="index" :label="item">
                         <template slot-scope="scope">
                             <span v-if="showRetainNum">{{ scope.row.retain_list[index] && scope.row.retain_list[index].retain_num }}</span>
