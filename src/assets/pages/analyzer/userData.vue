@@ -317,8 +317,8 @@ export default {
             }[name]
             const temp = list.map(item => {
                 return {
-                '日期': item.stat_date,
-                [text]: item[key] 
+                    '日期': item.stat_date,
+                    [text]: item[key] || 0
                 }
             })
             Object.assign(this[name], {
@@ -370,7 +370,7 @@ export default {
                     // lastDate: activeUserData.data.result.list && activeUserData.data.result.list[0] && activeUserData.data.result.list[0].stat_date
                     lastDate: this.formatDate(this.formdata.date[1])
                 });
-                this.bindChart(activeUserData.data.result.list, 'activeUserChartData');
+                this.bindChart(activeUserData.data.result.list || [], 'activeUserChartData');
 
                 Object.assign(this.loginUserAnalyzer, {
                     totalCount: loginUserData.data.result.total_login_user_num,
