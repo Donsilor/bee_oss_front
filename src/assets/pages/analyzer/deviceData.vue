@@ -40,7 +40,7 @@
                     <div>单位: 户</div>
                 </el-col>
             </el-row>
-             <ve-chart :legend-visible="false" :data="operFamilyCategoryCharData" :extend="chartExtend" :settings="chartSettings1"></ve-chart>
+             <ve-chart :data-empty="showFamilyCategoryEmpty" :legend-visible="false" :data="operFamilyCategoryCharData" :extend="chartExtend" :settings="chartSettings1"></ve-chart>
             <!-- <ve-histogram :data="operFamilyCategoryCharData" :extend="chartExtend" :settings="chartSettings"></ve-histogram> -->
         </el-card>
     </div>
@@ -56,7 +56,7 @@
                     <div>单位: %</div>
                 </el-col>
             </el-row>
-            <ve-chart :legend-visible="false" :data="operFamilyCategoryRateCharData" :extend="chartExtend" :settings="chartSettings2"></ve-chart>
+            <ve-chart :data-empty="showFamilyCategoryRateEmpty" :legend-visible="false" :data="operFamilyCategoryRateCharData" :extend="chartExtend" :settings="chartSettings2"></ve-chart>
             <!-- <ve-histogram :data="operFamilyCategoryCharData" :extend="chartExtend" :settings="chartSettings"></ve-histogram> -->
         </el-card>
     </div>
@@ -72,7 +72,7 @@
                     <div>单位: 次</div>
                 </el-col>
             </el-row>
-            <ve-chart :legend-visible="false" :data="operStatCharData" :extend="chartExtend" :settings="chartSettings3"></ve-chart>
+            <ve-chart :data-empty="showStatEmpty" :legend-visible="false" :data="operStatCharData" :extend="chartExtend" :settings="chartSettings3"></ve-chart>
             <!-- <ve-histogram :data="operStatCharData" :extend="chartExtend" :settings="chartSettings"></ve-histogram> -->
         </el-card>
     </div>
@@ -188,7 +188,10 @@ export default {
                     'family_num': '户数',
                     'family_rate': '比重'
                 }
-            }
+            },
+            showFamilyCategoryEmpty: false,
+            showFamilyCategoryRateEmpty: false,
+            showStatEmpty: false
         };
     },
     methods: {
@@ -206,9 +209,12 @@ export default {
             // console.log(params);
             axios.all([this.getOperFamilyCategoryData(params), this.getOperStatData(params)])
             .then(axios.spread((operFamilyCategoryData, operStatData) => {
-                this.operFamilyCategoryCharData.rows = operFamilyCategoryData.data.result.list;
-                this.operFamilyCategoryRateCharData.rows = operFamilyCategoryData.data.result.list;
-                this.operStatCharData.rows = operStatData.data.result.list;
+                this.operFamilyCategoryCharData.rows = operFamilyCategoryData.data.result.list || [];
+                this.showFamilyCategoryEmpty = !Boolean(this.operFamilyCategoryCharData.rows.length);
+                this.operFamilyCategoryRateCharData.rows = operFamilyCategoryData.data.result.list || [];
+                this.showFamilyCategoryRateEmpty = !Boolean(this.operFamilyCategoryRateCharData.rows.length);
+                this.operStatCharData.rows = operStatData.data.result.list || [];
+                this.showStatEmpty = !Boolean(this.operStatCharData.rows.length);
             }));
         },
         getOperFamilyCategoryData (params) {

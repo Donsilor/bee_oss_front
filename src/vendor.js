@@ -6,6 +6,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css'
 
 import VCharts from 'v-charts'
+import 'v-charts/lib/style.css'
 import axios from 'axios';
 import preview from 'vue-photo-preview'
 import 'vue-photo-preview/dist/skin.css'
