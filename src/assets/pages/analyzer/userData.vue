@@ -130,7 +130,7 @@
             </ul>
           </el-col> -->
         </el-row>
-        <ve-line :data="chartData" :settings="chartSettings"></ve-line>
+        <ve-line :data="chartData" :settings="chartSettings" :legend-visible="false"></ve-line>
       </el-card>
     </div>
 
