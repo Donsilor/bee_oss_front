@@ -251,6 +251,8 @@ export default {
                     currentArr.forEach((item) => {
                         obj.sortArr.push(item.id)
                     })
+                }else{
+                    obj.imgList.tableData = []
                 }
             })
         },
