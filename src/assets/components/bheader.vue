@@ -57,7 +57,8 @@ export default {
 	z-index: 100;
 	background: #2B2B37;
 	color: #ffffff;
-	height: 80px;
+  height: 80px;
+  z-index: 9888;
 }
 .bnh-logo{
 	font-size: 1.5em;
