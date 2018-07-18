@@ -130,7 +130,7 @@
             </ul>
           </el-col> -->
         </el-row>
-        <ve-line :data="chartData" :settings="chartSettings" :legend-visible="false"></ve-line>
+        <ve-line :data="chartData" :settings="chartSettings" :legend-visible="false" :data-empty="showEmpty"></ve-line>
       </el-card>
     </div>
 
@@ -214,6 +214,7 @@ export default {
             // area: true
         };
         return {
+            showEmpty: false,
             // 是否显示留存按周月筛选的按钮
             isShowUnitWeek: true,
             isShowUnitMon: false,
@@ -305,6 +306,7 @@ export default {
     },
     methods: {
         setChartData (data) {  
+            this.showEmpty = !Boolean(data.rows.length);
             this.chartData = data;
         },
         bindChart (list, name) {
