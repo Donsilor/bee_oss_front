@@ -417,8 +417,9 @@ export default {
             const start = date ? date[0].getTime() : '';
             const end = date ? date[1].getTime() : '';
             const diff = end - start;
-            this.isShowUnitMon = diff > (1000 * 3600 * 24 * 30);
-            this.isShowUnitWeek = diff > (1000 * 3600 * 24 * 7);
+            // 至少2个月才显示月 至少2周才显示周
+            this.isShowUnitMon = diff > (1000 * 3600 * 24 * 30 + 1000 * 3600 * 24 * 31);
+            this.isShowUnitWeek = diff > (1000 * 3600 * 24 * 7 * 2);
         },
         // 是否选择了同一天
         checkIsSameDate (date) {
