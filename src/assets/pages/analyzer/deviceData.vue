@@ -40,7 +40,7 @@
                     <div>单位: 户</div>
                 </el-col>
             </el-row>
-             <ve-chart :data="operFamilyCategoryCharData" :extend="chartExtend" :settings="chartSettings1"></ve-chart>
+             <ve-chart :legend-visible="false" :data="operFamilyCategoryCharData" :extend="chartExtend" :settings="chartSettings1"></ve-chart>
             <!-- <ve-histogram :data="operFamilyCategoryCharData" :extend="chartExtend" :settings="chartSettings"></ve-histogram> -->
         </el-card>
     </div>
@@ -56,7 +56,7 @@
                     <div>单位: %</div>
                 </el-col>
             </el-row>
-            <ve-chart :data="operFamilyCategoryRateCharData" :extend="chartExtend" :settings="chartSettings2"></ve-chart>
+            <ve-chart :legend-visible="false" :data="operFamilyCategoryRateCharData" :extend="chartExtend" :settings="chartSettings2"></ve-chart>
             <!-- <ve-histogram :data="operFamilyCategoryCharData" :extend="chartExtend" :settings="chartSettings"></ve-histogram> -->
         </el-card>
     </div>
@@ -72,7 +72,7 @@
                     <div>单位: 次</div>
                 </el-col>
             </el-row>
-            <ve-chart :data="operStatCharData" :extend="chartExtend" :settings="chartSettings3"></ve-chart>
+            <ve-chart :legend-visible="false" :data="operStatCharData" :extend="chartExtend" :settings="chartSettings3"></ve-chart>
             <!-- <ve-histogram :data="operStatCharData" :extend="chartExtend" :settings="chartSettings"></ve-histogram> -->
         </el-card>
     </div>
