@@ -43,6 +43,15 @@ const actions = {
                 console.log(error)
             })
         })
+    },
+    ModuleList({commit, state}, params) {
+        return new Promise((resolve, reject) => {
+            axios.post(CMDATA_API.ModuleList, params).then((response) => {
+                resolve(response.data)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
     }
 }
 export default {
