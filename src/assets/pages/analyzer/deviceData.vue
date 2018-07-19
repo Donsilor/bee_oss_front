@@ -34,8 +34,8 @@
                 <el-col :span="16">
                     <div>
                         <span>控制设备家庭户数</span>
-                        <span class="histogram" @click="changeCharType('chartSettings1', 'histogram')"></span>
-                        <span class="line"  @click="changeCharType('chartSettings1', 'line')"></span>
+                        <span class="type-icon" :class="[(chartSettings1.type === 'histogram') ? 'histogram-active' : 'histogram']" @click="changeCharType('chartSettings1', 'histogram')"></span>
+                        <span class="type-icon" :class="[(chartSettings1.type === 'line') ? 'line-active' : 'line']" @click="changeCharType('chartSettings1', 'line')"></span>
                     </div>
                     <div>单位: 户</div>
                 </el-col>
@@ -50,8 +50,8 @@
                 <el-col :span="16">
                     <div>
                         <span>控制设备家庭比重</span>
-                        <span class="histogram" @click="changeCharType('chartSettings2', 'histogram')"></span>
-                        <span class="line"  @click="changeCharType('chartSettings2', 'line')"></span>
+                        <span class="type-icon" :class="[(chartSettings2.type === 'histogram') ? 'histogram-active' : 'histogram']" @click="changeCharType('chartSettings2', 'histogram')"></span>
+                        <span class="type-icon" :class="[(chartSettings2.type === 'line') ? 'line-active' : 'line']" @click="changeCharType('chartSettings2', 'line')"></span>
                     </div>
                     <div>单位: %</div>
                 </el-col>
@@ -66,8 +66,8 @@
                 <el-col :span="16">
                     <div>
                         <span>控制设备次数</span>
-                        <span class="histogram" @click="changeCharType('chartSettings3', 'histogram')"></span>
-                        <span class="line"  @click="changeCharType('chartSettings3', 'line')"></span>
+                        <span class="type-icon" :class="[(chartSettings3.type === 'histogram') ? 'histogram-active' : 'histogram']" @click="changeCharType('chartSettings3', 'histogram')"></span>
+                        <span class="type-icon" :class="[(chartSettings3.type === 'line') ? 'line-active' : 'line']" @click="changeCharType('chartSettings3', 'line')"></span>
                     </div>
                     <div>单位: 次</div>
                 </el-col>
@@ -271,22 +271,26 @@ export default {
     background-image: url(../../images/tendency.png);
     background-size: 100% 100%;
 }
+.type-icon {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  background-size: 100% 100%;
+  cursor: pointer;
+}
 .histogram {
-    display: inline-block;
-    width: 15px;
-    height: 15px;
-    background-image: url(../../images/through.png);
-    background-size: 100% 100%;
-    margin: 0 10px;
-    cursor: pointer;
+  background-image: url(../../images/icn_histogram.png);
+  margin: 0 10px;
+}
+.histogram-active {
+  background-image: url(../../images/icn_histogram_active.png);
+  margin: 0 10px;
 }
 .line {
-    display: inline-block;
-    width: 15px;
-    height: 15px;
-    background-image: url(../../images/QPS.png);
-    background-size: 100% 100%;
-    cursor: pointer;
+  background-image: url(../../images/icn_line.png);
+}
+.line-active {
+  background-image: url(../../images/icn_line_active.png);
 }
 
 </style>
