@@ -11,6 +11,7 @@
                         <li>反馈用户名：{{ detail.uname }}</li>
                         <li>反馈用户ID: {{ detail.id }}</li>
                         <li>反馈时间：{{ detail.created_at }}</li>
+                        <li>联系方式：{{ detail.contact }}</li>
                     </ul>
                 </div>
             </el-col>
@@ -133,11 +134,13 @@ export default {
     overflow: hidden;
     margin: 0 0 30px 0;
 }
-.col li:nth-child(2) {
-    margin: 20px 0
+.col li {
+    margin: 0 0 12px 0
+}
+.col1 {
+    border-right: 1px solid @borderColor;
 }
 .col2 {
-    border-left: 1px solid @borderColor;
     padding: 0 0 0 40px;
 }
 .imgs img {
