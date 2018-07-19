@@ -87,6 +87,7 @@ export const CMDATA_API = {
     CmDataAdd: API_MASTER + 'cmdata/add',
     CmDataEdit: API_MASTER + 'cmdata/edit',
     CmDataDel: API_MASTER + 'cmdata/del',
+    ModuleList: API_MASTER + 'sysconfig/get'
 }
 // feedback
 export const feedbackList = API_MASTER + 'feedback/list';

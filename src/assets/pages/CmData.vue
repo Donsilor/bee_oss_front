@@ -2,10 +2,30 @@
     <div class="page-content config-page">
         <!--顶部tab-->
         <div style="position: relative">
-            <el-row :gutter="24">
+           <!--  <el-row :gutter="24">
                 <el-col :span="2" style="padding-right: 0; ">
                     <el-button type="primary" @click="openAddEditLayer()">添加文案配置</el-button>
                 </el-col>
+            </el-row> -->
+            <el-row type="flex" justify="space-between">
+                <el-col :span="12">
+                    <el-input class="searchInput" v-model="searchKey.F_key" :maxlength="12" type="text" placeholder="输入键值查询" />
+                    <el-select  v-model="searchKey.F_module_name" placeholder="模块名称" >
+                        
+                        <el-option v-for="module in moduleList"  :label="module" :value="module">
+                        </el-option>
+                    
+                    </el-select>
+                    <el-button type="primary" @click="search">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
+                </el-col>
+
+                <el-col :span="12" style="padding-right: 0; ">
+                    <el-button type="primary" @click="openAddEditLayer()">添加文案配置</el-button>
+                </el-col>
+                
+                <!--<el-col :span="6" style="text-align: right;">-->
+                    <!--<el-button v-show="searchedFlag" @click="searchedFlag = false">返回</el-button>-->
+                <!--</el-col>-->
             </el-row>
         </div>
         <!--列表-->
@@ -43,8 +63,14 @@
                 <el-form :model="AddEditForm" :rules="rulesAddEdit" ref="AddEditForm" label-width="100px" >
                     
                 <el-form-item label="模块名称">
-                    <el-input v-model="AddEditForm.F_module_name"></el-input>
+                    <el-select v-model="AddEditForm.F_module_name" placeholder="模块名称" >
+                        
+                        <el-option v-for="module in moduleList"  :label="module" :value="module">
+                        </el-option>
+                    
+                    </el-select>
                 </el-form-item>
+
                  <el-form-item label="键">
                     <el-input v-model="AddEditForm.F_key"></el-input>
                 </el-form-item>
@@ -75,6 +101,7 @@ export default {
             addEditLayer: false,
             totalItem: 0,
             currentPage: 1,
+            moduleList:[],
             listParams: {
                 page: 1
             },
@@ -95,6 +122,10 @@ export default {
                F_key: '',
                F_value: ''
             },
+            searchKey: {
+                F_module_name: '',
+                F_key: '',
+            },
             rulesAddEdit: {
             },
             sortArr: [],
@@ -102,11 +133,18 @@ export default {
     },
     mounted () {
         this.getImgList(1);
-
+        this.getModuleList(); 
         let table = document.querySelectorAll('.el-table__body-wrapper > table > tbody')[0]
         let obj = this
     },
     methods: {
+        search () {
+            if (!this.searchKey) {
+              this.$message.error('请输入策略组id')
+              return
+            }
+            this.getImgList()
+        },
         getdata () {
             console.log('移动中.....')
         },
@@ -201,9 +239,10 @@ export default {
         getImgList (page) {
             this.listParams.page = page
             this.listParams.limit = 10
+            this.listParams.F_key = this.searchKey.F_key
+            this.listParams.F_module_name = this.searchKey.F_module_name
             const obj  = this
             obj.$store.dispatch('CmDataList', obj.listParams).then((result) => {
-                console.log(result)
                 if (result && result.result && result.result.data.length) {
                     let currentArr = result.result.data
                     obj.imgList.tableData = currentArr
@@ -212,14 +251,27 @@ export default {
                     currentArr.forEach((item) => {
                         obj.sortArr.push(item.id)
                     })
+                }else{
+                    obj.imgList.tableData = []
                 }
             })
         },
+        getModuleList (page) {
+            const obj  = this
+            let params = {}
+            params.config_key = "cm_data_module_name"
+            params.only_val = 1
+            obj.$store.dispatch('ModuleList', params).then((result) => {
+                obj.moduleList = result.result
+                console.log(obj.moduleList)
+            })
+        },
+
        
 
     },
     ...mapActions([
-        'CmDataList'
+        'CmDataList',
     ]),
     computed: {
         ...mapGetters({})
