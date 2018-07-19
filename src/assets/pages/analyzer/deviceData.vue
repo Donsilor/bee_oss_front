@@ -40,7 +40,7 @@
                     <div>单位: 户</div>
                 </el-col>
             </el-row>
-             <ve-chart :data-empty="showFamilyCategoryEmpty" :legend-visible="false" :data="operFamilyCategoryCharData" :extend="chartExtend" :settings="chartSettings1"></ve-chart>
+             <ve-chart :data-empty="showFamilyCategoryEmpty" :legend-visible="false" :data="operFamilyCategoryCharData" :extend="chartExtend1" :settings="chartSettings1"></ve-chart>
             <!-- <ve-histogram :data="operFamilyCategoryCharData" :extend="chartExtend" :settings="chartSettings"></ve-histogram> -->
         </el-card>
     </div>
@@ -56,7 +56,7 @@
                     <div>单位: %</div>
                 </el-col>
             </el-row>
-            <ve-chart :data-empty="showFamilyCategoryRateEmpty" :legend-visible="false" :data="operFamilyCategoryRateCharData" :extend="chartExtend" :settings="chartSettings2"></ve-chart>
+            <ve-chart :data-empty="showFamilyCategoryRateEmpty" :legend-visible="false" :data="operFamilyCategoryRateCharData" :extend="chartExtend2" :settings="chartSettings2"></ve-chart>
             <!-- <ve-histogram :data="operFamilyCategoryCharData" :extend="chartExtend" :settings="chartSettings"></ve-histogram> -->
         </el-card>
     </div>
@@ -72,7 +72,7 @@
                     <div>单位: 次</div>
                 </el-col>
             </el-row>
-            <ve-chart :data-empty="showStatEmpty" :legend-visible="false" :data="operStatCharData" :extend="chartExtend" :settings="chartSettings3"></ve-chart>
+            <ve-chart :data-empty="showStatEmpty" :legend-visible="false" :data="operStatCharData" :extend="chartExtend3" :settings="chartSettings3"></ve-chart>
             <!-- <ve-histogram :data="operStatCharData" :extend="chartExtend" :settings="chartSettings"></ve-histogram> -->
         </el-card>
     </div>
@@ -153,13 +153,39 @@ export default {
                 columns: ['category_title', 'oper_num'],
                 rows: []
             },
-            chartExtend: {
+            chartExtend1: {
                 // label设置查看echarts 2.x文档
                 series: {
                     barWidth: 40,
                     itemStyle: {
                         normal: {
-                            label: {show: true, position: 'top'}
+                          label: {show: true, position: 'top'}
+                        }
+                    }
+                }
+            },
+            chartExtend2: {
+                series: {
+                    barWidth: 40,
+                    itemStyle: {
+                        normal: {
+                            label: {
+                              show: true, 
+                              position: 'top',
+                              formatter (a) {
+                                return a.value * 100 + '%';
+                              }
+                            }
+                        }
+                    }
+                }
+            },
+            chartExtend3: {
+                series: {
+                    barWidth: 40,
+                    itemStyle: {
+                        normal: {
+                          label: {show: true, position: 'top'}
                         }
                     }
                 }
