@@ -124,7 +124,12 @@ export default {
                 "tableData":[]
             },
             totalItem: 0,
-            currentPage: 1
+            currentPage: 1,
+            os_type_text: {
+                1: 'android_app',
+                4: 'ios_app',
+                6: 'android_pad'
+            }
 		}
 	},
 	mounted () {
@@ -144,7 +149,7 @@ export default {
 				page: page,
 				limit: 5,
                 version: dataObj.version,
-				os_type: dataObj.os_type || '',
+				os_type: obj.os_type_text[dataObj.os_type] || '',
                 product_id: dataObj.product_id || '',
 				router_pid: dataObj.router_pid || '',
                 method: 'get_uuids'

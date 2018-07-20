@@ -482,7 +482,7 @@ export default {
                     version: dataObj.version,
                     user_id: dataObj.user_id,
                     product_id: dataObj.product_id || '',
-					os_type: dataObj.os_type || '',
+					os_type: obj.os_type_text[dataObj.os_type] || '',
                     router_pid: dataObj.router_pid || '',
                     method: 'del_version'
                 }
@@ -512,7 +512,7 @@ export default {
                     user_id: dataObj.user_id,
                     product_id: dataObj.product_id,
                     method: 'rollback',
-                    os_type: dataObj.os_type
+                    os_type: obj.os_type_text[dataObj.os_type] || ''
                 }
 
                 obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
@@ -530,30 +530,12 @@ export default {
         getVersionDetail (dataObj) {
             this.infoBoxFlag = true
 			this.currentDetailObj = dataObj
-
-            let cur_os_type = ''
-            if (dataObj.os_type) {
-                switch (dataObj.os_type) {
-                    case 1:
-                        cur_os_type = 'android_app'
-                        break
-                    case 4:
-                        cur_os_type = 'ios_app'
-                        break
-                    case 6:
-                        cur_os_type = 'android_pad'
-                        break
-                    default:
-                        cur_os_type = dataObj.os_type
-                        break
-                }
-            }
 			let param = {
                 method: 'version_detail',
                 type: dataObj.type,
                 version: dataObj.version,
                 product_id: dataObj.product_id || '',
-                os_type: cur_os_type,
+                os_type: this.os_type_text[dataObj.os_type] || '',
                 router_pid: dataObj.router_pid || '',
 			}
 			let obj = this
