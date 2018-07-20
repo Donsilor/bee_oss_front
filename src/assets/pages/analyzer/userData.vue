@@ -331,7 +331,7 @@ export default {
         search () {
             const { date, platform, city } = this.formdata;
             if (this.checkIsSameDate(date)) {
-                return this.$message({ message: '日期不能选择同一天', type: 'warning', showClose: true, duration: 0 });
+                return this.$message({ message: '日期不能选择同一天', type: 'warning', showClose: true });
             }
             this.getUserAnalyzeData({
                 start_date: this.formatDate(date[0]),
