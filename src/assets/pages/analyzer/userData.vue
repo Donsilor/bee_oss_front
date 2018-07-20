@@ -390,7 +390,8 @@ export default {
             axios.post(URL.analyzerRetain, params).then((res) => {
                 const result = res.data.result.list;
                 this.tableData = result;
-                if (this.colunmName.length) return
+                // 通过colunmName构造table
+                this.colunmName = [];
                 this.tableData[0].retain_list.forEach((obj) => {
                     this.colunmName.push(obj.day);
                 });
