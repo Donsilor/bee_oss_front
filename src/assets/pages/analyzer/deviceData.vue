@@ -153,6 +153,25 @@ export default {
                 columns: ['category_title', 'oper_num'],
                 rows: []
             },
+            chartSettings1: {
+                type: 'histogram',
+                labelMap: {
+                    'family_num': '户数'
+                }
+            },
+            chartSettings2: {
+                yAxisType: ['percent'],
+                type: 'histogram',
+                labelMap: {
+                    'family_rate': '比重'
+                }
+            },
+            chartSettings3: {
+                type: 'histogram',
+                labelMap: {
+                    'oper_num': '次数'
+                }
+            },
             chartExtend1: {
                 // label设置查看echarts 2.x文档
                 series: {
@@ -173,7 +192,16 @@ export default {
                               show: true, 
                               position: 'top',
                               formatter (a) {
-                                return a.value * 100 + '%';
+                                // echarts配置文档中
+                                // line value是数组
+                                // histogram value是number
+                                let value = '';
+                                if (a.componentSubType === 'line') {
+                                  value = a.value[1];
+                                } else {
+                                  value = a.value; 
+                                }
+                                return value * 100 + '%';
                               }
                             }
                         }
@@ -188,31 +216,6 @@ export default {
                           label: {show: true, position: 'top'}
                         }
                     }
-                }
-            },
-            chartSettings1: {
-                type: 'histogram',
-                labelMap: {
-                    'oper_num': '次数',
-                    'family_num': '户数',
-                    'family_rate': '比重'
-                }
-            },
-            chartSettings2: {
-                yAxisType: ['percent'],
-                type: 'histogram',
-                labelMap: {
-                    'oper_num': '次数',
-                    'family_num': '户数',
-                    'family_rate': '比重'
-                }
-            },
-            chartSettings3: {
-                type: 'histogram',
-                labelMap: {
-                    'oper_num': '次数',
-                    'family_num': '户数',
-                    'family_rate': '比重'
                 }
             },
             showFamilyCategoryEmpty: false,
