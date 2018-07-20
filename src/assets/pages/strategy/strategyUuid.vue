@@ -5,7 +5,15 @@
 			<!--搜索框-->
 			<el-row type="flex" justify="space-between">
 				<el-col :span="8">
-					<el-input class="searchInput" v-model="searchKey" :maxlength="11" type="text" placeholder="输入用策略组id" />
+					<!-- <el-input class="searchInput" v-model="searchKey" :maxlength="11" type="text" placeholder="输入用策略组id" /> -->
+                    <el-select v-model="searchKey"  filterable placeholder="请选择策略组ID">
+                        <el-option
+                          v-for="item in strategyId"
+                          
+                          :label="item.F_strategy_id"
+                          :value="item.F_strategy_id">
+                        </el-option>
+                    </el-select>
 					<el-button type="primary" @click="search">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
 				</el-col>
 
@@ -58,7 +66,15 @@
 				    <el-input v-model="AddEditForm.F_uuid" :disabled="true"></el-input>
 					</el-form-item>
 					<el-form-item label="策略组id">
-					    <el-input v-model="AddEditForm.F_strategy_id"></el-input>
+					    <!-- <el-input v-model="AddEditForm.F_strategy_id"></el-input> -->
+                        <el-select v-model="AddEditForm.F_strategy_id" filterable placeholder="请选择策略组ID">
+                        <el-option
+                          v-for="item in strategyId"
+                        
+                          :label="item.F_strategy_id"
+                          :value="item.F_strategy_id">
+                        </el-option>
+                    </el-select>
 					</el-form-item>		
 				</el-form>
 			</div>
@@ -81,6 +97,7 @@ export default {
 	    return {
             addEditLayer: false,
             is_edit: true,
+            strategyId: [],
             totalItem: 0,
             currentPage: 1,
             searchKey:'',
@@ -107,7 +124,7 @@ export default {
 	},
     mounted () {
         this.getImgList(1);
-
+        this.getStrategyId()
         let table = document.querySelectorAll('.el-table__body-wrapper > table > tbody')[0]
         let obj = this
     },
@@ -230,6 +247,23 @@ export default {
                 }
             })
 		},
+        getStrategyId(){
+            const obj  = this
+            var params = {}
+            // params.page = 1
+            // params.limit = 10
+            obj.$store.dispatch('strategyList', params).then((result) => {
+                obj.strategyId = result.result.data
+            })
+        },
+        // filter(query){
+        //     const obj  = this
+        //     var params = {}
+        //     params.F_strategy_id = query
+        //     obj.$store.dispatch('strategyList', obj.params).then((result) => {
+        //         obj.strategyId = result.result.data
+        //     })
+        // }
        
 
 	},

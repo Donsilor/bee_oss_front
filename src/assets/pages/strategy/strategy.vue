@@ -71,7 +71,15 @@
                     </el-select>
 				</el-form-item>
 				<el-form-item label="host列表">
-				    <el-input v-model="AddEditForm.F_host_list"></el-input>
+				  <!--   <el-input v-model="AddEditForm.F_host_list"></el-input> -->
+                    <el-select v-model="AddEditForm.F_host_list" filterable placeholder="请选择">
+                        <el-option
+                          v-for="item in hostList"
+                        
+                          :label="item.F_value"
+                          :value="item.F_value">
+                        </el-option>
+                    </el-select>
 				</el-form-item>
 					
 				</el-form>
@@ -94,6 +102,7 @@ export default {
 	data () {
 	    return {
             addEditLayer: false,
+            hostList:[],
             totalItem: 0,
             currentPage: 1,
             listParams: {
@@ -126,7 +135,7 @@ export default {
 	},
     mounted () {
         this.getImgList(1);
-
+        this.getHostList()
         let table = document.querySelectorAll('.el-table__body-wrapper > table > tbody')[0]
         let obj = this
     },
@@ -239,6 +248,18 @@ export default {
                 }
             })
 		},
+        getHostList(){
+            const obj  = this
+            var params = {}
+            // params.page = 1 
+            // params.limit = 10
+            params.F_type = 'gray_host'
+            obj.$store.dispatch('StrategyConfiglists', params).then((result) => {
+                if (result && result.result) {
+                    obj.hostList = result.result
+                }
+            })
+        }
        
 
 	},
