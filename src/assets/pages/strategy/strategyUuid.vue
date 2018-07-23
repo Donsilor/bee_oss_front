@@ -10,7 +10,7 @@
                         <el-option
                           v-for="item in strategyId"
                           
-                          :label="item.F_strategy_id"
+                          :label="item.F_strategy_name+ '  (id:' + item.F_strategy_id  +  ')'"
                           :value="item.F_strategy_id">
                         </el-option>
                     </el-select>
@@ -71,7 +71,7 @@
                         <el-option
                           v-for="item in strategyId"
                         
-                          :label="item.F_strategy_id"
+                          :label="item.F_strategy_name+ '  (id:' + item.F_strategy_id  +  ')'"
                           :value="item.F_strategy_id">
                         </el-option>
                     </el-select>
