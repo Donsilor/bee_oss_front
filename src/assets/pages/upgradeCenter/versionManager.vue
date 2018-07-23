@@ -13,6 +13,12 @@
 		<div class="p-r" v-if="!firstTableShow" style="height: 40px; padding-top: 10px">
 			<!--<div style="line-height: 40px; height: 40px">{{secondTitle}}</div>-->
 			<el-button type="text"  @click="backToList" class="btn-back">返回上一级</el-button>
+			<template v-if="inputType === 3 || inputType === 8">
+				<el-tabs v-model="activeName" @tab-click="deviceRouterChange">
+					<el-tab-pane label="子设备列表" name="devices"></el-tab-pane>
+					<el-tab-pane label="子路由列表" name="routers"></el-tab-pane>
+				</el-tabs>
+			</template>
 		</div>
 		<!--版本列表-->
 		<div>
@@ -38,7 +44,7 @@
 						width="180"
 						label="操作">
 					<template slot-scope="scope">
-						<el-button  type="text" size="small" @click="getVersionHistory(scope.row,1)">查看版本列表</el-button>
+						<el-button  type="text" size="small" @click="gotoHistoryList(scope.row,1)">查看版本列表</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -129,6 +135,7 @@
 					:editDataObj="editDataObj"
 					:releasedFlag="releasedFlag"
 					:routerPidList="routerPidList"
+					:activeName="activeName"
 			>
 			</version-input>
 		</el-dialog>
@@ -297,7 +304,8 @@ export default {
                 1: '白名单',
                 2: '黑名单',
                 3: '全量'
-			}
+			},
+            activeName: 'devices'
 		}
 	},
 	filters: {
@@ -415,6 +423,7 @@ export default {
             })
 
         },
+		//禁用、启用
         startStopVerion (dataObj) {
             let obj = this
             obj.$confirm('确定此操作吗?', '提示', {
@@ -443,6 +452,7 @@ export default {
                 })
             })
         },
+		//操作日志
         getOperateLog (dataObj) {
             this.operateLogLayer = true
 			this.operateLogList= operation_log_json
@@ -459,6 +469,7 @@ export default {
                 }
             })
 		},
+		//删除
         deleteVersion (dataObj) {
             let obj = this
             obj.$confirm('确定此操作吗?', '提示', {
@@ -471,7 +482,7 @@ export default {
                     version: dataObj.version,
                     user_id: dataObj.user_id,
                     product_id: dataObj.product_id || '',
-					os_type: dataObj.os_type || '',
+					os_type: obj.os_type_text[dataObj.os_type] || '',
                     router_pid: dataObj.router_pid || '',
                     method: 'del_version'
                 }
@@ -487,6 +498,7 @@ export default {
                 })
             })
 		},
+		//回滚
         rollBackVersion (dataObj) {
             let obj = this
             obj.$confirm('确定此操作吗?', '提示', {
@@ -500,7 +512,7 @@ export default {
                     user_id: dataObj.user_id,
                     product_id: dataObj.product_id,
                     method: 'rollback',
-                    os_type: dataObj.os_type
+                    os_type: obj.os_type_text[dataObj.os_type] || ''
                 }
 
                 obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
@@ -518,30 +530,12 @@ export default {
         getVersionDetail (dataObj) {
             this.infoBoxFlag = true
 			this.currentDetailObj = dataObj
-
-            let cur_os_type = ''
-            if (dataObj.os_type) {
-                switch (dataObj.os_type) {
-                    case 1:
-                        cur_os_type = 'android_app'
-                        break
-                    case 4:
-                        cur_os_type = 'ios_app'
-                        break
-                    case 6:
-                        cur_os_type = 'android_pad'
-                        break
-                    default:
-                        cur_os_type = dataObj.os_type
-                        break
-                }
-            }
 			let param = {
                 method: 'version_detail',
                 type: dataObj.type,
                 version: dataObj.version,
                 product_id: dataObj.product_id || '',
-                os_type: cur_os_type,
+                os_type: this.os_type_text[dataObj.os_type] || '',
                 router_pid: dataObj.router_pid || '',
 			}
 			let obj = this
@@ -596,8 +590,6 @@ export default {
 		},
 		// 版本录入
         importSubmit (params) {
-            console.log(params)
-
             this.$store.dispatch('pubilcCorsAction', params).then((result) => {
                 if (result.code === 0) {
                     this.$message.success(this.addEditFlag ? '录入成功' : '编辑成功')
@@ -783,6 +775,12 @@ export default {
             this.secondTitle = this.getVersionTitle(dataObj)
             this.getVersionHistoryList(page, dataObj)
 		},
+		gotoHistoryList (dataObj,page) {
+            if (dataObj.type === 3) {
+                this.activeName = 'devices'
+            }
+            this.getVersionHistory (dataObj,page)
+		},
 		getVersionTitle(dataObj) {
             let title = ''
             if (dataObj.name) {
@@ -801,7 +799,7 @@ export default {
             this.getVersionList(1)
 		},
         getPidName(dataObj) {
-            if (dataObj.type === 3 || dataObj.type === 5) {
+            if (dataObj.type === 3 || dataObj.type === 8 || dataObj.type === 5) {
                 if (dataObj.product_id) {
                     return '--' + dataObj.product_id
                 } else {
@@ -816,6 +814,11 @@ export default {
             } else {
                 return ''
 			}
+		},
+		//子设备/子路由切换
+		deviceRouterChange() {
+            this.currentDataObj.type = this.activeName === 'devices' ? 3 : 8
+            this.getVersionHistory(this.currentDataObj,1)
 		}
 	},
     ...mapActions([
@@ -870,6 +873,7 @@ export default {
 	.btn-back{
 		position: absolute;
 		right: 10px;
+		z-index: 999;
 		top: 10px;
 	}
 	.support-routers{
@@ -884,6 +888,9 @@ export default {
 		li:last-of-type{
 			border-bottom: 0
 		}
+	}
+	.el-tabs__nav-wrap::after{
+		height: 1px;
 	}
 }
 </style>

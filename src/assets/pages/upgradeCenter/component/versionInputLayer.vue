@@ -6,7 +6,7 @@
 		<el-form-item label="路由器pid" prop="router_pid" v-if="inputType === 2 && addEditFlag">
 			<el-input type="text" v-model="importForm.router_pid" />
 		</el-form-item>
-		<el-form-item label="product_id" prop="product_id" v-if="(inputType === 3 || inputType === 5)  && addEditFlag">
+		<el-form-item label="product_id" prop="product_id" v-if="(inputType === 3 || inputType === 8 || inputType === 5)  && addEditFlag">
 			<el-input type="text" v-model="importForm.product_id" />
 		</el-form-item>
 		<el-form-item label="os_type" prop="os_type"  v-if="inputType === 5">
@@ -155,7 +155,7 @@ import { mapGetters, mapActions } from 'vuex';
 import getCorsUrl from '../../../lib/corsconfig'
 export default {
     props: ['brandIDOptions','type','typeIDOptions','productIDOptions','routerPidList',
-		'inputType','product','addEditFlag','editDataObj', 'releasedFlag','os_type'],
+		'inputType','product','addEditFlag','editDataObj', 'releasedFlag','os_type','activeName'],
 	data () {
 		return {
             brandIDOptionsChild: this.brandIDOptions,
@@ -343,7 +343,7 @@ export default {
             if (this.inputType === 2) {
                 attrObj['router_pid'] = ''
             }
-            if (this.inputType === 3 || this.inputType === 5) {
+            if (this.inputType === 3 || this.inputType === 8 || this.inputType === 5) {
                 attrObj['product_id'] = ''
 			}
             if (this.inputType === 5) {
@@ -388,7 +388,7 @@ export default {
 
 		},
         resetImportForm () {
-            if (this.inputType === 3 || this.inputType === 5) {
+            if (this.inputType === 3 || this.inputType === 8 || this.inputType === 5) {
                 // 此处尚未找到具体原因，暂时先这样修复
                 this.$refs['importForm'].fields.forEach((field, index) => {
                     if (field.prop === undefined){
@@ -428,7 +428,7 @@ export default {
 		},
 		productChange (val) {
 			let obj = this
-			if (this.inputType === 3) {
+			if (this.inputType === 3 || this.inputType === 8) {
 			    return
 			}
             obj.$store.dispatch('pubilcCorsAction',{
@@ -495,7 +495,7 @@ export default {
                             params.method = this.addEditFlag ? 'create_router_version' : 'update_router_version'
                             break
                         case 3:
-                            params.method = this.addEditFlag ? 'create_device_version' : 'update_device_version'
+							params.method = this.addEditFlag ? 'create_device_version' : 'update_device_version'
                             break
                         case 5:
                             params.method = this.addEditFlag ? 'create_h5_version' : 'update_h5_version'
@@ -503,11 +503,14 @@ export default {
                         case 7:
                             params.method = this.addEditFlag ? 'create_android_system_version' : 'update_android_system_version'
                             break
+                        case 8:
+                            params.method = this.addEditFlag ? 'create_device_android_system_version' : 'update_device_android_system_version'
+                            break
                         default:
                             break
 					}
 
-                    if (currentType !== 3 && currentType !== 5) {
+                    if (currentType !== 3 && currentType !== 8 && currentType !== 5) {
                         delete params.product_id
                     }
                     if (currentType !== 2) {
