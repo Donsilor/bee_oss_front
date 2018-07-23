@@ -141,6 +141,7 @@
 			<el-select style="width: 100%;" v-model="importForm.force" placeholder="请选择">
 				<el-option label="否" :value="0"></el-option>
 				<el-option label="是" :value="1"></el-option>
+				<el-option label="不弹窗升级" :value="3"></el-option>
 			</el-select>
 		</el-form-item>
 		<el-form-item>
