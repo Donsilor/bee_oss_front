@@ -799,7 +799,7 @@ export default {
             this.getVersionList(1)
 		},
         getPidName(dataObj) {
-            if (dataObj.type === 3 || dataObj.type === 5) {
+            if (dataObj.type === 3 || dataObj.type === 8 || dataObj.type === 5) {
                 if (dataObj.product_id) {
                     return '--' + dataObj.product_id
                 } else {

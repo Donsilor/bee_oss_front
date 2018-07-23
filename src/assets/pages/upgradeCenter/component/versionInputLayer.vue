@@ -504,7 +504,7 @@ export default {
                             params.method = this.addEditFlag ? 'create_android_system_version' : 'update_android_system_version'
                             break
                         case 8:
-                            params.method = this.addEditFlag ? 'create_android_system_version' : 'update_android_system_version'
+                            params.method = this.addEditFlag ? 'create_device_android_system_version' : 'update_device_android_system_version'
                             break
                         default:
                             break
