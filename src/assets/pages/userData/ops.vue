@@ -275,6 +275,7 @@ import routerLists from '../../json/routers.json'
 import operLists from '../../json/operList.json'
 import '../../lib/util'
 import pager from '../../components/pagination/livePagination.vue'
+import API from '../../service/index'
 export default {
 	computed: {
 	},
@@ -391,7 +392,7 @@ export default {
 		// 拉取数据
 		getUserData (key) {
             let obj = this
-            obj.$store.dispatch('searchUserMsg',{phone_num: key}).then((result) => {
+            API.searchUserMsg({phone_num: key}).then((result) => {
                 obj.user_id = result.info.F_uid
                 obj.setUsermsg(result.info)
                 obj.hasAllMsg = true
@@ -493,7 +494,7 @@ export default {
                 page: page,
 				limit: 10
             }
-            obj.$store.dispatch('searchLogOut', param).then((result) => {
+            API.searchLogOut(param).then((result) => {
                 logOutLists.tableData = result.data
                 obj.logOutList = logOutLists
 				obj.totalItem = result.total
@@ -553,7 +554,7 @@ export default {
                 page: page
                 // family_id: this.allFamily[this.allFamilyIndex].family_id
 			}
-            obj.$store.dispatch('operaList', param).then((result) => {
+            API.operaList(param).then((result) => {
                 if (result && result.data) {
                     operLists.tableData = result.data
 					obj.totalItemOper = result.total

@@ -93,6 +93,7 @@ import { PREFIX } from '../lib/util.js';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title'; 
+import API from '../service/index'
 
 export default {
 	data () {
@@ -173,7 +174,7 @@ export default {
 			}
 		},
 		getHomeData () {
-            this.$store.dispatch('throughDatas',{}).then((result) => {
+            API.throughDatas({}).then((result) => {
                 if (result) {
                     this.homeData = result;
                 }
@@ -217,7 +218,7 @@ export default {
                 select_date: new Date(),
                 group_by: ''
             }
-            obj.$store.dispatch('getwarnDatas',param).then((result) => {
+            API.getwarnDatas(param).then((result) => {
                 if (result.data) {
                     let data = result.data
                     let datas = data.result.data

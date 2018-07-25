@@ -193,6 +193,7 @@ import version_detail from './component/versionDetail.vue'
 import operate_log from './component/operateLogs.vue'
 import filter_form from './component/filterLayer.vue'
 import version_mapping from './component/versionMapping.vue'
+import API from '../../service/index'
 export default {
     components: {
         'version-input': version_input,
@@ -410,7 +411,7 @@ export default {
                 router_pid: dataObj.router_pid || '',
             }
             let obj = this
-            obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
+            API.pubilcCorsAction(param).then((result) => {
                 let currentData = result.result
                 obj.releasedFlag = currentData.status === 1 ? true : false
                 obj.addEditFlag = false
@@ -441,7 +442,7 @@ export default {
                     method: dataObj['status'] ? 'disable' : 'enable'
                 }
 
-                obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
+                API.pubilcCorsAction(param).then((result) => {
                     if (result.code === 0) {
                         obj.$message({
                             type: 'success',
@@ -463,7 +464,7 @@ export default {
                 product_id: dataObj.product_id,
                 method: 'history_operation_logs'
 			}
-            obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
+            API.pubilcCorsAction(param).then((result) => {
                 if (result.code === 0) {
                     obj.operateLogList.tableData = result.result.items
                 }
@@ -487,7 +488,7 @@ export default {
                     method: 'del_version'
                 }
 
-                obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
+                API.pubilcCorsAction(param).then((result) => {
                     if (result.code === 0) {
                         obj.$message({
                             type: 'success',
@@ -515,7 +516,7 @@ export default {
                     os_type: obj.os_type_text[dataObj.os_type] || ''
                 }
 
-                obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
+                API.pubilcCorsAction(param).then((result) => {
                     if (result.code === 0) {
                         obj.$message({
                             type: 'success',
@@ -539,7 +540,7 @@ export default {
                 router_pid: dataObj.router_pid || '',
 			}
 			let obj = this
-            obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
+            API.pubilcCorsAction(param).then((result) => {
                 let datas = result.result
 				let form = obj.ruleFormDetail
 				for (let attr in form) {
@@ -590,7 +591,7 @@ export default {
 		},
 		// 版本录入
         importSubmit (params) {
-            this.$store.dispatch('pubilcCorsAction', params).then((result) => {
+            API.pubilcCorsAction(params).then((result) => {
                 if (result.code === 0) {
                     this.$message.success(this.addEditFlag ? '录入成功' : '编辑成功')
                     this.importBoxFlag = false
@@ -600,7 +601,7 @@ export default {
         },
 		// 推送升级
         pushUpdate (params) {
-            this.$store.dispatch('pubilcCorsAction', params).then((result) => {
+            API.pubilcCorsAction(params).then((result) => {
                 if (result.code === 0) {
                     this.$message.success('推送成功');
                     this.pushBoxFlag = false;
@@ -617,7 +618,7 @@ export default {
 		// 版本匹配搜索
         filterVersions (params) {
             let obj = this
-            obj.$store.dispatch('pubilcCorsAction', params).then((result) => {
+            API.pubilcCorsAction(params).then((result) => {
 		        if (result.code === 0) {
                     obj.filterPopoverFlag = false
                     obj.firstTableShow = false
@@ -634,7 +635,7 @@ export default {
 			this.listParams.page = page
 			this.versionsFirst = Object.assign({}, version_first_json)
 			const obj  = this
-            obj.$store.dispatch('getVersions', obj.listParams).then((result) => {
+            API.getVersions(obj.listParams).then((result) => {
                 if (result.code === 0) {
                     obj.firstTableShow = true
 					obj.$nextTick(() => {
@@ -757,7 +758,7 @@ export default {
 				product_id: dataObj.product_id || ''
 			}
             const obj  = this
-            obj.$store.dispatch('getVersions', param).then((result) => {
+            API.getVersions(param).then((result) => {
                 if (result.code === 0) {
                     let currentData = result.result
                     obj.firstTableShow = false

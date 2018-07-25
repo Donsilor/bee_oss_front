@@ -82,6 +82,7 @@
 <script>
 import * as namespace from '../../../store/namespace';
 import { mapActions } from 'vuex';
+import API from '../../../service/index'
 export default {
     props: ['inputType'],
 	data () {
@@ -129,7 +130,7 @@ export default {
                 default:
                     break
             }
-            obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
+            API.pubilcCorsAction(param).then((result) => {
                 obj.currenData = result.result
             })
 

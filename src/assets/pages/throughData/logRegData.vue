@@ -21,7 +21,8 @@
 <script>
 import echarts from 'echarts';
 import {mapActions} from 'vuex';
-import '../../lib/util'
+import '../../lib/util';
+import API from '../../service/index'
 export default {
 	data () {
 		return {
@@ -39,7 +40,7 @@ export default {
 		},
         changeSelectDate () {
 			let obj = this
-            obj.$store.dispatch('logRegDatas',{select_date: obj.select_date, channel: obj.channel}).then((result) => {
+            API.logRegDatas({select_date: obj.select_date, channel: obj.channel}).then((result) => {
                 if (result.data && result.data.result.data) {
                     let datas = result.data.result.data
                     let Xarrs = []

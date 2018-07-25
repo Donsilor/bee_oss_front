@@ -77,6 +77,8 @@ import '../../lib/util.js'
 import { Message } from 'element-ui'
 import Sortable  from 'sortablejs'
 import getCorsUrl from '../../lib/corsconfig'
+import API from '../../service/index'
+
 export default {
 	data () {
 	    return {
@@ -129,7 +131,7 @@ export default {
                 let temp_old = obj.sortArr[oldIndex]
 				obj.sortArr[newIndex] = temp_old
                 obj.sortArr[oldIndex] = temp_new
-                obj.$store.dispatch('sortImgs', {id_list: obj.sortArr}).then((result) => {
+                API.sortImgs({id_list: obj.sortArr}).then((result) => {
 
                 })
             }
@@ -160,7 +162,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                obj.$store.dispatch('deleteImgs', {id: dataObj.id}).then((result) => {
+                API.deleteImgs({id: dataObj.id}).then((result) => {
                     if (result.code === 200) {
                         obj.$message({
                             type: 'success',
@@ -194,7 +196,7 @@ export default {
                     if (obj.addEditFlag) {
                         delete currentParam.id
                     }
-                    obj.$store.dispatch(currentAction, currentParam).then((result) => {
+                    API[currentAction](currentParam).then((result) => {
                         if (!obj.addEditFlag) {
                             if (result && result.code === 200) {
                                 Message({
@@ -228,7 +230,7 @@ export default {
 		getImgList (page) {
             this.listParams.page = page
             const obj  = this
-            obj.$store.dispatch('imgList', obj.listParams).then((result) => {
+            API.imgList(obj.listParams).then((result) => {
                 if (result && result.result && result.result.length) {
                     let currentArr = result.result
                     obj.imgList.tableData = currentArr
@@ -269,10 +271,10 @@ export default {
 
 	},
     ...mapActions([
-        'imgList',
-        'addImgs',
-        'deleteImgs',
-        'editImgs'
+        // 'imgList',
+        // 'addImgs',
+        // 'deleteImgs',
+        // 'editImgs'
     ]),
     computed: {
         ...mapGetters({})

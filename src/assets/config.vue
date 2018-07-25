@@ -350,6 +350,7 @@ import versions_children_json from '../../json/versionsChildren.json'
 import push_history_json from '../../json/pushHistory.json'
 import version_input from '../../components/versionInputLayer.vue'
 import push_update from '../../components/pushUpdateLayer.vue'
+import API from './service/index'
 export default {
     components: {
         'version-input': version_input,
@@ -559,7 +560,7 @@ export default {
         tabClick () {
             if (this.activeName === 'second') {
                 if (!this.pushHistoryList.tableData) {
-                    this.$store.dispatch('getPushHistoryList', {}).then((result) => {
+                    API.getPushHistoryList({}).then((result) => {
                         let datas = result.result
                         push_history_json.tableData = datas.items
 						this.pushHistoryList = push_history_json
@@ -661,7 +662,7 @@ export default {
             delete params.routersList
             delete params.tab
 
-            this.$store.dispatch('pushUpdateAction', params).then((result) => {
+            API.pushUpdateAction(params).then((result) => {
                 if (result.code === 200) {
                     this.$message.success('推送成功');
                     this.pushBoxFlag = false;
@@ -697,7 +698,7 @@ export default {
 			if (obj.filterForm.tab === 2) {
                 // delete currentParam.product_id
 			}
-            obj.$store.dispatch('selectVersion', currentParam).then((result) => {
+            API.selectVersion(currentParam).then((result) => {
 		        if (result.code === 200) {
                     obj.filterPopoverFlag = false
                     obj.firstTableShow = false
@@ -714,7 +715,7 @@ export default {
 			// this.filterParams.token = this.token
 			this.listParams.page = page
 			const obj  = this
-            obj.$store.dispatch('getVersions', obj.listParams).then((result) => {
+            API.getVersions(obj.listParams).then((result) => {
                 if (result.code === 0) {
                     obj.firstTableShow = true
                     obj.childTableHeaderShow = false
@@ -829,7 +830,7 @@ export default {
 				product_id: product_id || ''
 			}
             const obj  = this
-            obj.$store.dispatch('getVersions', param).then((result) => {
+            API.getVersions(param).then((result) => {
                 if (result.code === 200) {
                     let currentData = result.result
                     obj.firstTableShow = false

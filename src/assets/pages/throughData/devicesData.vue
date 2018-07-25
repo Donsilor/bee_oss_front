@@ -17,7 +17,8 @@
 <script>
 import echarts from 'echarts';
 import {mapActions} from 'vuex';
-import '../../lib/util'
+import '../../lib/util';
+import API from '../../service/index'
 export default {
 	data () {
 		return {
@@ -49,7 +50,7 @@ export default {
 	methods: {
         changeSelectDate () {
 			let obj = this
-            obj.$store.dispatch('deviceTotals',{select_date: obj.select_date}).then((result) => {
+            API.deviceTotals({select_date: obj.select_date}).then((result) => {
                 if (result.data && result.data.length) {
                     let datas = result.data
 					let Xarrs = []

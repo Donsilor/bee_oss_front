@@ -106,6 +106,7 @@
 import {mapActions} from 'vuex';
 import errLogJson from '../../json/errLogs.json'
 import '../../lib/util'
+import API from '../../service/index'
 export default {
 	computed: {
 	},
@@ -204,7 +205,7 @@ export default {
                     param[attr] = currentForm[attr]
 				}
 			}
-            obj.$store.dispatch('errLogs',param).then((result) => {
+            API.errLogs(param).then((result) => {
                 // obj.terminalList = result
                 errLogJson.tableData = result.data
 				this.rootLogData = errLogJson

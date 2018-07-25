@@ -75,6 +75,7 @@
 <script>
 import * as namespace from '../../../store/namespace';
 import { mapGetters, mapActions } from 'vuex';
+import API from '../../../service/index'
 export default {
     props: ['brandIDOptions','typeIDOptions', 'type', 'productIDOptions','appIos',
 		'router','inputType','product'],
@@ -172,7 +173,7 @@ export default {
 		},
 		productChange (val) {
 			let obj = this
-            obj.$store.dispatch('pubilcCorsAction',{
+            API.pubilcCorsAction({
                 method: 'released_versions',
                 type: 3,
                 product_id: val

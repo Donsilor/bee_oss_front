@@ -72,6 +72,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
+import API from '../../service/index'
 export default {
 	data () {
 		return {
@@ -96,7 +97,7 @@ export default {
         handleClick () {},
 	    getFirstDatas () {
             let obj = this
-            obj.$store.dispatch('throughDatas',{select_date: obj.select_date}).then((result) => {
+            API.throughDatas({select_date: obj.select_date}).then((result) => {
                 if (result) {
                     for (let attr in obj.numAll) {
                         if (result[attr]) {

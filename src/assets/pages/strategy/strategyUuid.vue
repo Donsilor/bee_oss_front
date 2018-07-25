@@ -92,6 +92,7 @@ import '../../lib/util.js'
 import { Message } from 'element-ui'
 import Sortable  from 'sortablejs'
 import getCorsUrl from '../../lib/corsconfig'
+import API from '../../service/index'
 export default {
 	data () {
 	    return {
@@ -159,7 +160,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                obj.$store.dispatch('StrategyUuidDel', {F_uuid: dataObj.F_uuid}).then((result) => {
+                API.StrategyUuidDel({F_uuid: dataObj.F_uuid}).then((result) => {
                     if (result.code === 200) {
                         obj.$message({
                             type: 'success',
@@ -193,7 +194,7 @@ export default {
                         delete currentParam.id
                     }
                     if (!obj.addEditFlag) {
-                    obj.$store.dispatch('StrategyUuidEdit', currentParam).then((result) => {
+                    API.StrategyUuidEdit(currentParam).then((result) => {
                         if (result && result.code === 200) {
                             Message({
                                 message:  '编辑成功',
@@ -205,7 +206,7 @@ export default {
                         
                     })
                 	}else{
-                    obj.$store.dispatch('StrategyUuidAdd', currentParam).then((result) => {
+                    API.StrategyUuidAdd(currentParam).then((result) => {
                    
                             if (result && result.code === 200) {
                                 Message({
@@ -233,7 +234,7 @@ export default {
             this.listParams.limit = 10
             this.listParams.F_strategy_id = this.searchKey > 0 ? this.searchKey : 1
             const obj  = this
-            obj.$store.dispatch('StrategyUuidList', obj.listParams).then((result) => {
+            API.StrategyUuidList(obj.listParams).then((result) => {
                 if (result && result.result && result.result.data.length) {
                     let currentArr = result.result.data
                     obj.imgList.tableData = currentArr
@@ -252,7 +253,7 @@ export default {
             var params = {}
             // params.page = 1
             // params.limit = 10
-            obj.$store.dispatch('strategyList', params).then((result) => {
+            API.strategyList(params).then((result) => {
                 obj.strategyId = result.result.data
             })
         },

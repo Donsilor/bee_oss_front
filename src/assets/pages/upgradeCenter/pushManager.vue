@@ -83,6 +83,7 @@ import '../../lib/util.js';
 import push_history_json from '../../json/pushHistory.json'
 import version_input from './component/versionInputLayer.vue'
 import push_update from './component/pushUpdateLayer.vue'
+import API from '../../service/index'
 export default {
     components: {
         'version-input': version_input,
@@ -215,7 +216,7 @@ export default {
 				limit: 10,
 				page: page
 			}
-            obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
+            API.pubilcCorsAction(param).then((result) => {
                 obj.pushHistoryList.tableData = result.result ? result.result.items : []
                 // 翻页效果
 				obj.totalItem =  result.result ? result.result.page.total : 0
@@ -231,7 +232,7 @@ export default {
                 product_id: dataObj.product_id,
                 method: 'push_detail'
             }
-            obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
+            API.pubilcCorsAction(param).then((result) => {
                 obj.pushDetailList.tableData = result.result ? result.result.items : []
                 // 翻页效果
             })
@@ -246,7 +247,7 @@ export default {
                 version: dataObj.version,
                 method: 'push_list'
             }
-            obj.$store.dispatch('pubilcCorsAction', param).then((result) => {
+            API.pubilcCorsAction(param).then((result) => {
                 obj.pushNameList.tableData = result.result ? result.result.items : []
             })
 		}

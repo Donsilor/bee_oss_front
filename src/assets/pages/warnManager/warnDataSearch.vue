@@ -68,7 +68,8 @@
 <script>
 import {mapActions} from 'vuex';
 import rootLogJson from '../../json/warnList.json'
-import '../../lib/util'
+import '../../lib/util';
+import API from '../../service/index'
 export default {
 	computed: {
 	},
@@ -118,7 +119,7 @@ export default {
                     param[attr] = currentForm[attr]
 				}
 			}
-            obj.$store.dispatch('getwarnDataList',param).then((result) => {
+            API.getwarnDataList(param).then((result) => {
                 // obj.terminalList = result
                 rootLogJson.tableData = result.data.result.data
 				this.rootLogData = rootLogJson

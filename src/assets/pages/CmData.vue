@@ -95,6 +95,8 @@ import '../lib/util.js'
 import { Message } from 'element-ui'
 import Sortable  from 'sortablejs'
 import getCorsUrl from '../lib/corsconfig'
+import API from '../service/index.js'
+
 export default {
     data () {
         return {
@@ -168,7 +170,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                obj.$store.dispatch('CmDataDel', {F_id: dataObj.F_id}).then((result) => {
+                API.CmDataDel({F_id: dataObj.F_id}).then((result) => {
                     if (result.code === 200) {
                         obj.$message({
                             type: 'success',
@@ -201,7 +203,7 @@ export default {
                         delete currentParam.id
                     }
                     if (!obj.addEditFlag) {
-                    obj.$store.dispatch('CmDataEdit', currentParam).then((result) => {
+                    API.CmDataEdit(currentParam).then((result) => {
                         if (result && result.code === 200) {
                             Message({
                                 message:  '编辑成功',
@@ -213,7 +215,7 @@ export default {
                         
                     })
                     }else{
-                    obj.$store.dispatch('CmDataAdd', currentParam).then((result) => {
+                    API.CmDataAdd(currentParam).then((result) => {
                    
                             if (result && result.code === 200) {
                                 Message({
@@ -242,7 +244,7 @@ export default {
             this.listParams.F_key = this.searchKey.F_key
             this.listParams.F_module_name = this.searchKey.F_module_name
             const obj  = this
-            obj.$store.dispatch('CmDataList', obj.listParams).then((result) => {
+            API.CmDataList(obj.listParams).then((result) => {
                 if (result && result.result && result.result.data.length) {
                     let currentArr = result.result.data
                     obj.imgList.tableData = currentArr
@@ -261,7 +263,7 @@ export default {
             let params = {}
             params.config_key = "cm_data_module_name"
             params.only_val = 1
-            obj.$store.dispatch('ModuleList', params).then((result) => {
+            API.ModuleList(params).then((result) => {
                 obj.moduleList = result.result
                 console.log(obj.moduleList)
             })
@@ -270,9 +272,9 @@ export default {
        
 
     },
-    ...mapActions([
-        'CmDataList',
-    ]),
+    // ...mapActions([
+    //     'CmDataList',
+    // ]),
     computed: {
         ...mapGetters({})
     }

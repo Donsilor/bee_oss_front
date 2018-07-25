@@ -86,6 +86,7 @@ import '../../lib/util.js'
 import { Message } from 'element-ui'
 import Sortable  from 'sortablejs'
 import getCorsUrl from '../../lib/corsconfig'
+import API from '../../service/index'
 export default {
 	data () {
 	    return {
@@ -149,7 +150,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                obj.$store.dispatch('StrategyConfigDel', {F_id: dataObj.F_id}).then((result) => {
+                API.StrategyConfigDel({F_id: dataObj.F_id}).then((result) => {
                     if (result.code === 200) {
                         obj.$message({
                             type: 'success',
@@ -182,7 +183,7 @@ export default {
                         delete currentParam.id
                     }
                     if (!obj.addEditFlag) {
-                    obj.$store.dispatch('StrategyConfigEdit', currentParam).then((result) => {
+                    API.StrategyConfigEdit(currentParam).then((result) => {
                         if (result && result.code === 200) {
                             Message({
                                 message:  '编辑成功',
@@ -194,7 +195,7 @@ export default {
                         
                     })
                 	}else{
-                    obj.$store.dispatch('StrategyConfigAdd', currentParam).then((result) => {
+                    API.StrategyConfigAdd(currentParam).then((result) => {
                    
                             if (result && result.code === 200) {
                                 Message({
@@ -221,7 +222,7 @@ export default {
             this.listParams.page = page
             this.listParams.limit = 10
             const obj  = this
-            obj.$store.dispatch('StrategyConfiglists', obj.listParams).then((result) => {
+            API.StrategyConfiglists(obj.listParams).then((result) => {
                 console.log(result)
                 if (result && result.result && result.result.length) {
                     let currentArr = result.result

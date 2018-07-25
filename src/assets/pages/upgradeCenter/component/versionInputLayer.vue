@@ -104,6 +104,7 @@
 import * as namespace from '../../../store/namespace';
 import { mapGetters, mapActions } from 'vuex';
 import getCorsUrl from '../../../lib/corsconfig';
+import API from '../../../service/index'
 export default {
     props: [
         'brandIDOptions',
@@ -364,8 +365,7 @@ export default {
             if (this.inputType === 3 || this.inputType === 8) {
                 return;
             }
-            obj.$store
-                .dispatch('pubilcCorsAction', {
+            API.pubilcCorsAction({
                     method: 'released_versions',
                     type: 3,
                     product_id: val
@@ -486,7 +486,7 @@ export default {
                 type: 2
             };
             const obj = this;
-            obj.$store.dispatch('getChoseList', param).then(result => {
+            API.getChoseList(param).then(result => {
                 if (result.code === 0) {
                     obj.router = result.result.map(x => {
                         return {

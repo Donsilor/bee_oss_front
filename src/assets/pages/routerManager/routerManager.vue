@@ -112,7 +112,8 @@ import * as namespace from '../../store/namespace'
 import { mapGetters, mapActions } from 'vuex'
 import '../../lib/util.js'
 import router_list_json from '../../json/routerList.json'
-import { Message } from 'element-ui'
+import { Message } from 'element-ui';
+import API from '../../service/index'
 export default {
     components: {
 	},
@@ -212,7 +213,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                obj.$store.dispatch('deleteRouter', currentParam).then((result) => {
+                API.deleteRouter(currentParam).then((result) => {
                     if (result.code === 0) {
                         obj.$message({
                             type: 'success',
@@ -251,7 +252,7 @@ export default {
 			this.routerList = router_list_json
 			this.listParams.page = page
 			const obj  = this
-            obj.$store.dispatch('routerList', obj.listParams).then((result) => {
+            API.routerList(obj.listParams).then((result) => {
                 if (result && result.list && result.list.length) {
                     obj.routerList.tableData = result.list
 					obj.totalItem = result.total
@@ -292,7 +293,7 @@ export default {
 					if (obj.addEditFlag) {
 					   delete currentParam.router_id
 					}
-                    obj.$store.dispatch(currentAction, currentParam).then((result) => {
+                    API[currentAction](currentParam).then((result) => {
                         if (!obj.addEditFlag) {
 							if (result && result.code === 0) {
                                 Message({

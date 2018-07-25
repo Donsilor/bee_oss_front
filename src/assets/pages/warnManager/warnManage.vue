@@ -30,7 +30,8 @@
 <script>
 import echarts from 'echarts';
 import {mapActions} from 'vuex';
-import '../../lib/util'
+import '../../lib/util';
+import API from '../../service/index'
 export default {
 	data () {
 		let startTime = new Date().setHours(0,0,0)
@@ -54,7 +55,7 @@ export default {
 				start_time: obj.start_end_time[0] && obj.start_end_time[0].Format('hh:mm:ss') || '',
 				end_time: obj.start_end_time[1] && obj.start_end_time[1].Format('hh:mm:ss') || ''
 			}
-            obj.$store.dispatch('getwarnDatas',param).then((result) => {
+            API.getwarnDatas(param).then((result) => {
 				if (result.data) {
 					let data = result.data
 					let datas = data.result.data

@@ -111,6 +111,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import API from '../../../service/index'
 export default {
     props: ['ruleFormDetail','deviceObj'],
 	data () {
@@ -154,7 +155,7 @@ export default {
 				router_pid: dataObj.router_pid || '',
                 method: 'get_uuids'
             }
-            obj.$store.dispatch('pubilcCorsAction', param_1).then((result) => {
+            API.pubilcCorsAction(param_1).then((result) => {
                 obj.versionDeviceList.tableData = result.result ? result.result.items : []
 				obj.totalItem = result.result && result.result.page && result.result.page.total || 0
             })

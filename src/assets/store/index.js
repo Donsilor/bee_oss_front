@@ -2,12 +2,12 @@ import Vuex from 'vuex';
 import user from './modules/user';
 // import website from './modules/website';
 import chosen from './modules/chosen';
-import ops from './modules/ops';
-import strategy from './modules/strategy';
-import upgrade from './modules/upgrade';
-import family from './modules/familys';
+// import ops from './modules/ops';
+// import strategy from './modules/strategy';
+// import upgrade from './modules/upgrade';
+// import family from './modules/familys';
 import feedback from './modules/feedback';
-import cmdata from './modules/cmdata';
+// import cmdata from './modules/cmdata';
 
 export default new Vuex.Store({
     state: {}, //state
@@ -18,11 +18,11 @@ export default new Vuex.Store({
         user,
         website: {},
         chosen,
-        ops,
-        upgrade,
-        family,
-        strategy,
-        feedback,
-        cmdata
+        // ops,
+        // upgrade,
+        // family,
+        // strategy,
+        feedback
+        // cmdata
     }
 });

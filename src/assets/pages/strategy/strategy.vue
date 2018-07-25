@@ -98,6 +98,7 @@ import '../../lib/util.js'
 import { Message } from 'element-ui'
 import Sortable  from 'sortablejs'
 import getCorsUrl from '../../lib/corsconfig'
+import API from '../../service/index'
 export default {
 	data () {
 	    return {
@@ -163,7 +164,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                obj.$store.dispatch('StrategyDel', {F_strategy_id: dataObj.F_strategy_id}).then((result) => {
+                API.StrategyDel({F_strategy_id: dataObj.F_strategy_id}).then((result) => {
                     if (result.code === 200) {
                         obj.$message({
                             type: 'success',
@@ -197,7 +198,7 @@ export default {
                         delete currentParam.id
                     }
                     if (!obj.addEditFlag) {
-                    obj.$store.dispatch('StrategyEdit', currentParam).then((result) => {
+                    API.StrategyEdit(currentParam).then((result) => {
                         if (result && result.code === 200) {
                             Message({
                                 message:  '编辑成功',
@@ -209,7 +210,7 @@ export default {
                         
                     })
                 	}else{
-                    obj.$store.dispatch('StrategyAdd', currentParam).then((result) => {
+                    API.StrategyAdd(currentParam).then((result) => {
                    
                             if (result && result.code === 200) {
                                 Message({
@@ -236,7 +237,7 @@ export default {
             this.listParams.page = page
             this.listParams.limit = 10
             const obj  = this
-            obj.$store.dispatch('strategyList', obj.listParams).then((result) => {
+            API.strategyList(obj.listParams).then((result) => {
                 if (result && result.result && result.result.data.length) {
                     let currentArr = result.result.data
                     obj.imgList.tableData = currentArr
