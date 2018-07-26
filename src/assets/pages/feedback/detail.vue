@@ -8,8 +8,8 @@
             <el-col :span="8" class="col col1">
                 <div>
                     <ul>
-                        <li>反馈用户名：{{ detail.uname }}</li>
-                        <li>反馈用户ID: {{ detail.id }}</li>
+                        <li>反馈用户名：{{ detail.name }}</li>
+                        <li>反馈用户手机号: {{ detail.uname }}</li>
                         <li>反馈时间：{{ detail.created_at }}</li>
                         <li>联系方式：{{ detail.contact }}</li>
                     </ul>
@@ -20,7 +20,7 @@
                     <ul>
                         <li>终端名：{{ detail.terminal_name }}</li>
                         <li>终端类型: {{ detail.terminal_type }}</li>
-                        <li>客户端版本号：{{ detail.client_version }}</li>
+                        <li>客户端版本号：{{ detail.app_version }}</li>
                     </ul>
                 </div>
             </el-col>

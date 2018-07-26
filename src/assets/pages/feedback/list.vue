@@ -35,14 +35,14 @@
                 </el-table-column>
                 <el-table-column width="150">
                     <template slot-scope="scope">
-                        <span>{{ scope.row.client_version}}</span>
+                        <span>{{ scope.row.app_version}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column width="180">
                     <template slot-scope="scope">
                         <ul>
                             <li>{{ scope.row.terminal_type }}</li>
-                            <li>{{ scope.row.app_version }}</li>
+                            <li>{{ scope.row.client_version }}</li>
                         </ul>
                     </template>
                 </el-table-column>
