@@ -35,6 +35,7 @@
                 </el-table-column>
                 <el-table-column width="150">
                     <template slot-scope="scope">
+                        <span style="margin-right: 15px">{{ scope.row.os_type}}</span>
                         <span>{{ scope.row.app_version}}</span>
                     </template>
                 </el-table-column>
@@ -48,7 +49,10 @@
                 </el-table-column>
                 <el-table-column width="150" :show-overflow-tooltip="true">
                     <template slot-scope="scope">
-                        <span>{{ scope.row.uname }}</span>
+                        <ul>
+                            <li>用户名</li>
+                            <li>{{ scope.row.uname }}</li>
+                        </ul>
                     </template>
                 </el-table-column>
                 <el-table-column width="180">
