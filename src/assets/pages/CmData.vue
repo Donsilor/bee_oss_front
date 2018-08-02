@@ -36,7 +36,7 @@
                 </el-col>
 
                 <el-col :span="2" style="padding-right: 0; ">
-                   <el-button type="primary" plain @click='exportList()'>批量导出</el-button>
+                   <a href="javascript:;" @click='exportList()'><el-button type="primary" plain >批量导出</el-button></a>
                 </el-col>
                 
                 <!--<el-col :span="6" style="text-align: right;">-->
