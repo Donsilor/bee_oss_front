@@ -61,5 +61,29 @@ export default {
                     console.log(error);
                 });
         });
+    },
+    // output(params) {
+    //     return new Promise((resolve, reject) => {
+    //         axios
+    //             .get(CMDATA_API.output, params)
+    //             .then(response => {
+                    
+    //             })
+    //             .catch(error => {
+    //                 console.log(error);
+    //             });
+    //     });
+    // },
+    input(params) {
+        return new Promise((resolve, reject) => {
+            axios
+                .post(CMDATA_API.input, params)
+                .then(response => {
+                    resolve(response.data);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        });
     }
 };

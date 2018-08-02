@@ -9,8 +9,8 @@
             </el-row> -->
             <el-row type="flex" justify="space-between">
                 <el-col :span="12">
-                    <el-input class="searchInput" v-model="searchKey.F_key" :maxlength="12" type="text" placeholder="输入键值查询" />
-                    <el-select  v-model="searchKey.F_module_name" placeholder="模块名称" >
+                    <el-input class="searchInput" v-model="F_key" :maxlength="12" type="text" placeholder="输入键值查询" />
+                    <el-select  v-model="F_module_name" placeholder="模块名称" >
                         
                         <el-option v-for="module in moduleList"  :label="module" :value="module">
                         </el-option>
@@ -19,8 +19,24 @@
                     <el-button type="primary" @click="search">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
                 </el-col>
 
-                <el-col :span="12" style="padding-right: 0; ">
+                <el-col :span="7" style="padding-right: 0; ">
                     <el-button type="primary" @click="openAddEditLayer()">添加文案配置</el-button>
+                </el-col>
+
+                <el-col :span="2" style="padding-right: 0; ">
+                   <el-upload
+                      class="upload-demo"
+                      ref="upload"
+                      :on-success="getUploadData"
+                      :show-file-list="true"
+                      :limit="1"
+                      :action="transUrl">
+                      <el-button type="primary" plain>批量导入</el-button> 
+                    </el-upload>
+                </el-col>
+
+                <el-col :span="2" style="padding-right: 0; ">
+                   <a :href ="output"><el-button type="primary" plain >批量导出</el-button></a>
                 </el-col>
                 
                 <!--<el-col :span="6" style="text-align: right;">-->
@@ -86,6 +102,22 @@
                 <el-button  @click="addEditLayer=false" >取消</el-button>
             </div>
         </el-dialog>
+        <!--上传列表显示-->
+        <el-dialog
+          title="导入记录"
+          :visible.sync="inputModel"
+          :lock-scroll='false'
+          width="30%"
+          :before-close="handleClose">
+             <div v-for="info in uploadData" class="text item" >
+
+               <span style="color:red" v-if="info.result!=1"> {{ info.msg }}</span>
+               <span  v-if="info.result==1"> {{ info.msg }}</span>
+              </div>
+            <!-- <el-button @click="inputModel = false">取 消</el-button> -->
+           <!--  <el-button type="primary" @click="inputModel = false" >确 定</el-button> -->
+          </span>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -94,6 +126,7 @@ import { mapGetters, mapActions } from 'vuex'
 import '../lib/util.js'
 import { Message } from 'element-ui'
 import Sortable  from 'sortablejs'
+import { CMDATA_API } from '~/assets/lib/api';
 import getCorsUrl from '../lib/corsconfig'
 import API from '../service/index.js'
 
@@ -101,7 +134,13 @@ export default {
     data () {
         return {
             addEditLayer: false,
+            uploadData:[],
+            inputModel: false,
+            transUrl: CMDATA_API.input + '?token=' + JSON.parse(localStorage.getItem('localData')).user.info.token ,
             totalItem: 0,
+            uploadObj: {
+                token: JSON.parse(localStorage.getItem('localData')).user.info.token
+            },
             currentPage: 1,
             moduleList:[],
             listParams: {
@@ -124,13 +163,12 @@ export default {
                F_key: '',
                F_value: ''
             },
-            searchKey: {
-                F_module_name: '',
-                F_key: '',
-            },
+            F_module_name: '',
+            F_key: '',
             rulesAddEdit: {
             },
             sortArr: [],
+            output:CMDATA_API.output + '?token=' + JSON.parse(localStorage.getItem('localData')).user.info.token ,
         }
     },
     mounted () {
@@ -139,9 +177,17 @@ export default {
         let table = document.querySelectorAll('.el-table__body-wrapper > table > tbody')[0]
         let obj = this
     },
+    watch: {
+        F_key () {
+            this.output = CMDATA_API.output + '?token=' + JSON.parse(localStorage.getItem('localData')).user.info.token + '&F_key=' + this.F_key + '&F_module_name=' + this.F_module_name
+            },
+        F_module_name(){
+            this.output = CMDATA_API.output + '?token=' + JSON.parse(localStorage.getItem('localData')).user.info.token +'&F_key=' + this.F_key + '&F_module_name=' + this.F_module_name
+            }
+    },
     methods: {
         search () {
-            if (!this.searchKey) {
+            if (!this.F_key) {
               this.$message.error('请输入策略组id')
               return
             }
@@ -241,8 +287,8 @@ export default {
         getImgList (page) {
             this.listParams.page = page
             this.listParams.limit = 10
-            this.listParams.F_key = this.searchKey.F_key
-            this.listParams.F_module_name = this.searchKey.F_module_name
+            this.listParams.F_key = this.F_key
+            this.listParams.F_module_name = this.F_module_name
             const obj  = this
             API.CmDataList(obj.listParams).then((result) => {
                 if (result && result.result && result.result.data.length) {
@@ -268,6 +314,34 @@ export default {
                 console.log(obj.moduleList)
             })
         },
+        // output () {
+        //     let params = {}
+        //     params.F_key = this.searchKey.F_key
+        //     params.F_module_name = this.searchKey.F_module_name
+        //     const obj  = this
+        //     API.output(params).then((result) => {
+        //         console.log(result)
+        //     })
+        // },
+        getUploadData (data) {
+            console.log(data)
+            const obj  = this
+            if (data.code != 200) {
+                obj.$message.error(data.msg)
+                obj.$refs.upload.clearFiles()
+            }else{
+                this.uploadData = data.result.info
+                this.inputModel = true
+            }
+            
+            
+        },
+        handleClose () {
+            this.inputModel = false
+            this.getImgList()
+            this.$refs.upload.clearFiles()
+
+        }
 
        
 
@@ -281,6 +355,7 @@ export default {
 }
 </script>
 <style lang="less">
+
     .icon-rank{
         position: relative;
         left: 10px;
