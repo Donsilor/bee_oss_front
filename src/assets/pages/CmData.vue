@@ -188,10 +188,6 @@ export default {
     },
     methods: {
         search () {
-            if (!this.F_key) {
-              this.$message.error('请输入策略组id')
-              return
-            }
             this.getImgList()
         },
         getdata () {
