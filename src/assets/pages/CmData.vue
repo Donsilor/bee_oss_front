@@ -36,7 +36,7 @@
                 </el-col>
 
                 <el-col :span="2" style="padding-right: 0; ">
-                   <a href="javascript:;" @click='exportList()'><el-button type="primary" plain >批量导出</el-button></a>
+                   <a href="javascript:;"  :href="output" download=""><el-button type="primary" plain >批量导出</el-button></a>
                 </el-col>
                 
                 <!--<el-col :span="6" style="text-align: right;">-->
@@ -169,6 +169,7 @@ export default {
             },
             sortArr: [],
             output:CMDATA_API.output + '?token=' + JSON.parse(localStorage.getItem('localData')).user.info.token ,
+            down_ulr: ''
         }
     },
     mounted () {
@@ -313,9 +314,6 @@ export default {
                 obj.moduleList = result.result
                 console.log(obj.moduleList)
             })
-        },
-        exportList () {
-            window.location.href = this.output
         },
         getUploadData (data) {
             console.log(data)
