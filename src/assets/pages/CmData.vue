@@ -36,7 +36,7 @@
                 </el-col>
 
                 <el-col :span="2" style="padding-right: 0; ">
-                   <a :href ="output"><el-button type="primary" plain >批量导出</el-button></a>
+                   <el-button type="primary" plain @click='exportList()'>批量导出</el-button>
                 </el-col>
                 
                 <!--<el-col :span="6" style="text-align: right;">-->
@@ -314,15 +314,9 @@ export default {
                 console.log(obj.moduleList)
             })
         },
-        // output () {
-        //     let params = {}
-        //     params.F_key = this.searchKey.F_key
-        //     params.F_module_name = this.searchKey.F_module_name
-        //     const obj  = this
-        //     API.output(params).then((result) => {
-        //         console.log(result)
-        //     })
-        // },
+        exportList () {
+            window.location.href = this.output
+        },
         getUploadData (data) {
             console.log(data)
             const obj  = this
