@@ -254,9 +254,14 @@ export default {
             var params = {}
             // params.page = 1 
             // params.limit = 10
-            params.F_type = 'gray_host'
-            obj.$store.dispatch('StrategyConfiglists', params).then((result) => {
-                if (result && result.result) {
+             params.F_type = 'gray_host'
+            // obj.$store.dispatch('StrategyConfiglists', params).then((result) => {
+            //     if (result && result.result) {
+            //         obj.hostList = result.result
+            //     }
+            // })
+            API.StrategyConfiglists(params).then((result) => {
+                    if (result && result.result) {
                     obj.hostList = result.result
                 }
             })
@@ -265,7 +270,7 @@ export default {
 
 	},
     ...mapActions([
-    	'strategyList'
+    	'StrategyConfiglists'
     ]),
     computed: {
         ...mapGetters({})
