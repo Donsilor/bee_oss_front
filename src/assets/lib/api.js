@@ -104,3 +104,8 @@ export const analyzerRetain = API_MASTER + 'analyzer/retain';
 export const operFamilyCategory = API_MASTER + 'analyzer/oper_family_category';
 export const operFamilyStat = API_MASTER + 'analyzer/oper_family_stat';
 export const operStat = API_MASTER + 'analyzer/oper_stat';
+
+//oss uploadfile
+export const getUnuploadShardList = API_MASTER + 'file/getUnuploadShardList';//分片任务初始化接口
+export const uploadShard = API_MASTER + 'file/uploadShard';//单独的分片上传接口
+export const uploadIsSuccess = API_MASTER + 'file/uploadIsSuccess';//查询文件上传结果接口

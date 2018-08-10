@@ -4,6 +4,7 @@ import store from './assets/store/index.js';
 import cache from './assets/store/cache.js';
 import App from './App.vue';
 
+
 //打开 mockjs拦截请求，返回mock数据
 // 关闭 请求服务器数据
 // import mock from './assets/mockData';

@@ -14,6 +14,12 @@ const routes = [
         children: [
             {
                 path: "",
+                alias: "uploadFile",
+                name: "uploadFile",
+                component: Pages.UpLoadFile
+            },
+            {
+                path: "",
                 alias: "home",
                 name: "home",
                 component: Pages.Home
