@@ -39,12 +39,47 @@
 						<div :title="scope.row[item.prop]">{{scope.row[item.prop]}}</div>
 					</template>
 				</el-table-column>
+				<el-table-column
+                            width="180"
+                            label="操作">
+                        <template slot-scope="scope">
+                            <el-button  type="text" size="small" @click="openLayer(scope.row)">查看详情</el-button>
+                            
+                            
+                        </template>
+                    </el-table-column>
 			</el-table>
 			<div class="page-line">
 				<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="15" :current-page.sync="currentPage"></el-pagination>
 			</div>
 		</div>
+		<el-dialog
+      title="家庭详情"
+      :visible.sync="infoModel"
+      :lock-scroll='false'
+      width="30%">
+       <span> 家庭ID:{{familyInfo.F_family_id}}</span><br>
+        <span> 家庭名称:{{familyInfo.F_name}}</span><br>
+         <span> 户主用户内部ID:{{familyInfo.F_owner_id}}</span><br>
+          <span> 家庭绑定的路由器内部id:{{familyInfo.F_router_id}}</span><br>
+           <span> 	省份:{{familyInfo.F_provice}}</span><br>
+            <span> 城市:{{familyInfo.F_city}}</span><br>
+             <span> 家庭小区:{{familyInfo.F_district}}</span><br>
+              <span> 家庭地址:{{familyInfo.F_addr}}</span><br>
+               <span> 家庭栋号:{{familyInfo.F_building_no}}</span><br>
+                <span> 家庭房号:{{familyInfo.F_room_no}}</span><br>
+                <span> 电话（账户）:{{familyInfo.F_phone_num}}</span><br>
+     			<span> 户主:{{familyInfo.F_user_name}}</span><br>
+ 				<span> 关联设备数:{{familyInfo.F_device_num}}</span><br>
+ 				<span> 	异常设备数:{{familyInfo.F_device_abnormal_num}}</span><br>
+ 				<span> 创建时间:{{familyInfo.F_created_at}}</span><br>
+ 				<span> 更新时间:{{familyInfo.F_updated_at}}</span>
+
+      
+      
+    </el-dialog>
 	</div>
+	
 </template>
 <script>
 import {mapActions} from 'vuex';
@@ -61,6 +96,8 @@ export default {
               phone: '',
 			  abnormal: false
 			},
+			familyInfo: {},
+			infoModel: false,
             totalItem: 0,
             page:1,
 			currentPage: 1,
@@ -113,6 +150,10 @@ export default {
         pageChange () {
             this.getFamilyList(this.currentPage)
         },
+        openLayer (row) {
+        	this.familyInfo = row
+        	this.infoModel = true
+        }
     }
 }
 </script>
