@@ -219,6 +219,15 @@ export default {
                     console.log(error);
                 });
         });
+    },
+    getFamilyList(params) {
+        return new Promise((resolve, reject) => {
+            axios.post(OPS_API.familyList, params).then((response) => {
+                resolve(response.data)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
     }
 };
 

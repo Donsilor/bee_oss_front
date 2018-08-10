@@ -3,8 +3,8 @@
 		<div style="padding-bottom: 30px;">
 			<!--搜索框-->
 			<el-row :gutter="24" >
-				<el-col :span="3" style="padding-right: 0">
-					<el-select placeholder="请选择城市" value="">
+				<!-- <el-col :span="3" style="padding-right: 0">
+					<el-select placeholder="请选 择城市" value="">
 						<el-option label="暂无数据" value=""></el-option>
 					</el-select>
 				</el-col>
@@ -12,7 +12,7 @@
 					<el-select placeholder="请选择小区" value="">
 						<el-option label="暂无数据" value=""></el-option>
 					</el-select>
-				</el-col>
+				</el-col> -->
 				<el-col :span="3" style="padding-right: 0">
 					<el-input v-model="familyForm.phone" placeholder="输入手机号查询"></el-input>
 				</el-col>
@@ -20,20 +20,20 @@
 					<el-checkbox v-model="familyForm.abnormal">仅看异常家庭</el-checkbox>
 				</el-col>
 				<el-col :span="2">
-					<el-button type="primary" @click="getRootLogs(1)">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
+					<el-button type="primary" @click="getFamilyList()">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
 				</el-col>
 			</el-row>
 		</div>
 		<div>
 			<el-table
-					:data="rootLogData.tableData"
+					:data="familyList.tableData"
 					style="width: 100%">
-				<el-table-column v-for="item in rootLogData.tableColumn" :key="item.prop"
+				<el-table-column v-for="item in familyList.tableColumn" :key="item.prop"
 								 :prop="item.prop"
 								 :show-overflow-tooltip="true"
 								 :label="item.label"
 								 :width="'auto'"
-								 sortable
+								
 				>
 					<template slot-scope="scope">
 						<div :title="scope.row[item.prop]">{{scope.row[item.prop]}}</div>
@@ -62,8 +62,21 @@ export default {
 			  abnormal: false
 			},
             totalItem: 0,
+            page:1,
 			currentPage: 1,
-            rootLogData: {},
+            listParams: {},
+            familyList: {
+                "tableColumn":[
+                    {"prop": "F_family_id", "label": "id"},
+                    {"prop": "F_name", "label": "家庭名称"},
+                    {"prop": "F_owner_id", "label": "户主用户内部ID"},
+                    {"prop": "F_router_id", "label": "路由器内部ID"},
+                    {"prop": "F_phone_num", "label": "电话"},
+                    {"prop": "F_user_name", "label": "户主"},
+                    {"prop": "F_created_at", "label": "创建时间"}
+                ],
+                "tableData":[]
+            },
             rootLogForm: {
                 log_type: '',
                 host_name: '',
@@ -76,47 +89,31 @@ export default {
 		}
 	},
 	mounted () {
-	    this.getRootLogs(1)
+        this.getFamilyList(1);
 	},
-	watch: {
+	watch: {  
 	},
 	methods: {
-        getDetail (dataObj) {
-            this.detailFlag = true
-            let obj = this.logDetail
-			for (let attr in obj) {
-                obj[attr] = dataObj[attr]
-			}
-		},
-        getRootLogs (page) {
-            let obj = this
-			let param = {}
-			let currentForm =  obj.rootLogForm || {}
-            currentForm.page = page
-			for (let attr in currentForm) {
-                if (attr === 'start_end_time') {
-                    if (currentForm['start_end_time'].length) {
-                        param.start_time = currentForm['start_end_time'][0].Format('hh:mm:ss')
-                        param.end_time = currentForm['start_end_time'][1].Format('hh:mm:ss')
-					}
-				}else {
-                    param[attr] = currentForm[attr]
-				}
-			}
-            API.getwarnDataList(param).then((result) => {
-                // obj.terminalList = result
-                rootLogJson.tableData = result.data.result.data
-				this.rootLogData = rootLogJson
-				this.totalItem = result.data.result.total
+        getFamilyList (page) {
+            this.listParams.page = page
+            this.listParams.limit = 10
+            this.listParams.phone_num = this.familyForm.phone
+            this.listParams.is_abnormal = this.familyForm.abnormal
+            const obj  = this
+            API.getFamilyList(obj.listParams).then((result) => {
+                if (result && result.result && result.result.data.length) {
+                	
+                    obj.familyList.tableData = result.result.data
+                    obj.totalItem = result.result.total || 0
+                }else{
+                    obj.familyList.tableData = []
+                }
             })
         },
         pageChange () {
-            this.getRootLogs(this.currentPage)
-        }
-	},
-    ...mapActions([
-		'getwarnDataList'
-    ])
+            this.getFamilyList(this.currentPage)
+        },
+    }
 }
 </script>
 <style lang="less">

@@ -15,7 +15,8 @@ export const OPS_API = {
     addRouter: API_MASTER + 'iotrouter/add',  //添加路由
     editRouter: API_MASTER + 'iotrouter/edit',  //编辑路由
     deleteRouter: API_MASTER + 'iotrouter/del',  //删除路由
-    importRouter: API_MASTER + 'iotrouter/import'  //路由批量导入
+    importRouter: API_MASTER + 'iotrouter/import',  //路由批量导入
+    familyList: API_MASTER + 'iotuser/familylist'  //家庭列表
 }
 export const UPGRADE_API = {
     // getVersions: API_MASTER + 'version/list',  // 版本列表
