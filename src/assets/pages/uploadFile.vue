@@ -4,7 +4,11 @@
 			<span class="buttonText">上传文件</span>
 			<input type="file" value=""  id="file" ref="fileGet" v-on:change="fileUpLoad">
 		</div>	
-		<div class="hidingPath" v-if="showStatus || showAgainButton">
+		<div class="successObj" v-if="success">
+			<p class="objText">{{back_file_name}}</p>
+			<P class="closeImg" @click="cutFile"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAARtJREFUOBGtk0sSwUAQhnsoVarYOI9g7wocQxjFkvK+hSuwyY7kBLaOYa35kwxjIjMUvZjMo/8v048h+qdJOatJOep8y4QGWugKifjSvhJvB8PR6lMYfKEhurShKWIIw+Op7rUqROx7jWY1Co8B9vOsL8dL+Aoh1ov5dAO/GIRJFB6CT2AJ5JpAZlMfWtgDhIULlgfJgGwwGwQ6geGd6UJmwUTZcHRdLghOCoZ5nFgtJ9jTLS2/vvWcC8HWHz09jWTrB+gTZu7hJvd2i1yt8VI1BUpCSvvkHo6rmtBlQCovZk5csBdQHkTd1AZ7gFwQFywG4RUz8cYMR4nNr36zhtc8462m5a/uCyS6C0ufmLDlfNKHplwu7cyzn9Y3Uj+/+/tFAJkAAAAASUVORK5CYII="></img></P>
+		</div>
+		<div class="hidingPath" v-if="!success && (showStatus || showAgainButton)">
 			<div class="progressBar" v-if="showStatus">
 				<span v-if="status ===0">切片进度:{{percent+"%"}} </span>
 				<span v-else>上传进度:{{percent+"%"}} </span>
@@ -19,6 +23,7 @@
 import SparkMD5 from 'spark-md5';
 import axios from 'axios';
 import * as URL from "~/assets/lib/api"; 
+
 export default {
 	props: {
 		className: "",//自定义样式
@@ -35,20 +40,37 @@ export default {
 			shard_index_list:[],
 			file_md5:'',//上传问价你的md5值
 			dealCount:0,//上传次数
-			picesCountNow:0,//目前待上传的包的数量
 			success:false,
 			showStatus:false,//是否展示进度
-			showAgainButton:false,//是否展示重新提交按钮
+			showAgainButton:false,//是否展示重新提交按钮,
+			back_file_name:'eudhoefiwefportu.jpg'//上传成功后返回的文件名
 		};
 	},
 	mounted () {
-		
+		console.log("999999999999999999999999999999999999999999999999999999999999")
 	},
 	watch:{
 
 	},
 	methods: {
+		zeroFile:function(){
+			//归零,数据重置
+			this.status = 0;
+			this.percent = 0;
+			this.file_name = '';
+			this.chunksCount = 0;
+			this.pices = [];
+			this.picesMD5 = [];
+			this.shard_index_list = [];
+			this.file_md5 = '';
+			this.dealCount = '';
+			this.success = false;
+			this.showStatus = false;
+			this.showAgainButton = false;
+			this.back_file_name = '';
+		},
 		fileUpLoad:function(e){
+			this.zeroFile();
 			this.showStatus = true;
 			let file = e.target.files[0];
 			this.file_name = file.name;
@@ -109,8 +131,10 @@ export default {
 											if(result.data.code === 0){
 												alert("该文件已经上传过了！")
 												that.success = true;
+												that.back_file_name = result.data.result.object;
 												that.status = 1;
 												that.percent = 100;
+												that.$emit("uploadSuccess",{'download_file_md5':result.data.result.file_md5,'download_url_object':that.back_file_name,'size':result.data.result.size});
 												return;
 											}else{
 												// console.log(111111,"uploadFileLine()")
@@ -128,6 +152,7 @@ export default {
 							},function(err){
 								// console.log('分片上传失败')
 								alert("任务初始化失败，请重试");
+								that.showAgainButton = true;
 							}).then(function(shard_index_list){
 								console.log(111111110,shard_index_list)
 								if(shard_index_list && shard_index_list.length!==0){
@@ -170,9 +195,12 @@ export default {
 												that.uploadIsSuccess({
 													file_md5:that.file_md5
 												}).then(function(result){
-													// console.log("ifsuccess",result)
+													console.log("ifsuccess",result)
 													if(result.data.code === 0){
 														that.success = true;
+														that.back_file_name = result.data.result.object;
+														that.success = true;
+														that.$emit("uploadSuccess",{'download_file_md5':result.data.result.file_md5,'download_url_object':that.back_file_name,'size':result.data.result.size});
 														alert("全部分片已经上传成功了")
 														return;
 													}
@@ -191,6 +219,7 @@ export default {
 						}else if(that.success){
 							// console.log("已经上传成功")
 							alert('文件已经上传成功!')
+							that.$emit("uploadSuccess",{'download_file_md5':that.file_md5,'download_url_object':that.back_file_name,'size':result.data.result.size});
 							return;
 						}else{
 							// console.log("三次上传后仍然出错，需求重新上传")
@@ -232,6 +261,9 @@ export default {
 			// this.$refs.submit.apply(this.$refs.fileGet,this.$refs.fileGet.currentValue)
 			this.$refs.fileGet.click.call(this.$refs.fileGet,this.$refs.fileGet.$event)
 			
+		},
+		cutFile:function(){
+			this.zeroFile();
 		}
 	}
 }
@@ -249,7 +281,7 @@ export default {
 	font-size:13px;
 }
 .hidingPath{
-	width:35%;
+	width:80%;
 	height: auto;
 	padding:10px 20px 20px 20px;
 	border:1px solid #cccc;
@@ -260,13 +292,13 @@ export default {
 	width:100px;
 	height: 45px;
 	color:#fff;
-	margin:10px 20px;
 	background-color: #a0cfff;
 	border-radius:10px;
 	text-align: center;
 	line-height: 55px;
 	position: relative;
 	font-size:16px;
+	margin-bottom:10px;
 	.buttonText{
 		display: block;
 		width:100%;
@@ -283,5 +315,30 @@ export default {
 	left:0;
 	z-index:1;
 	opacity: 0;
+}
+.successObj{
+	width:100%;
+	height: 20px;
+	line-height: 20px;
+	background-color: #f4f4f8;
+	box-sizing: border-box;
+	padding:0px 10px;
+	position: relative;
+	.objText{
+		font-size:14px;
+		color:#606266;
+	}
+	.closeImg{
+		width:12px;
+		height: 12px;
+		position: absolute;
+		top:4px;
+		right:5px;
+		img{
+			display: block;
+			width:12px;
+			height: 12px;
+		}
+	}
 }
 </style>

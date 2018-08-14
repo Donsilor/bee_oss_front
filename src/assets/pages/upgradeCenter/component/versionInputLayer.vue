@@ -76,11 +76,13 @@
         <el-form-item label="appstore链接" prop="download_url_object" v-if="os_type === 'ios' && !releasedFlag">
             <el-input type="text" v-model="importForm.download_url_object" />
         </el-form-item>
-        <el-form-item label="上传固件包" prop="download_url_object" v-if="os_type !== 'ios' && !releasedFlag">
+        <el-form-item label="上传固件包" prop="download_url_object" v-if="os_type !== 'ios' && !releasedFlag" class="is-required">
             <!--<el-input type="text" v-model="importForm.download_url_object" />-->
-            <el-upload ref="uploadFile" class="upload-demo" :action="corsUrls" :data="uploadObj" :before-upload="beforeAvatarUpload" :on-success="getUploadData" :on-preview="handlePreview" :limit="1" :file-list="fileListObj" :on-remove="handleRemove">
+            <!-- <el-upload ref="uploadFile" class="upload-demo" :action="corsUrls" :data="uploadObj" :before-upload="beforeAvatarUpload" :on-success="getUploadData" :on-preview="handlePreview" :limit="1" :file-list="fileListObj" :on-remove="handleRemove">
                 <el-button size="small" type="primary">点击上传</el-button>
-            </el-upload>
+             </el-upload> -->
+            <upload-file ref="uploadFile" class="newButtonStyle" @uploadSuccess ="getSuccessNews"></upload-file>
+            <!-- <span style="color:red" v-show="!download_url_object">请先上传文件</span> -->//TODO
         </el-form-item>
         <el-form-item label="上传img图片" prop="img_url_object">
             <el-upload ref="uploadFileImg" class="upload-demo" :action="corsUrls" :before-upload="beforeAvatarUploadImg" :on-success="getUploadDataImg" :data="uploadObj" :on-preview="handlePreviewImg" :limit="1" :file-list="fileListImg" :on-remove="handleRemoveImg">
@@ -105,7 +107,11 @@ import * as namespace from '../../../store/namespace';
 import { mapGetters, mapActions } from 'vuex';
 import getCorsUrl from '../../../lib/corsconfig';
 import API from '../../../service/index'
+import uploadFile from '../../uploadFile.vue';
 export default {
+    components: {
+        uploadFile,
+    },
     props: [
         'brandIDOptions',
         'type',
@@ -187,7 +193,7 @@ export default {
                 product_id: [{ required: true, message: '请输入子设备' }],
                 routersList: [{ required: true, message: '请选择支持版本' }],
                 productsList: [{ required: true, message: '请选择支持版本' }],
-                download_url_object: [{ required: true, message: '请上传固件包' }],
+                // download_url_object: [{ required: true, message: '请上传固件包' }],
                 img_url_object: [{ required: true, message: '请上传img图片' }],
                 force: [{ required: true, message: '请选择是否强制升级' }]
             },
@@ -247,6 +253,17 @@ export default {
     },
     mounted() {},
     methods: {
+        getSuccessNews:function(val){
+            console.log(99999999999,val)
+            if(val){
+                // this.importForm.download_url_object = val;
+                this.importForm.download_url_object = val.download_url_object;
+                this.importForm.download_file_md5 = val.download_file_md5;
+                this.importForm.size = val.size;
+                this.$refs['importForm'].validate(valid => {});
+                console.log(this.$refs['importForm'].validate())
+            }
+        },
         ruleChange(val) {
             //            if (val) {
             //                this.rulesImport.productsList =  [
@@ -335,7 +352,7 @@ export default {
             }
             this.$refs['importForm'].resetFields();
             if (this.os_type !== 'ios' && !this.releasedFlag) {
-                this.$refs['uploadFile'].clearFiles();
+                // this.$refs['uploadFile'].clearFiles();//TODO
             }
             this.$refs['uploadFileImg'].clearFiles();
             let form = this.importForm;
@@ -390,8 +407,14 @@ export default {
         },
         //录入
         importSubmitForm(formName) {
+            console.log("formName",formName)
+            console.log(this.$refs[formName])
+            if(!this.importForm.download_url_object){
+                
+            }
             const obj = this;
             obj.$refs[formName].validate(valid => {
+                console.log("valid",valid)
                 if (valid) {
                     if (!obj.importForm['selectRule']) {
                         obj.importForm['routersList'] = [{ router_pid: '*', rule: '*' }];
@@ -403,6 +426,7 @@ export default {
                         },
                         obj.importForm
                     );
+                    console.log("params11111111111111",params)
                     let currentType = obj.inputType;
                     // params.release_time = params.release_time && params.release_time.Format('yyyy-MM-dd hh:mm:ss')
                     delete params.brand_id;
@@ -469,12 +493,24 @@ export default {
                         params.size = 0;
                         params.download_file_md5 = 'default';
                     }
-
+                    //处理问价上传
+                    console.log("this.importForm.download_url_object",this.importForm.download_url_object)
+                    // if(this.importForm.download_url_object.length!==0){
+                    //     console.log(666,params)
+                    //     params = Object.assign(
+                    //         {
+                    //             'download_url_object':this.importForm.download_url_object
+                    //         },
+                    //         params
+                    //     );
+                    // }
+                    // console.log("params2222222",params)
                     obj.$emit('importSubmitParent', params);
                 } else {
                     return false;
                 }
             });
+            console.log("submit",this.$refs.uploadFile)
         },
         routerPidChange(val) {
             if (!val) {
@@ -504,13 +540,13 @@ export default {
         handlePreview(file) {},
         handleRemoveImg(file, fileList) {},
         handlePreviewImg(file) {},
-        getUploadData(val) {
-            let data = val.result;
-            this.importForm.download_url_object = data.object;
-            this.importForm.download_file_md5 = data.md5;
-            this.importForm.size = data.file_size;
-            this.$refs['importForm'].validate(valid => {});
-        },
+        // getUploadData(val) {
+        //     let data = val.result;
+        //     this.importForm.download_url_object = data.object;
+        //     this.importForm.download_file_md5 = data.md5;
+        //     this.importForm.size = data.file_size;
+        //     this.$refs['importForm'].validate(valid => {});
+        // },
         getUploadDataImg(val) {
             let data = val.result;
             this.importForm.img_url_object = data.object;
@@ -543,4 +579,7 @@ export default {
 };
 </script>
 <style lang="less">
+.newButtonStyle{
+    border:1px solid red;
+}
 </style>

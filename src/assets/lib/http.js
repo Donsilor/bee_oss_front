@@ -13,35 +13,47 @@ const CODE = {
 
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
-  let info = localStorage.getItem('localData') &&
+  if((config.url==='/api/index.php/file/getUnuploadShardList')||(config.url==='/api/index.php/file/uploadIsSuccess')|| (/uploadShard/).test(config.url)){
+    // if(config.url.indexOf('getUnuploadShardList') || config.url.indexOf('uploadIsSuccess') || config.url.indexOf('uploadShard')){
+    //uploadShard
+    console.log("config1111",config)
+    console.log("config.url,test",config.url)
+    console.log("config.data",config.data)
+    // config.data['token'] = '';
+    console.log(2222222,"enter",config.data['token'])
+    return config
+  }else{
+    let info = localStorage.getItem('localData') &&
       JSON.parse(localStorage.getItem('localData')).user &&
       JSON.parse(localStorage.getItem('localData')).user.info || {}
-  config.withCredentials = true
-  // config.headers['Content-Type'] = 'application/json'
-  if (!/\/api.php/.test(config.url)) {
-      if(!config.data) config.data = {}
-      config.data['token'] = info.token || ''
-  } else {
-      config.url = getCorsUrl() + config.url
-  }
-
-  NProgress.start()
-  if (config.method === 'post' || config.method === 'put') {
-    var params = {}
-    var str = []
-    for (var k in config.data) {
-      if (typeof config.data[k] !== 'function') {
-         params[k] = config.data[k]
-      }
+    config.withCredentials = true
+    // config.headers['Content-Type'] = 'application/json'
+    if (!/\/api.php/.test(config.url)) {
+        if(!config.data) config.data = {}
+        config.data['token'] = info.token || ''
+    } else {
+        config.url = getCorsUrl() + config.url
     }
-    // Object.keys(params).map(function (key) {
-    //   str.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
-    // })
-    // config.data = str.join('&')
-      config.data = params
+
+    NProgress.start()
+    if (config.method === 'post' || config.method === 'put') {
+      var params = {}
+      var str = []
+      for (var k in config.data) {
+        if (typeof config.data[k] !== 'function') {
+          params[k] = config.data[k]
+        }
+      }
+      // Object.keys(params).map(function (key) {
+      //   str.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+      // })
+      // config.data = str.join('&')
+        config.data = params
+    }
+    // Do something before request is sent
+    return config
   }
-  // Do something before request is sent
-  return config
+  
 }, function (error) {
   // Do something with request error
   NProgress.done()
