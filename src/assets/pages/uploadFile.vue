@@ -1,10 +1,10 @@
 <template>
-	<div class="main_index">
+	<div :class="className">
 		<div class="chooseFileButton">
 			<span class="buttonText">上传文件</span>
 			<input type="file" value=""  id="file" ref="fileGet" v-on:change="fileUpLoad">
 		</div>	
-		<div class="hidingPath">
+		<div class="hidingPath" v-if="showStatus || showAgainButton">
 			<div class="progressBar" v-if="showStatus">
 				<span v-if="status ===0">切片进度:{{percent+"%"}} </span>
 				<span v-else>上传进度:{{percent+"%"}} </span>
@@ -21,15 +21,12 @@ import axios from 'axios';
 import * as URL from "~/assets/lib/api"; 
 export default {
 	props: {
-		// actived: {
-		// 	type: String,
-		// 	default: null
-		// }
+		className: "",//自定义样式
 	},
 	data () {
 		return {
 			status:0,//进度条的状态，0表示正在切片，1表示正在上传
-			percent:0,
+			percent:0,//进度条百分比
 			file_name:'',
 			chunkSize:2097152,//单词上传的图片大小,2M
 			chunksCount:0,//这个文件要上传的次数
@@ -41,15 +38,11 @@ export default {
 			picesCountNow:0,//目前待上传的包的数量
 			success:false,
 			showStatus:false,//是否展示进度
-			showAgainButton:true,//是否展示重新提交按钮
+			showAgainButton:false,//是否展示重新提交按钮
 		};
 	},
 	mounted () {
-		// while(this.shard_index_list.length!==0){
-		// 	console.log('没有上传结束')
-		// 	this.shard_index_list.length.pop()
-		// }
-		//  Object.defineProperty()
+		
 	},
 	watch:{
 
@@ -102,14 +95,13 @@ export default {
 								shard_size:chunkSize,
 								file_md5:md5string
 							}).then(function(data){
-								console.log(111111,data)
 								if(data.data.code === 0){
 									let result = data.data.result;
 									that.shard_index_list = result.shard_index_list;
 									// that.resultAllData = result.shard_index_list.length;
-									console.log(233333333333333,result.shard_index_list)
+									// console.log(233333333333333,result.shard_index_list)
 									if(result.shard_index_list && result.shard_index_list.length === 0){//说明这个文件已经上传过，
-										console.log(11111111111111111111111111)
+										// console.log(11111111111111111111111111)
 										return that.uploadIsSuccess({
 											file_md5:that.file_md5
 										}).then(function(result){
@@ -121,7 +113,7 @@ export default {
 												that.percent = 100;
 												return;
 											}else{
-												console.log(111111,"uploadFileLine()")
+												// console.log(111111,"uploadFileLine()")
 												uploadFileLine();
 											}
 										}).catch(function(err){
@@ -129,12 +121,12 @@ export default {
 											uploadFileLine();
 										})
 									}else{
-										console.log("else",22222222222222222222)
+										// console.log("else",22222222222222222222)
 										return result.shard_index_list;
 									}
 								}
 							},function(err){
-								console.log('分片上传失败')
+								// console.log('分片上传失败')
 								alert("任务初始化失败，请重试");
 							}).then(function(shard_index_list){
 								console.log(111111110,shard_index_list)
@@ -149,7 +141,7 @@ export default {
 												shard_md5:that.picesMD5[item],
 												file_name:that.file_name
 											},that.pices[item]).then(function(data){
-												console.log(item,that.picesMD5[item],data)
+												// console.log(item,that.picesMD5[item],data)
 												if(data.data.code === 0){
 													successPackage++;
 													that.status = 1;
@@ -157,7 +149,7 @@ export default {
 													resolve(data)
 												}
 											}).catch(function(err){
-												console.log(item+'上传失败22222')
+												// console.log(item+'上传失败22222')
 												reject(err);
 											})
 										})
@@ -167,18 +159,18 @@ export default {
 									Promise.all(promiseAll).then(function(resultAllData){
 										console.log("resultAllData",resultAllData)
 										if(resultAllData){
-											for(let i=0;i<resultAllData.length;i++){
-												let itemCode = resultAllData[i].data.code;
-												if(itemCode === 0 ){
-													console.log(i+'成功了')
-												}
-											}
+											// for(let i=0;i<resultAllData.length;i++){
+											// 	let itemCode = resultAllData[i].data.code;
+											// 	if(itemCode === 0 ){
+											// 		// console.log(i+'成功了')
+											// 	}
+											// }
 											if(successPackage === that.shard_index_list.length){
 												console.log("所有待上传的包都上传成功了")
 												that.uploadIsSuccess({
 													file_md5:that.file_md5
 												}).then(function(result){
-													console.log("ifsuccess",result)
+													// console.log("ifsuccess",result)
 													if(result.data.code === 0){
 														that.success = true;
 														alert("全部分片已经上传成功了")
@@ -186,22 +178,22 @@ export default {
 													}
 												})
 											}else{
-												console.log("重新上传一次uploadFileLine()")
+												// console.log("重新上传一次uploadFileLine()")
 												uploadFileLine();
 											}
 										}
 									})
 								}else{
-									console.log(99999999,"")
+									// console.log(99999999,"")
 									return;
 								}
 							})
 						}else if(that.success){
-							console.log("已经上传成功")
+							// console.log("已经上传成功")
 							alert('文件已经上传成功!')
 							return;
 						}else{
-							console.log("三次上传后仍然出错，需求重新上传")
+							// console.log("三次上传后仍然出错，需求重新上传")
 							alert("文件上传出错，请重试")
 							that.showAgainButton = true;
 						}
@@ -213,7 +205,6 @@ export default {
 			function loadNext() {
 				var start = currentChunk * chunkSize, 
 					end = start + chunkSize >= file.size ? file.size : start + chunkSize;
-					console.log(888,blobSlice.call(file, start, end))
 					that.pices.push(blobSlice.call(file, start, end));
 					
 				fileReader.readAsBinaryString(blobSlice.call(file, start, end));
@@ -236,14 +227,11 @@ export default {
 			return axios.post(URL.uploadIsSuccess, params,{async:true});//同步上传
 		},
 		submitFile:function(){
-			// alert(11111)
-			console.log(this.$refs.fileGet,this.$refs.submit)
-			console.log(6666,this.$refs.fileGet.currentValue)
 			this.$refs.fileGet.value = '';
 			// this.$refs.fileGet.change.call(this.$refs.fileGet,this.$refs.fileGet.currentValue)
 			// this.$refs.submit.apply(this.$refs.fileGet,this.$refs.fileGet.currentValue)
 			this.$refs.fileGet.click.call(this.$refs.fileGet,this.$refs.fileGet.$event)
-			// this.$emit('change')
+			
 		}
 	}
 }
@@ -264,8 +252,9 @@ export default {
 	width:35%;
 	height: auto;
 	padding:10px 20px 20px 20px;
-	border:1px solid #999;
-	border-radius:0 0 20px 20px;
+	border:1px solid #cccc;
+	border-radius:0 0 10px 10px;
+	background-color: #f4f4f8;
 }
 .chooseFileButton{
 	width:100px;
