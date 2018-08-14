@@ -6,6 +6,13 @@ import axios from '../lib/http';
 import { OPS_API, THROUGH_API } from '~/assets/lib/api';
 
 export default {
+    searchUserList(phone_num, begin=0, size=10) { 
+        return axios.post(OPS_API.userList, {
+            phone_num,
+            begin,
+            size
+        })
+    },
     searchUserMsg(params) {
         return new Promise((resolve, reject) => {
             axios

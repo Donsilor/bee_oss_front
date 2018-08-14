@@ -4,7 +4,22 @@
 			<!--搜索框-->
 			<el-row type="flex" justify="space-between">
 				<el-col :span="18">
-					<el-input class="searchInput" v-model="searchKey" :maxlength="11" type="text" placeholder="输入用户手机号码" />
+					<el-autocomplete 
+						ref="input"
+						class="searchInput" 
+						v-model="searchKey" 
+						:maxlength="11" 
+						type="text" 
+						placeholder="输入用户手机号码" 
+						:fetch-suggestions="querySearch" 
+						:trigger-on-focus="false"
+						value-key="phone"
+						@select="handleSelect">
+						<template slot-scope="{ item }">
+							<div class="name">{{ item.phone }}</div>
+							<span class="addr">{{ item.user_name }}</span>
+						</template>
+					</el-autocomplete>
 					<el-button type="primary" @click="search">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
 				</el-col>
 				<!--<el-col :span="6" style="text-align: right;">-->
@@ -367,7 +382,11 @@ export default {
 			currentPage: 1,
             totalItemOper: 0,
 			currentOperPage: 1,
-            terminalListPage: []
+			terminalListPage: [],
+			suggestionData: [],
+			suggestionMore: 0,
+			suggestionBegin: 0,
+			suggestionSize: 10
 		}
 	},
 	mounted () {
@@ -375,6 +394,15 @@ export default {
 		    this.searchKey = this.$route.params.id
             this.getUserData(this.searchKey)
 		}
+		//element的auto complete不支持分页加载，在这里hack添加支持
+		this.$suggestionMoreBtn = document.createElement('div')
+		this.$suggestionMoreBtn.className = 'loadmore'
+		this.$suggestionMoreBtn.innerHTML = '加载更多'
+		this.$suggestionMoreBtn.addEventListener('click', () => {
+			const next = this.suggestionBegin + Math.min(this.suggestionMore, this.suggestionSize)
+			this.loadSuggestions(next)
+		}, false)
+		this.$refs.input.$el.querySelector('.el-autocomplete-suggestion').appendChild(this.$suggestionMoreBtn);
 	},
 	watch: {
 	},
@@ -388,6 +416,55 @@ export default {
 			  return
 			}
 			this.getUserData(this.searchKey)
+		},
+		updateSuggestions(result, cb) {
+			this.$refs.input.loading = false
+			this.suggestionMore = result.more
+			this.suggestionBegin = result.begin
+
+			if(result.begin <= 0){	
+				this.suggestionData = result.data
+			}else{	
+				this.suggestionData = this.suggestionData.concat(result.data)
+			}
+
+			this.$refs.input.suggestions = this.suggestionData
+			this.toggleMoreBtn(result.more)
+		},
+		toggleMoreBtn(show) {
+			this.$suggestionMoreBtn.style.display = show ? '' : 'none'
+		},
+		loadSuggestions(begin) {	
+			API.searchUserList(this.searchKey, begin , this.suggestionSize).then(res => {
+				if(res.data.result.list.length){
+					this.updateSuggestions({
+						data: res.data.result.list,
+						more: res.data.result.more,
+						begin: begin
+					});
+				}else{	
+					this.updateSuggestions({
+						data: [],
+						more: 0,
+						begin: 0
+					})
+				}
+			})
+		},
+		querySearch(queryString, cb) {
+			var phoneLen = this.searchKey.replace(/\*/g, '').length;
+			if(phoneLen >= 5){
+				this.loadSuggestions(0)
+			}else{
+				this.updateSuggestions({
+					data: [],
+					more: 0,
+					begin: 0
+				})
+			}
+		},
+		handleSelect(item) {	
+			this.getUserData(item.phone)
 		},
 		// 拉取数据
 		getUserData (key) {
@@ -668,5 +745,22 @@ export default {
 		.el-table .cell, .el-table th>div{
 			padding-right: 0;
 		}
+	}
+	.el-autocomplete-suggestion li{	
+		position: relative;
+	}
+	.el-autocomplete-suggestion .nodata,
+	.el-autocomplete-suggestion .loadmore{	
+		text-align: center;
+		font-size: 12px;
+		color:#666;
+		padding: 10px 0;
+		cursor: pointer;
+	}
+	.el-autocomplete-suggestion li .addr{
+		color:#999;
+		position: absolute;
+		right: 10px;
+		top: 1px;
 	}
 </style>

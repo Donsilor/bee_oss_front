@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import router from './assets/lib/router';
 import store from './assets/store/index.js';
-import cache from './assets/store/cache.js';
+// import cache from './assets/store/cache.js';
 import App from './App.vue';
 
 
@@ -33,5 +33,5 @@ new Vue({
 });
 
 window.addEventListener('beforeunload', () => {
-	cache.save();
+	// cache.save();
 });

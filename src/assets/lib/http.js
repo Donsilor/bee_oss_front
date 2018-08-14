@@ -12,41 +12,41 @@ const CODE = {
 }
 
 // Add a request interceptor
-// axios.interceptors.request.use(function (config) {
-//   let info = localStorage.getItem('localData') &&
-//       JSON.parse(localStorage.getItem('localData')).user &&
-//       JSON.parse(localStorage.getItem('localData')).user.info || {}
-//   config.withCredentials = true
-//   // config.headers['Content-Type'] = 'application/json'
-//   if (!/\/api.php/.test(config.url)) {
-//       if(!config.data) config.data = {}
-//       config.data['token'] = info.token || ''
-//   } else {
-//       config.url = getCorsUrl() + config.url
-//   }
+axios.interceptors.request.use(function (config) {
+  let info = localStorage.getItem('localData') &&
+      JSON.parse(localStorage.getItem('localData')).user &&
+      JSON.parse(localStorage.getItem('localData')).user.info || {}
+  config.withCredentials = true
+  // config.headers['Content-Type'] = 'application/json'
+  if (!/\/api.php/.test(config.url)) {
+      if(!config.data) config.data = {}
+      config.data['token'] = info.token || ''
+  } else {
+      config.url = getCorsUrl() + config.url
+  }
 
-//   NProgress.start()
-//   if (config.method === 'post' || config.method === 'put') {
-//     var params = {}
-//     var str = []
-//     for (var k in config.data) {
-//       if (typeof config.data[k] !== 'function') {
-//          params[k] = config.data[k]
-//       }
-//     }
-//     // Object.keys(params).map(function (key) {
-//     //   str.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
-//     // })
-//     // config.data = str.join('&')
-//       config.data = params
-//   }
-//   // Do something before request is sent
-//   return config
-// }, function (error) {
-//   // Do something with request error
-//   NProgress.done()
-//   return Promise.reject(error)
-// })
+  NProgress.start()
+  if (config.method === 'post' || config.method === 'put') {
+    var params = {}
+    var str = []
+    for (var k in config.data) {
+      if (typeof config.data[k] !== 'function') {
+         params[k] = config.data[k]
+      }
+    }
+    // Object.keys(params).map(function (key) {
+    //   str.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+    // })
+    // config.data = str.join('&')
+      config.data = params
+  }
+  // Do something before request is sent
+  return config
+}, function (error) {
+  // Do something with request error
+  NProgress.done()
+  return Promise.reject(error)
+})
 
 // Add a response interceptor
 axios.interceptors.response.use(function (response) {

@@ -34,7 +34,7 @@
 import { PREFIX } from '../lib/util';
 import * as namespace from '../store/namespace';
 import {mapGetters} from 'vuex';
-import cache from '../../assets/store/cache.js';
+// import cache from '../../assets/store/cache.js';
 export default {
     data () {
         const checkName = (rule, value, callback) => {
