@@ -82,7 +82,7 @@
                 <el-button size="small" type="primary">点击上传</el-button>
              </el-upload> -->
             <upload-file ref="uploadFile" class="newButtonStyle" @uploadSuccess ="getSuccessNews"></upload-file>
-            <!-- <span style="color:red" v-show="!download_url_object">请先上传文件</span> -->//TODO
+            <span class="fileObjectTips" v-show="fileTipsIfShow">请先上传文件</span>
         </el-form-item>
         <el-form-item label="上传img图片" prop="img_url_object">
             <el-upload ref="uploadFileImg" class="upload-demo" :action="corsUrls" :before-upload="beforeAvatarUploadImg" :on-success="getUploadDataImg" :data="uploadObj" :on-preview="handlePreviewImg" :limit="1" :file-list="fileListImg" :on-remove="handleRemoveImg">
@@ -107,7 +107,7 @@ import * as namespace from '../../../store/namespace';
 import { mapGetters, mapActions } from 'vuex';
 import getCorsUrl from '../../../lib/corsconfig';
 import API from '../../../service/index'
-import uploadFile from '../../uploadFile.vue';
+import uploadFile from '../../../components/uploadFile.vue';
 export default {
     components: {
         uploadFile,
@@ -194,6 +194,7 @@ export default {
                 routersList: [{ required: true, message: '请选择支持版本' }],
                 productsList: [{ required: true, message: '请选择支持版本' }],
                 // download_url_object: [{ required: true, message: '请上传固件包' }],
+                download_url_object:[],
                 img_url_object: [{ required: true, message: '请上传img图片' }],
                 force: [{ required: true, message: '请选择是否强制升级' }]
             },
@@ -225,7 +226,8 @@ export default {
                 1: 'android_app',
                 4: 'ios_app',
                 6: 'android_pad'
-            }
+            },
+            fileTipsIfShow:false,//文件未上传的提示：上传文件不能为空
         };
     },
     watch: {
@@ -254,14 +256,17 @@ export default {
     mounted() {},
     methods: {
         getSuccessNews:function(val){
-            console.log(99999999999,val)
             if(val){
-                // this.importForm.download_url_object = val;
+                console.log(88888,val)
                 this.importForm.download_url_object = val.download_url_object;
                 this.importForm.download_file_md5 = val.download_file_md5;
                 this.importForm.size = val.size;
                 this.$refs['importForm'].validate(valid => {});
-                console.log(this.$refs['importForm'].validate())
+                if(this.importForm.download_url_object){
+                    this.fileTipsIfShow = false;
+                }else{
+                    this.fileTipsIfShow = true;
+                }
             }
         },
         ruleChange(val) {
@@ -376,6 +381,7 @@ export default {
         },
         closeParentFlow() {
             this.$emit('closeImportBox');
+            this.fileTipsIfShow = false;
         },
         productChange(val) {
             let obj = this;
@@ -407,10 +413,8 @@ export default {
         },
         //录入
         importSubmitForm(formName) {
-            console.log("formName",formName)
-            console.log(this.$refs[formName])
             if(!this.importForm.download_url_object){
-                
+                this.fileTipsIfShow = true;
             }
             const obj = this;
             obj.$refs[formName].validate(valid => {
@@ -426,7 +430,7 @@ export default {
                         },
                         obj.importForm
                     );
-                    console.log("params11111111111111",params)
+                    // console.log("params11111111111111",params)
                     let currentType = obj.inputType;
                     // params.release_time = params.release_time && params.release_time.Format('yyyy-MM-dd hh:mm:ss')
                     delete params.brand_id;
@@ -493,18 +497,10 @@ export default {
                         params.size = 0;
                         params.download_file_md5 = 'default';
                     }
-                    //处理问价上传
-                    console.log("this.importForm.download_url_object",this.importForm.download_url_object)
-                    // if(this.importForm.download_url_object.length!==0){
-                    //     console.log(666,params)
-                    //     params = Object.assign(
-                    //         {
-                    //             'download_url_object':this.importForm.download_url_object
-                    //         },
-                    //         params
-                    //     );
-                    // }
-                    // console.log("params2222222",params)
+                    if(!this.importForm.download_url_object){//如果文件还没有上传，则不发送请求，直接退出
+                        this.fileTipsIfShow = true;
+                        return;
+                    }
                     obj.$emit('importSubmitParent', params);
                 } else {
                     return false;
@@ -580,6 +576,24 @@ export default {
 </script>
 <style lang="less">
 .newButtonStyle{
-    border:1px solid red;
+    .chooseFileButton{
+        background-color: #409EFF;
+        width:80px;
+        height: 32px;
+        border-radius:3px;
+        font-size:12px;
+        line-height: 32px;
+        span{
+           line-height: 32px; 
+        }
+    }
+}
+.fileObjectTips{
+    color: #f56c6c;
+    font-size: 12px;
+    height:12px;
+    line-height: 12px;
+    margin-top: 0;
+    display:block;
 }
 </style>

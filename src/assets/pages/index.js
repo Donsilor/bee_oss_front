@@ -37,7 +37,6 @@ import Strategy from './strategy/strategy.vue'
 import StrategyUuid from './strategy/strategyUuid.vue'
 import StrategyConfig from './strategy/strategyConfig.vue'
 import CmData from './CmData.vue'
-import UpLoadFile from './uploadFile.vue'
 
 
 export {
@@ -79,6 +78,5 @@ export {
     Strategy,
     StrategyUuid,
     StrategyConfig,
-    CmData,
-    UpLoadFile
+    CmData
 };

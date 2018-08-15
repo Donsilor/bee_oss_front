@@ -16,13 +16,13 @@
 			</div>
 			<div v-if="showAgainButton" class="submitButton" @click="submitFile" ref="submit">重新上传</div>
 		</div>
-		
 	</div>
+	
 </template>
 <script>
 import SparkMD5 from 'spark-md5';
 import axios from 'axios';
-import * as URL from "~/assets/lib/api"; 
+import * as URL from "~/assets/lib/api";
 
 export default {
 	props: {
@@ -43,11 +43,11 @@ export default {
 			success:false,
 			showStatus:false,//是否展示进度
 			showAgainButton:false,//是否展示重新提交按钮,
-			back_file_name:'eudhoefiwefportu.jpg'//上传成功后返回的文件名
+			back_file_name:''//上传成功后返回的文件名
 		};
 	},
 	mounted () {
-		console.log("999999999999999999999999999999999999999999999999999999999999")
+
 	},
 	watch:{
 
@@ -73,9 +73,8 @@ export default {
 			this.zeroFile();
 			this.showStatus = true;
 			let file = e.target.files[0];
-			this.file_name = file.name;
+			this.file_name = file.name || '';
 			let fileSize = file.size,
-				chunkSize = 2097152,
 				currentChunk = 0, 
 				that = this,
 				 //文件分割方法（注意兼容性）
@@ -106,15 +105,15 @@ export default {
 				} else {
 					var md5string = spark.end();
 					that.file_md5 = md5string;
-					console.info("计算的Hash", md5string);
-					console.log(9999999999,that.picesMD5)
+					// console.info("计算的Hash", md5string);
+					// console.log(9999999999,that.picesMD5)
 					function uploadFileLine(){
 						that.dealCount++;
 						var successPackage = 0;//成功上传的包的计数
 						if(that.dealCount<=3 && !that.success){
 							that.getUnuploadShardList({
 								total_size:fileSize,
-								shard_size:chunkSize,
+								shard_size:that.chunkSize,
 								file_md5:md5string
 							}).then(function(data){
 								if(data.data.code === 0){
@@ -129,7 +128,7 @@ export default {
 										}).then(function(result){
 											console.log("ifsuccess",result)
 											if(result.data.code === 0){
-												alert("该文件已经上传过了！")
+												alert("文件已经上传成功！")
 												that.success = true;
 												that.back_file_name = result.data.result.object;
 												that.status = 1;
@@ -141,7 +140,7 @@ export default {
 												uploadFileLine();
 											}
 										}).catch(function(err){
-											console.log("失败",err)
+											// console.log("失败",err)
 											uploadFileLine();
 										})
 									}else{
@@ -155,70 +154,11 @@ export default {
 								that.showAgainButton = true;
 							}).then(function(shard_index_list){
 								console.log(111111110,shard_index_list)
-								if(shard_index_list && shard_index_list.length!==0){
-									var promiseAll = [];
-									shard_index_list.forEach((item,index) => {
-										console.log(index,item,that.picesMD5[item])
-										var promise = new Promise((resolve,reject)=>{
-											that.uploadShard({
-												file_md5:that.file_md5,
-												shard_index:item,
-												shard_md5:that.picesMD5[item],
-												file_name:that.file_name
-											},that.pices[item]).then(function(data){
-												// console.log(item,that.picesMD5[item],data)
-												if(data.data.code === 0){
-													successPackage++;
-													that.status = 1;
-													that.percent = ((successPackage/that.shard_index_list.length)*100).toFixed(2);//上传成功百分比
-													resolve(data)
-												}
-											}).catch(function(err){
-												// console.log(item+'上传失败22222')
-												reject(err);
-											})
-										})
-										promiseAll.push(promise)
-										console.log("promiseall",promiseAll)
-									});
-									Promise.all(promiseAll).then(function(resultAllData){
-										console.log("resultAllData",resultAllData)
-										if(resultAllData){
-											// for(let i=0;i<resultAllData.length;i++){
-											// 	let itemCode = resultAllData[i].data.code;
-											// 	if(itemCode === 0 ){
-											// 		// console.log(i+'成功了')
-											// 	}
-											// }
-											if(successPackage === that.shard_index_list.length){
-												console.log("所有待上传的包都上传成功了")
-												that.uploadIsSuccess({
-													file_md5:that.file_md5
-												}).then(function(result){
-													console.log("ifsuccess",result)
-													if(result.data.code === 0){
-														that.success = true;
-														that.back_file_name = result.data.result.object;
-														that.success = true;
-														that.$emit("uploadSuccess",{'download_file_md5':result.data.result.file_md5,'download_url_object':that.back_file_name,'size':result.data.result.size});
-														alert("全部分片已经上传成功了")
-														return;
-													}
-												})
-											}else{
-												// console.log("重新上传一次uploadFileLine()")
-												uploadFileLine();
-											}
-										}
-									})
-								}else{
-									// console.log(99999999,"")
-									return;
-								}
+								that.picesFileUpload(shard_index_list,successPackage,that)//上传分片后的文件
 							})
 						}else if(that.success){
 							// console.log("已经上传成功")
-							alert('文件已经上传成功!')
+							alert('文件上传成功!')
 							that.$emit("uploadSuccess",{'download_file_md5':that.file_md5,'download_url_object':that.back_file_name,'size':result.data.result.size});
 							return;
 						}else{
@@ -231,14 +171,14 @@ export default {
 				}
 			};
 			//处理单片文件的上传
-			function loadNext() {
+			function loadNext(currentChunk,chunkSize) {
 				var start = currentChunk * chunkSize, 
 					end = start + chunkSize >= file.size ? file.size : start + chunkSize;
 					that.pices.push(blobSlice.call(file, start, end));
 					
 				fileReader.readAsBinaryString(blobSlice.call(file, start, end));
 			}
-      		loadNext();
+      		loadNext(currentChunk,that.chunkSize);
 		},
 		getUnuploadShardList:function(params){//分片任务初始化接口
 			return axios.post(URL.getUnuploadShardList, params);
@@ -255,6 +195,60 @@ export default {
 		uploadIsSuccess:function(params){
 			return axios.post(URL.uploadIsSuccess, params,{async:true});//同步上传
 		},
+		picesFileUpload:function(shard_index_list,successPackage,that){
+			if(shard_index_list && shard_index_list.length!==0){
+				var promiseAll = [];
+				shard_index_list.forEach((item,index) => {
+					console.log(index,item,that.picesMD5[item])
+					var promise = new Promise((resolve,reject)=>{
+						that.uploadShard({
+							file_md5:that.file_md5,
+							shard_index:item,
+							shard_md5:that.picesMD5[item],
+							file_name:that.file_name
+						},that.pices[item]).then(function(data){
+							if(data.data.code === 0){
+								successPackage++;
+								that.status = 1;
+								that.percent = ((successPackage/that.shard_index_list.length)*100).toFixed(2);//上传成功百分比
+								resolve(data)
+							}
+						}).catch(function(err){
+							reject(err);
+						})
+					})
+					promiseAll.push(promise)
+					// console.log("promiseall",promiseAll)
+				});
+				Promise.all(promiseAll).then(function(resultAllData){
+					// console.log("resultAllData",resultAllData)
+					if(resultAllData){
+						if(successPackage === that.shard_index_list.length){
+							console.log("所有待上传的包都上传成功了")
+							that.uploadIsSuccess({
+								file_md5:that.file_md5
+							}).then(function(result){
+								console.log("ifsuccess",result)
+								if(result.data.code === 0){
+									that.success = true;
+									that.back_file_name = result.data.result.object;
+									that.success = true;
+									that.$emit("uploadSuccess",{'download_file_md5':result.data.result.file_md5,'download_url_object':that.back_file_name,'size':result.data.result.size});
+									alert("全部分片已经上传成功了")
+									return;
+								}
+							})
+						}else{
+							// console.log("重新上传一次uploadFileLine()")
+							uploadFileLine();
+						}
+					}
+				})
+			}else{
+				// console.log(99999999,"")
+				return;
+			}
+		},
 		submitFile:function(){
 			this.$refs.fileGet.value = '';
 			// this.$refs.fileGet.change.call(this.$refs.fileGet,this.$refs.fileGet.currentValue)
@@ -264,6 +258,8 @@ export default {
 		},
 		cutFile:function(){
 			this.zeroFile();
+			this.$refs.fileGet.value = '';
+			this.$emit("uploadSuccess",{'download_file_md5':'','download_url_object':'','size':0});
 		}
 	}
 }
@@ -341,4 +337,13 @@ export default {
 		}
 	}
 }
+// .deal{
+// 	position: fixed;
+// 	width:auto;
+// 	padding:0 10px;
+// 	box-sizing:border-box;
+// 	top:50%;
+// 	left:50%;
+// 	transform: translate(-50%,-50%)
+// }
 </style>
