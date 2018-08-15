@@ -257,7 +257,6 @@ export default {
     methods: {
         getSuccessNews:function(val){
             if(val){
-                console.log(88888,val)
                 this.importForm.download_url_object = val.download_url_object;
                 this.importForm.download_file_md5 = val.download_file_md5;
                 this.importForm.size = val.size;
@@ -418,7 +417,6 @@ export default {
             }
             const obj = this;
             obj.$refs[formName].validate(valid => {
-                console.log("valid",valid)
                 if (valid) {
                     if (!obj.importForm['selectRule']) {
                         obj.importForm['routersList'] = [{ router_pid: '*', rule: '*' }];
@@ -430,7 +428,6 @@ export default {
                         },
                         obj.importForm
                     );
-                    // console.log("params11111111111111",params)
                     let currentType = obj.inputType;
                     // params.release_time = params.release_time && params.release_time.Format('yyyy-MM-dd hh:mm:ss')
                     delete params.brand_id;
@@ -506,7 +503,6 @@ export default {
                     return false;
                 }
             });
-            console.log("submit",this.$refs.uploadFile)
         },
         routerPidChange(val) {
             if (!val) {

@@ -13,14 +13,7 @@ const CODE = {
 
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
-  if((config.url==='/api/index.php/file/getUnuploadShardList')||(config.url==='/api/index.php/file/uploadIsSuccess')|| (/uploadShard/).test(config.url)){
-    // if(config.url.indexOf('getUnuploadShardList') || config.url.indexOf('uploadIsSuccess') || config.url.indexOf('uploadShard')){
-    //uploadShard
-    console.log("config1111",config)
-    console.log("config.url,test",config.url)
-    console.log("config.data",config.data)
-    // config.data['token'] = '';
-    console.log(2222222,"enter",config.data['token'])
+  if(config.url.indexOf('noToken')>-1){//大文件分片上传接口不加token验证，通过noToken参数来判断是否需要token验证，存在这个参数说明不需要进行Token验证
     return config
   }else{
     let info = localStorage.getItem('localData') &&

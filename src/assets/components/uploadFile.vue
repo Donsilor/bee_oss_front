@@ -119,14 +119,12 @@ export default {
 								if(data.data.code === 0){
 									let result = data.data.result;
 									that.shard_index_list = result.shard_index_list;
-									// that.resultAllData = result.shard_index_list.length;
-									// console.log(233333333333333,result.shard_index_list)
+									
 									if(result.shard_index_list && result.shard_index_list.length === 0){//说明这个文件已经上传过，
-										// console.log(11111111111111111111111111)
+									
 										return that.uploadIsSuccess({
 											file_md5:that.file_md5
 										}).then(function(result){
-											console.log("ifsuccess",result)
 											if(result.data.code === 0){
 												alert("文件已经上传成功！")
 												that.success = true;
@@ -136,7 +134,7 @@ export default {
 												that.$emit("uploadSuccess",{'download_file_md5':result.data.result.file_md5,'download_url_object':that.back_file_name,'size':result.data.result.size});
 												return;
 											}else{
-												// console.log(111111,"uploadFileLine()")
+											
 												uploadFileLine();
 											}
 										}).catch(function(err){
@@ -188,8 +186,9 @@ export default {
 			// xhr.open('POST', URL.uploadShard + '?file_md5=' + query.file_md5 +"&shard_index="+ query.shard_index+'&shard_md5='+query.shard_md5, true);
             // xhr.send(blob);
 			return axios.post(
-				URL.uploadShard + '?file_md5=' + query.file_md5 +"&shard_index="+ query.shard_index+'&shard_md5='+query.shard_md5 + "&file_name=" + query.file_name, 
-				blob 
+				URL.uploadShard + '?file_md5=' + query.file_md5 +"&shard_index="+ query.shard_index+'&shard_md5='+query.shard_md5 + "&file_name=" + query.file_name+"&noToken=true", 
+				blob,
+				 
 			);
 		},
 		uploadIsSuccess:function(params){
@@ -199,7 +198,6 @@ export default {
 			if(shard_index_list && shard_index_list.length!==0){
 				var promiseAll = [];
 				shard_index_list.forEach((item,index) => {
-					console.log(index,item,that.picesMD5[item])
 					var promise = new Promise((resolve,reject)=>{
 						that.uploadShard({
 							file_md5:that.file_md5,
@@ -218,17 +216,14 @@ export default {
 						})
 					})
 					promiseAll.push(promise)
-					// console.log("promiseall",promiseAll)
 				});
 				Promise.all(promiseAll).then(function(resultAllData){
-					// console.log("resultAllData",resultAllData)
 					if(resultAllData){
 						if(successPackage === that.shard_index_list.length){
 							console.log("所有待上传的包都上传成功了")
 							that.uploadIsSuccess({
 								file_md5:that.file_md5
 							}).then(function(result){
-								console.log("ifsuccess",result)
 								if(result.data.code === 0){
 									that.success = true;
 									that.back_file_name = result.data.result.object;
@@ -243,16 +238,17 @@ export default {
 							uploadFileLine();
 						}
 					}
+				}).catch(function(err){
+					console.log("err",err)
+					taht.zeroFile();
+					that.showAgainButton = true;
 				})
 			}else{
-				// console.log(99999999,"")
 				return;
 			}
 		},
 		submitFile:function(){
 			this.$refs.fileGet.value = '';
-			// this.$refs.fileGet.change.call(this.$refs.fileGet,this.$refs.fileGet.currentValue)
-			// this.$refs.submit.apply(this.$refs.fileGet,this.$refs.fileGet.currentValue)
 			this.$refs.fileGet.click.call(this.$refs.fileGet,this.$refs.fileGet.$event)
 			
 		},
