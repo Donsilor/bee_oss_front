@@ -126,7 +126,7 @@ export default {
 											file_md5:that.file_md5
 										}).then(function(result){
 											if(result.data.code === 0){
-												alert("文件已经上传成功！")
+												that.$message("文件已经上传成功!")
 												that.success = true;
 												that.back_file_name = result.data.result.object;
 												that.status = 1;
@@ -148,7 +148,7 @@ export default {
 								}
 							},function(err){
 								// console.log('分片上传失败')
-								alert("任务初始化失败，请重试");
+								that.$message("任务初始化失败，请重试");
 								that.showAgainButton = true;
 							}).then(function(shard_index_list){
 								console.log(111111110,shard_index_list)
@@ -156,12 +156,12 @@ export default {
 							})
 						}else if(that.success){
 							// console.log("已经上传成功")
-							alert('文件上传成功!')
+							that.$message('文件上传成功!')
 							that.$emit("uploadSuccess",{'download_file_md5':that.file_md5,'download_url_object':that.back_file_name,'size':result.data.result.size});
 							return;
 						}else{
 							// console.log("三次上传后仍然出错，需求重新上传")
-							alert("文件上传出错，请重试")
+							that.$message("文件上传出错，请重试")
 							that.showAgainButton = true;
 						}
 					}
@@ -229,7 +229,7 @@ export default {
 									that.back_file_name = result.data.result.object;
 									that.success = true;
 									that.$emit("uploadSuccess",{'download_file_md5':result.data.result.file_md5,'download_url_object':that.back_file_name,'size':result.data.result.size});
-									alert("全部分片已经上传成功了")
+									that.$message("全部分片已经上传成功了")
 									return;
 								}
 							})
