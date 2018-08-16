@@ -240,7 +240,7 @@ export default {
 					}
 				}).catch(function(err){
 					console.log("err",err)
-					taht.zeroFile();
+					that.zeroFile();
 					that.showAgainButton = true;
 				})
 			}else{
