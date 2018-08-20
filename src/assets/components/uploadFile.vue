@@ -101,7 +101,7 @@ export default {
 				
 				//如果文件处理完成计算MD5，如果还有分片继续处理
 				if (currentChunk <chunksCount) {
-					loadNext();
+					loadNext(currentChunk,that.chunkSize);
 				} else {
 					var md5string = spark.end();
 					that.file_md5 = md5string;
@@ -151,7 +151,7 @@ export default {
 								that.$message("任务初始化失败，请重试");
 								that.showAgainButton = true;
 							}).then(function(shard_index_list){
-								console.log(111111110,shard_index_list)
+								// console.log(111111110,shard_index_list)
 								that.picesFileUpload(shard_index_list,successPackage,that)//上传分片后的文件
 							})
 						}else if(that.success){
@@ -199,6 +199,7 @@ export default {
 				var promiseAll = [];
 				shard_index_list.forEach((item,index) => {
 					var promise = new Promise((resolve,reject)=>{
+						// console.log("that.picesMD5[item]",that.picesMD5[item])
 						that.uploadShard({
 							file_md5:that.file_md5,
 							shard_index:item,
