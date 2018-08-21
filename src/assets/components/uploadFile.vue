@@ -33,7 +33,8 @@ export default {
 			status:0,//进度条的状态，0表示正在切片，1表示正在上传
 			percent:0,//进度条百分比
 			file_name:'',
-			chunkSize:2097152,//单词上传的图片大小,2M
+			chunkSize:10485760,//单词上传的图片大小,10M
+			// chunkSize:2097152,//单词上传的图片大小,2M
 			chunksCount:0,//这个文件要上传的次数
 			pices:[],
 			picesMD5:[],
@@ -150,6 +151,8 @@ export default {
 								// console.log('分片上传失败')
 								that.$message("任务初始化失败，请重试");
 								that.showAgainButton = true;
+								that.status = 0;
+								that.percent = 0;
 							}).then(function(shard_index_list){
 								// console.log(111111110,shard_index_list)
 								that.picesFileUpload(shard_index_list,successPackage,that)//上传分片后的文件
@@ -163,6 +166,8 @@ export default {
 							// console.log("三次上传后仍然出错，需求重新上传")
 							that.$message("文件上传出错，请重试")
 							that.showAgainButton = true;
+							that.status = 0;
+							that.percent = 0;
 						}
 					}
 					uploadFileLine();
@@ -233,6 +238,12 @@ export default {
 									that.$message("全部分片已经上传成功了")
 									return;
 								}
+							}).catch(function(err){
+								that.$message(err)
+								// that.$message("任务初始化失败，请重试");
+								that.showAgainButton = true;
+								that.status = 0;
+								that.percent = 0;
 							})
 						}else{
 							// console.log("重新上传一次uploadFileLine()")
@@ -243,6 +254,8 @@ export default {
 					console.log("err",err)
 					that.zeroFile();
 					that.showAgainButton = true;
+					that.status = 0;
+					that.percent = 0;
 				})
 			}else{
 				return;
