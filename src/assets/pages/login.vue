@@ -101,7 +101,11 @@ export default {
 
                 }
             }).catch((res) => {
-                this.$message.error(res.msg);
+                if(res && res.msg){
+                    this.$message.error(res.msg);
+                }else{
+                    this.$message.error(res);
+                }
             });
         }
     },
