@@ -720,6 +720,9 @@ export default {
         getForceText (type) {
             let text = ''
             switch(type) {
+                case 3:
+                    text = "不弹窗升级";
+                    break;
                 case 1:
                     text = '强制升级'
                     break
