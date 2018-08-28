@@ -1,16 +1,16 @@
 {
-  "tableColumn":[
-    {"prop": "method", "label": "method"},
-    {"prop": "msg_tag", "label": "msg_tag"},
-    {"prop": "host_name", "label": "host_name"},
-    {"prop": "req", "label": "req"},
-    {"prop": "svr_id", "label": "svr_id"},
-    {"prop": "user_id", "label": "user_id"},
-    {"prop": "router_id", "label": "router_id"},
-    {"prop": "code", "label": "code"},
-    {"prop": "msg", "label": "msg"},
-    {"prop": "cost_time", "label": "cost_time"},
-    {"prop": "created_time", "label": "created_time"}
-  ],
-  "tableData":[]
+	"tableColumn": [
+		{ "prop": "method", "label": "method" },
+		{ "prop": "msg_tag", "label": "msg_tag" },
+		{ "prop": "host_name", "label": "host_name" },
+		{ "prop": "req", "label": "req" },
+		{ "prop": "svr_id", "label": "svr_id" },
+		{ "prop": "user_id", "label": "user_id" },
+		{ "prop": "router_id", "label": "router_id" },
+		{ "prop": "code", "label": "code" },
+		{ "prop": "msg", "label": "msg" },
+		{ "prop": "cost_time", "label": "cost_time" },
+		{ "prop": "created_time", "label": "created_time" }
+	],
+	"tableData": []
 }

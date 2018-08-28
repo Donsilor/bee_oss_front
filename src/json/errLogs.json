@@ -1,17 +1,17 @@
 {
-  "tableColumn":[
-    {"prop": "level", "label": "日志级别"},
-    {"prop": "channel", "label": "频道"},
-    {"prop": "module", "label": "模块"},
-    {"prop": "method", "label": "方法"},
-    {"prop": "user_id", "label": "用户id"},
-    {"prop": "uuid", "label": "APP uuid"},
-    {"prop": "router_id", "label": "路由id"},
-    {"prop": "level", "label": "日志级别"},
-    {"prop": "code", "label": "错误码"},
-    {"prop": "msg", "label": "错误描述"},
-    {"prop": "session_id", "label": "会话ID"},
-    {"prop": "created_time", "label": "创建时间"}
-  ],
-  "tableData":[]
+	"tableColumn": [
+		{ "prop": "level", "label": "日志级别" },
+		{ "prop": "channel", "label": "频道" },
+		{ "prop": "module", "label": "模块" },
+		{ "prop": "method", "label": "方法" },
+		{ "prop": "user_id", "label": "用户id" },
+		{ "prop": "uuid", "label": "APP uuid" },
+		{ "prop": "router_id", "label": "路由id" },
+		{ "prop": "level", "label": "日志级别" },
+		{ "prop": "code", "label": "错误码" },
+		{ "prop": "msg", "label": "错误描述" },
+		{ "prop": "session_id", "label": "会话ID" },
+		{ "prop": "created_time", "label": "创建时间" }
+	],
+	"tableData": []
 }

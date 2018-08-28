@@ -1,13 +1,13 @@
 {
-  "tableColumn":[
-    {"prop": "_id", "label": "ID"},
-    {"prop": "log_type", "label": "日志类型"},
-    {"prop": "log_head", "label": "日志头信息"},
-    {"prop": "host_name", "label": "主机名称"},
-    {"prop": "svr_id", "label": "本服务的ID"},
-    {"prop": "monitor_name", "label": "告警名称"},
-    {"prop": "monitor_content", "label": "告警详细"},
-    {"prop": "created_time", "label": "创建时间"}
-  ],
-  "tableData":[]
+	"tableColumn": [
+		{ "prop": "_id", "label": "ID" },
+		{ "prop": "log_type", "label": "日志类型" },
+		{ "prop": "log_head", "label": "日志头信息" },
+		{ "prop": "host_name", "label": "主机名称" },
+		{ "prop": "svr_id", "label": "本服务的ID" },
+		{ "prop": "monitor_name", "label": "告警名称" },
+		{ "prop": "monitor_content", "label": "告警详细" },
+		{ "prop": "created_time", "label": "创建时间" }
+	],
+	"tableData": []
 }

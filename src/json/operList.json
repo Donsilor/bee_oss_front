@@ -1,13 +1,13 @@
 {
-  "tableColumn":[
-    {"prop": "uuid", "label": "app uuid"},
-    {"prop": "category_id", "label": "设备品类"},
-    {"prop": "device_id", "label": "子设备uuid"},
-    {"prop": "channel", "label": "渠道"},
-    {"prop": "method", "label": "方法"},
-    {"prop": "code", "label": "错误码"},
-    {"prop": "msg", "label": "错误信息"},
-    {"prop": "created_time", "label": "创建时间"}
-  ],
-  "tableData":[]
+	"tableColumn": [
+		{ "prop": "uuid", "label": "app uuid" },
+		{ "prop": "category_id", "label": "设备品类" },
+		{ "prop": "device_id", "label": "子设备uuid" },
+		{ "prop": "channel", "label": "渠道" },
+		{ "prop": "method", "label": "方法" },
+		{ "prop": "code", "label": "错误码" },
+		{ "prop": "msg", "label": "错误信息" },
+		{ "prop": "created_time", "label": "创建时间" }
+	],
+	"tableData": []
 }
