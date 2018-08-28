@@ -1,9 +1,0 @@
-{
-  "tableColumn":[
-    {"prop": "id", "label": "id"},
-    {"prop": "username", "label": "用户名"},
-    {"prop": "operation_name", "label": "操作"},
-    {"prop": "created_at", "label": "时间"}
-  ],
-  "tableData":[]
-}

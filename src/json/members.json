@@ -1,0 +1,10 @@
+{
+	"tableColumn": [
+		{ "prop": "F_uid", "label": "内部ID" },
+		{ "prop": "F_nickname", "label": "昵称" },
+		{ "prop": "F_role_name", "label": "角色名称" },
+		{ "prop": "F_created_at", "label": "创建时间" },
+		{ "prop": "F_updated_at", "label": "更新时间" }
+	],
+	"tableData": []
+}
