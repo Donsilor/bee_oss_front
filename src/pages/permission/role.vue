@@ -167,5 +167,8 @@ export default {
 .menulist .hd {
     /* background: #efefef; */
 }
+.el-checkbox-group {
+    font-size: 14px;
+}
 </style>
 
