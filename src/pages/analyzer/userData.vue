@@ -19,7 +19,7 @@
 					</el-form-item>
 
 					<el-form-item>
-						<city-picker v-model="formdata.city"></city-picker>
+						<city-picker @change="onCitySelect"></city-picker>
 					</el-form-item>
 
 					<!-- <el-form-item>
@@ -55,18 +55,7 @@
 					</div>
 				</el-card>
 			</el-col>
-			<!-- <el-col :span="4">
-        <el-card shadow="never" @click.native="setChartData(onlineUserChartData)">
-          <div class="data-list">
-            <el-row :gutter="24">
-              <el-col :span="16">{{onlineUserAnalyzer.text}}</el-col>
-              <el-col :span="4" :offset="4"></el-col>
-            </el-row>
-            <div>{{onlineUserAnalyzer.totalCount}}</div>
-            <div>截止到{{onlineUserAnalyzer.lastDate}}</div>
-          </div>
-        </el-card>
-      </el-col> -->
+
 			<el-col :span="6">
 				<el-card shadow="hover" @click.native="setChartData(loginUserChartData)" class="select-item">
 					<div class="data-list">
@@ -75,9 +64,7 @@
 								<span>
 									{{loginUserAnalyzer.text}}
 								</span>
-								<!-- <el-tooltip class="item" effect="dark" content="统计主动启动App，或者有唤醒语音路由（包括AI路由和mini路由）的去重用户数" placement="bottom">
-                    <i class="el-icon-information"></i>
-                </el-tooltip> -->
+
 								<i class="icon-tendency"></i>
 							</el-col>
 							<el-col :span="4" :offset="4"></el-col>
@@ -118,40 +105,11 @@
 						</div>
 						<div>单位: 个</div>
 					</el-col>
-					<!-- <el-col :span="4" :offset="4" style="text-align: right;">
-            <ul>
-              <li>
-                <a href="">日</a>
-                <a href="">周</a>
-                <a href="">月</a>
-              </li>
-            </ul>
-          </el-col> -->
+
 				</el-row>
 				<ve-line :data="chartData" :settings="chartSettings" :legend-visible="false" :data-empty="showEmpty"></ve-line>
 			</el-card>
 		</div>
-
-		<!-- <div style="margin-top: 20px">
-      <el-card shadow="never">
-        <el-row :gutter="24">
-          <el-col :span="16">
-            <div>活跃度统计</div>
-            <div>单位: %</div>
-          </el-col>
-          <el-col :span="4" :offset="4" style="text-align: right;">
-            <ul>
-              <li>
-                <a href="">日</a>
-                <a href="">周</a>
-                <a href="">月</a>
-              </li>
-            </ul>
-          </el-col>
-        </el-row>
-        <ve-line :data="activePercentChartData" :settings="chartSettings"></ve-line>
-      </el-card>
-    </div> -->
 
 		<div style="margin-top: 20px">
 			<el-card shadow="never">
@@ -221,7 +179,7 @@ export default {
             formdata: {
                 date: "",
                 platform: "",
-                project: "",
+                province: "",
                 city: ""
             },
             pickerOptions: {
@@ -298,6 +256,10 @@ export default {
         };
     },
     methods: {
+        onCitySelect(val) {
+            this.formdata.province = val[0];
+            this.formdata.city = val[1];
+        },
         setChartData(data) {
             this.showEmpty = !Boolean(data.rows.length);
             this.chartData = data;
@@ -322,13 +284,14 @@ export default {
         },
         // 点击查询按钮
         search() {
-            const { date, platform, city } = this.formdata;
+            const { date, platform, province, city } = this.formdata;
             if (this.checkIsSameDate(date)) {
                 return this.$message({ message: "日期不能选择同一天", type: "warning", showClose: true });
             }
             this.getUserAnalyzeData({
                 start_date: this.formatDate(date[0]),
                 end_date: this.formatDate(date[1]),
+                province,
                 city,
                 os_type: platform || "",
                 app_version: ""
@@ -338,6 +301,7 @@ export default {
             this.getAnalyzerRetainDate({
                 start_date: this.formatDate(date[0]),
                 end_date: this.formatDate(date[1]),
+                province,
                 city,
                 os_type: platform || "",
                 app_version: "",
@@ -348,29 +312,20 @@ export default {
         getUserAnalyzeData(params) {
             API.getUserAnalyzeData(params).then(
                 axios.spread((onlineUserData, registerUserData, activeUserData, loginUserData, activePercentData) => {
-                    // Object.assign(this.onlineUserAnalyzer, {
-                    //   totalCount: onlineUserData.data.result.total_online_num,
-                    //   lastDate: onlineUserData.data.result.list && onlineUserData.data.result.list[0] && onlineUserData.data.result.list[0].stat_date
-                    // });
-                    // this.bindChart(onlineUserData.data.result.list, 'onlineUserChartData');
-
                     Object.assign(this.registerUserAnalyzer, {
                         totalCount: registerUserData.data.result.total_register_num,
-                        // lastDate: registerUserData.data.result.list && registerUserData.data.result.list[0] && registerUserData.data.result.list[0].stat_date
                         lastDate: this.formatDate(this.formdata.date[1])
                     });
                     this.bindChart(registerUserData.data.result.list || [], "registerUserChartData");
 
                     Object.assign(this.activeUserAnalyzer, {
                         totalCount: activeUserData.data.result.total_active_user_num,
-                        // lastDate: activeUserData.data.result.list && activeUserData.data.result.list[0] && activeUserData.data.result.list[0].stat_date
                         lastDate: this.formatDate(this.formdata.date[1])
                     });
                     this.bindChart(activeUserData.data.result.list || [], "activeUserChartData");
 
                     Object.assign(this.loginUserAnalyzer, {
                         totalCount: loginUserData.data.result.total_login_user_num,
-                        // lastDate: loginUserData.data.result.list && loginUserData.data.result.list[0] && loginUserData.data.result.list[0].stat_date
                         lastDate: this.formatDate(this.formdata.date[1])
                     });
                     this.bindChart(loginUserData.data.result.list || [], "loginUserChartData");
@@ -437,11 +392,13 @@ export default {
         this.getUserAnalyzeData({
             start_date: this.formatDate(start),
             end_date: this.formatDate(end),
+            province: "",
             city: ""
         });
         this.getAnalyzerRetainDate({
             start_date: this.formatDate(start),
             end_date: this.formatDate(end),
+            province: "",
             city: ""
         });
     }
