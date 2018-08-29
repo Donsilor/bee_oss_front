@@ -22,10 +22,6 @@
 						<city-picker @change="onCitySelect"></city-picker>
 					</el-form-item>
 
-					<!-- <el-form-item>
-            <el-select v-model="formdata.project" placeholder="请选择项目">
-            </el-select>
-          </el-form-item> -->
 					<el-form-item style="margin-bottom:0">
 						<el-button type="primary" @click="search">查询</el-button>
 					</el-form-item>
@@ -69,8 +65,8 @@
 							</el-col>
 							<el-col :span="4" :offset="4"></el-col>
 						</el-row>
-						<div>{{loginUserAnalyzer.totalCount}}</div>
-						<div>截止到{{loginUserAnalyzer.lastDate}}</div>
+						<div>{{loginUserAnalyzer.lastDateNum}}</div>
+						<div>{{loginUserAnalyzer.lastDate}}当天</div>
 					</div>
 				</el-card>
 			</el-col>
@@ -84,8 +80,8 @@
 							</el-col>
 							<el-col :span="4" :offset="4"></el-col>
 						</el-row>
-						<div>{{activeUserAnalyzer.totalCount}}</div>
-						<div>截止到{{activeUserAnalyzer.lastDate}}</div>
+						<div>{{activeUserAnalyzer.lastDateNum}}</div>
+						<div>{{activeUserAnalyzer.lastDate}}当天</div>
 					</div>
 				</el-card>
 			</el-col>
@@ -224,6 +220,7 @@ export default {
             activeUserAnalyzer: {
                 totalCount: 0,
                 lastDate: null,
+                lastDateNum: 0,
                 text: "活跃用户数"
             },
             registerUserAnalyzer: {
@@ -234,6 +231,7 @@ export default {
             loginUserAnalyzer: {
                 totalCount: 0,
                 lastDate: null,
+                lastDateNum: 0,
                 text: "登录用户数"
             },
             onlineUserChartData: {
@@ -319,14 +317,21 @@ export default {
                     this.bindChart(registerUserData.data.result.list || [], "registerUserChartData");
 
                     Object.assign(this.activeUserAnalyzer, {
-                        totalCount: activeUserData.data.result.total_active_user_num,
-                        lastDate: this.formatDate(this.formdata.date[1])
+                        totalCount: activeUserData.data.result,
+                        lastDate: this.formatDate(this.formdata.date[1]),
+                        lastDateNum: activeUserData.data.result.list
+                            ? activeUserData.data.result.list[activeUserData.data.result.list.length - 1]
+                                  .active_user_num
+                            : 0
                     });
                     this.bindChart(activeUserData.data.result.list || [], "activeUserChartData");
 
                     Object.assign(this.loginUserAnalyzer, {
                         totalCount: loginUserData.data.result.total_login_user_num,
-                        lastDate: this.formatDate(this.formdata.date[1])
+                        lastDate: this.formatDate(this.formdata.date[1]),
+                        lastDateNum: loginUserData.data.result.list
+                            ? loginUserData.data.result.list[loginUserData.data.result.list.length - 1].login_user_num
+                            : 0
                     });
                     this.bindChart(loginUserData.data.result.list || [], "loginUserChartData");
 
@@ -336,15 +341,16 @@ export default {
         },
         // 用户留存统计
         getAnalyzerRetainDate(params) {
-            // console.log(params);
             axios.post(URL.analyzerRetain, params).then(res => {
                 const result = res.data.result.list;
                 this.tableData = result;
                 // 通过colunmName构造table
                 this.colunmName = [];
-                this.tableData[0].retain_list.forEach(obj => {
-                    this.colunmName.push(obj.day);
-                });
+                if (this.tableData.length) {
+                    this.tableData[0].retain_list.forEach(obj => {
+                        this.colunmName.push(obj.day);
+                    });
+                }
             });
         },
         // 用户留存点击日周月

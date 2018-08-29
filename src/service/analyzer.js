@@ -21,9 +21,10 @@ const api = {
 
 Object.assign(api, {
 	getUserAnalyzeData: function(params) {
+		const registerParams = { ...params, province: "", city: "" };
 		return axios.all([
 			api.getOnlineUser(params),
-			api.getRegisterUser(params),
+			api.getRegisterUser(registerParams),
 			api.getActiveUser(params),
 			api.getLoginUser(params)
 		]);

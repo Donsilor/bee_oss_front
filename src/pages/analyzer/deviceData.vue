@@ -17,7 +17,7 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item>
-						<city-picker v-model="formdata.city"></city-picker>
+						<city-picker @change="onCitySelect"></city-picker>
 					</el-form-item>
 					<el-form-item style="margin-bottom:0">
 						<el-button type="primary" @click="search">查询</el-button>
@@ -102,7 +102,7 @@ export default {
             formdata: {
                 date: "",
                 platform: "",
-                project: "",
+                province: "",
                 city: ""
             },
             pickerOptions: {
@@ -222,11 +222,16 @@ export default {
         };
     },
     methods: {
+        onCitySelect(val) {
+            this.formdata.province = val[0];
+            this.formdata.city = val[1];
+        },
         search() {
-            const { date, platform, city } = this.formdata;
+            const { date, platform, province, city } = this.formdata;
             this.getDeviceAnalyzeData({
                 start_date: formatDate(date[0]),
                 end_date: formatDate(date[1]),
+                province,
                 city,
                 os_type: platform || "",
                 app_version: ""
