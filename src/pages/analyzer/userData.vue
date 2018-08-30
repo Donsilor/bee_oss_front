@@ -31,8 +31,8 @@
 
 		<el-row :gutter="24" class="analyzer-data">
 
-			<el-col :span="6">
-				<el-card shadow="hover" @click.native="setChartData(registerUserChartData)" class="select-item">
+			<el-col>
+				<el-card shadow="hover" @click.native="setChartData('registerUser')" class="select-item" :class="{active:currentCard=='registerUser'}">
 					<div class="data-list">
 						<el-row :gutter="24">
 							<el-col :span="16">
@@ -52,8 +52,8 @@
 				</el-card>
 			</el-col>
 
-			<el-col :span="6">
-				<el-card shadow="hover" @click.native="setChartData(loginUserChartData)" class="select-item">
+			<el-col>
+				<el-card shadow="hover" @click.native="setChartData('loginUser')" class="select-item" :class="{active:currentCard=='loginUser'}">
 					<div class="data-list">
 						<el-row :gutter="24">
 							<el-col :span="16">
@@ -70,8 +70,8 @@
 					</div>
 				</el-card>
 			</el-col>
-			<el-col :span="6">
-				<el-card shadow="hover" @click.native="setChartData(activeUserChartData)" class="select-item">
+			<el-col>
+				<el-card shadow="hover" @click.native="setChartData('activeUser')" class="select-item" :class="{active:currentCard=='activeUser'}">
 					<div class="data-list">
 						<el-row :gutter="24">
 							<el-col :span="16">
@@ -250,7 +250,8 @@ export default {
                 columns: ["日期", "登录用户数"],
                 rows: []
             },
-            chartData: {}
+            chartData: {},
+            currentCard: "registerUser"
         };
     },
     methods: {
@@ -258,8 +259,21 @@ export default {
             this.formdata.province = val[0];
             this.formdata.city = val[1];
         },
-        setChartData(data) {
-            this.showEmpty = !Boolean(data.rows.length);
+        setChartData(type) {
+            let data;
+            switch (type) {
+                case "registerUser":
+                    data = this.registerUserChartData;
+                    break;
+                case "loginUser":
+                    data = this.loginUserChartData;
+                    break;
+                case "activeUser":
+                    data = this.activeUserChartData;
+                    break;
+            }
+            this.currentCard = type;
+            this.showEmpty = !data || !data.rows.length;
             this.chartData = data;
         },
         bindChart(list, name) {
@@ -335,7 +349,7 @@ export default {
                     });
                     this.bindChart(loginUserData.data.result.list || [], "loginUserChartData");
 
-                    this.setChartData(this.registerUserChartData);
+                    this.setChartData("registerUser");
                 })
             );
         },
@@ -413,28 +427,39 @@ export default {
 
 <style lang="less" scoped>
 .analyzer-data {
+    .el-col {
+        width: 280px;
+    }
     .select-item {
         cursor: pointer;
         position: relative;
+        width: 260px;
+        overflow: inherit;
     }
-    .active-item:after {
+    .active {
+        background: #ffbb44;
+        .data-list > div {
+            color: #fff !important;
+        }
+    }
+    .active:after {
         content: "";
         width: 0;
         height: 0;
-        border-top: 10px solid #eee;
+        border-top: 10px solid #ffbb44;
         border-left: 8px solid transparent;
         border-right: 8px solid transparent;
         position: absolute;
-        top: 0px;
+        bottom: -10px;
         left: 50%;
         margin-left: -4px;
     }
     .data-list > div {
-        margin: 15px 0;
-        font-size: 14px;
+        // margin-bottom: 5px;
+        font-size: 12px;
         &:nth-child(2) {
             color: #409eff;
-            font-size: 18px;
+            font-size: 30px;
         }
     }
 }

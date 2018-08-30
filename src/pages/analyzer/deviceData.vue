@@ -276,7 +276,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .analyzer-data {
     .select {
         cursor: pointer;
