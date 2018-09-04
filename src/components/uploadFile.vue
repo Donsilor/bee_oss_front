@@ -4,11 +4,16 @@
 			<span class="buttonText">上传文件</span>
 			<input type="file" value="" id="file" ref="fileGet" v-on:change="fileUpLoad">
 		</div>
+		<div class="successObj" v-if="isNotUpload && fileList.length">
+			<p class="objText">{{fileList[0].name}}</p>
+		</div>
+
 		<div class="successObj" v-if="success">
-			<p class="objText">{{back_file_name}}</p>
+			<p class="objText" v-if="back_file_name">{{back_file_name}}</p>
 			<P class="closeImg" @click="cutFile"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAARtJREFUOBGtk0sSwUAQhnsoVarYOI9g7wocQxjFkvK+hSuwyY7kBLaOYa35kwxjIjMUvZjMo/8v048h+qdJOatJOep8y4QGWugKifjSvhJvB8PR6lMYfKEhurShKWIIw+Op7rUqROx7jWY1Co8B9vOsL8dL+Aoh1ov5dAO/GIRJFB6CT2AJ5JpAZlMfWtgDhIULlgfJgGwwGwQ6geGd6UJmwUTZcHRdLghOCoZ5nFgtJ9jTLS2/vvWcC8HWHz09jWTrB+gTZu7hJvd2i1yt8VI1BUpCSvvkHo6rmtBlQCovZk5csBdQHkTd1AZ7gFwQFywG4RUz8cYMR4nNr36zhtc8462m5a/uCyS6C0ufmLDlfNKHplwu7cyzn9Y3Uj+/+/tFAJkAAAAASUVORK5CYII=" />
 			</P>
 		</div>
+
 		<div class="hidingPath" v-if="!success && (showStatus || showAgainButton)">
 			<div class="progressBar" v-if="showStatus">
 				<span v-if="status ===0">切片进度:{{percent+"%"}} </span>
@@ -27,10 +32,12 @@ import * as URL from "~/lib/api";
 
 export default {
     props: {
+        fileList: Array,
         className: "" //自定义样式
     },
     data() {
         return {
+            isNotUpload: true,
             status: 0, //进度条的状态，0表示正在切片，1表示正在上传
             percent: 0, //进度条百分比
             file_name: "",
@@ -51,7 +58,11 @@ export default {
     mounted() {},
     watch: {},
     methods: {
-        zeroFile: function() {
+        clearFiles() {
+            this.isNotUpload = true;
+            this.zeroFile();
+        },
+        zeroFile() {
             //归零,数据重置
             this.status = 0;
             this.percent = 0;
@@ -69,6 +80,7 @@ export default {
         },
         fileUpLoad: function(e) {
             this.zeroFile();
+            this.isNotUpload = false;
             this.showStatus = true;
             let file = e.target.files[0];
             this.file_name = file.name || "";

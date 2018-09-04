@@ -24,6 +24,11 @@ const routes = [
 				component: Pages.VersionManager
 			},
 			{
+				path: "VersionManagerForSC",
+				name: "VersionManagerForSC",
+				component: Pages.VersionManagerForSC
+			},
+			{
 				path: "pushManager",
 				name: "pushManager",
 				component: Pages.PushManager

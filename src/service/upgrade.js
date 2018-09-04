@@ -29,6 +29,19 @@ export default {
 				});
 		});
 	},
+	getVersionsForSC(params) {
+		return new Promise((resolve, reject) => {
+			params.method = "list_versions_community";
+			axios
+				.post(API_UPGRADE, params)
+				.then(response => {
+					resolve(response.data);
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		});
+	},
 	selectVersion(params) {
 		return new Promise((resolve, reject) => {
 			axios
