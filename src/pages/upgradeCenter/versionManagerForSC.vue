@@ -5,7 +5,7 @@
 		<el-table v-show="firstTableShow" :data="versionsFirst.tableData" style="width: 100%">
 			<el-table-column v-for="item in versionsFirst.tableColumn" :key="item.prop" :prop="item.prop" :label="item.label" :width="'auto'">
 				<template slot-scope="scope">
-					<div v-if="item.prop === 'type'">{{getTypeText(scope.row.type, scope.row.os_type)+getPidName(scope.row)}}</div>
+					<div v-if="item.prop === 'type'">{{scope.row.key}}</div>
 					<div v-else-if="item.prop === 'status'">{{getStatusText(scope.row.status)}}</div>
 					<div v-else-if="item.prop === 'force'">{{getForceText(scope.row.force)}}</div>
 					<div v-else-if="item.prop === 'release_time'">{{formatTime(scope.row['release_time'])}}</div>
@@ -116,16 +116,6 @@
 	</div>
 </template>
 <script>
-/*
-设备类型：
-1、android_app，2、router，3、子设备，4、ios，5、H5，6、android_pad，7、android_system，8、device_android_system，9、community_app，10、community_app_plugin
-
-os_type:
-1、android_app, 4、ios, 6、android_pad
-
-新增force类型：
-3，不弹窗升级（当前共有：0：非强制，1：强制，3：不弹窗升级）2已被占用
-*/
 import * as namespace from "../../store/namespace";
 import { mapGetters, mapActions } from "vuex";
 import "../../lib/util.js";
@@ -586,7 +576,7 @@ export default {
             this.listParams.page = page;
             this.versionsFirst = Object.assign({}, version_first_json);
             const obj = this;
-            API.getVersions(obj.listParams).then(result => {
+            API.getVersionsForSC(obj.listParams).then(result => {
                 if (result.code === 0) {
                     obj.firstTableShow = true;
                     obj.$nextTick(() => {
@@ -601,33 +591,11 @@ export default {
         // 渲染首列数据
         setFirstVersionList(dataObj) {
             this.versionsFirst.tableData = [];
-            let deviceType = {
-                router: 2,
-                h5: 5,
-                device: 3
-            };
             for (let attr in dataObj) {
-                if (attr === "android" || attr === "android_pad" || attr === "android_system" || attr === "ios") {
-                    this.versionsFirst.tableData.push(dataObj[attr]);
-                } else {
-                    if (JSON.stringify(dataObj[attr]) === "{}") {
-                        this.versionsFirst.tableData.push({ type: deviceType[attr] });
-                    } else {
-                        for (let innerAttr in dataObj[attr]) {
-                            this.versionsFirst.tableData.push(dataObj[attr][innerAttr]);
-                        }
-                        //路由pid列表
-                        if (attr === "router") {
-                            this.routerPidList = [];
-                            for (let routerAttr in dataObj[attr]) {
-                                this.routerPidList.push({
-                                    label: routerAttr,
-                                    value: routerAttr
-                                });
-                            }
-                        }
-                    }
-                }
+                dataObj[attr].key = attr;
+                //后台bug，前端强制改变type
+                dataObj[attr].type = attr.indexOf("plugin") >= 0 ? 10 : 9;
+                this.versionsFirst.tableData.push(dataObj[attr]);
             }
         },
         getTypeText(type, os_type) {
@@ -705,13 +673,11 @@ export default {
                 page: page,
                 limit: 10,
                 level: 2,
-                os_type: dataObj.os_type || "",
-                router_pid: dataObj.router_pid || "",
-                type: dataObj.type,
-                product_id: dataObj.product_id || ""
+                os_type: this.os_type_text[dataObj.os_type] || "",
+                type: dataObj.type
             };
             const obj = this;
-            API.getVersions(param).then(result => {
+            API.getVersionsForSC(param).then(result => {
                 if (result.code === 0) {
                     let currentData = result.result;
                     obj.firstTableShow = false;
@@ -724,7 +690,8 @@ export default {
         getVersionHistory(dataObj, page) {
             this.currentDataObj = dataObj; //此操作是为了进入列表，进行各种操作时需要重新刷新列表
             this.inputType = dataObj.type;
-            this.os_type = dataObj.os_type || "";
+            // this.os_type = dataObj.os_type || "";
+            this.os_type = this.os_type_text[dataObj.os_type] || "";
             this.secondTitle = this.getVersionTitle(dataObj);
             this.getVersionHistoryList(page, dataObj);
         },
@@ -787,17 +754,7 @@ export default {
             brand: namespace.BRAND,
             type: namespace.TYPE,
             product: namespace.PRODUCT
-        }),
-        currentName() {
-            let name = this.getTypeText(this.currentDataObj.type, this.currentDataObj.os_type) + " ";
-            if (this.currentDataObj.product_id) {
-                name += this.currentDataObj.product_id;
-            }
-            if (this.currentDataObj.router_pid) {
-                name += this.currentDataObj.router_pid;
-            }
-            return name;
-        }
+        })
     }
 };
 </script>

@@ -38,6 +38,8 @@ import StrategyUuid from "./strategy/strategyUuid.vue";
 import StrategyConfig from "./strategy/strategyConfig.vue";
 import CmData from "./CmData.vue";
 
+import VersionManagerForSC from "./upgradeCenter/versionManagerForSC.vue";
+
 export {
 	Login,
 	Main,
@@ -77,5 +79,6 @@ export {
 	Strategy,
 	StrategyUuid,
 	StrategyConfig,
-	CmData
+	CmData,
+	VersionManagerForSC
 };

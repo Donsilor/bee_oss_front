@@ -50,6 +50,11 @@ export default {
                             icon: ""
                         },
                         {
+                            title: "社区版本管理",
+                            path: "/main/versionManagerForSC",
+                            icon: ""
+                        },
+                        {
                             title: "推送管理",
                             path: "/main/pushManager",
                             icon: ""

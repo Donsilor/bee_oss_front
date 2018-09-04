@@ -15,18 +15,27 @@
 				</el-option>
 			</el-select>
 		</el-form-item>
-		<el-form-item label="是否限制规则" v-if="!releasedFlag">
+		<el-form-item label="是否限制规则" v-if="inputType!==9 && !releasedFlag">
 			<el-radio-group v-model="importForm.selectRule" @change="ruleChange">
 				<el-radio :label="1">是</el-radio>
 				<el-radio :label="0">否</el-radio>
 			</el-radio-group>
 		</el-form-item>
-		<el-form-item label="路由pid" v-if="inputType !== 2  && !releasedFlag && importForm.selectRule">
+		<!-- 路由器版本 -->
+		<el-form-item label="路由pid" v-if="(inputType !== 2 && inputType!==9 && inputType!==10)  && !releasedFlag && importForm.selectRule">
 			<el-select style="width: 100%;" v-model="importForm.router_pid" placeholder="路由pid" @change="routerPidChange">
 				<el-option v-for="item in routerPidList" :key="item.value" :label="item.label" :value="item.value">
 				</el-option>
 			</el-select>
 		</el-form-item>
+		<!-- 路由器版本 -->
+		<el-form-item label="支持路由" prop="routersList" v-if="(inputType !== 2 && inputType!==9 && inputType!==10)  && !releasedFlag && importForm.selectRule">
+			<el-select style="width: 100%;" multiple v-model="importForm.routersList" placeholder="路由">
+				<el-option v-for="item in router" :key="item.value" :label="item.label" :value="item.value">
+				</el-option>
+			</el-select>
+		</el-form-item>
+		<!-- 路由器升级，依赖子设备版本 -->
 		<el-form-item label="子设备" v-if="inputType === 2 && !releasedFlag && importForm.selectRule">
 			<el-row>
 				<el-col :span="8">
@@ -49,18 +58,21 @@
 				</el-col>
 			</el-row>
 		</el-form-item>
+		<!-- 路由器升级，依赖子设备版本 -->
 		<el-form-item label="支持版本" prop="productsList" v-if="inputType === 2  && !releasedFlag && importForm.selectRule">
 			<el-select style="width: 100%;" multiple v-model="importForm.productsList" placeholder="子设备">
 				<el-option v-for="item in subsetProduct" :key="item.value" :label="item.label" :value="item.value">
 				</el-option>
 			</el-select>
 		</el-form-item>
-		<el-form-item label="支持路由" prop="routersList" v-if="inputType !== 2  && !releasedFlag && importForm.selectRule">
-			<el-select style="width: 100%;" multiple v-model="importForm.routersList" placeholder="路由">
-				<el-option v-for="item in router" :key="item.value" :label="item.label" :value="item.value">
+		<!-- 社区插件升级，依赖app版本 -->
+		<el-form-item label="支持APP版本" prop="appList" v-show="inputType === 10  && !releasedFlag && importForm.selectRule">
+			<el-select style="width: 100%;" multiple v-model="importForm.appList" placeholder="APP版本">
+				<el-option v-for="item in appVersionList" :key="item.value" :label="item.label" :value="item.value">
 				</el-option>
 			</el-select>
 		</el-form-item>
+
 		<el-form-item label="版本号" prop="version" v-if="!releasedFlag">
 			<el-input type="text" v-model="importForm.version" />
 		</el-form-item>
@@ -81,7 +93,7 @@
 			<!-- <el-upload ref="uploadFile" class="upload-demo" :action="corsUrls" :data="uploadObj" :before-upload="beforeAvatarUpload" :on-success="getUploadData" :on-preview="handlePreview" :limit="1" :file-list="fileListObj" :on-remove="handleRemove">
                 <el-button size="small" type="primary">点击上传</el-button>
              </el-upload> -->
-			<upload-file ref="uploadFile" class="newButtonStyle" @uploadSuccess="getSuccessNews"></upload-file>
+			<upload-file ref="uploadFile" class="newButtonStyle" :file-list="fileListObj" @uploadSuccess="getSuccessNews"></upload-file>
 			<span class="fileObjectTips" v-show="fileTipsIfShow">请先上传文件</span>
 		</el-form-item>
 		<el-form-item label="上传img图片" prop="img_url_object">
@@ -96,6 +108,7 @@
 				<el-option label="不弹窗升级" :value="3"></el-option>
 			</el-select>
 		</el-form-item>
+
 		<el-form-item>
 			<el-button type="primary" @click="importSubmitForm('importForm')">确定</el-button>
 			<el-button @click="closeParentFlow">取消</el-button>
@@ -180,7 +193,8 @@ export default {
                 note: "",
                 extra_note: "",
                 selectRule: 1,
-                os_type: ""
+                os_type: "",
+                appList: []
             },
             rulesImport: {
                 router_pid: [{ required: true, message: "请输入路由器pid" }],
@@ -198,6 +212,7 @@ export default {
                 img_url_object: [{ required: true, message: "请上传img图片" }],
                 force: [{ required: true, message: "请选择是否强制升级" }]
             },
+            appVersionList: [],
             subsetProduct: [],
             router: [],
             router_pid: "",
@@ -330,6 +345,15 @@ export default {
                         thisForm["productsList"].push(item.product_id + "--" + item.rule);
                     });
                 }
+            } else if (this.inputType === 10) {
+                let currentRouters = this.editDataObj["rules"];
+                if (currentRouters.length === 1 && currentRouters[0].rule === "*") {
+                    thisForm["selectRule"] = 0;
+                } else {
+                    thisForm["appList"] = this.editDataObj["rules"].map(item => {
+                        return item.rule;
+                    });
+                }
             } else {
                 let currentRouters = this.editDataObj["rules"];
                 if (currentRouters.length === 1 && currentRouters[0].rule === "*") {
@@ -357,15 +381,19 @@ export default {
                 this.rulesImport["product_id"] = [{ required: true, message: "请输入子设备" }];
             }
             this.$refs["importForm"].resetFields();
-            if (this.os_type !== "ios" && !this.releasedFlag) {
-                // this.$refs['uploadFile'].clearFiles();//TODO
-            }
+            // if (this.os_type !== "ios" && !this.releasedFlag) {
+            try {
+                this.fileTipsIfShow = false;
+                this.$refs["uploadFile"].clearFiles();
+            } catch (e) {}
+            // }
             this.$refs["uploadFileImg"].clearFiles();
             let form = this.importForm;
             for (let attr in form) {
                 switch (attr) {
                     case "routersList":
                     case "productsList":
+                    case "appList":
                         form[attr] = [];
                         break;
                     case "force":
@@ -379,10 +407,11 @@ export default {
                         break;
                 }
             }
+            this.getAppReleasedVersionList();
+            this.fileListObj = [];
         },
         closeParentFlow() {
             this.$emit("closeImportBox");
-            this.fileTipsIfShow = false;
         },
         productChange(val) {
             let obj = this;
@@ -411,6 +440,30 @@ export default {
                 }
             });
         },
+        getAppReleasedVersionList() {
+            if (this.inputType !== 10) {
+                return;
+            }
+            API.pubilcCorsAction({
+                method: "released_versions",
+                type: 10,
+                os_type: this.os_type
+            }).then(res => {
+                if (res.code === 0) {
+                    let list = res.result;
+                    if (list && list.length) {
+                        this.appVersionList = list.map(item => {
+                            return {
+                                label: item.version,
+                                value: item.version
+                            };
+                        });
+                    } else {
+                        this.appVersionList = [];
+                    }
+                }
+            });
+        },
         //录入
         importSubmitForm(formName) {
             if (!this.importForm.download_url_object) {
@@ -423,12 +476,7 @@ export default {
                         obj.importForm["routersList"] = [{ router_pid: "*", rule: "*" }];
                         obj.importForm["productsList"] = [{ product_id: "*", rule: "*" }];
                     }
-                    let params = Object.assign(
-                        {
-                            // token: this.token
-                        },
-                        obj.importForm
-                    );
+                    let params = Object.assign({}, obj.importForm);
                     let currentType = obj.inputType;
                     // params.release_time = params.release_time && params.release_time.Format('yyyy-MM-dd hh:mm:ss')
                     delete params.brand_id;
@@ -437,15 +485,27 @@ export default {
                     let attrName = currentType === 2 ? "product_id" : "router_pid";
                     let ruleName = currentType === 2 ? "productsList" : "routersList";
                     if (params.selectRule) {
-                        params.rules = params[ruleName].map(item => {
-                            let arr = item.split("--");
-                            return {
-                                [attrName]: arr[0],
-                                rule: arr[1]
-                            };
-                        });
+                        if (currentType === 10) {
+                            params.rules = params.appList.map(item => {
+                                return {
+                                    rule: item
+                                };
+                            });
+                        } else {
+                            params.rules = params[ruleName].map(item => {
+                                let arr = item.split("--");
+                                return {
+                                    [attrName]: arr[0],
+                                    rule: arr[1]
+                                };
+                            });
+                        }
                     } else {
-                        params.rules = params[ruleName];
+                        if (currentType === 10) {
+                            delete params.rules;
+                        } else {
+                            params.rules = params[ruleName];
+                        }
                     }
                     if (currentType !== 5) {
                         delete params.os_type;
@@ -474,6 +534,17 @@ export default {
                                 ? "create_device_android_system_version"
                                 : "update_device_android_system_version";
                             break;
+                        case 9:
+                            params.os_type = this.os_type;
+                            params.method = this.addEditFlag
+                                ? "create_app_community_version"
+                                : "update_app_community_version";
+                            break;
+                        case 10:
+                            params.os_type = this.os_type;
+                            params.method = this.addEditFlag
+                                ? "create_app_community_plugin_version"
+                                : "update_app_community_plugin_version";
                         default:
                             break;
                     }

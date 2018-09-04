@@ -15,7 +15,7 @@
 			</el-row>
 			<el-row>
 				<el-col :span="12">
-					<el-form-item label="概略描述" prop="description">
+					<el-form-item label="概略描述" prop="note">
 						<div>{{ruleFormDetail.note}}</div>
 					</el-form-item>
 				</el-col>
