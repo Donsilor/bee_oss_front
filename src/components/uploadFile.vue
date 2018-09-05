@@ -178,6 +178,8 @@ export default {
                                 )
                                 .then(function(shard_index_list) {
                                     // console.log(111111110,shard_index_list)
+                                    that.status = 1;
+                                    that.percent = 0;
                                     that.picesFileUpload(shard_index_list, successPackage, that); //上传分片后的文件
                                 });
                         } else if (that.success) {
