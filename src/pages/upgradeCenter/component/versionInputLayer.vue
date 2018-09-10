@@ -74,7 +74,7 @@
 		</el-form-item>
 
 		<el-form-item label="版本号" prop="version" v-if="!releasedFlag">
-			<el-input type="text" v-model="importForm.version" />
+			<el-input type="text" v-model="importForm.version" :disabled="!addEditFlag" />
 		</el-form-item>
 		<el-form-item label="概要描述" prop="note">
 			<el-input type="text" v-model="importForm.note" />
