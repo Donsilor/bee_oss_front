@@ -493,11 +493,12 @@ export default {
             };
             let obj = this;
             API.pubilcCorsAction(param).then(result => {
-                let datas = result.result;
-                let form = obj.ruleFormDetail;
-                for (let attr in form) {
-                    form[attr] = datas[attr];
-                }
+                obj.ruleFormDetail = result.result;
+                // let datas = result.result;
+                // let form = obj.ruleFormDetail;
+                // for (let attr in form) {
+                //     form[attr] = datas[attr];
+                // }
             });
             obj.$nextTick(() => {
                 obj.$refs["versionDetails"].resetList();

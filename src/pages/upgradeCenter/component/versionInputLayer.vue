@@ -346,7 +346,7 @@ export default {
                     });
                 }
             } else if (this.inputType === 10) {
-                let currentRouters = this.editDataObj["rules"];
+                let currentRouters = this.editDataObj["rules"] || [];
                 if (currentRouters.length === 1 && currentRouters[0].rule === "*") {
                     thisForm["selectRule"] = 0;
                 } else {
@@ -355,7 +355,7 @@ export default {
                     });
                 }
             } else {
-                let currentRouters = this.editDataObj["rules"];
+                let currentRouters = this.editDataObj["rules"] || [];
                 if (currentRouters.length === 1 && currentRouters[0].rule === "*") {
                     thisForm["selectRule"] = 0;
                 } else {

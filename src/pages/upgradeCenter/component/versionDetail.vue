@@ -40,7 +40,7 @@
 				</el-col>
 			</el-row>
 			<el-form-item label="限制规则" prop="description">
-				<div>{{ruleFormDetail.rule}}</div>
+				<div>{{getRules(ruleFormDetail.rules)}}</div>
 			</el-form-item>
 			<el-row>
 				<el-col :span="12">
@@ -131,6 +131,13 @@ export default {
     },
     mounted() {},
     methods: {
+        getRules(rules) {
+            if (rules) {
+                return rules.map(item => item.rule).join(",");
+            } else {
+                return "";
+            }
+        },
         resetList() {
             this.getVersionDeviceList(1);
         },
