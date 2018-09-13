@@ -63,7 +63,7 @@
 						<el-button type="text" size="small" @click="openVersionEdit(scope.row)">编辑</el-button>
 						<el-button type="text" size="small" @click="startStopVerion(scope.row)">{{scope.row['status']?'禁用':'启用'}}</el-button>
 						<br>
-						<el-button type="text" size="small" @click="openPushLayer(scope.row)">推送</el-button>
+						<!-- <el-button type="text" size="small" @click="openPushLayer(scope.row)">推送</el-button> -->
 						<el-button type="text" size="small" @click="getOperateLog(scope.row)">操作日志</el-button>
 						<el-button type="text" size="small" @click="rollBackVersion(scope.row)">回滚</el-button>
 						<el-button type="text" size="small" @click="deleteVersion(scope.row)">删除</el-button>
