@@ -109,6 +109,11 @@
 			</el-select>
 		</el-form-item>
 
+        <!-- iOS版本配置 -->
+        <el-form-item label="审核开关" v-if="os_type === 'ios'">
+            <el-switch v-model="importForm.audit_switch" :active-value="1" :inactive-value="0"></el-switch>
+        </el-form-item>
+
 		<el-form-item>
 			<el-button type="primary" @click="importSubmitForm('importForm')">确定</el-button>
 			<el-button @click="closeParentFlow">取消</el-button>
@@ -313,7 +318,8 @@ export default {
                 note: "",
                 extra_note: "",
                 size: "",
-                download_url_object: ""
+                download_url_object: "",
+                audit_switch: 0
             };
             if (this.inputType === 2) {
                 attrObj["router_pid"] = "";
