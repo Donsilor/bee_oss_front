@@ -39,6 +39,9 @@ import StrategyConfig from "./strategy/strategyConfig.vue";
 import CmData from "./CmData.vue";
 
 import VersionManagerForSC from "./upgradeCenter/versionManagerForSC.vue";
+import SwitchProductHistory from './switchproduct/history.vue'
+import SwitchProductImport from './switchproduct/import.vue'
+import SwitchProductSearch from './switchproduct/search.vue'
 
 export {
 	Login,
@@ -80,5 +83,8 @@ export {
 	StrategyUuid,
 	StrategyConfig,
 	CmData,
-	VersionManagerForSC
+	VersionManagerForSC,
+	SwitchProductHistory,
+	SwitchProductImport,
+	SwitchProductSearch
 };

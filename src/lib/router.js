@@ -213,6 +213,19 @@ const routes = [
 				path: "feedback/detail/:id",
 				name: "feedbackDetail",
 				component: Pages.FeedbackDetail
+			},
+			//开关生产信息查询
+			{
+				path: 'switchproduct/history',
+				component: Pages.SwitchProductHistory
+			},
+			{
+				path: 'switchproduct/import',
+				component: Pages.SwitchProductImport
+			},
+			{
+				path: 'switchproduct/search',
+				component: Pages.SwitchProductSearch
 			}
 		]
 	},

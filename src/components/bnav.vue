@@ -214,7 +214,29 @@ export default {
                     title: "用户反馈",
                     path: "/main/feedback/list",
                     icon: "family"
-                }
+                },
+                {   
+                    title: '开关生产信息',
+                    icon: 'family',
+                    path: 'switchproduct',
+                    children: [
+                        {
+                            title: '导入',
+                            path: '/main/switchproduct/import',
+                            icon: "facility"
+                        },
+                        {   
+                            title: 'MAC/SN查询',
+                            path: '/main/switchproduct/search',
+                            icon: "facility"
+                        },
+                        {   
+                            title: '历史查询记录',
+                            path: '/main/switchproduct/history',
+                            icon: "facility"
+                        }
+                    ]
+                },
             ]
         };
     },
