@@ -67,8 +67,8 @@
 						<el-button type="text" size="small" @click="getOperateLog(scope.row)">操作日志</el-button>
 						<el-button type="text" size="small" @click="rollBackVersion(scope.row)">回滚</el-button>
 						<el-button type="text" size="small" @click="deleteVersion(scope.row)">删除</el-button>
-						<br>
-						<el-button type="text" size="small" @click="clearUuid(scope.row)">清空uuid</el-button>
+						<el-button type="text" size="small" @click="deleteUUID(scope.row)">清空UUID</el-button>
+
 						<!-- <el-button type="text" size="small" @click="getVersionHistory(scope.row,1)">查看版本列表</el-button> -->
 					</template>
 				</el-table-column>
@@ -481,6 +481,32 @@ export default {
                     });
                 });
         },
+        deleteUUID(row) {  
+            this.$confirm("确定此操作吗?", "提示", {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning"
+                })
+                .then(() => {
+                    const param = {
+                        type: row.type,
+                        version: row.version,
+                        user_id: row.user_id,
+                        product_id: row.product_id,
+                        os_type: this.os_type_text[row.os_type] || "",
+                        method: "uuid_del"
+                    };
+
+                    API.pubilcCorsAction(param).then(result => {
+                        if (result.code === 0) {
+                            this.$message({
+                                type: "success",
+                                message: "清空UUID成功!"
+                            });
+                        }
+                    });
+                });
+        },
         // 获取详情
         getVersionDetail(dataObj) {
             this.infoBoxFlag = true;
@@ -775,37 +801,7 @@ export default {
         deviceRouterChange() {
             this.currentDataObj.type = this.activeName === "devices" ? 3 : 8;
             this.getVersionHistory(this.currentDataObj, 1);
-        },
-		// 清空uuid
-		clearUuid(dataObj) {
-			let obj = this;
-			obj
-				.$confirm("确定此操作吗?", "提示", {
-					confirmButtonText: "确定",
-					cancelButtonText: "取消",
-					type: "warning"
-				})
-				.then(() => {
-					let param = {
-						type: dataObj.type,
-						version: dataObj.version,
-						user_id: dataObj.user_id,
-						product_id: dataObj.product_id || "",
-						os_type: obj.os_type_text[dataObj.os_type] || "",
-						method: "uuid_del"
-					};
-
-					API.pubilcCorsAction(param).then(result => {
-						if (result.code === 0) {
-							obj.$message({
-								type: "success",
-								message: "清空uuid成功!"
-							});
-							obj.getVersionHistory(obj.currentDataObj, 1);
-						}
-					});
-				});
-		}
+        }
     },
     ...mapActions([
         "getVersions",

@@ -15,6 +15,10 @@
 				</el-option>
 			</el-select>
 		</el-form-item>
+        <el-form-item label="升级数量限制">
+            <el-input v-model="importForm.upgrade_limit"></el-input>
+            0或者空为不限制
+        </el-form-item>
 		<el-form-item label="是否限制规则" v-if="inputType!==9 && !releasedFlag">
 			<el-radio-group v-model="importForm.selectRule" @change="ruleChange">
 				<el-radio :label="1">是</el-radio>
@@ -199,7 +203,8 @@ export default {
                 extra_note: "",
                 selectRule: 1,
                 os_type: "",
-                appList: []
+                appList: [],
+                upgrade_limit: ""
             },
             rulesImport: {
                 router_pid: [{ required: true, message: "请输入路由器pid" }],
@@ -319,7 +324,8 @@ export default {
                 extra_note: "",
                 size: "",
                 download_url_object: "",
-                audit_switch: 0
+                audit_switch: 0,
+                upgrade_limit: ""
             };
             if (this.inputType === 2) {
                 attrObj["router_pid"] = "";
