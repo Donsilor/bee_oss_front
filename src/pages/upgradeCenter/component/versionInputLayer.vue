@@ -15,7 +15,8 @@
 				</el-option>
 			</el-select>
 		</el-form-item>
-        <el-form-item label="升级数量限制">
+        <!-- H5，社区不显示 -->
+        <el-form-item label="升级数量限制" v-if="inputType !== 5 && inputType !== 9 && inputType !== 10">
             <el-input v-model="importForm.upgrade_limit"></el-input>
             0或者空为不限制
         </el-form-item>
