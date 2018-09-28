@@ -494,6 +494,7 @@ export default {
                         user_id: row.user_id,
                         product_id: row.product_id,
                         os_type: this.os_type_text[row.os_type] || "",
+                        router_pid: row.router_pid,
                         method: "uuid_del"
                     };
 
