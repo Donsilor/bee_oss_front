@@ -606,7 +606,7 @@ export default {
                 if (result.code === 0) {
                     obj.router = result.result.map(x => {
                         return {
-                            label: x.title,
+                            label: x.version,
                             value: `${x.router_pid}--${x.version}`,
                             product_id: x.product_id
                         };
