@@ -39,9 +39,19 @@
 					</el-form-item>
 				</el-col>
 			</el-row>
-			<el-form-item label="限制规则" prop="description">
-				<div>{{getRules(ruleFormDetail.rules)}}</div>
-			</el-form-item>
+			<el-row>
+				<el-col :span="12">
+					<el-form-item label="限制规则" prop="description">
+						<div>{{getRules(ruleFormDetail.rules)}}</div>
+					</el-form-item>
+				</el-col>
+				<el-col :span="12">
+					<el-form-item label="升级数量限制" prop="description">
+						<div>{{ruleFormDetail.upgrade_limit}}</div>
+					</el-form-item>
+				</el-col>
+			</el-row>
+			
 			<el-row>
 				<el-col :span="12">
 					<el-form-item label="固件大小" prop="size">
