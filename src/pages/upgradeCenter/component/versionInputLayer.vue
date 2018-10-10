@@ -393,14 +393,16 @@ export default {
                 });
                 this.rulesImport["product_id"] = [{ required: true, message: "请输入子设备" }];
             }
-            this.$refs["importForm"].resetFields();
+            
             // if (this.os_type !== "ios" && !this.releasedFlag) {
             try {
+                this.$refs["importForm"].resetFields();
+                this.$refs["uploadFileImg"].clearFiles();
                 this.fileTipsIfShow = false;
                 this.$refs["uploadFile"].clearFiles();
             } catch (e) {}
             // }
-            this.$refs["uploadFileImg"].clearFiles();
+            
             let form = this.importForm;
             for (let attr in form) {
                 switch (attr) {
