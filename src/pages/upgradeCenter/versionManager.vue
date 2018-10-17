@@ -63,11 +63,11 @@
 						<el-button type="text" size="small" @click="openVersionEdit(scope.row)">编辑</el-button>
 						<el-button type="text" size="small" @click="startStopVerion(scope.row)">{{scope.row['status']?'禁用':'启用'}}</el-button>
 						<br>
-						<el-button type="text" size="small" @click="openPushLayer(scope.row)">推送</el-button>
+						<el-button type="text" size="small" @click="openPushLayer(scope.row)" v-if="scope.row.type!='8'">推送</el-button>
 						<el-button type="text" size="small" @click="getOperateLog(scope.row)">操作日志</el-button>
 						<el-button type="text" size="small" @click="rollBackVersion(scope.row)">回滚</el-button>
 						<el-button type="text" size="small" @click="deleteVersion(scope.row)">删除</el-button>
-						<el-button type="text" size="small" @click="deleteUUID(scope.row)">清空UUID</el-button>
+						<el-button type="text" size="small" @click="deleteUUID(scope.row)" v-if="scope.row.type!='8'">清空UUID</el-button>
 
 						<!-- <el-button type="text" size="small" @click="getVersionHistory(scope.row,1)">查看版本列表</el-button> -->
 					</template>
