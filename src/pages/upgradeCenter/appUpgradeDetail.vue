@@ -15,14 +15,16 @@
         label="版本号"
         prop="version"/>
       <el-table-column
+        :formatter="(row, col, val)=>formatValue('force', val)"
         label="强制升级"
         prop="force"/>
       <el-table-column
-        label="升级数量限制"
-        prop="upgrade_limit"/>
-      <el-table-column
+        :formatter="(row, col, val)=>formatValue('release_type', val)"
         label="发布类型"
         prop="release_type"/>
+      <el-table-column
+        label="升级数量限制"
+        prop="upgrade_limit"/>
       <el-table-column
         label="升级成功数"
         prop="current_upgrade_count"/>
@@ -36,16 +38,18 @@
         width="300px"
         label="操作">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            @click="view(scope.row)">查看</el-button>
+          <p style="margin-bottom: 5px;">
+            <el-button
+              size="mini"
+              @click="view(scope.row)">查看</el-button>
 
-          <el-button
-            size="mini"
-            @click="edit(scope.row)">编辑</el-button>
-          <el-button
-            size="mini"
-            @click="del(scope.row)">删除</el-button><br>
+            <el-button
+              size="mini"
+              @click="edit(scope.row)">编辑</el-button>
+            <el-button
+              size="mini"
+              @click="del(scope.row)">删除</el-button>
+          </p>
           <el-button
             size="mini"
             @click="setConf(scope.row)">升级设置</el-button>
@@ -66,6 +70,7 @@
         @current-change="onPageChange"/>
     </div>
 
+    <!-- 新增,编辑 -->
     <el-dialog
       :visible.sync="dialogVisible"
       :title="isEdit?'编辑':'新增'">
@@ -98,11 +103,6 @@
               v-model="form.description"
               placeholder=""/>
           </el-form-item>
-
-          <!-- </el-col>
-          <el-col :span="12"> -->
-
-          <!-- </el-col> -->
         </el-row>
 
         <el-form-item
@@ -161,6 +161,12 @@
         </el-form-item>
 
         <el-form-item
+          label="升级数量限制"
+          prop="upgrade_limit">
+          <el-input v-model="form.upgrade_limit"/>
+        </el-form-item>
+
+        <el-form-item
           label="版本状态"
           prop="status">
           <el-select
@@ -188,13 +194,124 @@
       </el-form>
     </el-dialog>
 
+    <!-- 升级设置 -->
     <el-dialog
       :visible.sync="pushBoxFlag"
-      title="推送升级">
-      <push-update
-        ref="pushUpdates"
-        @pushUpdateParent="pushUpdate"
-        @closePushBox="pushBoxFlag = false;"/>
+      title="升级设置">
+      <el-form
+        label-width="100px">
+
+        <el-form-item
+          label="升级类型"
+          prop="push_type">
+          <el-select
+            v-model="pushForm.release_type"
+            placeholder="选择类型">
+            <el-option
+              :value="0"
+              label="全量升级"/>
+            <el-option
+              :value="1"
+              label="白名单"/>
+            <el-option
+              :value="2"
+              label="黑名单"/>
+          </el-select>
+        </el-form-item>
+
+        <el-row v-if="pushForm.release_type">
+          <el-form-item
+            label="推送客户端"
+            prop="push_type">
+            <el-radio-group v-model="pushForm.terminal_type">
+              <el-radio :label="1">输入uuid</el-radio>
+              <el-radio :label="0">上传csv压缩包</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-row>
+        <el-form-item
+          v-if="pushForm.release_type && pushForm.terminal_type"
+          label="uuid_list"
+          prop="uuid_list">
+          <el-row :gutter="24">
+            <el-col
+              :span="17"
+              style="padding-left:0">
+              <el-input v-model="pushForm.uuid_list"/>
+            </el-col>
+          </el-row>
+          <el-row>
+            <span style="font-size: 12px; color: #999">可输入多个uuid，用逗号隔开</span>
+          </el-row>
+        </el-form-item>
+        <el-form-item
+          v-if="pushForm.release_type && !pushForm.terminal_type"
+          label="uuid_csv"
+          prop="uuid_csv">
+          <el-row :gutter="24">
+            <el-col
+              :span="17"
+              style="padding-left:0">
+              <el-upload
+                ref="uploadFile"
+                :action="uuid_upload"
+                :data="uploadObj"
+                :on-success="getUploadDataUUid"
+                :limit="1"
+                class="upload-demo">
+                <el-button
+                  size="small"
+                  type="primary">点击上传</el-button>
+              </el-upload>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            @click="pushUpdateForm('pushForm')">确定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <!-- 详情 -->
+    <el-dialog
+      :visible.sync="detailDialogVisible"
+      :title="'详情 - '+currentRow.title">
+      <el-row>
+        <el-col :span="12">
+          <p>版本号：{{ currentRow.version }}</p>
+          <p>APP_ID：{{ currentRow.app_id }}</p>
+          <p>描述：{{ currentRow.description }}</p>
+          <p>固件URL：{{ currentRow.download_url_object }}</p>
+          <p>固件MD5：{{ currentRow.download_file_md5 }}</p>
+          <p>固件大小：{{ currentRow.size }}</p>
+        </el-col>
+        <el-col :span="12">
+          <p>强制升级：{{ formatValue('force', currentRow.force) }}</p>
+          <p>升级类型：{{ formatValue('release_type', currentRow.release_type) }}</p>
+          <p>升级限制数量：{{ currentRow.upgrade_limit }}</p>
+          <p>升级成功数量：{{ currentRow.current_upgrade_count }}</p>
+          <p>状态：{{ formatValue('status', currentRow.status) }}</p>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">创建时间：{{ currentRow.created_at }}</el-col>
+        <el-col :span="12">更新时间：{{ currentRow.updated_at }}</el-col>
+      </el-row>
+      <el-row style="padding: 20px 0">
+        <el-table
+          :data="versionDeviceList.tableData"/>
+        <div class="page-line">
+          <el-pagination
+            :total="totalItem"
+            :page-size="5"
+            :current-page.sync="currentPage"
+            small
+            layout="prev, pager, next"
+            @current-change="pageChange"/>
+        </div>
+      </el-row>
     </el-dialog>
   </div>
 </template>
@@ -202,13 +319,11 @@
 <script>
 import API from '../../service/index'
 import uploadFile from "../../components/uploadFile.vue";
-import push_update from "./component/pushUpdateLayer.vue";
 import getCorsUrl from "../../lib/corsconfig";
 
 export default {
 	components: {
-		uploadFile,
-		"push-update": push_update,
+		uploadFile
 	},
   data() {
     return {
@@ -219,16 +334,24 @@ export default {
 	  form: {},
 	  isEdit: false,
 	  dialogVisible: false,
+	  detailDialogVisible: false,
 	  fileListObj: [],
 	  fileListImg: [],
 	  fileTipsIfShow: false,
 	  corsUrls: getCorsUrl() + "/oss_file_upload",
+	  uuid_upload: getCorsUrl() + "/uuid_upload",
 	  uploadObj: {
 		token: JSON.parse(localStorage.getItem("localData")).user.info.token
 	  },
 	  appInfo: JSON.parse(localStorage.getItem('CurrentAppVerInfo')),
 	  pushBoxFlag: false,
-	  pushDataObj: {}
+	  pushForm: {
+		 release_type: 0,
+		 terminal_type: 1,
+		 uuid_csv: '',
+		 uuid_list: ''
+	  },
+	  currentRow: {}
     }
   },
   mounted() {
@@ -290,53 +413,81 @@ export default {
 		 })
 	 },
 	 view(row) {
-
+		 this.currentRow = row
+		 this.detailDialogVisible = true
 	 },
 
-		getUploadDataImg(val) {
-			let data = val.result;
-			this.form.img_url_object = data.object;
-		},
-		getSuccessNews: function(val) {
-			if (val) {
-				this.form.download_url_object = val.download_url_object;
-				this.form.download_file_md5 = val.download_file_md5;
-				this.form.size = val.size;
-				if (this.form.download_url_object) {
-					this.fileTipsIfShow = false;
-				} else {
-					this.fileTipsIfShow = true;
-				}
+	getUploadDataImg(val) {
+		let data = val.result;
+		this.form.img_url_object = data.object;
+	},
+	getUploadDataUUid(val) {
+		this.pushForm.uuid_csv = val.result;
+	},
+	getSuccessNews: function(val) {
+		if (val) {
+			this.form.download_url_object = val.download_url_object;
+			this.form.download_file_md5 = val.download_file_md5;
+			this.form.size = val.size;
+			if (this.form.download_url_object) {
+				this.fileTipsIfShow = false;
+			} else {
+				this.fileTipsIfShow = true;
 			}
-		},
-		setConf(row) {
-			this.currentRow = row
-			this.pushBoxFlag = true
-			console.log(this.currentRow)
-		},
-		setStatus(row) {
-			API.setAppVerStatus({
-				version_id: row.version_id,
-				status: row.status === 1 ? 0 : 1
-			}).then(() => {
-				this.$message.success('操作成功')
-				this.getList()
-			})
-		},
-		pushUpdate(params) {
-			let retParams = {
-				version_id: this.currentRow.version_id,
-				uuid_list: params.uuid_list,
-				release_type: params.push_type === 1 ? (params.is_black ? 2 : 1) : params.push_type
+		}
+	},
+	setConf(row) {
+		this.currentRow = row
+		this.pushBoxFlag = true
+	},
+	setStatus(row) {
+		API.setAppVerStatus({
+			version_id: row.version_id,
+			status: row.status === 1 ? 0 : 1
+		}).then(() => {
+			this.$message.success('操作成功')
+			this.getList()
+		})
+	},
+	pushUpdateForm() {
+		let retParams = {
+			version_id: this.currentRow.version_id,
+			release_type: this.pushForm.release_type
+		}
+		if(this.pushForm.release_type){
+			if(this.pushForm.terminal_type === 1){
+				retParams.uuid_list = this.pushForm.uuid_list.split(',')
+			}else if(this.pushForm.terminal_type === 0){
+				retParams.uuid_list = this.pushForm.uuid_csv
 			}
-            API.setAppVerUuids(retParams).then(result => {
-                if (result.code === 0) {
-                    this.$message.success("推送成功");
-                    this.pushBoxFlag = false;
-                    this.getVersionList(1);
-                }
-            });
-        },
+		}
+		API.setAppVerUuids(retParams).then(() => {
+			this.$message.success("设置成功");
+			this.pushBoxFlag = false;
+		});
+	},
+	formatValue(key, val) {
+		if(key == 'force'){
+			return {
+				0: '否',
+				1: '是'
+			}[val]
+		}
+		if(key == 'release_type'){
+			return {
+				0: '全量升级',
+				1: '白名单',
+				2: '黑名单'
+			}[val]
+		}
+		if(key == 'status'){
+			return {
+				0: '禁用',
+				1: '启用'
+			}[val]
+		}
+		return ''
+	}
   }
 }
 </script>
