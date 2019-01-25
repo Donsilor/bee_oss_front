@@ -299,7 +299,7 @@
         <el-col :span="12">创建时间：{{ currentRow.created_at }}</el-col>
         <el-col :span="12">更新时间：{{ currentRow.updated_at }}</el-col>
       </el-row>
-      <el-row style="padding: 20px 0">
+      <!-- <el-row style="padding: 20px 0">
         <el-table
           :data="versionDeviceList.tableData"/>
         <div class="page-line">
@@ -311,7 +311,7 @@
             layout="prev, pager, next"
             @current-change="pageChange"/>
         </div>
-      </el-row>
+      </el-row> -->
     </el-dialog>
   </div>
 </template>
