@@ -2,7 +2,9 @@
   <div class="page-content config-page">
     <el-row>
       <el-col :span="24">
-        <el-button @click="addApp">新增应用</el-button>
+        <el-button
+          type="primary"
+          @click="addApp">新增应用</el-button>
       </el-col>
     </el-row>
 
@@ -21,7 +23,8 @@
         label="版本信息"
         prop="title"/>
       <el-table-column
-        label="强制升级"
+        :formatter="(row, col, val)=>formatValue('force', val)"
+		label="强制升级"
         prop="force"/>
       <el-table-column
         label="发布时间"
@@ -61,7 +64,9 @@
           <el-input v-model="form.app_name"/>
         </el-form-item>
         <el-form-item label="终端类型">
-          <el-select v-model="form.os_type">
+          <el-select
+            v-model="form.os_type"
+            :disabled="isEdit">
             <el-option
               :value="1"
               label="android"/>
@@ -83,6 +88,7 @@
 
 <script>
 import API from '../../service/index'
+import {formatValue} from './util.js'
 export default {
   data() {
     return {
@@ -156,7 +162,8 @@ export default {
 				 this.getList()
 			 })
 		 })
-	  }
+	  },
+	  formatValue
   }
 }
 </script>

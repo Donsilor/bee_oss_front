@@ -3,7 +3,9 @@
     <el-row>
       <el-col :span="24">
         <el-button @click="back">返回</el-button>
-        <el-button @click="addAppVer">录入版本</el-button>
+        <el-button
+          type="primary"
+          @click="addAppVer">录入版本</el-button>
 
     </el-col></el-row>
 
@@ -92,6 +94,7 @@
             prop="version">
             <el-input
               v-model="form.version"
+              :disabled="isEdit"
               placeholder=""/>
           </el-form-item>
 
@@ -320,6 +323,7 @@
 import API from '../../service/index'
 import uploadFile from "../../components/uploadFile.vue";
 import getCorsUrl from "../../lib/corsconfig";
+import {formatValue} from './util.js'
 
 export default {
 	components: {
@@ -439,6 +443,10 @@ export default {
 	setConf(row) {
 		this.currentRow = row
 		this.pushBoxFlag = true
+		this.pushForm.release_type = row.release_type
+		// API.getAppVerUuids({version_id: row.version_id}).then(res => {
+		// 	 this.pushForm.uuid_list = res.data.result;
+		// })
 	},
 	setStatus(row) {
 		API.setAppVerStatus({
@@ -466,28 +474,7 @@ export default {
 			this.pushBoxFlag = false;
 		});
 	},
-	formatValue(key, val) {
-		if(key == 'force'){
-			return {
-				0: '否',
-				1: '是'
-			}[val]
-		}
-		if(key == 'release_type'){
-			return {
-				0: '全量升级',
-				1: '白名单',
-				2: '黑名单'
-			}[val]
-		}
-		if(key == 'status'){
-			return {
-				0: '禁用',
-				1: '启用'
-			}[val]
-		}
-		return ''
-	}
+	formatValue
   }
 }
 </script>
