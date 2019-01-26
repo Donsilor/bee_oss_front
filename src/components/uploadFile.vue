@@ -1,28 +1,55 @@
 <template>
-	<div :class="className">
-		<div class="chooseFileButton">
-			<span class="buttonText">上传文件</span>
-			<input type="file" value="" id="file" ref="fileGet" v-on:change="fileUpLoad">
-		</div>
-		<div class="successObj" v-if="isNotUpload && fileList.length">
-			<p class="objText">{{fileList[0].name}}</p>
-		</div>
+  <div :class="className">
+    <div class="chooseFileButton">
+      <el-button
+        class="buttonText"
+        size="small"
+        type="primary">点击上传</el-button>
+      <input
+        id="file"
+        ref="fileGet"
+        type="file"
+        value=""
+        @change="fileUpLoad">
+    </div>
+    <div
+      v-if="isNotUpload && fileList.length"
+      class="successObj">
+      <p class="objText">{{ fileList[0].name }}</p>
+    </div>
 
-		<div class="successObj" v-if="success">
-			<p class="objText" v-if="back_file_name">{{back_file_name}}</p>
-			<P class="closeImg" @click="cutFile"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAARtJREFUOBGtk0sSwUAQhnsoVarYOI9g7wocQxjFkvK+hSuwyY7kBLaOYa35kwxjIjMUvZjMo/8v048h+qdJOatJOep8y4QGWugKifjSvhJvB8PR6lMYfKEhurShKWIIw+Op7rUqROx7jWY1Co8B9vOsL8dL+Aoh1ov5dAO/GIRJFB6CT2AJ5JpAZlMfWtgDhIULlgfJgGwwGwQ6geGd6UJmwUTZcHRdLghOCoZ5nFgtJ9jTLS2/vvWcC8HWHz09jWTrB+gTZu7hJvd2i1yt8VI1BUpCSvvkHo6rmtBlQCovZk5csBdQHkTd1AZ7gFwQFywG4RUz8cYMR4nNr36zhtc8462m5a/uCyS6C0ufmLDlfNKHplwu7cyzn9Y3Uj+/+/tFAJkAAAAASUVORK5CYII=" />
-			</P>
-		</div>
+    <div
+      v-if="success"
+      class="successObj">
+      <p
+        v-if="back_file_name"
+        class="objText">{{ back_file_name }}</p>
+      <P
+        class="closeImg"
+        @click="cutFile"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAARtJREFUOBGtk0sSwUAQhnsoVarYOI9g7wocQxjFkvK+hSuwyY7kBLaOYa35kwxjIjMUvZjMo/8v048h+qdJOatJOep8y4QGWugKifjSvhJvB8PR6lMYfKEhurShKWIIw+Op7rUqROx7jWY1Co8B9vOsL8dL+Aoh1ov5dAO/GIRJFB6CT2AJ5JpAZlMfWtgDhIULlgfJgGwwGwQ6geGd6UJmwUTZcHRdLghOCoZ5nFgtJ9jTLS2/vvWcC8HWHz09jWTrB+gTZu7hJvd2i1yt8VI1BUpCSvvkHo6rmtBlQCovZk5csBdQHkTd1AZ7gFwQFywG4RUz8cYMR4nNr36zhtc8462m5a/uCyS6C0ufmLDlfNKHplwu7cyzn9Y3Uj+/+/tFAJkAAAAASUVORK5CYII=" >
+      </P>
+    </div>
 
-		<div class="hidingPath" v-if="!success && (showStatus || showAgainButton)">
-			<div class="progressBar" v-if="showStatus">
-				<span v-if="status ===0">切片进度:{{percent+"%"}} </span>
-				<span v-else>上传进度:{{percent+"%"}} </span>
-				<progress max=100 :value="percent" :data-file_file_md5="percent" ref="progress"></progress>
-			</div>
-			<div v-if="showAgainButton" class="submitButton" @click="submitFile" ref="submit">重新上传</div>
-		</div>
-	</div>
+    <div
+      v-if="!success && (showStatus || showAgainButton)"
+      class="hidingPath">
+      <div
+        v-if="showStatus"
+        class="progressBar">
+        <span v-if="status ===0">切片进度:{{ percent+"%" }} </span>
+        <span v-else>上传进度:{{ percent+"%" }} </span>
+        <progress
+          ref="progress"
+          :value="percent"
+          :data-file_file_md5="percent"
+          max="100/"/></progress></div>
+      <div
+        v-if="showAgainButton"
+        ref="submit"
+        class="submitButton"
+        @click="submitFile">重新上传</div>
+    </div>
+  </div>
 
 </template>
 <script>
@@ -55,8 +82,8 @@ export default {
             back_file_name: "" //上传成功后返回的文件名
         };
     },
-    mounted() {},
     watch: {},
+    mounted() {},
     methods: {
         clearFiles() {
             this.isNotUpload = true;
@@ -349,20 +376,8 @@ export default {
 .chooseFileButton {
     width: 100px;
     height: 45px;
-    color: #fff;
-    background-color: #a0cfff;
-    border-radius: 10px;
-    text-align: center;
-    line-height: 55px;
     position: relative;
-    font-size: 16px;
     margin-bottom: 10px;
-    .buttonText {
-        display: block;
-        width: 100%;
-        height: 100%;
-        line-height: 45px;
-    }
 }
 #file {
     display: block;

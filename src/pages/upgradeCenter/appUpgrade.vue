@@ -24,7 +24,7 @@
         prop="title"/>
       <el-table-column
         :formatter="(row, col, val)=>formatValue('force', val)"
-		label="强制升级"
+        label="强制升级"
         prop="force"/>
       <el-table-column
         label="发布时间"
@@ -49,7 +49,7 @@
     <div class="page-line">
       <el-pagination
         :total="total"
-        :page-size="10"
+        :page-size="limit"
         :current-page.sync="currentPage"
         small
         layout="prev, pager, next"
@@ -58,12 +58,21 @@
 
     <el-dialog
       :title="isEdit?'编辑':'新增'"
-      :visible.sync="dialogVisible">
-      <el-form label-width="100px">
-        <el-form-item label="应用名称">
+      :visible.sync="dialogVisible"
+      @close="onClose">
+      <el-form
+        ref="ruleForm"
+        :model="form"
+        :rules="rules"
+        label-width="100px">
+        <el-form-item
+          label="应用名称"
+          prop="app_name">
           <el-input v-model="form.app_name"/>
         </el-form-item>
-        <el-form-item label="终端类型">
+        <el-form-item
+          label="终端类型"
+          prop="os_type">
           <el-select
             v-model="form.os_type"
             :disabled="isEdit">
@@ -99,6 +108,14 @@ export default {
 	  form: {
 		  app_name: '',
 		  os_type: 1
+	  },
+	  rules: {
+		  app_name: [
+			  {required: true, message: '请输入应用名称', trigger: 'blur' }
+		  ],
+		  os_type: [
+			  {required: true}
+		  ]
 	  },
 	  isEdit: false,
 	  dialogVisible: false
@@ -138,10 +155,14 @@ export default {
 		  this.getList()
 	  },
 	  saveApp() {
-		  API.saveApp(this.form).then(res => {
-			  this.dialogVisible = false
-			  this.$message.success('保存成功')
-			  this.getList()
+		  this.$refs.ruleForm.validate(valid => {
+			  if(valid){
+				  API.saveApp(this.form).then(res => {
+					this.dialogVisible = false
+					this.$message.success('保存成功')
+					this.getList()
+				})
+			  }
 		  })
 	  },
 	  view(row) {
@@ -162,6 +183,9 @@ export default {
 				 this.getList()
 			 })
 		 })
+	  },
+	  onClose() {
+		  this.$refs.ruleForm.clearValidate()
 	  },
 	  formatValue
   }

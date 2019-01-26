@@ -65,7 +65,7 @@
     <div class="page-line">
       <el-pagination
         :total="total"
-        :page-size="10"
+        :page-size="limit"
         :current-page.sync="currentPage"
         small
         layout="prev, pager, next"
@@ -75,9 +75,13 @@
     <!-- 新增,编辑 -->
     <el-dialog
       :visible.sync="dialogVisible"
-      :title="isEdit?'编辑':'新增'">
+      :title="isEdit?'编辑':'新增'"
+      @close="onClose">
       <el-form
-        label-width="100px">
+        ref="ruleForm"
+        :model="form"
+        :rules="rules"
+        label-width="150px">
 
         <el-row>
           <!-- <el-col :span="12"> -->
@@ -126,9 +130,6 @@
             :file-list="fileListObj"
             class="newButtonStyle"
             @uploadSuccess="getSuccessNews"/>
-          <span
-            v-show="fileTipsIfShow"
-            class="fileObjectTips">请先上传文件</span>
         </el-form-item>
 
         <el-form-item
@@ -341,7 +342,6 @@ export default {
 	  detailDialogVisible: false,
 	  fileListObj: [],
 	  fileListImg: [],
-	  fileTipsIfShow: false,
 	  corsUrls: getCorsUrl() + "/oss_file_upload",
 	  uuid_upload: getCorsUrl() + "/uuid_upload",
 	  uploadObj: {
@@ -355,7 +355,24 @@ export default {
 		 uuid_csv: '',
 		 uuid_list: ''
 	  },
-	  currentRow: {}
+	  currentRow: {},
+	  rules: {
+		  title: [
+			  {required: true, message: '请输入标题', trigger: 'blur'}
+		  ],
+		  version: [
+			  {required: true, message: '请输入版本号', trigger: 'blur'}
+		  ],
+		  download_url_object: [
+			  {required: true, message: '请上传固件包', trigger: 'blur'}
+		  ],
+		  force: [
+			  {required: true, message: '请选择是否强制升级', trigger: 'blur'}
+		  ]
+	  },
+	  pushFormRules: {
+
+	  }
     }
   },
   mounted() {
@@ -366,13 +383,15 @@ export default {
 		  this.$router.go(-1)
 	  },
 	  getList() {
-		  API.getAppVerList({
-		  page: this.currentPage,
-		  app_id: this.appInfo.app_id
-      }).then(res => {
-        this.currentPage = res.data.result.current_page
-        this.list = res.data.result.data
-      })
+		API.getAppVerList({
+			page: this.currentPage,
+			limit: this.limit,
+			app_id: this.appInfo.app_id
+		}).then(res => {
+			this.total = res.data.result.total
+			this.currentPage = res.data.result.current_page
+			this.list = res.data.result.data
+		})
 	  },
 	  addAppVer() {
 		  this.isEdit = false
@@ -380,21 +399,31 @@ export default {
 		  this.form = {}
 		  this.fileListImg = []
 		  this.fileListObj = []
+		  try{
+		 	this.$refs.uploadFile.clearFiles()
+		  }catch(e){
+
+		  }
 	  },
 	  onPageChange(page) {
 		  this.currentPage = page
 		  this.getList()
 	  },
 	  saveAppVer() {
-		  let params = Object.assign({},this.form, {
-			  app_id: this.appInfo.app_id,
-			  user_id: ""
+		  this.$refs.ruleForm.validate(valid => {
+			  if(valid){
+				  let params = Object.assign({},this.form, {
+					app_id: this.appInfo.app_id,
+					user_id: ""
+				})
+				API.saveAppVer(params).then(res => {
+					this.dialogVisible = false
+					this.$message.success('保存成功')
+					this.getList()
+				})
+			  }
 		  })
-		  API.saveAppVer(params).then(res => {
-			  this.dialogVisible = false
-			  this.$message.success('保存成功')
-			  this.getList()
-		  })
+
 	  },
 	  edit(row) {
 		  this.isEdit = true
@@ -424,6 +453,7 @@ export default {
 	getUploadDataImg(val) {
 		let data = val.result;
 		this.form.img_url_object = data.object;
+		this.$refs.ruleForm.validateField('img_url_object')
 	},
 	getUploadDataUUid(val) {
 		this.pushForm.uuid_csv = val.result;
@@ -433,11 +463,7 @@ export default {
 			this.form.download_url_object = val.download_url_object;
 			this.form.download_file_md5 = val.download_file_md5;
 			this.form.size = val.size;
-			if (this.form.download_url_object) {
-				this.fileTipsIfShow = false;
-			} else {
-				this.fileTipsIfShow = true;
-			}
+			this.$refs.ruleForm.validateField('download_url_object')
 		}
 	},
 	setConf(row) {
@@ -473,6 +499,9 @@ export default {
 			this.$message.success("设置成功");
 			this.pushBoxFlag = false;
 		});
+	},
+	onClose() {
+		this.$refs.ruleForm.clearValidate()
 	},
 	formatValue
   }
