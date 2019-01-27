@@ -374,10 +374,8 @@ export default {
     background-color: #f4f4f8;
 }
 .chooseFileButton {
-    width: 100px;
-    height: 45px;
+    width: 90px;
     position: relative;
-    margin-bottom: 10px;
 }
 #file {
     display: block;

@@ -104,7 +104,7 @@
 
 
           <el-form-item
-            label="概略描述"
+            label="升级描述"
             prop="description">
             <el-input
               v-model="form.description"
@@ -305,15 +305,15 @@
       </el-row>
       <!-- <el-row style="padding: 20px 0">
         <el-table
-          :data="versionDeviceList.tableData"/>
+          :data="uuidList"/>
         <div class="page-line">
           <el-pagination
-            :total="totalItem"
+            :total="uuids_total"
             :page-size="5"
-            :current-page.sync="currentPage"
+            :current-page.sync="uuids_current_page"
             small
             layout="prev, pager, next"
-            @current-change="pageChange"/>
+            @current-change="on_uuids_page_change"/>
         </div>
       </el-row> -->
     </el-dialog>
@@ -363,11 +363,20 @@ export default {
 		  version: [
 			  {required: true, message: '请输入版本号', trigger: 'blur'}
 		  ],
+		  description: [
+			  {required: true, message: '请输入升级描述', trigger: 'blur'}
+		  ],
 		  download_url_object: [
-			  {required: true, message: '请上传固件包', trigger: 'blur'}
+			  {required: true, message: '请上传固件包或appstore链接', trigger: 'blur'}
+		  ],
+		  img_url_object: [
+			  {required: true, message: '请上传图片', trigger: 'blur'}
 		  ],
 		  force: [
 			  {required: true, message: '请选择是否强制升级', trigger: 'blur'}
+		  ],
+		  status: [
+			  {required: true, message: '请选择版本状态', trigger: 'blur'}
 		  ]
 	  },
 	  pushFormRules: {
