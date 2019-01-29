@@ -348,7 +348,7 @@ export default {
 	  corsUrls: getCorsUrl() + "/oss_file_upload",
 	  uuid_upload: getCorsUrl() + "/uuid_upload",
 	  uploadObj: {
-		token: localStorage.getItem("token")
+		token: ''
 	  },
 	  appInfo: JSON.parse(localStorage.getItem('CurrentAppVerInfo')),
 	  pushBoxFlag: false,
@@ -391,6 +391,9 @@ export default {
     }
   },
   mounted() {
+	  try{
+	  	this.uploadObj.token = JSON.parse(localStorage.getItem("localData")).user.info.token
+	  }catch(e){}
 	  this.getList()
   },
   methods: {
