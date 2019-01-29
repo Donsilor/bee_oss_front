@@ -303,19 +303,22 @@
         <el-col :span="12">创建时间：{{ currentRow.created_at }}</el-col>
         <el-col :span="12">更新时间：{{ currentRow.updated_at }}</el-col>
       </el-row>
-      <!-- <el-row style="padding: 20px 0">
+      <el-row style="padding: 20px 0">
         <el-table
-          :data="uuidList"/>
+          :data="uuidList">
+          <el-table-column
+            prop="app_uuid"
+            label="app_uuid"/></el-table>
         <div class="page-line">
           <el-pagination
-            :total="uuids_total"
+            :total="uuidsTotal"
             :page-size="5"
-            :current-page.sync="uuids_current_page"
+            :current-page.sync="uuidsCurrentPage"
             small
             layout="prev, pager, next"
-            @current-change="on_uuids_page_change"/>
+            @current-change="onUuidPageChange"/>
         </div>
-      </el-row> -->
+      </el-row>
     </el-dialog>
   </div>
 </template>
@@ -345,7 +348,7 @@ export default {
 	  corsUrls: getCorsUrl() + "/oss_file_upload",
 	  uuid_upload: getCorsUrl() + "/uuid_upload",
 	  uploadObj: {
-		token: JSON.parse(localStorage.getItem("localData")).user.info.token
+		token: localStorage.getItem("token")
 	  },
 	  appInfo: JSON.parse(localStorage.getItem('CurrentAppVerInfo')),
 	  pushBoxFlag: false,
@@ -381,7 +384,10 @@ export default {
 	  },
 	  pushFormRules: {
 
-	  }
+	  },
+	  uuidList: [],
+	  uuidsTotal: 0,
+	  uuidsCurrentPage: 1
     }
   },
   mounted() {
@@ -457,6 +463,7 @@ export default {
 	 view(row) {
 		 this.currentRow = row
 		 this.detailDialogVisible = true
+		 this.getUuidList()
 	 },
 
 	getUploadDataImg(val) {
@@ -479,6 +486,8 @@ export default {
 		this.currentRow = row
 		this.pushBoxFlag = true
 		this.pushForm.release_type = row.release_type
+		this.pushForm.uuid_list = ''
+		this.pushForm.uuid_csv = ''
 		// API.getAppVerUuids({version_id: row.version_id}).then(res => {
 		// 	 this.pushForm.uuid_list = res.data.result;
 		// })
@@ -512,8 +521,22 @@ export default {
 	onClose() {
 		this.$refs.ruleForm.clearValidate()
 	},
-	formatValue
+	formatValue,
+	getUuidList() {
+		API.getAppVerUuids({
+			page: this.uuidsCurrentPage,
+			limit: 5,
+			version_id: this.currentRow.version_id
+		}).then(res => {
+			this.uuidsTotal = res.data.result.total
+			this.uuidsCurrentPage = res.data.result.current_page
+			this.uuidList = res.data.result.data
+		})
+	},
+	onUuidPageChange(page) {
+		this.uuidsCurrentPage = page
+		this.getUuidList()
+	}
   }
 }
 </script>
-
