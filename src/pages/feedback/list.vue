@@ -1,68 +1,101 @@
 <template>
-	<div class="page-content config-page">
-		<div>
-			<el-row style="line-height:36px;">
-				<el-col :span="6">
-					<el-checkbox v-model="unRead" @change="seeUnRead">只看未读</el-checkbox>
-				</el-col>
-				<el-col :span="12">
-					<span>日期：</span>
-					<el-date-picker v-model="date" @change="changeDate" type="daterange" placeholder="请选择日期范围"></el-date-picker>
-				</el-col>
-				<el-col :span="6">
-					<el-input placeholder="搜索关键字" icon="search" v-model="searchKey" @change="search" :on-icon-click="search">
-					</el-input>
-				</el-col>
-			</el-row>
-		</div>
-		<div style="margin: 20px 0">
-			<el-table :data="tableData" style="width: 100%" :show-header="false">
-				<el-table-column width="80">
-					<template slot-scope="scope">
-						<img v-if="scope.row.img_list" :src="scope.row.img_list.split(',')[0]" alt="" class="avatar">
-						<img v-else src="../../images/device.png" alt="" class="avatar">
-					</template>
-				</el-table-column>
-				<el-table-column>
-					<template slot-scope="scope">
-						<span class="summary point" @click="goDetail(scope.row.id)" :class="{unRead: scope.row.is_read === 0}">{{ scope.row.title }}</span>
-					</template>
-				</el-table-column>
-				<el-table-column width="150">
-					<template slot-scope="scope">
-						<span style="margin-right: 15px">{{ scope.row.os_type}}</span>
-						<span>{{ scope.row.app_version}}</span>
-					</template>
-				</el-table-column>
-				<el-table-column width="180">
-					<template slot-scope="scope">
-						<ul>
-							<li>{{ scope.row.terminal_type }}</li>
-							<li>{{ scope.row.client_version }}</li>
-						</ul>
-					</template>
-				</el-table-column>
-				<el-table-column width="150" :show-overflow-tooltip="true">
-					<template slot-scope="scope">
-						<ul>
-							<li>用户名</li>
-							<li>{{ scope.row.uname }}</li>
-						</ul>
-					</template>
-				</el-table-column>
-				<el-table-column width="180">
-					<template slot-scope="scope">
-						<span>{{ scope.row.created_at }}</span>
-					</template>
-				</el-table-column>
-			</el-table>
-		</div>
-		<div class="block" style="overflow: hidden">
-			<span class="info gray">共{{ total }}条记录，其中{{ unReadTotal }}条未读</span>
-			<el-pagination class="pull-right" @current-change="handleCurrentChange" :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next, jumper" :total="total">
-			</el-pagination>
-		</div>
-	</div>
+  <div class="page-content config-page">
+    <div>
+      <el-row style="line-height:36px;">
+        <el-col :span="6">
+          <el-checkbox
+            v-model="unRead"
+            @change="seeUnRead">只看未读</el-checkbox>
+        </el-col>
+        <el-col :span="12">
+          <span>日期：</span>
+          <el-date-picker
+            v-model="date"
+            type="daterange"
+            placeholder="请选择日期范围"
+            @change="changeDate"/>
+        </el-col>
+        <el-col :span="6">
+          <el-input
+            v-model="searchKey"
+            :on-icon-click="search"
+            placeholder="搜索关键字"
+            icon="search"
+            @change="search"/>
+        </el-col>
+      </el-row>
+    </div>
+    <div style="margin: 20px 0">
+      <el-table
+        :data="tableData"
+        :show-header="false"
+        style="width: 100%">
+        <el-table-column width="80">
+          <template slot-scope="scope">
+            <img
+              v-if="scope.row.img_list"
+              :src="scope.row.img_list.split(',')[0]"
+              alt=""
+              class="avatar">
+            <img
+              v-else
+              src="../../images/device.png"
+              alt=""
+              class="avatar">
+          </template>
+        </el-table-column>
+        <el-table-column>
+          <template slot-scope="scope">
+            <span
+              :class="{unRead: scope.row.is_read === 0}"
+              class="summary point"
+              @click="goDetail(scope.row.id)">{{ scope.row.content }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column width="150">
+          <template slot-scope="scope">
+            <span style="margin-right: 15px">{{ scope.row.os_type }}</span>
+            <span>{{ scope.row.app_version }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column width="180">
+          <template slot-scope="scope">
+            <ul>
+              <li>{{ scope.row.terminal_type }}</li>
+              <li>{{ scope.row.client_version }}</li>
+            </ul>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :show-overflow-tooltip="true"
+          width="150">
+          <template slot-scope="scope">
+            <ul>
+              <li>用户名</li>
+              <li>{{ scope.row.uname }}</li>
+            </ul>
+          </template>
+        </el-table-column>
+        <el-table-column width="180">
+          <template slot-scope="scope">
+            <span>{{ scope.row.created_at }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <div
+      class="block"
+      style="overflow: hidden">
+      <span class="info gray">共{{ total }}条记录，其中{{ unReadTotal }}条未读</span>
+      <el-pagination
+        :current-page="currentPage"
+        :page-size="pageSize"
+        :total="total"
+        class="pull-right"
+        layout="prev, pager, next, jumper"
+        @current-change="handleCurrentChange"/>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -87,6 +120,7 @@ export default {
     computed: {
         ...mapGetters("feedback", ["queryOptionStorage", "needQueryOptionStorage"])
     },
+    watch: {},
     created() {
         if (this.needQueryOptionStorage) {
             // 如果是从详情页跳回列表页的 needQueryOptionStorage是true 拿出存在store的筛选条件queryOptionStorage
@@ -110,7 +144,6 @@ export default {
         }
         this.getFeedbackList();
     },
-    watch: {},
     methods: {
         goDetail(id) {
             // 去详情页 store存入筛选条件queryOptionStorage
