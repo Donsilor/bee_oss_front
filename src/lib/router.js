@@ -22,6 +22,11 @@ const routes = [
         path: 'versionManager',
         name: 'versionManager',
         component: Pages.VersionManager
+	  },
+	  {
+        path: 'versionManager/:id',
+        name: 'versionManagerDetail',
+        component: Pages.VersionManagerDetail
       },
       {
         path: 'VersionManagerForSC',

@@ -14,148 +14,64 @@ export default {
 		});
 	},
 	searchUserMsg(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(OPS_API.searchUserMsg, params)
-				.then(response => {
-					resolve(response.data.result);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(OPS_API.searchUserMsg, params)
+		.then(response => response.data.result)
 	},
 	searchLogOut(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(OPS_API.searchLogOut, params)
-				.then(response => {
-					resolve(response.data.result);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(OPS_API.searchLogOut, params)
+		.then(response => response.data.result)
 	},
 	operaList(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(OPS_API.operaList, params)
-				.then(response => {
-					resolve(response.data.result);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(OPS_API.operaList, params)
+		.then(response => response.data.result)
 	},
 	rootLogs(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(OPS_API.rootLogs, params)
-				.then(response => {
-					resolve(response.data.result);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(OPS_API.rootLogs, params)
+		.then(response => response.data.result)
 	},
 	errLogs(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(OPS_API.errLogs, params)
-				.then(response => {
-					resolve(response.data.result);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(OPS_API.errLogs, params)
+		.then(response => response.data.result)
 	},
 	throughDatas(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(THROUGH_API.throughDatas, params)
-				.then(response => {
-					resolve(response.data.result);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(THROUGH_API.throughDatas, params)
+		.then(response => response.data.result)
 	},
 	deviceTotals(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(THROUGH_API.deviceTotal, params)
-				.then(response => {
-					resolve(response.data.result);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(THROUGH_API.deviceTotal, params)
+		.then(response => response.data.result)
 	},
 	onlineLogs(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(THROUGH_API.onlineLog, params)
-				.then(response => {
-					resolve(response.data.result);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(THROUGH_API.onlineLog, params)
+		.then(response => response.data.result)
 	},
 	logRegDatas(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(THROUGH_API.logRegData, params)
-				.then(response => {
-					resolve(response.data.result);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(THROUGH_API.logRegData, params)
+		.then(response => response.data.result)
 	},
 	qpsDatas(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(THROUGH_API.qpsData, params)
-				.then(response => {
-					resolve(response.data.result);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(THROUGH_API.qpsData, params)
+		.then(response => response.data.result)
 	},
 	getwarnDatas(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(THROUGH_API.warnData, params)
-				.then(response => {
-					resolve(response.data.result);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(THROUGH_API.warnData, params)
+		.then(response => response.data.result)
 	},
 	getwarnDataList(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(THROUGH_API.warnDataSearch, params)
-				.then(response => {
-					resolve(response.data.result);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(THROUGH_API.warnDataSearch, params)
+		.then(response => response.data.result)
 	},
 	// getTerminalList({commit, state}, params) {
 	//     return new Promise((resolve, reject) => {
@@ -168,75 +84,33 @@ export default {
 	// },
 	// 路由管理
 	routerList(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(OPS_API.routerList, params)
-				.then(response => {
-					resolve(response.data.result);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(OPS_API.routerList, params)
+		.then(response => response.data.result)
 	},
 	addRouter(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(OPS_API.addRouter, params)
-				.then(response => {
-					resolve(response.data.result);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(OPS_API.addRouter, params)
+		.then(response => response.data.result)
 	},
 	editRouter(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(OPS_API.editRouter, params)
-				.then(response => {
-					resolve(response.data);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(OPS_API.editRouter, params)
+		.then(response => response.data)
 	},
 	deleteRouter(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(OPS_API.deleteRouter, params)
-				.then(response => {
-					resolve(response.data);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(OPS_API.deleteRouter, params)
+		.then(response => response.data)
 	},
 	importRouter(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(OPS_API.importRouter, params)
-				.then(response => {
-					resolve(response.data.result);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(OPS_API.importRouter, params)
+		.then(response => response.data.result)
 	},
 	getFamilyList(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(OPS_API.familyList, params)
-				.then(response => {
-					resolve(response.data);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(OPS_API.familyList, params)
+		.then(response => response.data)
 	}
 };

@@ -3,64 +3,29 @@ import { CMDATA_API } from "~/lib/api";
 
 export default {
 	CmDataList(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(CMDATA_API.CmDataList, params)
-				.then(response => {
-					resolve(response.data);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(CMDATA_API.CmDataList, params)
+		.then(response => response.data )
 	},
 	CmDataAdd(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(CMDATA_API.CmDataAdd, params)
-				.then(response => {
-					resolve(response.data);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return  axios
+		.post(CMDATA_API.CmDataAdd, params)
+		.then(response => response.data)
 	},
 	CmDataEdit(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(CMDATA_API.CmDataEdit, params)
-				.then(response => {
-					resolve(response.data);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(CMDATA_API.CmDataEdit, params)
+		.then(response => response.data)
 	},
 	CmDataDel(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(CMDATA_API.CmDataDel, params)
-				.then(response => {
-					resolve(response.data);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(CMDATA_API.CmDataDel, params)
+		.then(response => response.data)
 	},
 	ModuleList(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(CMDATA_API.ModuleList, params)
-				.then(response => {
-					resolve(response.data);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(CMDATA_API.ModuleList, params)
+		.then(response => response.data)
 	},
 	// output(params) {
 	//     return new Promise((resolve, reject) => {
@@ -75,15 +40,8 @@ export default {
 	//     });
 	// },
 	input(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(CMDATA_API.input, params)
-				.then(response => {
-					resolve(response.data);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(CMDATA_API.input, params)
+		.then(response => response.data)
 	}
 };

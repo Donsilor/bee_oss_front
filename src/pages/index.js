@@ -6,6 +6,7 @@ import Cloud from './cloud.vue'
 import CMDB from './cmdb.vue'
 import upgrade from './upgradeCenter.vue'
 import VersionManager from './upgradeCenter/versionManager.vue'
+import VersionManagerDetail from './upgradeCenter/versionManagerDetail.vue'
 import PushManager from './upgradeCenter/pushManager.vue'
 import OPS from './userData/ops.vue'
 import MUSER from './userData/muser/index.vue'
@@ -52,6 +53,7 @@ export {
   OPS,
   MUSER,
   VersionManager,
+  VersionManagerDetail,
   PushManager,
   Facility,
   Cloud,

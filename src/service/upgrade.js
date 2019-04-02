@@ -5,90 +5,41 @@ const API_UPGRADE = '/api.php'
 
 export default {
   pubilcCorsAction(params) {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(API_UPGRADE, params)
-        .then(response => {
-          resolve(response.data)
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    })
+    return axios
+	.post(API_UPGRADE, params)
+	.then(response => response.data)
   },
   getVersions(params) {
-    return new Promise((resolve, reject) => {
-      params.method = 'list_versions'
-      axios
-        .post(API_UPGRADE, params)
-        .then(response => {
-          resolve(response.data)
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    })
+	params.method = 'list_versions'
+    return axios
+	.post(API_UPGRADE, params)
+	.then(response => response.data)
   },
   getVersionsForSC(params) {
-    return new Promise((resolve, reject) => {
-      params.method = 'list_versions_community'
-      axios
-        .post(API_UPGRADE, params)
-        .then(response => {
-          resolve(response.data)
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    })
+	params.method = 'list_versions_community'
+    return axios
+	.post(API_UPGRADE, params)
+	.then(response => response.data)
   },
   selectVersion(params) {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(UPGRADE_API.selectVersion, params)
-        .then(response => {
-          resolve(response.data)
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    })
+    return axios
+	.post(UPGRADE_API.selectVersion, params)
+	.then(response => response.data)
   },
   pushUpdateAction(params) {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(UPGRADE_API.pushUpdateAction, params)
-        .then(response => {
-          resolve(response.data)
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    })
+    return axios
+	.post(UPGRADE_API.pushUpdateAction, params)
+	.then(response => response.data)
   },
   getPushHistoryList(params) {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(UPGRADE_API.getPushHistoryList, params)
-        .then(response => {
-          resolve(response.data)
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    })
+    return axios
+	.post(UPGRADE_API.getPushHistoryList, params)
+	.then(response => response.data)
   },
   getChoseList(params) {
-    return new Promise((resolve, reject) => {
-      axios
-        .post(API_UPGRADE, params)
-        .then(response => {
-          resolve(response.data)
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    })
+    return axios
+	.post(API_UPGRADE, params)
+	.then(response => response.data)
   },
   // 融合版APP 升级
   getAppList(params) {

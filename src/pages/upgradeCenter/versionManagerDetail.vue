@@ -1,151 +1,118 @@
 <template>
   <div class="page-content config-page">
-
-    <!--固定版本列表-->
+    <!--顶部tab-->
+    <el-row
+      type="flex"
+      justify="space-between">
+      <el-col :span="12">
+        <el-button-group>
+          <el-button @click="openImportLayer">录入版本
+            <i class="el-icon-caret-bottom"/>
+          </el-button>
+          <el-button @click="openFilterFormLayer">匹配搜索
+            <i class="el-icon-caret-bottom"/>
+          </el-button>
+          <!--<el-button @click="openPushLayer">推送升级 <i class="el-icon-caret-bottom"></i></el-button>-->
+        </el-button-group>
+      </el-col>
+    </el-row>
+    <div
+      class="p-r"
+      style="height: 40px; padding-top: 10px">
+      <!--<div style="line-height: 40px; height: 40px">{{secondTitle}}</div>-->
+      <el-button
+        type="text"
+        class="btn-back"
+        @click="backToList">返回上一级</el-button>
+      <template v-if="inputType === 3 || inputType === 8">
+        <el-tabs
+          v-model="activeName"
+          @tab-click="deviceRouterChange">
+          <el-tab-pane
+            label="子设备列表"
+            name="devices"/>
+          <el-tab-pane
+            label="子路由列表"
+            name="routers"/>
+        </el-tabs>
+      </template>
+    </div>
+    <!--子设备列表-->
     <el-table
-      v-show="firstTableShow"
-      :data="versionsFirst.tableData"
-      style="width: 100%">
+      :data="versionList.tableData"
+      style="width: 100%; border-top:0 none">
       <el-table-column
-        v-for="item in versionsFirst.tableColumn"
+        v-for="item in versionList.tableColumn"
         :key="item.prop"
         :prop="item.prop"
         :label="item.label"
         :width="'auto'">
         <template slot-scope="scope">
-          <div v-if="item.prop === 'type'">{{ getTypeText(scope.row.type, scope.row.os_type)+getPidName(scope.row) }}</div>
-          <div v-else-if="item.prop === 'status'">{{ getStatusText(scope.row.status) }}</div>
-          <div v-else-if="item.prop === 'force'">{{ getForceText(scope.row.force) }}</div>
+          <div v-if="item.prop == 'type'">{{ getTypeText(scope.row.type, scope.row.os_type) }}</div>
+          <div v-else-if="item.prop == 'status'">{{ getStatusText(scope.row.status) }}</div>
+          <div v-else-if="item.prop == 'force'">{{ getForceText(scope.row.force) }}</div>
+          <div v-else-if="item.prop == 'is_pre_release'">{{ getPreReleaseText(scope.row.is_pre_release) }}</div>
+          <div v-else-if="item.prop == 'gray'">{{ getGrayStatus[scope.row.gray] }}</div>
           <div v-else-if="item.prop === 'release_time'">{{ formatTime(scope.row['release_time']) }}</div>
           <div v-else>{{ scope.row[item.prop] }}</div>
         </template>
       </el-table-column>
       <el-table-column
-        width="180"
+        :width="250"
         label="操作">
         <template slot-scope="scope">
           <el-button
             type="text"
             size="small"
-            @click="gotoHistoryList(scope.row,1)">查看版本列表</el-button>
+            @click="getVersionDetail(scope.row)">查看</el-button>
+          <el-button
+            type="text"
+            size="small"
+            @click="openSupportLayer(scope.row)">支持版本</el-button>
+          <el-button
+            type="text"
+            size="small"
+            @click="openVersionEdit(scope.row)">编辑</el-button>
+          <el-button
+            type="text"
+            size="small"
+            @click="startStopVerion(scope.row)">{{ scope.row['status']?'禁用':'启用' }}</el-button>
+          <br>
+          <el-button
+            v-if="scope.row.type!='8'"
+            type="text"
+            size="small"
+            @click="openPushLayer(scope.row)">推送</el-button>
+          <el-button
+            type="text"
+            size="small"
+            @click="getOperateLog(scope.row)">操作日志</el-button>
+          <el-button
+            type="text"
+            size="small"
+            @click="rollBackVersion(scope.row)">回滚</el-button>
+          <el-button
+            type="text"
+            size="small"
+            @click="deleteVersion(scope.row)">删除</el-button>
+          <el-button
+            v-if="scope.row.type!='8'"
+            type="text"
+            size="small"
+            @click="deleteUUID(scope.row)">清空UUID</el-button>
+
+            <!-- <el-button type="text" size="small" @click="getVersionHistory(scope.row,1)">查看版本列表</el-button> -->
         </template>
       </el-table-column>
     </el-table>
-    <div v-if="!firstTableShow">
-      <!--顶部tab-->
-      <el-row
-        type="flex"
-        justify="space-between">
-        <el-col :span="12">
-          <el-button-group>
-            <el-button @click="openImportLayer">录入版本
-              <i class="el-icon-caret-bottom"/>
-            </el-button>
-            <el-button @click="openFilterFormLayer">匹配搜索
-              <i class="el-icon-caret-bottom"/>
-            </el-button>
-            <!--<el-button @click="openPushLayer">推送升级 <i class="el-icon-caret-bottom"></i></el-button>-->
-          </el-button-group>
-        </el-col>
-      </el-row>
-      <div
-        class="p-r"
-        style="height: 40px; padding-top: 10px">
-        <!--<div style="line-height: 40px; height: 40px">{{secondTitle}}</div>-->
-        <el-button
-          type="text"
-          class="btn-back"
-          @click="backToList">返回上一级</el-button>
-        <template v-if="inputType === 3 || inputType === 8">
-          <el-tabs
-            v-model="activeName"
-            @tab-click="deviceRouterChange">
-            <el-tab-pane
-              label="子设备列表"
-              name="devices"/>
-            <el-tab-pane
-              label="子路由列表"
-              name="routers"/>
-          </el-tabs>
-        </template>
-      </div>
-      <!--子设备列表-->
-      <el-table
-        :data="versionList.tableData"
-        style="width: 100%; border-top:0 none">
-        <el-table-column
-          v-for="item in versionList.tableColumn"
-          :key="item.prop"
-          :prop="item.prop"
-          :label="item.label"
-          :width="'auto'">
-          <template slot-scope="scope">
-            <div v-if="item.prop == 'type'">{{ getTypeText(scope.row.type, scope.row.os_type) }}</div>
-            <div v-else-if="item.prop == 'status'">{{ getStatusText(scope.row.status) }}</div>
-            <div v-else-if="item.prop == 'force'">{{ getForceText(scope.row.force) }}</div>
-            <div v-else-if="item.prop == 'is_pre_release'">{{ getPreReleaseText(scope.row.is_pre_release) }}</div>
-            <div v-else-if="item.prop == 'gray'">{{ getGrayStatus[scope.row.gray] }}</div>
-            <div v-else-if="item.prop === 'release_time'">{{ formatTime(scope.row['release_time']) }}</div>
-            <div v-else>{{ scope.row[item.prop] }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :width="250"
-          label="操作">
-          <template slot-scope="scope">
-            <el-button
-              type="text"
-              size="small"
-              @click="getVersionDetail(scope.row)">查看</el-button>
-            <el-button
-              type="text"
-              size="small"
-              @click="openSupportLayer(scope.row)">支持版本</el-button>
-            <el-button
-              type="text"
-              size="small"
-              @click="openVersionEdit(scope.row)">编辑</el-button>
-            <el-button
-              type="text"
-              size="small"
-              @click="startStopVerion(scope.row)">{{ scope.row['status']?'禁用':'启用' }}</el-button>
-            <br>
-            <el-button
-              v-if="scope.row.type!='8'"
-              type="text"
-              size="small"
-              @click="openPushLayer(scope.row)">推送</el-button>
-            <el-button
-              type="text"
-              size="small"
-              @click="getOperateLog(scope.row)">操作日志</el-button>
-            <el-button
-              type="text"
-              size="small"
-              @click="rollBackVersion(scope.row)">回滚</el-button>
-            <el-button
-              type="text"
-              size="small"
-              @click="deleteVersion(scope.row)">删除</el-button>
-            <el-button
-              v-if="scope.row.type!='8'"
-              type="text"
-              size="small"
-              @click="deleteUUID(scope.row)">清空UUID</el-button>
-
-              <!-- <el-button type="text" size="small" @click="getVersionHistory(scope.row,1)">查看版本列表</el-button> -->
-          </template>
-        </el-table-column>
-      </el-table>
-      <div class="page-line">
-        <el-pagination
-          :total="totalItem_two"
-          :page-size="10"
-          :current-page.sync="currentPage_two"
-          small
-          layout="prev, pager, next"
-          @current-change="pageChange_two"/>
-      </div>
+    <div class="page-line">
+      <el-pagination
+        :total="totalItem_two"
+        :page-size="10"
+        :current-page.sync="currentPage_two"
+        small
+        layout="prev, pager, next"
+        @current-change="pageChange_two"/>
     </div>
     <!--版本匹配搜索-->
     <el-dialog
@@ -258,8 +225,6 @@ import { mapGetters, mapActions } from "vuex";
 import "../../lib/util.js";
 import version_first_json from "../../json/versions.json";
 import versions_children_json from "../../json/versionsChildren.json";
-import versions_device_h5_json from "../../json/versionsDeviceH5.json";
-import push_history_json from "../../json/pushHistory.json";
 import operation_log_json from "../../json/operateLogList.json";
 import version_input from "./component/versionInputLayer.vue";
 import push_update from "./component/pushUpdateLayer.vue";
@@ -431,7 +396,13 @@ export default {
         this.$store.dispatch({
             type: namespace.INITPRODUCT
         });
-        this.getVersionList(1);
+
+		try{
+			const dataObj = JSON.parse(sessionStorage.getItem('CurrentAppInfo'))
+			this.getVersionHistory(dataObj);
+		}catch(e){
+			this.$router.push({path:'/main/versionManager'})
+		}
     },
     methods: {
         openSupportLayer(dataObj) {
@@ -701,7 +672,7 @@ export default {
                 if (result.code === 0) {
                     this.$message.success(this.addEditFlag ? "录入成功" : "编辑成功");
                     this.importBoxFlag = false;
-                    this.getVersionList(1);
+                    this.pageChange_two(1);
                 }
             });
         },
@@ -711,14 +682,14 @@ export default {
                 if (result.code === 0) {
                     this.$message.success("推送成功");
                     this.pushBoxFlag = false;
-                    this.getVersionList(1);
+                    this.pageChange_two(1);
                 }
             });
         },
-        pageChange() {
-            this.getVersionList(this.currentPage);
-        },
-        pageChange_two() {
+        pageChange_two(page) {
+			if(page){
+				this.currentPage_two = page
+			}
             this.getVersionHistory(this.currentDataObj, this.currentPage_two);
         },
         // 版本匹配搜索
@@ -734,56 +705,6 @@ export default {
                     obj.totalItem = currentData.page.total;
                 }
             });
-        },
-        // 获取所有版本列表
-        getVersionList(page) {
-            // this.filterParams.token = this.token
-            this.listParams.page = page;
-            this.versionsFirst = Object.assign({}, version_first_json);
-            const obj = this;
-            API.getVersions(obj.listParams).then(result => {
-                if (result.code === 0) {
-                    obj.firstTableShow = true;
-                    obj.$nextTick(() => {
-                        let currentData = result.result;
-                        if (!(obj.versionsFirst.tableData && obj.versionsFirst.tableData.length)) {
-                            obj.setFirstVersionList(currentData);
-                        }
-                    });
-                }
-            });
-        },
-        // 渲染首列数据
-        setFirstVersionList(dataObj) {
-            this.versionsFirst.tableData = [];
-            let deviceType = {
-                router: 2,
-                h5: 5,
-                device: 3
-            };
-            for (let attr in dataObj) {
-                if (attr === "android" || attr === "android_pad" || attr === "android_system" || attr === "ios") {
-                    this.versionsFirst.tableData.push(dataObj[attr]);
-                } else {
-                    if (JSON.stringify(dataObj[attr]) === "{}") {
-                        this.versionsFirst.tableData.push({ type: deviceType[attr] });
-                    } else {
-                        for (let innerAttr in dataObj[attr]) {
-                            this.versionsFirst.tableData.push(dataObj[attr][innerAttr]);
-                        }
-                        //路由pid列表
-                        if (attr === "router") {
-                            this.routerPidList = [];
-                            for (let routerAttr in dataObj[attr]) {
-                                this.routerPidList.push({
-                                    label: routerAttr,
-                                    value: routerAttr
-                                });
-                            }
-                        }
-                    }
-                }
-            }
         },
         getTypeText(type, os_type) {
             let text = "";
@@ -869,8 +790,16 @@ export default {
             API.getVersions(param).then(result => {
                 if (result.code === 0) {
                     let currentData = result.result;
-                    obj.firstTableShow = false;
-                    versions_children_json.tableData = currentData.items;
+					obj.firstTableShow = false;
+					if(Array.isArray(currentData.items)){
+						versions_children_json.tableData = currentData.items;
+					}else{
+						let temp = []
+						Object.keys(currentData.items).forEach(k => {
+							temp.push(currentData.items[k])
+						})
+						versions_children_json.tableData = temp
+					}
                     obj.versionList = Object.assign({}, versions_children_json);
                     obj.totalItem_two = currentData.page.total;
                 }
@@ -882,15 +811,6 @@ export default {
             this.os_type = dataObj.os_type || "";
             this.secondTitle = this.getVersionTitle(dataObj);
             this.getVersionHistoryList(page, dataObj);
-        },
-        gotoHistoryList(dataObj, page) {
-			sessionStorage.setItem('CurrentAppInfo', JSON.stringify(dataObj))
-			this.$router.push({path:`/main/versionManager/${dataObj.id}`})
-            // if (dataObj.type === 3) {
-            //     this.activeName = "devices";
-            // }
-            // this.currentPage_two = page;
-            // this.getVersionHistory(dataObj, page);
         },
         getVersionTitle(dataObj) {
             let title = "";
@@ -906,7 +826,7 @@ export default {
             return title;
         },
         backToList() {
-            this.getVersionList(1);
+			this.$router.go(-1)
         },
         getPidName(dataObj) {
             if (dataObj.type === 3 || dataObj.type === 8 || dataObj.type === 5) {

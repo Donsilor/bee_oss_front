@@ -3,63 +3,28 @@ import { FAMILY_API } from "~/lib/api";
 
 export default {
 	imgList(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(FAMILY_API.imgList, params)
-				.then(response => {
-					resolve(response.data);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(FAMILY_API.imgList, params)
+		.then(response => response.data)
 	},
 	addImgs(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(FAMILY_API.addImgs, params)
-				.then(response => {
-					resolve(response.data);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(FAMILY_API.addImgs, params)
+		.then(response => response.data)
 	},
 	deleteImgs(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(FAMILY_API.deleteImgs, params)
-				.then(response => {
-					resolve(response.data);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(FAMILY_API.deleteImgs, params)
+		.then(response => response.data)
 	},
 	editImgs(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(FAMILY_API.editImgs, params)
-				.then(response => {
-					resolve(response.data);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(FAMILY_API.editImgs, params)
+		.then(response => response.data)
 	},
 	sortImgs(params) {
-		return new Promise((resolve, reject) => {
-			axios
-				.post(FAMILY_API.sortImgs, params)
-				.then(response => {
-					resolve(response.data);
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
+		return axios
+		.post(FAMILY_API.sortImgs, params)
+		.then(response => response.data)
 	}
 };
