@@ -463,7 +463,8 @@ export default {
         },
         openVersionEdit(dataObj) {
             this.initBrandIDOptions();
-            this.filterPopoverFlag = false;
+			this.filterPopoverFlag = false;
+			console.log('openVersionEdit: ',dataObj)
             let cur_os_type = "";
             if (dataObj.os_type) {
                 switch (dataObj.os_type) {
@@ -475,6 +476,12 @@ export default {
                         break;
                     case 6:
                         cur_os_type = "android_pad";
+						break;
+					case 11:
+                        cur_os_type = "route_app";
+						break;
+					case 12:
+                        cur_os_type = "video_app";
                         break;
                     default:
                         cur_os_type = dataObj.os_type;

@@ -137,8 +137,8 @@ export default {
                 3: "子设备",
                 5: "H5",
                 7: "Android system",
-				11: "route_app_version",
-				12: "video_app_version"
+				11: "route_app",
+				12: "video_app"
             },
             getGrayStatus: {
                 0: "无",
@@ -193,7 +193,7 @@ export default {
                 device: 3
             };
             for (let attr in dataObj) {
-                if (attr === "android" || attr === "android_pad" || attr === "android_system" || attr === "ios" || attr === 'video_app_version' || attr === 'route_app_version') {
+                if (attr === "android" || attr === "android_pad" || attr === "android_system" || attr === "ios" || attr === 'video_app' || attr === 'route_app') {
                     this.versionsFirst.tableData.push(dataObj[attr]);
                 } else {
                     if (JSON.stringify(dataObj[attr]) === "{}") {
