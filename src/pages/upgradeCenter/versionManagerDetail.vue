@@ -155,6 +155,7 @@
         :brand-idoptions="brandIDOptions"
         :type-idoptions="typeIDOptions"
         :product-idoptions="productIDOptions"
+        :os-version-list="osVersionList"
         :input-type="inputType"
         :product="product"
         :type="type"
@@ -223,7 +224,6 @@ os_type:
 import * as namespace from "../../store/namespace";
 import { mapGetters, mapActions } from "vuex";
 import "../../lib/util.js";
-import version_first_json from "../../json/versions.json";
 import versions_children_json from "../../json/versionsChildren.json";
 import operation_log_json from "../../json/operateLogList.json";
 import version_input from "./component/versionInputLayer.vue";
@@ -312,7 +312,8 @@ export default {
                     value: "1",
                     lable: "选项一"
                 }
-            ],
+			],
+			osVersionList: [],
             versionsFirst: {},
             versionList: {},
             inputType: "",
@@ -384,15 +385,6 @@ export default {
         }
     },
     mounted() {
-        //        this.$store.dispatch({
-        //            type: namespace.INITAPPIOS
-        //        })
-        //        this.$store.dispatch({
-        //            type: namespace.INITAPPANDROID
-        //        })
-        //		this.$store.dispatch({
-        //			type: namespace.INITROUTER
-        //		})
         this.$store.dispatch({
             type: namespace.INITPRODUCT
         });
@@ -403,8 +395,51 @@ export default {
 		}catch(e){
 			this.$router.push({path:'/main/versionManager'})
 		}
+
+		this.getVersionList()
+		this.getOsVersionList()
     },
     methods: {
+		getOsVersionList() {
+			API.pubilcCorsAction({
+				"method": "released_versions",
+    			"type": 7
+			}).then(res => {
+				console.log('released_versions: ',res)
+				this.osVersionList = res.result.map(item => {
+					return {
+						label: item.version,
+						value: item.version
+					}
+				})
+            });
+		},
+		// 获取所有版本列表
+        getVersionList() {
+            const obj = this;
+            API.getVersions(obj.listParams).then(result => {
+                if (result.code === 0) {
+                    obj.$nextTick(() => {
+                        let currentData = result.result;
+                        obj.setFirstVersionList(currentData);
+                    });
+                }
+            });
+        },
+        // 渲染首列数据
+        setFirstVersionList(dataObj) {
+            for (let attr in dataObj) {
+                if (attr === "router") {
+					this.routerPidList = [];
+					for (let routerAttr in dataObj[attr]) {
+						this.routerPidList.push({
+							label: routerAttr,
+							value: routerAttr
+						});
+					}
+				}
+            }
+        },
         openSupportLayer(dataObj) {
             this.supportLayer = true;
             this.$nextTick(() => {

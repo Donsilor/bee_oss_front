@@ -1,129 +1,304 @@
 <template>
-	<el-form :model="importForm" ref="importForm" :rules="rulesImport" label-width="8em">
-		<el-form-item label="版本title" prop="title">
-			<el-input type="text" v-model="importForm.title" />
-		</el-form-item>
-		<el-form-item label="路由器pid" prop="router_pid" v-if="inputType === 2 && addEditFlag">
-			<el-input type="text" v-model="importForm.router_pid" />
-		</el-form-item>
-		<el-form-item label="product_id" prop="product_id" v-if="(inputType === 3 || inputType === 8 || inputType === 5)  && addEditFlag">
-			<el-input type="text" v-model="importForm.product_id" />
-		</el-form-item>
-		<el-form-item label="os_type" prop="os_type" v-if="inputType === 5">
-			<el-select v-model="importForm.os_type" placeholder="os_type">
-				<el-option v-for="item in os_type_list" :key="item.value" :label="item.label" :value="item.value">
-				</el-option>
-			</el-select>
-		</el-form-item>
-        <!-- H5，社区不显示 -->
-        <el-form-item label="升级数量限制" v-if="inputType !== 5 && inputType !== 9 && inputType !== 10">
-            <el-input v-model="importForm.upgrade_limit"></el-input>
-            0或者空为不限制
-        </el-form-item>
-		<el-form-item label="是否限制规则" v-if="inputType!==9 && !releasedFlag">
-			<el-radio-group v-model="importForm.selectRule" @change="ruleChange">
-				<el-radio :label="1">是</el-radio>
-				<el-radio :label="0">否</el-radio>
-			</el-radio-group>
-		</el-form-item>
-		<!-- 路由器版本 -->
-		<el-form-item label="路由pid" v-if="(inputType !== 2 && inputType!==9 && inputType!==10)  && !releasedFlag && importForm.selectRule">
-			<el-select style="width: 100%;" v-model="importForm.router_pid" placeholder="路由pid" @change="routerPidChange">
-				<el-option v-for="item in routerPidList" :key="item.value" :label="item.label" :value="item.value">
-				</el-option>
-			</el-select>
-		</el-form-item>
-		<!-- 路由器版本 -->
-		<el-form-item label="支持路由" prop="routersList" v-if="(inputType !== 2 && inputType!==9 && inputType!==10)  && !releasedFlag && importForm.selectRule">
-			<el-select style="width: 100%;" multiple v-model="importForm.routersList" placeholder="路由">
-				<el-option v-for="item in router" :key="item.value" :label="item.label" :value="item.value">
-				</el-option>
-			</el-select>
-		</el-form-item>
-		<!-- 路由器升级，依赖子设备版本 -->
-		<el-form-item label="子设备" v-if="inputType === 2 && !releasedFlag && importForm.selectRule">
-			<el-row>
-				<el-col :span="8">
-					<el-select v-model="importForm.brand_id" placeholder="品牌">
-						<el-option v-for="item in brandIDOptionsChild" :key="item.value" :label="item.label" :value="item.value">
-						</el-option>
-					</el-select>
-				</el-col>
-				<el-col :span="7" :offset="1">
-					<el-select v-model="importForm.type_id" placeholder="类型">
-						<el-option v-for="item in typeIDOptionsChild" :key="item.value" :label="item.label" :value="item.value">
-						</el-option>
-					</el-select>
-				</el-col>
-				<el-col :span="7" :offset="1">
-					<el-select v-model="product_id" @change="productChange" placeholder="产品">
-						<el-option v-for="item in productIDOptionsChild" :key="item.value" :label="item.label" :value="item.value">
-						</el-option>
-					</el-select>
-				</el-col>
-			</el-row>
-		</el-form-item>
-		<!-- 路由器升级，依赖子设备版本 -->
-		<el-form-item label="支持版本" prop="productsList" v-if="inputType === 2  && !releasedFlag && importForm.selectRule">
-			<el-select style="width: 100%;" multiple v-model="importForm.productsList" placeholder="子设备">
-				<el-option v-for="item in subsetProduct" :key="item.value" :label="item.label" :value="item.value">
-				</el-option>
-			</el-select>
-		</el-form-item>
-		<!-- 社区插件升级，依赖app版本 -->
-		<el-form-item label="支持APP版本" prop="appList" v-show="inputType === 10  && !releasedFlag && importForm.selectRule">
-			<el-select style="width: 100%;" multiple v-model="importForm.appList" placeholder="APP版本">
-				<el-option v-for="item in appVersionList" :key="item.value" :label="item.label" :value="item.value">
-				</el-option>
-			</el-select>
-		</el-form-item>
+  <el-form
+    ref="importForm"
+    :model="importForm"
+    :rules="rulesImport"
+    label-width="8em">
+    <el-form-item
+      label="版本title"
+      prop="title">
+      <el-input
+        v-model="importForm.title"
+        type="text" />
+    </el-form-item>
+    <el-form-item
+      v-if="inputType === 2 && addEditFlag"
+      label="路由器pid"
+      prop="router_pid">
+      <el-input
+        v-model="importForm.router_pid"
+        type="text" />
+    </el-form-item>
+    <el-form-item
+      v-if="(inputType === 3 || inputType === 8 || inputType === 5) && addEditFlag"
+      label="product_id"
+      prop="product_id">
+      <el-input
+        v-model="importForm.product_id"
+        type="text" />
+    </el-form-item>
+    <el-form-item
+      v-if="inputType === 5"
+      label="os_type"
+      prop="os_type">
+      <el-select
+        v-model="importForm.os_type"
+        placeholder="os_type">
+        <el-option
+          v-for="item in os_type_list"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"/>
+      </el-select>
+    </el-form-item>
+    <!-- H5，社区不显示 -->
+    <el-form-item
+      v-if="inputType !== 5 && inputType !== 9 && inputType !== 10"
+      label="升级数量限制">
+      <el-input v-model="importForm.upgrade_limit"/>
+      0或者空为不限制
+    </el-form-item>
+    <el-form-item
+      v-if="inputType!==9 && !releasedFlag"
+      label="是否限制规则">
+      <el-radio-group
+        v-model="importForm.selectRule"
+        @change="ruleChange">
+        <el-radio :label="1">是</el-radio>
+        <el-radio :label="0">否</el-radio>
+      </el-radio-group>
+    </el-form-item>
+    <!-- 路由器版本 -->
+    <el-form-item
+      v-if="(inputType !== 2 && inputType!==9 && inputType!==10 && inputType!==12) && !releasedFlag && importForm.selectRule"
+      label="路由pid">
+      <el-select
+        v-model="importForm.router_pid"
+        style="width: 100%;"
+        placeholder="路由pid"
+        @change="routerPidChange">
+        <el-option
+          v-for="item in routerPidList"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"/>
+      </el-select>
+    </el-form-item>
+    <!-- 路由器版本 -->
+    <el-form-item
+      v-if="(inputType !== 2 && inputType!==9 && inputType!==10 && inputType!==12) && !releasedFlag && importForm.selectRule"
+      label="支持路由"
+      prop="routersList">
+      <el-select
+        v-model="importForm.routersList"
+        style="width: 100%;"
+        multiple
+        placeholder="路由">
+        <el-option
+          v-for="item in router"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"/>
+      </el-select>
+    </el-form-item>
+    <!-- 语音版APP，系统版本 -->
+    <el-form-item
+      v-if="inputType === 12 && !releasedFlag && importForm.selectRule"
+      label="系统版本"
+    >
+      <el-select
+        v-model="importForm.rule"
+        style="width: 100%;"
+        multiple
+        placeholder="系统版本">
+        <el-option
+          v-for="item in osVersionList"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"/>
+      </el-select>
+    </el-form-item>
+    <!-- 路由器升级，依赖子设备版本 -->
+    <el-form-item
+      v-if="inputType === 2 && !releasedFlag && importForm.selectRule"
+      label="子设备">
+      <el-row>
+        <el-col :span="8">
+          <el-select
+            v-model="importForm.brand_id"
+            placeholder="品牌">
+            <el-option
+              v-for="item in brandIDOptionsChild"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"/>
+          </el-select>
+        </el-col>
+        <el-col
+          :span="7"
+          :offset="1">
+          <el-select
+            v-model="importForm.type_id"
+            placeholder="类型">
+            <el-option
+              v-for="item in typeIDOptionsChild"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"/>
+          </el-select>
+        </el-col>
+        <el-col
+          :span="7"
+          :offset="1">
+          <el-select
+            v-model="product_id"
+            placeholder="产品"
+            @change="productChange">
+            <el-option
+              v-for="item in productIDOptionsChild"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"/>
+          </el-select>
+        </el-col>
+      </el-row>
+    </el-form-item>
+    <!-- 路由器升级，依赖子设备版本 -->
+    <el-form-item
+      v-if="inputType === 2 && !releasedFlag && importForm.selectRule"
+      label="支持版本"
+      prop="productsList">
+      <el-select
+        v-model="importForm.productsList"
+        style="width: 100%;"
+        multiple
+        placeholder="子设备">
+        <el-option
+          v-for="item in subsetProduct"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"/>
+      </el-select>
+    </el-form-item>
+    <!-- 社区插件升级，依赖app版本 -->
+    <el-form-item
+      v-show="inputType === 10 && !releasedFlag && importForm.selectRule"
+      label="支持APP版本"
+      prop="appList">
+      <el-select
+        v-model="importForm.appList"
+        style="width: 100%;"
+        multiple
+        placeholder="APP版本">
+        <el-option
+          v-for="item in appVersionList"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"/>
+      </el-select>
+    </el-form-item>
 
-		<el-form-item label="版本号" prop="version" v-if="!releasedFlag">
-			<el-input type="text" v-model="importForm.version" :disabled="!addEditFlag" />
-		</el-form-item>
-		<el-form-item label="概要描述" prop="note">
-			<el-input type="text" v-model="importForm.note" />
-		</el-form-item>
-		<el-form-item label="详细事项" prop="description">
-			<el-input type="text" v-model="importForm.description" />
-		</el-form-item>
-		<el-form-item label="备注" prop="extra_note">
-			<el-input type="text" v-model="importForm.extra_note" />
-		</el-form-item>
-		<el-form-item label="appstore链接" prop="download_url_object" v-if="os_type === 'ios' && !releasedFlag">
-			<el-input type="text" v-model="importForm.download_url_object" />
-		</el-form-item>
-		<el-form-item label="上传固件包" prop="download_url_object" v-if="os_type !== 'ios' && !releasedFlag" class="is-required">
-			<!--<el-input type="text" v-model="importForm.download_url_object" />-->
-			<!-- <el-upload ref="uploadFile" class="upload-demo" :action="corsUrls" :data="uploadObj" :before-upload="beforeAvatarUpload" :on-success="getUploadData" :on-preview="handlePreview" :limit="1" :file-list="fileListObj" :on-remove="handleRemove">
+    <el-form-item
+      v-if="!releasedFlag"
+      label="版本号"
+      prop="version">
+      <el-input
+        v-model="importForm.version"
+        :disabled="!addEditFlag"
+        type="text" />
+    </el-form-item>
+    <el-form-item
+      label="概要描述"
+      prop="note">
+      <el-input
+        v-model="importForm.note"
+        type="text" />
+    </el-form-item>
+    <el-form-item
+      label="详细事项"
+      prop="description">
+      <el-input
+        v-model="importForm.description"
+        type="text" />
+    </el-form-item>
+    <el-form-item
+      label="备注"
+      prop="extra_note">
+      <el-input
+        v-model="importForm.extra_note"
+        type="text" />
+    </el-form-item>
+    <el-form-item
+      v-if="os_type === 'ios' && !releasedFlag"
+      label="appstore链接"
+      prop="download_url_object">
+      <el-input
+        v-model="importForm.download_url_object"
+        type="text" />
+    </el-form-item>
+    <el-form-item
+      v-if="os_type !== 'ios' && !releasedFlag"
+      label="上传固件包"
+      prop="download_url_object"
+      class="is-required">
+      <!--<el-input type="text" v-model="importForm.download_url_object" />-->
+      <!-- <el-upload ref="uploadFile" class="upload-demo" :action="corsUrls" :data="uploadObj" :before-upload="beforeAvatarUpload" :on-success="getUploadData" :on-preview="handlePreview" :limit="1" :file-list="fileListObj" :on-remove="handleRemove">
                 <el-button size="small" type="primary">点击上传</el-button>
              </el-upload> -->
-			<upload-file ref="uploadFile" class="newButtonStyle" :file-list="fileListObj" @uploadSuccess="getSuccessNews"></upload-file>
-			<span class="fileObjectTips" v-show="fileTipsIfShow">请先上传文件</span>
-		</el-form-item>
-		<el-form-item label="上传img图片" prop="img_url_object">
-			<el-upload ref="uploadFileImg" class="upload-demo" :action="corsUrls" :before-upload="beforeAvatarUploadImg" :on-success="getUploadDataImg" :data="uploadObj" :on-preview="handlePreviewImg" :limit="1" :file-list="fileListImg" :on-remove="handleRemoveImg">
-				<el-button size="small" type="primary">点击上传</el-button>
-			</el-upload>
-		</el-form-item>
-		<el-form-item label="是否强制升级" prop="force">
-			<el-select style="width: 100%;" v-model="importForm.force" placeholder="请选择">
-				<el-option label="否" :value="0"></el-option>
-				<el-option label="是" :value="1"></el-option>
-				<el-option label="不弹窗升级" :value="3"></el-option>
-			</el-select>
-		</el-form-item>
+      <upload-file
+        ref="uploadFile"
+        :file-list="fileListObj"
+        class="newButtonStyle"
+        @uploadSuccess="getSuccessNews"/>
+      <span
+        v-show="fileTipsIfShow"
+        class="fileObjectTips">请先上传文件</span>
+    </el-form-item>
+    <el-form-item
+      label="上传img图片"
+      prop="img_url_object">
+      <el-upload
+        ref="uploadFileImg"
+        :action="corsUrls"
+        :before-upload="beforeAvatarUploadImg"
+        :on-success="getUploadDataImg"
+        :data="uploadObj"
+        :on-preview="handlePreviewImg"
+        :limit="1"
+        :file-list="fileListImg"
+        :on-remove="handleRemoveImg"
+        class="upload-demo">
+        <el-button
+          size="small"
+          type="primary">点击上传</el-button>
+      </el-upload>
+    </el-form-item>
+    <el-form-item
+      label="是否强制升级"
+      prop="force">
+      <el-select
+        v-model="importForm.force"
+        style="width: 100%;"
+        placeholder="请选择">
+        <el-option
+          :value="0"
+          label="否"/>
+        <el-option
+          :value="1"
+          label="是"/>
+        <el-option
+          :value="3"
+          label="不弹窗升级"/>
+      </el-select>
+    </el-form-item>
 
-        <!-- iOS版本配置 -->
-        <el-form-item label="审核开关" v-if="os_type === 'ios'">
-            <el-switch v-model="importForm.audit_switch" :active-value="1" :inactive-value="0"></el-switch>
-        </el-form-item>
+    <!-- iOS版本配置 -->
+    <el-form-item
+      v-if="os_type === 'ios'"
+      label="审核开关">
+      <el-switch
+        v-model="importForm.audit_switch"
+        :active-value="1"
+        :inactive-value="0"/>
+    </el-form-item>
 
-		<el-form-item>
-			<el-button type="primary" @click="importSubmitForm('importForm')">确定</el-button>
-			<el-button @click="closeParentFlow">取消</el-button>
-		</el-form-item>
-	</el-form>
+    <el-form-item>
+      <el-button
+        type="primary"
+        @click="importSubmitForm('importForm')">确定</el-button>
+      <el-button @click="closeParentFlow">取消</el-button>
+    </el-form-item>
+  </el-form>
 </template>
 <script>
 import * as namespace from "../../../store/namespace";
@@ -147,7 +322,8 @@ export default {
         "editDataObj",
         "releasedFlag",
         "os_type",
-        "activeName"
+		"activeName",
+		"osVersionList"
     ],
     data() {
         return {
@@ -205,7 +381,8 @@ export default {
                 selectRule: 1,
                 os_type: "",
                 appList: [],
-                upgrade_limit: ""
+				upgrade_limit: "",
+				rule: []
             },
             rulesImport: {
                 router_pid: [{ required: true, message: "请输入路由器pid" }],
@@ -256,6 +433,7 @@ export default {
             fileTipsIfShow: false //文件未上传的提示：上传文件不能为空
         };
     },
+    computed: {},
     watch: {
         "importForm.brand_id"(curVal, oldVal) {
             this.importForm.type_id = "";
@@ -376,7 +554,9 @@ export default {
                         thisForm["routersList"].push(item.router_pid + "--" + item.rule);
                     });
                 }
-            }
+			}
+
+			thisForm.rule = thisForm.rule || []
 
             // 由于接口设计，要求编辑的时候带上详情的几个字段
             for (let attr in this.editData) {
@@ -393,7 +573,7 @@ export default {
                 });
                 this.rulesImport["product_id"] = [{ required: true, message: "请输入子设备" }];
             }
-            
+
             // if (this.os_type !== "ios" && !this.releasedFlag) {
             try {
                 this.$refs["importForm"].resetFields();
@@ -402,13 +582,14 @@ export default {
                 this.$refs["uploadFile"].clearFiles();
             } catch (e) {}
             // }
-            
+
             let form = this.importForm;
             for (let attr in form) {
                 switch (attr) {
                     case "routersList":
                     case "productsList":
-                    case "appList":
+					case "appList":
+					case "rule":
                         form[attr] = [];
                         break;
                     case "force":
@@ -526,8 +707,13 @@ export default {
                         delete params.os_type;
                     }
                     switch (currentType) {
-                        case 1:
-                            params.os_type = this.os_type;
+						case 1:
+						case 11:
+						case 12:
+							if(currentType == 12){
+								delete params.router_pid
+							}
+							params.os_type = this.os_type;
                             params.method = this.addEditFlag ? "create_app_version" : "update_app_version";
                             break;
                         case 2:
@@ -559,7 +745,8 @@ export default {
                             params.os_type = this.os_type;
                             params.method = this.addEditFlag
                                 ? "create_app_community_plugin_version"
-                                : "update_app_community_plugin_version";
+								: "update_app_community_plugin_version";
+							break;
                         default:
                             break;
                     }
@@ -657,7 +844,6 @@ export default {
             //            return isLt2M;
         }
     },
-    computed: {}
 };
 </script>
 <style lang="less">
