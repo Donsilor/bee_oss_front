@@ -392,7 +392,8 @@ export default {
                 2: "路由器",
                 3: "子设备",
                 5: "H5",
-                7: "Android system"
+                7: "Android system",
+                8: "video_app_version"
             },
             getGrayStatus: {
                 0: "无",
@@ -762,7 +763,7 @@ export default {
                 device: 3
             };
             for (let attr in dataObj) {
-                if (attr === "android" || attr === "android_pad" || attr === "android_system" || attr === "ios") {
+                if (attr === "android" || attr === "android_pad" || attr === "android_system" || attr === "ios" || attr === 'video_app_version' || attr === 'route_app_version') {
                     this.versionsFirst.tableData.push(dataObj[attr]);
                 } else {
                     if (JSON.stringify(dataObj[attr]) === "{}") {
@@ -792,6 +793,7 @@ export default {
             } else {
                 text = this.device_type_text[type];
             }
+            console.log('aaa==',type, text)
             return text;
         },
         getStatusTextPush(type) {
