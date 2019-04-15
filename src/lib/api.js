@@ -115,7 +115,7 @@ export const ControlAnalysisURL = API_MASTER + "analyzer/control";
 export const ActiveAnalysisURL = API_MASTER + "analyzer/active";
 
 // 路由分析
-export const RouterAnalysisURL = API_MASTER + "analyzer/router";
+export const RouterAnalysisURL = API_MASTER + "analyzer/router_interact";
 
 // 数据日报
 export const dailyDataURL = API_MASTER + "analyzer/data_daily";
