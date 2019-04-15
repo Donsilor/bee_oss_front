@@ -15,6 +15,12 @@ export default {
       type: String,
       default: ''
     },
+    result: {
+      type: Object,
+      default () {  
+        return {}
+      }
+    },
     width: {
       type: String,
       default: '100%'
@@ -30,11 +36,40 @@ export default {
   },
   data() {
     return {
-      chart: null
+      chart: null,
+      legendData: [],
+      xAxisData: [],
+      seriesData: []
+    }
+  },
+  watch: {
+    result () {
+      let obj = {}
+      for (let key in this.result) {
+        this.xAxisData.push(key)
+        this.result[key].forEach((element, index) => {
+          if (!obj[element.F_category_id_map]) {
+            obj[element.F_category_id_map] = []
+            obj[element.F_category_id_map].push(element.F_app)
+          } else {
+            obj[element.F_category_id_map].push(element.F_app)
+          }
+        })
+      }
+      for (let key in obj) {
+        this.legendData.push(key)
+        this.seriesData.push({
+          name: key,
+          type: 'line',
+          data: obj[key]
+        })
+      }
+      this.initChart()
+      console.log(this.result, 'this.result4444')
     }
   },
   mounted() {
-    this.initChart()
+    // 
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -68,7 +103,7 @@ export default {
           itemWidth: 14,
           itemHeight: 5,
           itemGap: 25,
-          data: ['pageA', 'pageB', 'pageC'],
+          data: this.legendData,
           left: 'center',
           textStyle: {
             fontSize: 12
@@ -84,24 +119,12 @@ export default {
         xAxis: [{
           type: 'category',
           boundaryGap: false,
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          data: this.xAxisData
         }],
         yAxis: [{
           type: 'value'
         }],
-        series: [{
-          name: 'pageA',
-          type: 'line',
-          data: [0, 52, 200, 334, 390, 330, 220]
-        }, {
-          name: 'pageB',
-          type: 'line',
-          data: [80, 52, 20, 304, 690, 1330, 20]
-        }, {
-          name: 'pageC',
-          type: 'line',
-          data: [30, 52, 150, 334, 630, 220, 120]
-        }]
+        series: this.seriesData
       })
     }
   }

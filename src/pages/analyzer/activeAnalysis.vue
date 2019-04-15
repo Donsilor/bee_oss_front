@@ -7,11 +7,11 @@
           <div class="data-list">
             <el-row :gutter="24">
 							<el-col :span="16">
-								<span>{{ equipmentAnalyzer.text }}</span>
+								<span>{{ DAUS.text }}</span>
 							</el-col>
 						</el-row>
-						<div>{{ equipmentAnalyzer.totalCount }}</div>
-						<div>截止到 {{ equipmentAnalyzer.lastDate }}</div>
+						<div>{{ DAUS.totalCount }}</div>
+						<div>截止到 {{ DAUS.lastDate }}</div>
           </div>
         </el-card>
       </el-col>
@@ -21,11 +21,11 @@
           <div class="data-list">
             <el-row :gutter="24">
 							<el-col :span="16">
-								<span>{{ userAnalyzer.text }}</span>
+								<span>{{ MAUS.text }}</span>
 							</el-col>
 						</el-row>
-						<div>{{ userAnalyzer.totalCount }}</div>
-						<div>截止到 {{ userAnalyzer.lastDate }}</div>
+						<div>{{ MAUS.totalCount }}</div>
+						<div>截止到 {{ MAUS.lastDate }}</div>
           </div>
         </el-card>
       </el-col>
@@ -35,11 +35,11 @@
           <div class="data-list">
             <el-row :gutter="24">
 							<el-col :span="16">
-								<span>{{ controlAnalyzer.text }}</span>
+								<span>{{ DAFS.text }}</span>
 							</el-col>
 						</el-row>
-						<div>{{ controlAnalyzer.totalCount }}</div>
-						<div>截止到 {{ controlAnalyzer.lastDate }}</div>
+						<div>{{ DAFS.totalCount }}</div>
+						<div>截止到 {{ DAFS.lastDate }}</div>
           </div>
         </el-card>
       </el-col>
@@ -49,11 +49,11 @@
           <div class="data-list">
             <el-row :gutter="24">
 							<el-col :span="16">
-								<span>{{ controlAnalyzer.text }}</span>
+								<span>{{ MAFS.text }}</span>
 							</el-col>
 						</el-row>
-						<div>{{ controlAnalyzer.totalCount }}</div>
-						<div>截止到 {{ controlAnalyzer.lastDate }}</div>
+						<div>{{ MAFS.totalCount }}</div>
+						<div>截止到 {{ MAFS.lastDate }}</div>
           </div>
         </el-card>
       </el-col>
@@ -83,7 +83,7 @@
       <el-card shadow="hover">
         <el-row :gutter="24">
           <el-col>
-            <line-chart id="phoneControlTimes" title="手机控制次数趋势图" rotate="0" style="height:400px; width:100%;"></line-chart>
+            <line-chart id="phoneControlTimes" title="手机控制次数趋势图" rotate="0" :result="activeUser" style="height:400px; width:100%;"></line-chart>
           </el-col>
         </el-row>
       </el-card>
@@ -94,7 +94,7 @@
       <el-card shadow="hover">
         <el-row :gutter="24">
           <el-col>
-            <line-chart id="phoneControlTimes1" title="手机控制次数趋势图" rotate="0" style="height:400px; width:100%;"></line-chart>
+            <line-chart id="phoneControlTimes1" title="手机控制次数趋势图" rotate="0" :result="activeFamily" style="height:400px; width:100%;"></line-chart>
           </el-col>
         </el-row>
       </el-card>
@@ -146,31 +146,85 @@ export default {
           }
         }]
       },
-      equipmentAnalyzer: {
-        totalCount: 0,
-        lastDate: null,
-        text: '累计入网设备数'
+      formdata: {
+        date: ''
       },
-      userAnalyzer: {
+      DAUS: {
         totalCount: 0,
         lastDate: null,
-        text: '总控制用户数'
+        text: '日活跃用户数'
       },
-      controlAnalyzer: {
+      MAUS: {
         totalCount: 0,
         lastDate: null,
-        text: '总控制次数'
-      }
+        text: '30日活跃用户数'
+      },
+      DAFS: {
+        totalCount: 0,
+        lastDate: null,
+        text: '日活跃家庭数'
+      },
+      MAFS: {
+        totalCount: 0,
+        lastDate: null,
+        text: '30日活跃家庭数'
+      },
+      xAxisData: [],
+      activeUser: [{
+        name:'单日',
+        type:'line',
+        data:[3, 45]
+      }, {
+        name:'30日',
+        type:'line',
+        data:[2, 16]
+      }],
+      activeFamily: [{
+        name:'单日',
+        type:'line',
+        data:[1, 10]
+      }, {
+        name:'30日',
+        type:'line',
+        data:[6, 17]
+      }]
     }
   },
   mounted () {
-    this.getControlAnalysis()
+    let end = new Date()
+    let start = new Date()
+    end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
+    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+    this.formdata.date = [start, end]
+    this.DAUS.lastDate = this.formatDate(this.formdata.date[1])
+    this.MAUS.lastDate = this.formatDate(this.formdata.date[1])
+    this.DAFS.lastDate = this.formatDate(this.formdata.date[1])
+    this.MAFS.lastDate = this.formatDate(this.formdata.date[1])
+    this.getActiveAnalysis()
   },
   methods: {
     // 获取数据
-    getControlAnalysis () {
-      // 
-      console.log(1)
+    getActiveAnalysis () {
+      axios.post(URL.ActiveAnalysisURL).then(res => {
+        let obj = {}, activeList = {}
+        if (res.data.code === 200) {
+          let result = res.data.result.data
+          // console.log(result, 'result')
+          this.DAUS.totalCount = result.summary.F_dau
+          this.MAUS.totalCount = result.summary.F_mau
+          this.DAFS.totalCount = result.summary.F_daf
+          this.MAFS.totalCount = result.summary.F_maf
+          activeList = result.detail_data
+          
+          for (let key in activeList) {
+            this.xAxisData.push(key)
+            activeList[key].forEach((element, index) => {
+              // if (element.F_dau)
+              console.log(element)
+            })
+          }
+        }
+      })
     },
     // 选择开始结束日后 决定是否显示留存筛选的周月
     changeDate(date) {
@@ -187,6 +241,14 @@ export default {
     },
     search () {
       console.log(111)
+    },
+    // 格式化时间
+    formatDate(d) {
+      let padZero = num => {
+          num = num + ''
+          return num.length == 1 ? '0' + num : num
+      }
+      return d ? d.getFullYear() + '-' + padZero(d.getMonth() + 1) + '-' + padZero(d.getDate()) : ''
     }
   }
 }

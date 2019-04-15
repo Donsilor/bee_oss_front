@@ -85,7 +85,7 @@
             <!-- <pie-chart id="pieChart111" title="手机控制次数分析（单位：次）" style="height:400px; width:100%;"></pie-chart> -->
           </el-col>
           <el-col :span="12">
-            <simple-chart id="chart12" title="手机控制人数分析（单位：个）" rotate="45" :result="allAppUserNum" style="height:400px; width:100%;"></simple-chart>
+            <simple-chart id="chart12" title="手机控制人数分析（单位：个）" rotate="45" barColor="#68D388" :result="allAppUserNum" style="height:400px; width:100%;"></simple-chart>
             <!-- <pie-chart id="pieChart11133" title="手机控制人数分析（单位：个）" style="height:400px; width:100%;"></pie-chart> -->
           </el-col>
         </el-row>
@@ -96,7 +96,7 @@
       <el-card shadow="hover">
         <el-row :gutter="24">
           <el-col>
-            <line-chart id="phoneControlTimes" title="手机控制次数趋势图" rotate="0" style="height:400px; width:100%;"></line-chart>
+            <line-chart id="phoneControlTimes" title="手机控制次数趋势图" rotate="0" :result="tendencyArray" style="height:400px; width:100%;"></line-chart>
           </el-col>
         </el-row>
       </el-card>
@@ -106,9 +106,11 @@
       <el-card shadow="hover">
         <el-row :gutter="24">
           <el-col :span="12">
+            <simple-chart id="voice-chart" title="语音控制次数分析（单位：次）" rotate="45" :result="allRouterNum" style="height:400px; width:100%;"></simple-chart>
             <!-- <pie-chart id="pieChart113sss1" title="语音控制次数分析（单位：次）" style="height:400px; width:100%;"></pie-chart> -->
           </el-col>
           <el-col :span="12">
+            <simple-chart id="voice-chart1" title="语音控制人数分析（单位：个）" rotate="45" barColor="#68D388" :result="allRouterUserNum" style="height:400px; width:100%;"></simple-chart>
             <!-- <pie-chart id="pieChart113fff31" title="语音控制人数分析（单位：个）" style="height:400px; width:100%;"></pie-chart> -->
           </el-col>
         </el-row>
@@ -186,6 +188,7 @@ export default {
       allAppUserNum: [],
       allRouterNum: [],
       allRouterUserNum: [],
+      tendencyArray: {},
       networkType: {
         '2G': '',
         '3G': '',
@@ -208,7 +211,7 @@ export default {
       axios.post(URL.ControlAnalysisURL).then(res => {
         if (res.data.code === 200) {
           let result = res.data.result.data
-          console.log(result, '22222222')
+          console.log(result, 'allRouterUserNum')
           this.equipmentAnalyzer.totalCount = result.summary.F_device
           this.userAnalyzer.totalCount = result.summary.F_usr
           this.controlAnalyzer.totalCount = result.summary.F_total
@@ -219,10 +222,11 @@ export default {
           this.networkType['other'] = result.summary.F_net_unknown
           this.controlWay['app'] = result.summary.F_chan_app
           this.controlWay['router'] = result.summary.F_chan_router
-          this.allAppNum = result.category_data.F_app
-          this.allAppUserNum = result.category_data.F_app_usr
-          this.allRouterNum = result.category_data.F_router
-          this.allRouterUserNum = result.category_data.F_router_usr
+          this.tendencyArray = result.detail_data
+          this.allAppNum = Object.values(result.category_data.F_app)
+          this.allAppUserNum = Object.values(result.category_data.F_app_usr)
+          this.allRouterNum = Object.values(result.category_data.F_router)
+          this.allRouterUserNum = Object.values(result.category_data.F_router_usr)
         }
       })
     },

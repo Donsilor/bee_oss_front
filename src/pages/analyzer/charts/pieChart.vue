@@ -63,7 +63,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.result, 'result')
+    // console.log(this.result, 'result')
   },
   beforeDestroy() {
     if (!this.chart) {

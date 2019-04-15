@@ -28,7 +28,6 @@
         <el-col>
           <el-table
             :data="tableData1"
-            :span-method="objectSpanMethod"
             border
             style="width: 100%; margin-top: 20px">
             <el-table-column
@@ -97,47 +96,45 @@ export default {
           let result = res.data.result.data
           console.log(result, 'res....')
           this.tableData1 = result
-          this.rowspan()
+          // this.rowspan()
           console.log(this.spanArr, 'this.spanArr')
         }
       })
     },
     // 导出数据
     exportData () {
-      axios.get(URL.ExportURL, {select_time: this.fromDate}).then(res => {
-        alert(1)
-        console.log(res, '导出数据')
-      }).catch(error => {
-        console.log(error)
+      let token = localStorage.getItem('token')
+      axios.post(URL.ExportURL, {token}).then(res => {
+
       })
     },
-    rowspan() {
-      this.tableData1.forEach((item,index) => {
-        if( index === 0){
-          this.spanArr.push(1)
-          this.position = 0
-        } else if (this.tableData1[index].category === this.tableData1[index-1].category) {
-          this.spanArr.push(0)
-          this.spanArr[this.position] += 1
-        } else {
-          this.spanArr.push(1)
-          this.position = index
-        }
-      })
-    },
+    // rowspan() {
+    //   this.tableData1.forEach((item,index) => {
+    //     if( index === 0){
+    //       this.spanArr.push(1)
+    //       this.position = 0
+    //     } else if (this.tableData1[index].category === this.tableData1[index-1].category) {
+    //       this.spanArr.push(0)
+    //       this.spanArr[this.position] += 1
+    //     } else {
+    //       this.spanArr.push(1)
+    //       this.position = index
+    //     }
+    //   })
+    // },
 
 
-    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-      if(columnIndex === 0){
-        const _row = this.spanArr[rowIndex];
-        const _col = _row > 0 ? 1 : 0;
-        return {
-          rowspan: _row, //行
-          colspan: _col  //列
-        }
+    // objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+    //   if(columnIndex === 0){
+    //     const _row = this.spanArr[rowIndex];
+    //     const _col = _row > 0 ? 1 : 0;
+    //     return {
+    //       rowspan: _row, //行
+    //       colspan: _col  //列
+    //     }
 
-      }
-    }
+    //   }
+    // }
   }
 }
 </script>
