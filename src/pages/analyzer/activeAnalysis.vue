@@ -63,7 +63,7 @@
 			<el-col>
 				<el-form :inline="true">
 					<el-form-item>
-						<el-date-picker placeholder="请选择时间段" v-model="formdata.date" @change="changeDate" type="daterange" align="left" unlink-panels range-separator="至" :clearable="false" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
+						<el-date-picker placeholder="请选择时间段" v-model="dateRange" @change="changeDate" type="daterange" align="left" unlink-panels range-separator="至" :clearable="false" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
 						</el-date-picker>
 					</el-form-item>
 
@@ -83,7 +83,7 @@
       <el-card shadow="hover">
         <el-row :gutter="24">
           <el-col>
-            <line-chart id="phoneControlTimes" title="手机控制次数趋势图" rotate="0" :result="activeUser" style="height:400px; width:100%;"></line-chart>
+            <line-chart2 id="phoneControlTimes" ref="activeChart1" :xAxisData="xAxisData" :chartData="chartDataDayUser" :chartData2="chartDataMonUser" title="手机控制次数趋势图" rotate="0" style="height:400px; width:100%;"></line-chart2>
           </el-col>
         </el-row>
       </el-card>
@@ -94,7 +94,7 @@
       <el-card shadow="hover">
         <el-row :gutter="24">
           <el-col>
-            <line-chart id="phoneControlTimes1" title="手机控制次数趋势图" rotate="0" :result="activeFamily" style="height:400px; width:100%;"></line-chart>
+            <line-chart2 id="phoneControlTimes1" ref="activeChart2" :xAxisData="xAxisData" :chartData="chartDataDayFa" :chartData2="chartDataMonFa" title="手机控制次数趋势图" rotate="0" style="height:400px; width:100%;"></line-chart2>
           </el-col>
         </el-row>
       </el-card>
@@ -104,13 +104,13 @@
 
 <script>
 import CityPicker from "../../components/cityPicker.vue"
-import LineChart from './charts/lineChart.vue'
+import LineChart2 from './charts/lineChart2.vue'
 import axios from "axios"
 import * as URL from "~/lib/api"
 export default {
   components: {
     CityPicker,
-    LineChart
+    LineChart2
   },
   data () {
     return {
@@ -170,6 +170,11 @@ export default {
         text: '30日活跃家庭数'
       },
       xAxisData: [],
+	  chartDataDayUser: [],
+	  chartDataMonUser: [],
+	  chartDataDayFa: [],
+	  chartDataMonFa: [],
+	  dateRange: '',
       activeUser: [{
         name:'单日',
         type:'line',
@@ -204,26 +209,21 @@ export default {
   },
   methods: {
     // 获取数据
-    getActiveAnalysis () {
-      axios.post(URL.ActiveAnalysisURL).then(res => {
+    getActiveAnalysis (params) {
+      axios.post(URL.ActiveAnalysisURL, params).then(res => {
         let obj = {}, activeList = {}
         if (res.data.code === 200) {
           let result = res.data.result.data
-          // console.log(result, 'result')
+           console.log(result, 'result')
           this.DAUS.totalCount = result.summary.F_dau
           this.MAUS.totalCount = result.summary.F_mau
           this.DAFS.totalCount = result.summary.F_daf
           this.MAFS.totalCount = result.summary.F_maf
-          activeList = result.detail_data
-          
-          for (let key in activeList) {
-            this.xAxisData.push(key)
-            activeList[key].forEach((element, index) => {
-              // if (element.F_dau)
-              console.log(element)
-            })
-          }
-        }
+
+		  this.filterChartData(result.detail_data)
+		  this.$refs.activeChart1.initChart()
+		  this.$refs.activeChart2.initChart()
+		}
       })
     },
     // 选择开始结束日后 决定是否显示留存筛选的周月
@@ -240,8 +240,21 @@ export default {
       this.formdata.city = val[1];
     },
     search () {
-      console.log(111)
+		this.reset()
+		const param = {
+			start_time: this.dateRange[0].Format('yyyy-MM-dd'),
+			end_time: this.dateRange[1].Format('yyyy-MM-dd')
+		}
+		console.log(777, param)
+		this.getActiveAnalysis(param)
     },
+	  reset () {
+		  this.xAxisData = []
+		  this.chartDataDayUser = []
+		  this.chartDataMonUser = []
+		  this.chartDataDayFa = []
+		  this.chartDataMonFa = []
+	  },
     // 格式化时间
     formatDate(d) {
       let padZero = num => {
@@ -249,7 +262,16 @@ export default {
           return num.length == 1 ? '0' + num : num
       }
       return d ? d.getFullYear() + '-' + padZero(d.getMonth() + 1) + '-' + padZero(d.getDate()) : ''
-    }
+    },
+	filterChartData (val) {
+		for (let item in val) {
+			this.xAxisData.push(item)
+			this.chartDataDayUser.push(val[item][0].F_dau)
+			this.chartDataMonUser.push(val[item][0].F_daf)
+			this.chartDataDayFa.push(val[item][0].F_mau)
+			this.chartDataMonFa.push(val[item][0].F_maf)
+		}
+	}
   }
 }
 </script>

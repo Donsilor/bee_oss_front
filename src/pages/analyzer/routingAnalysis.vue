@@ -69,10 +69,10 @@
       <el-card shadow="hover">
         <el-row :gutter="24">
           <el-col :span="12">
-            <line-chart id="phoneControlTimes" ref="chart1" title="唤醒次数" rotate="0" :xAxisData="xAxisData" :chartData="chartData1" style="height:400px; width:100%;"></line-chart>
+            <line-chart2 id="phoneControlTimes" ref="chart1" title="唤醒次数" rotate="0" :xAxisData="xAxisData" :chartData="chartData1" style="height:400px; width:100%;"></line-chart2>
           </el-col>
           <el-col :span="12">
-            <line-chart id="phoneControlTimes6" ref='chart2' title="唤醒路由数" rotate="0" :xAxisData="xAxisData" :chartData="chartData2" style="height:400px; width:100%;"></line-chart>
+            <line-chart2 id="phoneControlTimes6" ref='chart2' title="唤醒路由数" rotate="0" :xAxisData="xAxisData" :chartData="chartData2" style="height:400px; width:100%;"></line-chart2>
           </el-col>
         </el-row>
       </el-card>
@@ -83,7 +83,7 @@
       <el-card shadow="hover">
         <el-row :gutter="24">
           <el-col>
-            <line-chart id="phoneControlTimes1" ref="chart3" title="语音交互次数" :xAxisData="xAxisData" :chartData="chartData3" rotate="0" style="height:400px; width:100%;"></line-chart>
+            <line-chart2 id="phoneControlTimes1" ref="chart3" title="语音交互次数" :xAxisData="xAxisData" :chartData="chartData3" rotate="0" style="height:400px; width:100%;"></line-chart2>
           </el-col>
         </el-row>
       </el-card>
@@ -93,13 +93,13 @@
 
 <script>
 import CityPicker from "../../components/cityPicker.vue"
-import LineChart from './charts/lineChart.vue'
+import LineChart2 from './charts/lineChart2.vue'
 import axios from "axios"
 import * as URL from "~/lib/api"
 export default {
   components: {
     CityPicker,
-    LineChart
+    LineChart2
   },
   data () {
     return {
