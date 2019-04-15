@@ -7,10 +7,10 @@
           <div class="data-list">
             <el-row :gutter="24">
 							<el-col :span="16">
-								<span>{{ equipmentAnalyzer.text }}</span>
+								<span>日唤醒次数</span>
 							</el-col>
 						</el-row>
-						<div>{{ equipmentAnalyzer.totalCount }}</div>
+						<div>{{ summary.F_wakeup_cnt }}</div>
 						<div>截止到 {{ equipmentAnalyzer.lastDate }}</div>
           </div>
         </el-card>
@@ -21,10 +21,10 @@
           <div class="data-list">
             <el-row :gutter="24">
 							<el-col :span="16">
-								<span>{{ userAnalyzer.text }}</span>
+								<span>日唤醒路由数</span>
 							</el-col>
 						</el-row>
-						<div>{{ userAnalyzer.totalCount }}</div>
+						<div>{{ summary.F_wakeup_router }}</div>
 						<div>截止到 {{ userAnalyzer.lastDate }}</div>
           </div>
         </el-card>
@@ -35,10 +35,10 @@
           <div class="data-list">
             <el-row :gutter="24">
 							<el-col :span="16">
-								<span>{{ controlAnalyzer.text }}</span>
+								<span>日语音交互数</span>
 							</el-col>
 						</el-row>
-						<div>{{ controlAnalyzer.totalCount }}</div>
+						<div>{{ summary.F_voice_interact }}</div>
 						<div>截止到 {{ controlAnalyzer.lastDate }}</div>
           </div>
         </el-card>
@@ -49,7 +49,7 @@
 			<el-col>
 				<el-form :inline="true">
 					<el-form-item>
-						<el-date-picker placeholder="请选择时间段" v-model="formdata.date" @change="changeDate" type="daterange" align="left" unlink-panels range-separator="至" :clearable="false" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
+						<el-date-picker placeholder="请选择时间段" v-model="dateRange" @change="changeDate" type="daterange" align="left" unlink-panels range-separator="至" :clearable="false" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
 						</el-date-picker>
 					</el-form-item>
 
@@ -69,10 +69,10 @@
       <el-card shadow="hover">
         <el-row :gutter="24">
           <el-col :span="12">
-            <line-chart id="phoneControlTimes" title="手机控制次数趋势图" rotate="0" style="height:400px; width:100%;"></line-chart>
+            <line-chart id="phoneControlTimes" ref="chart1" title="唤醒次数" rotate="0" :xAxisData="xAxisData" :chartData="chartData1" style="height:400px; width:100%;"></line-chart>
           </el-col>
           <el-col :span="12">
-            <line-chart id="phoneControlTimes6" title="手机控制次数趋势图" rotate="0" style="height:400px; width:100%;"></line-chart>
+            <line-chart id="phoneControlTimes6" ref='chart2' title="唤醒路由数" rotate="0" :xAxisData="xAxisData" :chartData="chartData2" style="height:400px; width:100%;"></line-chart>
           </el-col>
         </el-row>
       </el-card>
@@ -83,7 +83,7 @@
       <el-card shadow="hover">
         <el-row :gutter="24">
           <el-col>
-            <line-chart id="phoneControlTimes1" title="手机控制次数趋势图" rotate="0" style="height:400px; width:100%;"></line-chart>
+            <line-chart id="phoneControlTimes1" ref="chart3" title="语音交互次数" :xAxisData="xAxisData" :chartData="chartData3" rotate="0" style="height:400px; width:100%;"></line-chart>
           </el-col>
         </el-row>
       </el-card>
@@ -137,19 +137,30 @@ export default {
       },
       equipmentAnalyzer: {
         totalCount: 0,
-        lastDate: null,
+        lastDate: '昨天 2019-03-27',
         text: '累计入网设备数'
       },
       userAnalyzer: {
         totalCount: 0,
-        lastDate: null,
+        lastDate: '昨天 2019-03-27',
         text: '总控制用户数'
       },
       controlAnalyzer: {
         totalCount: 0,
-        lastDate: null,
+        lastDate: '昨天 2019-03-27',
         text: '总控制次数'
-      }
+      },
+	  summary: {
+      	F_wakeup_cnt: 2,
+		F_wakeup_router: 3,
+		F_voice_interact: 5
+	  },
+	  detail_data: '',
+	  xAxisData: [],
+	  chartData1: [],
+	  chartData2: [],
+	  chartData3: [],
+	  dateRange: ''
     }
   },
   mounted () {
@@ -157,8 +168,19 @@ export default {
   },
   methods: {
     // 获取数据
-    getControlAnalysis () {
-      // 
+    getControlAnalysis (params) {
+    	axios.post(URL.RouterAnalysisURL, params).then(res => {
+    		if (res.data.code == 200) {
+    			const data = res.data.result.data
+    			this.summary = data.summary
+				this.fitterEchartData(data.detail_data)
+				this.$refs.chart1.initChart()
+				this.$refs.chart2.initChart()
+				this.$refs.chart3.initChart()
+				console.log(777, res)
+			}
+		})
+      //
       console.log(1)
     },
     // 选择开始结束日后 决定是否显示留存筛选的周月
@@ -174,9 +196,31 @@ export default {
       this.formdata.province = val[0];
       this.formdata.city = val[1];
     },
+	// 过滤echart图表需要的数据
+	fitterEchartData (val) {
+      for (let item in val) {
+    	this.xAxisData.push(item)
+		this.chartData1.push(val[item][0].F_wakeup_cnt)
+		this.chartData2.push(val[item][0].F_wakeup_router)
+		this.chartData3.push(val[item][0].F_voice_interact)
+		  console.log(89989, val[item][0].F_voice_interact)
+	  }
+	},
     search () {
-      console.log(111)
-    }
+      this.reset()
+      const param = {
+      	start_time: this.dateRange[0].Format('yyyy-MM-dd'),
+		end_time: this.dateRange[1].Format('yyyy-MM-dd')
+	  }
+	  this.getControlAnalysis(param)
+      console.log(111, this.dateRange[0].Format('yyyy-MM-dd'))
+    },
+	reset () {
+      this.xAxisData = []
+	  this.chartData1 = []
+	  this.chartData2 = []
+	  this.chartData3 = []
+	}
   }
 }
 </script>

@@ -32,7 +32,15 @@ export default {
     height: {
       type: String,
       default: '300px'
-    }
+    },
+	xAxisData: {
+      type: Array,
+	  default: [1]
+	},
+	chartData: {
+      type: Array,
+	  default: [1]
+	}
   },
   data() {
     return {
@@ -68,9 +76,16 @@ export default {
       console.log(this.result, 'this.result4444')
     }
   },
+<<<<<<< HEAD
   mounted() {
     // 
   },
+=======
+//  mounted() {
+//  	console.log(888, this.xAxisData, this.chartData)
+//	this.initChart()
+//  },
+>>>>>>> c64501e1382839aef2957f2402ce20ac473e2802
   beforeDestroy() {
     if (!this.chart) {
       return
@@ -80,7 +95,57 @@ export default {
   },
   methods: {
     initChart() {
+      const option = {
+		  title: {
+			  text: this.title,
+			  textStyle: {
+				  fontWeight: 'bolder',
+				  fontSize: 14,
+				  color: '#666666'
+			  },
+			  left: '1%'
+		  },
+		  tooltip: {
+			  trigger: 'axis',
+			  axisPointer: { // 坐标轴指示器，坐标轴触发有效
+				  type: 'line' // 默认为直线，可选为：'line' | 'shadow'
+			  }
+		  },
+		  legend: {
+			  bottom: 0,
+			  icon: 'rect',
+			  itemWidth: 14,
+			  itemHeight: 5,
+			  itemGap: 25,
+			  data: ['pageA', 'pageB', 'pageC'],
+			  left: 'center',
+			  textStyle: {
+				  fontSize: 12
+			  }
+		  },
+		  grid: {
+			  top: 50,
+			  left: '2%',
+			  right: '6%',
+			  bottom: '8%',
+			  containLabel: true
+		  },
+		  xAxis: [{
+			  type: 'category',
+			  boundaryGap: false,
+			  data: this.xAxisData
+		  }],
+		  yAxis: [{
+			  type: 'value'
+		  }],
+		  series: [{
+			  name: 'pageA',
+			  type: 'line',
+			  data: this.chartData
+		  }]
+	  }
       this.chart = echarts.init(document.getElementById(this.id))
+<<<<<<< HEAD
       this.chart.setOption({
         title: {
           text: this.title,
@@ -126,6 +191,9 @@ export default {
         }],
         series: this.seriesData
       })
+=======
+      this.chart.setOption(option)
+>>>>>>> c64501e1382839aef2957f2402ce20ac473e2802
     }
   }
 }
