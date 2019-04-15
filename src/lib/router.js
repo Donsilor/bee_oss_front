@@ -22,8 +22,8 @@ const routes = [
         path: 'versionManager',
         name: 'versionManager',
         component: Pages.VersionManager
-	  },
-	  {
+      },
+      {
         path: 'versionManager/:id',
         name: 'versionManagerDetail',
         component: Pages.VersionManagerDetail
@@ -36,12 +36,12 @@ const routes = [
       {
         path: 'appUpgrade',
         name: 'appUpgrade',
-		component: Pages.AppUpgrade
-	  },
-	  {
+        component: Pages.AppUpgrade
+      },
+      {
         path: 'appUpgrade/:id',
         name: 'appUpgradeDetail',
-		component: Pages.AppUpgradeDetail
+        component: Pages.AppUpgradeDetail
       },
       {
         path: 'pushManager',
@@ -216,6 +216,31 @@ const routes = [
             path: 'deviceData',
             name: 'deviceData',
             component: Pages.DeviceData
+          },
+          {
+            path: 'accessStatistics',
+            name: 'accessStatistics',
+            component: Pages.AccessStatistics
+          },
+          {
+            path: 'controlAnalysis',
+            name: 'controlAnalysis',
+            component: Pages.ControlAnalysis
+          },
+          {
+            path: 'activeAnalysis',
+            name: 'activeAnalysis',
+            component: Pages.ActiveAnalysis
+          },
+          {
+            path: 'routingAnalysis',
+            name: 'routingAnalysis',
+            component: Pages.RoutingAnalysis
+          },
+          {
+            path: 'dailyData',
+            name: 'dailyData',
+            component: Pages.DailyData
           }
         ]
       },

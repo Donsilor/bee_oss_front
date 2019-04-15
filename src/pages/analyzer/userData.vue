@@ -95,8 +95,7 @@
 							<span>{{chartData.columns && chartData.columns[1]}}</span>
 							<el-tooltip placement="right">
 								<div slot="content">统计截止到某一天，在各<br/>个端App中注册的用户总数</div>
-								<i class="el-icon-information"></i>
-								<!-- <i class="icon-information"></i> -->
+								<i class="el-icon-info"></i>
 							</el-tooltip>
 						</div>
 						<div>单位: 个</div>

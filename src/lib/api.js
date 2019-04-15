@@ -105,6 +105,22 @@ export const operFamilyCategory = API_MASTER + "analyzer/oper_family_category";
 export const operFamilyStat = API_MASTER + "analyzer/oper_family_stat";
 export const operStat = API_MASTER + "analyzer/oper_stat";
 
+// 入网统计
+export const AccessStatisticsURL = API_MASTER + "analyzer/device";
+
+// 控制分析
+export const ControlAnalysisURL = API_MASTER + "analyzer/control";
+
+// 活跃分析
+export const ActiveAnalysisURL = API_MASTER + "analyzer/active";
+
+// 路由分析
+export const RouterAnalysisURL = API_MASTER + "analyzer/router";
+
+// 数据日报
+export const dailyDataURL = API_MASTER + "analyzer/data_daily";
+export const ExportURL = API_MASTER + "analyzer/export";
+
 //oss uploadfile
 export const getUnuploadShardList = API_MASTER + "file/getUnuploadShardList"; //分片任务初始化接口
 export const uploadShard = API_MASTER + "file/uploadShard"; //单独的分片上传接口

@@ -30,8 +30,16 @@ import Role from './permission/role.vue'
 import ResetPwd from './permission/resetPwd.vue'
 import UpdatePwd from './permission/updatePwd.vue'
 import Error from './error.vue'
+
 import UserData from './analyzer/userData.vue'
 import DeviceData from './analyzer/deviceData.vue'
+// 新加的页面
+import AccessStatistics from './analyzer/accessStatistics.vue'
+import ControlAnalysis from './analyzer/controlAnalysis.vue'
+import ActiveAnalysis from './analyzer/activeAnalysis.vue'
+import RoutingAnalysis from './analyzer/routingAnalysis.vue'
+import DailyData from './analyzer/dailyData.vue'
+
 import FeedbackList from './feedback/list.vue'
 import FeedbackDetail from './feedback/detail.vue'
 import Strategy from './strategy/strategy.vue'
@@ -92,5 +100,10 @@ export {
   SwitchProductImport,
   SwitchProductSearch,
   AppUpgrade,
-  AppUpgradeDetail
+  AppUpgradeDetail,
+  AccessStatistics,
+  ControlAnalysis,
+  ActiveAnalysis,
+  RoutingAnalysis,
+  DailyData
 }
