@@ -25,7 +25,7 @@ export default {
     },
     result: {
       type: Array,
-      default () {  
+      default () {
         return []
       }
     },
@@ -43,7 +43,9 @@ export default {
     }
   },
   watch: {
-    result () {  
+    result () {
+	  this.xAxisData = [];
+	  this.seriesData = [];
       for (let index = 0; index < this.result.length; index++) {
         this.xAxisData.push(this.result[index].F_category_id_map)
         this.seriesData.push(this.result[index].count)

@@ -21,7 +21,7 @@ export default {
     },
     result: {
       type: Object,
-      default () {  
+      default () {
         return {}
       }
     },
@@ -48,6 +48,8 @@ export default {
   watch: {
     result: {
       handler (newVal) {
+      	this.xAxisData = [];
+      	this.seriesData = [];
         for (let key in newVal) {
           this.xAxisData.push(key)
           this.seriesData.push({
@@ -57,7 +59,7 @@ export default {
         }
         this.initChart()
       },
-      deep: true 
+      deep: true
     }
   },
   mounted() {

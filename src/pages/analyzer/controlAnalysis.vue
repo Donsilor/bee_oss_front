@@ -5,7 +5,7 @@
 			<el-col>
 				<el-form :inline="true">
 					<el-form-item>
-						<el-date-picker placeholder="请选择时间段" v-model="formdata.date" @change="changeDate" type="daterange" align="left" unlink-panels range-separator="至" :clearable="false" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
+						<el-date-picker placeholder="请选择时间段" v-model="dateRange" @change="changeDate" type="daterange" align="left" unlink-panels range-separator="至" :clearable="false" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
 						</el-date-picker>
 					</el-form-item>
 
@@ -199,7 +199,8 @@ export default {
       controlWay: {
         'app': '',
         'router': ''
-      }
+      },
+		dataRange: ''
     }
   },
   mounted () {
@@ -207,14 +208,14 @@ export default {
   },
   methods: {
     // 获取数据
-    getControlAnalysis () {
-      axios.post(URL.ControlAnalysisURL).then(res => {
+    getControlAnalysis (param) {
+      axios.post(URL.ControlAnalysisURL, param).then(res => {
         if (res.data.code === 200) {
           let result = res.data.result.data
           console.log(result, 'allRouterUserNum')
-          this.equipmentAnalyzer.totalCount = result.summary.F_device
-          this.userAnalyzer.totalCount = result.summary.F_usr
-          this.controlAnalyzer.totalCount = result.summary.F_total
+          this.equipmentAnalyzer.totalCount = result.summary.F_device || 0
+          this.userAnalyzer.totalCount = result.summary.F_usr || 0
+          this.controlAnalyzer.totalCount = result.summary.F_total || 0
           this.networkType['2G'] = result.summary.F_net_2G
           this.networkType['3G'] = result.summary.F_net_3G
           this.networkType['4G'] = result.summary.F_net_4G
@@ -244,7 +245,12 @@ export default {
       this.formdata.city = val[1];
     },
     search () {
-      console.log(111)
+		const param = {
+			start_time: this.dateRange[0].Format('yyyy-MM-dd'),
+			end_time: this.dateRange[1].Format('yyyy-MM-dd')
+		}
+		console.log(777, param)
+		this.getControlAnalysis(param)
     }
   }
 }

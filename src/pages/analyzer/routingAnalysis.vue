@@ -1,17 +1,17 @@
 <template>
   <div class="page-content config-page">
-        <!-- 数据头部展示 -->
+    <!-- 数据头部展示 -->
     <el-row>
       <el-col class="col-280">
         <el-card class="box-card">
           <div class="data-list">
             <el-row :gutter="24">
-							<el-col :span="16">
-								<span>日唤醒次数</span>
-							</el-col>
-						</el-row>
-						<div>{{ summary.F_wakeup_cnt }}</div>
-						<div>截止到 {{ equipmentAnalyzer.lastDate }}</div>
+              <el-col :span="16">
+                <span>日唤醒次数</span>
+              </el-col>
+            </el-row>
+            <div>{{ summary.F_wakeup_cnt }}</div>
+            <div>截止到 {{ equipmentAnalyzer.lastDate }}</div>
           </div>
         </el-card>
       </el-col>
@@ -20,12 +20,12 @@
         <el-card class="box-card">
           <div class="data-list">
             <el-row :gutter="24">
-							<el-col :span="16">
-								<span>日唤醒路由数</span>
-							</el-col>
-						</el-row>
-						<div>{{ summary.F_wakeup_router }}</div>
-						<div>截止到 {{ userAnalyzer.lastDate }}</div>
+              <el-col :span="16">
+                <span>日唤醒路由数</span>
+              </el-col>
+            </el-row>
+            <div>{{ summary.F_wakeup_router }}</div>
+            <div>截止到 {{ userAnalyzer.lastDate }}</div>
           </div>
         </el-card>
       </el-col>
@@ -34,45 +34,71 @@
         <el-card class="box-card">
           <div class="data-list">
             <el-row :gutter="24">
-							<el-col :span="16">
-								<span>日语音交互数</span>
-							</el-col>
-						</el-row>
-						<div>{{ summary.F_voice_interact }}</div>
-						<div>截止到 {{ controlAnalyzer.lastDate }}</div>
+              <el-col :span="16">
+                <span>日语音交互数</span>
+              </el-col>
+            </el-row>
+            <div>{{ summary.F_voice_interact }}</div>
+            <div>截止到 {{ controlAnalyzer.lastDate }}</div>
           </div>
         </el-card>
       </el-col>
     </el-row>
     <!-- 过滤条件 -->
-		<el-row style="margin-top: 20px;">
-			<el-col>
-				<el-form :inline="true">
-					<el-form-item>
-						<el-date-picker placeholder="请选择时间段" v-model="dateRange" @change="changeDate" type="daterange" align="left" unlink-panels range-separator="至" :clearable="false" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
-						</el-date-picker>
-					</el-form-item>
+    <el-row style="margin-top: 20px;">
+      <el-col>
+        <el-form :inline="true">
+          <el-form-item>
+            <el-date-picker 
+              v-model="dateRange" 
+              :clearable="false" 
+              :picker-options="pickerOptions" 
+              placeholder="请选择时间段" 
+              type="daterange" 
+              align="left" 
+              unlink-panels 
+              range-separator="至" 
+              start-placeholder="开始日期" 
+              end-placeholder="结束日期" 
+              @change="changeDate"/>
+          </el-form-item>
 
-					<el-form-item>
-						<city-picker @change="onCitySelect"></city-picker>
-					</el-form-item>
+          <el-form-item>
+            <city-picker @change="onCitySelect"/>
+          </el-form-item>
 
-					<el-form-item style="margin-bottom:0">
-						<el-button type="primary" @click="search">查询</el-button>
-					</el-form-item>
-				</el-form>
-			</el-col>
-		</el-row>
+          <el-form-item style="margin-bottom:0">
+            <el-button 
+              type="primary" 
+              @click="search">查询</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </el-row>
 
     <!-- 手机控制次数趋势图 -->
     <div class="network-equipment">
       <el-card shadow="hover">
         <el-row :gutter="24">
           <el-col :span="12">
-            <line-chart2 id="phoneControlTimes" ref="chart1" title="唤醒次数" rotate="0" :xAxisData="xAxisData" :chartData="chartData1" style="height:400px; width:100%;"></line-chart2>
+            <line-chart2 
+              id="phoneControlTimes" 
+              ref="chart1" 
+              :x-axis-data="xAxisData" 
+              :chart-data="chartData1" 
+              title="唤醒次数" 
+              rotate="0" 
+              style="height:400px; width:100%;"/>
           </el-col>
           <el-col :span="12">
-            <line-chart2 id="phoneControlTimes6" ref='chart2' title="唤醒路由数" rotate="0" :xAxisData="xAxisData" :chartData="chartData2" style="height:400px; width:100%;"></line-chart2>
+            <line-chart2 
+              id="phoneControlTimes6" 
+              ref="chart2" 
+              :x-axis-data="xAxisData" 
+              :chart-data="chartData2" 
+              title="唤醒路由数" 
+              rotate="0" 
+              style="height:400px; width:100%;"/>
           </el-col>
         </el-row>
       </el-card>
@@ -83,7 +109,14 @@
       <el-card shadow="hover">
         <el-row :gutter="24">
           <el-col>
-            <line-chart2 id="phoneControlTimes1" ref="chart3" title="语音交互次数" :xAxisData="xAxisData" :chartData="chartData3" rotate="0" style="height:400px; width:100%;"></line-chart2>
+            <line-chart2 
+              id="phoneControlTimes1" 
+              ref="chart3" 
+              :x-axis-data="xAxisData" 
+              :chart-data="chartData3" 
+              title="语音交互次数" 
+              rotate="0" 
+              style="height:400px; width:100%;"/>
           </el-col>
         </el-row>
       </el-card>

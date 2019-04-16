@@ -69,3 +69,4 @@ export const PREFIX = (function() {
 	const host = window.location.href;
 	return "/api/index.php/";
 })();
+

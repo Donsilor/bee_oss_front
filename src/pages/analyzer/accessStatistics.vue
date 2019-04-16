@@ -50,7 +50,7 @@
         <el-row>
           <el-col :span="24" class="datePicker">
             <el-date-picker
-              v-model="formdata.date"
+              v-model="dateRange"
               type="daterange"
               align="right"
               unlink-panels
@@ -87,7 +87,7 @@
                 </el-option>
               </el-select>
             </div>
-            <simple-chart id="chart3" title="房间分布设备数（单位:个）" barColor="#68D388" style="height:400px; width:100%;"></simple-chart>
+            <simple-chart id="chart3" title="房间分布设备数（单位:个）" barColor="#68D388" style="height:400px; width:100%;" rotate="45" :result="allRoomEquipmentNum"></simple-chart>
           </el-col>
           <el-col :span="12">
             <div class="sizer">
@@ -166,13 +166,25 @@ export default {
       formdata: {
         date: ''
       },
+	  dateRange: '',
       equipment: '0',
       room: '0',
       roomOptions: [],
       equipmentOptions: [],
       allEquipmentNum: [],
-      newAddEquipmentNum: {}
+      newAddEquipmentNum: {},
+	  allRoomEquipmentNum: []
     }
+  },
+  watch: {
+  	dateRange (val) {
+  	  console.log(8989, val);
+  	  const param = {
+  	  	'new_cat:start_time': val[0].Format('yyyy-MM-dd'),
+  	  	'new_cat:end_time': val[1].Format('yyyy-MM-dd')
+	  };
+  	  this.getAccessStatistics(param)
+	}
   },
   mounted() {
     let end = new Date()
@@ -187,8 +199,8 @@ export default {
   },
   methods: {
     // 获取数据
-    getAccessStatistics () {
-      axios.post(URL.AccessStatisticsURL).then(res => {
+    getAccessStatistics (param) {
+      axios.post(URL.AccessStatisticsURL, param).then(res => {
         if (res.data.code === 200) {
           // this.roomOptions = res.data.result.data.all_room
           // this.equipmentOptions = res.data.result.data.all_device
@@ -199,6 +211,7 @@ export default {
           this.familyAnalyzer.totalCount = result.summary.F_family
           this.allEquipmentNum = result.all_cat
           this.newAddEquipmentNum = result.new_cat
+		  this.allRoomEquipmentNum = result.all_room
         }
       })
     },

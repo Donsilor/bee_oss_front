@@ -13,7 +13,7 @@ export default {
     },
     result: {
       type: Object,
-      default () {  
+      default () {
         return {}
       }
     },
@@ -47,6 +47,15 @@ export default {
   watch: {
     result () {
       let obj = {}
+      this.xAxisData = [];
+      this.legendData = [];
+      this.seriesData = [{
+		  name: '',
+		  type: 'bar',
+		  stack: 'vistors',
+		  barWidth: '13%',
+		  data: []
+	  }];
       for (let key in this.result) {
         this.xAxisData.push(key)
         this.result[key].forEach((element, index) => {
@@ -73,7 +82,7 @@ export default {
     }
   },
   mounted() {
-    
+
   },
   beforeDestroy() {
     if (!this.chart) {

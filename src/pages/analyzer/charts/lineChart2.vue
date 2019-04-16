@@ -80,6 +80,7 @@
 						}
 					},
 					legend: {
+						show: true,
 						bottom: 0,
 						icon: 'rect',
 						itemWidth: 14,
@@ -93,7 +94,7 @@
 					},
 					grid: {
 						top: 50,
-						left: '2%',
+						left: '3%',
 						right: '6%',
 						bottom: '8%',
 						containLabel: true
@@ -120,7 +121,10 @@
 							data: this.chartData2
 						}
 					)
+				} else {
+					option.legend.show = false
 				}
+				console.log(777, this.xAxisData)
 				this.chart = echarts.init(document.getElementById(this.id))
 				this.chart.setOption(option)
 			}

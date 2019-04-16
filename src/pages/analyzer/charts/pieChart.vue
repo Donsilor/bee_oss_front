@@ -21,7 +21,7 @@ export default {
     },
     result: {
       type: Object,
-      default () {  
+      default () {
         return {}
       }
     },
@@ -50,6 +50,8 @@ export default {
   watch: {
     result: {
       handler (newVal) {
+		this.legendData = [];
+		this.seriesData = [];
         for (let key in newVal) {
           this.legendData.push(key=== 'app' ? '星络App' : '路由器语音')
           this.seriesData.push({
@@ -59,7 +61,7 @@ export default {
         }
         this.initChart()
       },
-      deep: true 
+      deep: true
     }
   },
   mounted() {

@@ -103,10 +103,9 @@ export default {
     },
     // 导出数据
     exportData () {
-      let token = localStorage.getItem('token')
-      axios.post(URL.ExportURL, {token}).then(res => {
-
-      })
+      let token = JSON.parse(localStorage.getItem("localData")).user.info.token;
+      let select_time = (this.fromDate.select_time).Format('yyyy-MM-dd')
+      window.open(URL.ExportURL + `?token=${token}&&select_time=${select_time}`)
     },
     // rowspan() {
     //   this.tableData1.forEach((item,index) => {
