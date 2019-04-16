@@ -49,27 +49,27 @@
       <el-col>
         <el-form :inline="true">
           <el-form-item>
-            <el-date-picker 
-              v-model="dateRange" 
-              :clearable="false" 
-              :picker-options="pickerOptions" 
-              placeholder="请选择时间段" 
-              type="daterange" 
-              align="left" 
-              unlink-panels 
-              range-separator="至" 
-              start-placeholder="开始日期" 
-              end-placeholder="结束日期" 
+            <el-date-picker
+              v-model="dateRange"
+              :clearable="false"
+              :picker-options="pickerOptions"
+              placeholder="请选择时间段"
+              type="daterange"
+              align="left"
+              unlink-panels
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
               @change="changeDate"/>
           </el-form-item>
 
           <el-form-item>
-            <city-picker @change="onCitySelect"/>
+            <!--<city-picker @change="onCitySelect"/>-->
           </el-form-item>
 
           <el-form-item style="margin-bottom:0">
-            <el-button 
-              type="primary" 
+            <el-button
+              type="primary"
               @click="search">查询</el-button>
           </el-form-item>
         </el-form>
@@ -81,23 +81,23 @@
       <el-card shadow="hover">
         <el-row :gutter="24">
           <el-col :span="12">
-            <line-chart2 
-              id="phoneControlTimes" 
-              ref="chart1" 
-              :x-axis-data="xAxisData" 
-              :chart-data="chartData1" 
-              title="唤醒次数" 
-              rotate="0" 
+            <line-chart2
+              id="phoneControlTimes"
+              ref="chart1"
+              :x-axis-data="xAxisData"
+              :chart-data="chartData1"
+              title="唤醒次数"
+              rotate="0"
               style="height:400px; width:100%;"/>
           </el-col>
           <el-col :span="12">
-            <line-chart2 
-              id="phoneControlTimes6" 
-              ref="chart2" 
-              :x-axis-data="xAxisData" 
-              :chart-data="chartData2" 
-              title="唤醒路由数" 
-              rotate="0" 
+            <line-chart2
+              id="phoneControlTimes6"
+              ref="chart2"
+              :x-axis-data="xAxisData"
+              :chart-data="chartData2"
+              title="唤醒路由数"
+              rotate="0"
               style="height:400px; width:100%;"/>
           </el-col>
         </el-row>
@@ -109,13 +109,13 @@
       <el-card shadow="hover">
         <el-row :gutter="24">
           <el-col>
-            <line-chart2 
-              id="phoneControlTimes1" 
-              ref="chart3" 
-              :x-axis-data="xAxisData" 
-              :chart-data="chartData3" 
-              title="语音交互次数" 
-              rotate="0" 
+            <line-chart2
+              id="phoneControlTimes1"
+              ref="chart3"
+              :x-axis-data="xAxisData"
+              :chart-data="chartData3"
+              title="语音交互次数"
+              rotate="0"
               style="height:400px; width:100%;"/>
           </el-col>
         </el-row>

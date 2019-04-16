@@ -78,7 +78,7 @@
           </el-form-item>
 
           <el-form-item>
-            <city-picker @change="onCitySelect"/>
+            <!--<city-picker @change="onCitySelect"/>-->
           </el-form-item>
 
           <el-form-item style="margin-bottom:0">
@@ -101,7 +101,7 @@
               :x-axis-data="xAxisData"
               :chart-data="chartDataDayUser"
               :chart-data2="chartDataMonUser"
-              title="手机控制次数趋势图"
+              title="活跃用户数"
               rotate="0"
               style="height:400px; width:100%;"/>
           </el-col>
@@ -120,7 +120,7 @@
               :x-axis-data="xAxisData"
               :chart-data="chartDataDayFa"
               :chart-data2="chartDataMonFa"
-              title="手机控制次数趋势图"
+              title="活跃家庭数"
               rotate="0"
               style="height:400px; width:100%;"/>
           </el-col>

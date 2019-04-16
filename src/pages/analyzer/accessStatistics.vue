@@ -73,38 +73,38 @@
     </div>
 
     <!-- 房间分布设备数 && 设备分布房间数 -->
-    <div class="network-equipment">
-      <el-card shadow="hover">
-        <el-row :gutter="24">
-          <el-col :span="12">
-            <div class="sizer">
-              <el-select v-model="room" placeholder="请选择">
-                <el-option
-                  v-for="item in roomOptions"
-                  :key="item.F_category_id_map"
-                  :label="item.F_category_id_map"
-                  :value="item.F_category_id_map">
-                </el-option>
-              </el-select>
-            </div>
-            <simple-chart id="chart3" title="房间分布设备数（单位:个）" barColor="#68D388" style="height:400px; width:100%;" rotate="45" :result="allRoomEquipmentNum"></simple-chart>
-          </el-col>
-          <el-col :span="12">
-            <div class="sizer">
-              <el-select v-model="equipment" placeholder="请选择">
-                <el-option
-                  v-for="item in equipmentOptions"
-                  :key="item.value"
-                  :label="item.F_category_id_map"
-                  :value="item.F_category_id">
-                </el-option>
-              </el-select>
-            </div>
-						<simple-chart id="chart4" title="设备分布房间数（单位:个）" style="height:400px; width:100%;"></simple-chart>
-          </el-col>
-        </el-row>
-      </el-card>
-    </div>
+    <!--<div class="network-equipment">-->
+      <!--<el-card shadow="hover">-->
+        <!--<el-row :gutter="24">-->
+          <!--<el-col :span="12">-->
+            <!--<div class="sizer">-->
+              <!--<el-select v-model="room" placeholder="请选择">-->
+                <!--<el-option-->
+                  <!--v-for="item in roomOptions"-->
+                  <!--:key="item.F_category_id_map"-->
+                  <!--:label="item.F_category_id_map"-->
+                  <!--:value="item.F_category_id_map">-->
+                <!--</el-option>-->
+              <!--</el-select>-->
+            <!--</div>-->
+            <!--<simple-chart id="chart3" title="房间分布设备数（单位:个）" barColor="#68D388" style="height:400px; width:100%;" rotate="45" :result="allRoomEquipmentNum"></simple-chart>-->
+          <!--</el-col>-->
+          <!--<el-col :span="12">-->
+            <!--<div class="sizer">-->
+              <!--<el-select v-model="equipment" placeholder="请选择">-->
+                <!--<el-option-->
+                  <!--v-for="item in equipmentOptions"-->
+                  <!--:key="item.value"-->
+                  <!--:label="item.F_category_id_map"-->
+                  <!--:value="item.F_category_id">-->
+                <!--</el-option>-->
+              <!--</el-select>-->
+            <!--</div>-->
+						<!--<simple-chart id="chart4" title="设备分布房间数（单位:个）" style="height:400px; width:100%;"></simple-chart>-->
+          <!--</el-col>-->
+        <!--</el-row>-->
+      <!--</el-card>-->
+    <!--</div>-->
   </div>
 </template>
 
