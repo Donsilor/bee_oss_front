@@ -1,5 +1,8 @@
 <template>
-  <div :class="className" :id="id" :style="{height:height,width:width}"/>
+  <div
+    :class="className"
+    :id="id"
+    :style="{height:height,width:width}"/>
 </template>
 
 <script>
@@ -56,6 +59,13 @@ export default {
 		  barWidth: '13%',
 		  data: []
 	  }];
+
+	  function getTotalCnt(arr) {
+		  return arr.reduce((total, num) => {
+			  return total + num
+		  })
+	  }
+
       for (let key in this.result) {
         this.xAxisData.push(key)
         this.result[key].forEach((element, index) => {
@@ -69,14 +79,18 @@ export default {
         })
       }
       for (let key in obj) {
-        this.legendData.push(key)
-        this.seriesData.push({
-          name: key,
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '13%',
-          data: obj[key]
-        })
+		let total = getTotalCnt(obj[key])
+		let name = `${key}(${total})`
+		if(total > 0){
+			this.legendData.push(name)
+			this.seriesData.push({
+			name: name,
+			type: 'bar',
+			stack: 'vistors',
+			barWidth: '13%',
+			data: obj[key]
+			})
+		}
       }
       this.initChart()
     }
