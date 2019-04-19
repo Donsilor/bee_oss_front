@@ -69,7 +69,6 @@ export default {
       for (let key in this.result) {
         this.xAxisData.push(key)
         this.result[key].forEach((element, index) => {
-          console.log(element, 'element12')
           if (!obj[element.F_category_id_map]) {
             obj[element.F_category_id_map] = []
             obj[element.F_category_id_map].push(element.F_cnt)
@@ -91,12 +90,16 @@ export default {
 			data: obj[key]
 			})
 		}
-      }
-      this.initChart()
+	  }
+
+	  this.chart.dispose()
+	  this.$nextTick(() => {
+		  this.initChart()
+	  })
     }
   },
   mounted() {
-
+	  this.initChart()
   },
   beforeDestroy() {
     if (!this.chart) {
