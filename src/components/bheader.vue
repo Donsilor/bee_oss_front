@@ -1,15 +1,18 @@
 <template>
-	<section class="bnheader">
-		<el-row>
-			<el-col :span="16" class="bnh-logo">
-				<h1>BeeNet OSS管理后台</h1>
-			</el-col>
-			<el-col :span="8" class="bnh-info">
-				<span>{{user.name}}</span>
-				<a href="javascript:;" @click="logout">退出登录</a>
-			</el-col>
-		</el-row>
-	</section>
+  <section class="bnheader">
+    <el-row>
+      <el-col :span="16" 
+class="bnh-logo">
+        <h1>BeeNet OSS管理后台</h1>
+      </el-col>
+      <el-col :span="8" 
+class="bnh-info">
+        <span>{{ user.name }}</span>
+        <a href="javascript:;" 
+@click="logout">退出登录</a>
+      </el-col>
+    </el-row>
+  </section>
 </template>
 <script>
 import * as namespace from "../store/namespace";
@@ -28,11 +31,6 @@ export default {
                 })
                 .then(res => {
                     const json = res.data;
-                    //				if (json.code === 200) {
-                    //
-                    //				} else {
-                    //					this.$message.error(json.msg);
-                    //				}
                     this.$store.dispatch({
                         type: namespace.DELUSER
                     });
