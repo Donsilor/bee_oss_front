@@ -66,8 +66,12 @@ axios.interceptors.response.use(
 				// console.error(response.data)
 				if (response.data.code === CODE.NO_LOGIN) {
 					// 未登录的情况
+					Message({
+						message: `token过期，请登录后重试`,
+						type: "error"
+					});
 					localStorage.setItem("localData", "");
-					// window.location.hash = "/";
+					window.location.hash = "/";
 				} else {
 					Message({
 						message: response.data.msg || response.data.message,

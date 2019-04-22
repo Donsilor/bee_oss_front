@@ -27,6 +27,7 @@ export default {
 		},
 		[namespace.DELUSER](state, payload) {
 			state.info = {};
+			localStorage.setItem("localData", '')
 		},
 		getPermissionList(state, payload) {
 			state.permission_list = payload;

@@ -1,34 +1,38 @@
 <template>
-	<div class="container">
-		<div class="login-content">
-			<section class="login-box">
-				<header>
-					<h1>BeeOSS系统 - 登录</h1>
-				</header>
-				<article>
-					<el-form :model="loginForm" ref="loginForm" @submit.prevent.native="login" :rules="rules">
-						<ol class="login-form">
-							<li>
-								<el-form-item prop="username" required>
-									<el-input v-model="loginForm.username" type="text" size="large" placeholder="手机/登录邮箱" />
-								</el-form-item>
-							</li>
-							<li>
-								<el-form-item prop="password" required>
-									<el-input v-model="loginForm.password" type="password" size="large" placeholder="登录密码" />
-								</el-form-item>
-							</li>
-							<li>
-								<el-form-item>
-									<el-button native-type="submit" :disabled="loginForm.name === '' || loginForm.password === ''" type="primary" size="large">登录</el-button>
-								</el-form-item>
-							</li>
-						</ol>
-					</el-form>
-				</article>
-			</section>
-		</div>
-	</div>
+  <div class="container">
+    <div class="login-content">
+      <section class="login-box">
+        <header>
+          <h1>BeeOSS系统 - 登录</h1>
+        </header>
+        <article>
+          <el-form ref="loginForm" :model="loginForm" :rules="rules" @submit.prevent.native="login">
+            <ol class="login-form">
+              <li>
+                <el-form-item prop="username" 
+required>
+                  <el-input v-model="loginForm.username" 
+type="text" size="large" placeholder="手机/登录邮箱" />
+                </el-form-item>
+              </li>
+              <li>
+                <el-form-item prop="password" 
+required>
+                  <el-input v-model="loginForm.password" 
+type="password" size="large" placeholder="登录密码" />
+                </el-form-item>
+              </li>
+              <li>
+                <el-form-item>
+                  <el-button :disabled="loginForm.name === '' || loginForm.password === ''" native-type="submit" type="primary" size="large">登录</el-button>
+                </el-form-item>
+              </li>
+            </ol>
+          </el-form>
+        </article>
+      </section>
+    </div>
+  </div>
 </template>
 <script>
 import { PREFIX } from "../lib/util";
@@ -72,7 +76,7 @@ export default {
         };
     },
     mounted() {
-        if (this.token) {
+        if (localStorage.getItem("localData")) {
             this.$router.push("main");
         }
     },

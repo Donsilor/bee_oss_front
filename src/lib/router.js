@@ -266,7 +266,16 @@ const routes = [
       {
         path: 'switchproduct/search',
         component: Pages.SwitchProductSearch
-      }
+	  },
+	  //家居销售按钮
+	  {
+        path: 'mallButtonConfig',
+        component: Pages.MallButtonConfig
+	  },
+	  {
+		path: 'mallOrder',
+		component: Pages.MallOrder
+	  }
     ]
   },
   {

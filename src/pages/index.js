@@ -54,6 +54,9 @@ import SwitchProductSearch from './switchproduct/search.vue'
 import AppUpgrade from './upgradeCenter/appUpgrade.vue'
 import AppUpgradeDetail from './upgradeCenter/appUpgradeDetail.vue'
 
+import MallButtonConfig from './mallMgmt/mallButtonConfig.vue'
+import MallOrder from './mallMgmt/mallOrder.vue'
+
 export {
   Login,
   Main,
@@ -105,5 +108,7 @@ export {
   ControlAnalysis,
   ActiveAnalysis,
   RoutingAnalysis,
-  DailyData
+  DailyData,
+  MallButtonConfig,
+  MallOrder
 }
