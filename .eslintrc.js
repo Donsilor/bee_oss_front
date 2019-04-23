@@ -14,7 +14,7 @@ module.exports = {
 	//it is base on https://github.com/vuejs/eslint-config-vue
 	rules: {
 		'arrow-parens': 0,
-		'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+		'no-console': 'off',
 		semi: [2, 'never'],
 		'space-before-function-paren': [2, 'never'],
 		'no-new': 0,
