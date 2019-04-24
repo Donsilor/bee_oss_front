@@ -192,11 +192,11 @@ export default {
               path: '/main/CmData',
               icon: 'facility'
 			},
-			// {
-            //   title: '商城配置',
-            //   path: '/main/mallButtonConfig',
-            //   icon: 'facility'
-            // }
+			{
+              title: '商城配置',
+              path: '/main/mallButtonConfig',
+              icon: 'facility'
+            }
           ]
         },
         {
@@ -296,11 +296,11 @@ export default {
             }
           ]
 		},
-		// {
-        //   title: '商城预约',
-        //   path: '/main/mallOrder',
-        //   icon: 'family'
-        // },
+		{
+          title: '商城预约',
+          path: '/main/mallOrder',
+          icon: 'family'
+        },
       ]
     }
     },
