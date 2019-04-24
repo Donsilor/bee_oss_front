@@ -1,218 +1,392 @@
 <template>
-	<div class="page-content ops-page">
-		<div style="padding-bottom: 30px">
-			<!--搜索框-->
-			<el-row type="flex" justify="space-between">
-				<el-col :span="18">
-					<el-autocomplete ref="input" class="searchInput" v-model="searchKey" :maxlength="11" type="text" placeholder="输入用户手机号码" :fetch-suggestions="querySearch" :trigger-on-focus="false" value-key="phone" @select="handleSelect">
-						<template slot-scope="{ item }">
-							<div class="name">{{ item.phone }}</div>
-							<span class="addr">{{ item.user_name }}</span>
-						</template>
-					</el-autocomplete>
-					<el-button type="primary" @click="search">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
-				</el-col>
-				<!--<el-col :span="6" style="text-align: right;">-->
-				<!--<el-button v-show="searchedFlag" @click="searchedFlag = false">返回</el-button>-->
-				<!--</el-col>-->
-			</el-row>
-			<div v-if="!hasAllMsg" style="height: 400px; color: #999; width: 100%; text-align: center; line-height: 400px">
-				请输入手机号码查询用户信息
-			</div>
-			<div v-if="hasAllMsg">
-				<!--用户信息-->
-				<el-row class="user_msg_con">
-					<el-col :span="3">
-						<div class="first-img">
-							<img src="../../images/u2978.png" width="95" height="130">
-						</div>
-					</el-col>
-					<el-col :span="21">
-						<el-form label-width="100px" class="user_msg">
-							<el-row>
-								<el-col :span="7" v-for="item in user_msg" :key="item.value">
-									<el-form-item :label="item.name">
-										<span>{{item.value}}</span>
-									</el-form-item>
-								</el-col>
-							</el-row>
-						</el-form>
-					</el-col>
-				</el-row>
-				<!--终端列表-->
-				<el-row class="terminal_list p_r">
-					<h3 class="h3_pp">终端列表</h3>
-					<!--<div class="right_button">-->
-					<!--<el-button type="primary" @click="toRootLog">主查看云平台日志</el-button>-->
-					<!--</div>-->
-					<el-table :data="terminalListPage" style="width: 100%">
-						<el-table-column v-for="item in terminalList.tableColumn" :key="item.prop" :prop="item.prop" :label="item.label" :width="'auto'">
-							<template slot-scope="scope">
-								<div v-if="item.prop === 'F_device_state'">
-									{{getStatusText(scope.row['F_status'])}}
-								</div>
-								<div v-else>{{scope.row[item.prop]}}</div>
-							</template>
-						</el-table-column>
-						<el-table-column width="auto" label="日志">
-							<template slot-scope="scope">
-								<el-button type="text" size="small" @click="openLogOutLayer(scope.row)">登录登出日志</el-button>
-								<!--<el-button  type="text" size="small" @click="errLogLayer=true">错误日志</el-button>-->
-							</template>
-						</el-table-column>
-					</el-table>
-					<pager v-if="terminalList.tableData && terminalList.tableData.length" :data="terminalList.tableData" :display-data="terminalListPage"></pager>
-				</el-row>
-				<!--家庭详情-->
-				<el-row class="p_r">
-					<h3 class="h3_pp">家庭详情</h3>
-					<el-dropdown class="family_tab" @command="handleCommand" trigger="click">
-						<el-button type="" size="small">
-							{{allFamily.length && allFamily[allFamilyIndex].name}}
-							<i class="el-icon-arrow-down el-icon--right"></i>
-						</el-button>
-						<!--<span class="el-dropdown-link">-->
-						<!--{{allFamily.length && allFamily[0].name}}<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
-						<!--</span>-->
-						<el-dropdown-menu slot="dropdown" style="max-height:250px;overflow-y:auto">
-							<el-dropdown-item :command="item.value" v-for="item in allFamily" :key="item.value">{{item.name}}</el-dropdown-item>
-						</el-dropdown-menu>
-					</el-dropdown>
-					<div class="detail_tab_con p_r">
-						<el-button @click="openOperListLayer" class="operation-list" size="small" type="primary">用户操作轨迹</el-button>
-						<el-tabs v-model="activeName" @tab-click="tabClick">
-							<el-tab-pane label="基本信息" name="first"></el-tab-pane>
-							<el-tab-pane label="成员" name="second"></el-tab-pane>
-							<el-tab-pane label="设备" name="third"></el-tab-pane>
-						</el-tabs>
-						<!--家庭-基本信息-->
-						<el-row class="user_msg_con" v-show="activeName==='first'">
-							<el-col :span="2">
-								<img src="../../images/u2978.png">
-							</el-col>
-							<el-col :span="22">
-								<el-form label-width="100px" class="user_msg">
-									<el-row>
-										<el-col :span="7" v-for="item in family_info" :key="item.value">
-											<el-form-item :label="item.name">
-												<span>{{item.value}}</span>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</el-form>
-							</el-col>
-						</el-row>
-						<!--家庭-成员列表-->
-						<el-row class="user_msg_con" v-show="activeName==='second'">
-							<el-table :data="memberList.tableData" style="width: 100%">
-								<el-table-column v-for="item in memberList.tableColumn" :key="item.prop" :prop="item.prop" :label="item.label" :width="'auto'">
-								</el-table-column>
-							</el-table>
-						</el-row>
-						<!--家庭-设备列表-->
-						<el-row class="user_msg_con" v-show="activeName==='third'" style="padding-top: 0">
-							<h3 class="h3_inner">路由器</h3>
-							<el-table :data="routerList.tableData" style="width: 100%; margin-bottom: 15px">
-								<el-table-column v-for="item in routerList.tableColumn" :key="item.prop" :prop="item.prop" :label="item.label" :width="'auto'">
-									<template slot-scope="scope">
-										<div v-if="item.prop === 'F_device_state'">
-											{{getRouterStatusText(scope.row['F_device_state'])}}
-										</div>
-										<div v-else>{{scope.row[item.prop]}}</div>
-									</template>
-								</el-table-column>
-							</el-table>
-							<h3 class="h3_inner">子设备</h3>
-							<div class="childDevice">
-								<el-table :data="deviceList.tableData" style="width: 100%">
-									<el-table-column v-for="item in deviceList.tableColumn" :key="item.prop" :prop="item.prop" :label="item.label" :width="'auto'" sortable>
-										<template slot-scope="scope">
-											<div v-if="item.prop === 'F_device_state'">
-												{{getStatusText(scope.row['F_device_state'])}}
-											</div>
-											<div :title="scope.row[item.prop]" v-else>{{scope.row[item.prop]}}</div>
-										</template>
-									</el-table-column>
-								</el-table>
-							</div>
-						</el-row>
-					</div>
-				</el-row>
-			</div>
-		</div>
-		<!--错误日志-->
-		<el-dialog title="错误日志" :visible.sync="errLogLayer">
-			<el-form ref="errLogForm" :model="errLogForm">
-				<el-form-item label="" class="errSearchForm">
-					<el-date-picker v-model="errLogForm.date" type="daterange" placeholder="选择日期范围">
-					</el-date-picker>
-					<el-select v-model="errLogForm.type">
-						<el-option label="uuid" value="uuid"></el-option>
-						<el-option label="msg_tag" value="msg_tag"></el-option>
-						<el-option label="user_id" value="user_id"></el-option>
-						<el-option label="route_id" value="route_id"></el-option>
-					</el-select>
-					<el-input v-model="errLogForm.inner" placeholder="包含"></el-input>
-					<el-input v-model="errLogForm.uid" placeholder="uuid"></el-input>
-					<el-button type="primary" @click="searchErrLog">搜 索</el-button>
-				</el-form-item>
-			</el-form>
-			<el-collapse v-model="errActiveName" accordion>
-				<el-collapse-item :title="item.key" :name="index" v-for="(item, index) in errLogList" :key="item.value">
-					<div>{{item.value}}</div>
-				</el-collapse-item>
-			</el-collapse>
-			<span slot="footer" class="dialog-footer">
-				<el-button @click="errLogLayer = false" style="border:none;">取 消</el-button>
-			</span>
-		</el-dialog>
-		<!--登录登出日志-->
-		<el-dialog title="登录登出日志" :visible.sync="logOutLayer">
-			<div style="padding-bottom:15px">
-				<el-date-picker v-model="logOutForm.date" @change="changeSelectLogOutDate" placeholder="今天">
-				</el-date-picker>
-			</div>
-			<div class="childDevice">
-				<el-table :data="logOutList.tableData" style="width: 100%">
-					<el-table-column v-for="item in logOutList.tableColumn" :key="item.prop" :prop="item.prop" :label="item.label">
-						<template slot-scope="scope">
-							<div :title="scope.row[item.prop]">{{scope.row[item.prop]}}</div>
-						</template>
-					</el-table-column>
-				</el-table>
-			</div>
-			<div class="page-line">
-				<el-pagination small layout="prev, pager, next" :total="totalItem" @current-change="pageChange" :page-size="10" :current-page.sync="currentPage"></el-pagination>
-			</div>
-			<span slot="footer" class="dialog-footer">
-				<el-button @click="logOutLayer = false" style="border:none;">取 消</el-button>
-			</span>
-		</el-dialog>
-		<!--子设备操作流水-->
-		<el-dialog title="子设备操作流水" :visible.sync="operListLayer">
-			<div style="padding-bottom:15px">
-				<el-date-picker v-model="operListForm.date" @change="changeSelectOperList" placeholder="今天">
-				</el-date-picker>
-			</div>
-			<div class="childDevice">
-				<el-table :data="operList.tableData" style="width: 100%">
-					<el-table-column v-for="item in operList.tableColumn" :key="item.prop" :prop="item.prop" :label="item.label">
-						<template slot-scope="scope">
-							<div v-if="scope.row[item.prop]==='created_time'" :title="scope.row[item.prop].Format('yyyy-MM-dd')">{{scope.row[item.prop].Format('yyyy-MM-dd')}}</div>
-							<div v-else-if="scope.row[item.prop]==='rsp_time'" :title="scope.row[item.prop].Format('yyyy-MM-dd')">{{scope.row[item.prop].Format('yyyy-MM-dd')}}</div>
-							<div v-else :title="scope.row[item.prop]">{{scope.row[item.prop]}}</div>
-						</template>
-					</el-table-column>
-				</el-table>
-			</div>
-			<div class="page-line">
-				<el-pagination small layout="prev, pager, next" :total="totalItemOper" @current-change="pageOperChange" :page-size="10" :current-page.sync="currentOperPage"></el-pagination>
-			</div>
-			<span slot="footer" class="dialog-footer">
-				<el-button @click="operListLayer = false" style="border:none;">取 消</el-button>
-			</span>
-		</el-dialog>
-	</div>
+  <div class="page-content ops-page">
+    <div style="padding-bottom: 30px">
+      <!--搜索框-->
+      <el-row
+        type="flex"
+        justify="space-between">
+        <el-col :span="18">
+          <el-autocomplete
+            ref="input"
+            v-model="searchKey"
+            :maxlength="11"
+            :fetch-suggestions="querySearch"
+            :trigger-on-focus="false"
+            class="searchInput"
+            type="text"
+            placeholder="输入用户手机号码"
+            value-key="phone"
+            @select="handleSelect">
+            <template slot-scope="{ item }">
+              <div class="name">{{ item.phone }}</div>
+              <span class="addr">{{ item.user_name }}</span>
+            </template>
+          </el-autocomplete>
+          <el-button
+            type="primary"
+            @click="search">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
+        </el-col>
+        <!--<el-col :span="6" style="text-align: right;">-->
+        <!--<el-button v-show="searchedFlag" @click="searchedFlag = false">返回</el-button>-->
+        <!--</el-col>-->
+      </el-row>
+      <div
+        v-if="!hasAllMsg"
+        style="height: 400px; color: #999; width: 100%; text-align: center; line-height: 400px">
+        请输入手机号码查询用户信息
+      </div>
+      <div v-if="hasAllMsg">
+        <!--用户信息-->
+        <el-row class="user_msg_con">
+          <el-col :span="3">
+            <div class="first-img">
+              <img
+                src="../../images/u2978.png"
+                width="95"
+                height="130">
+            </div>
+          </el-col>
+          <el-col :span="21">
+            <el-form
+              label-width="100px"
+              class="user_msg">
+              <el-row>
+                <el-col
+                  v-for="item in user_msg"
+                  :span="7"
+                  :key="item.value">
+                  <el-form-item :label="item.name">
+                    <span>{{ item.value }}</span>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </el-col>
+        </el-row>
+        <!--终端列表-->
+        <el-row class="terminal_list p_r">
+          <h3 class="h3_pp">终端列表</h3>
+          <!--<div class="right_button">-->
+          <!--<el-button type="primary" @click="toRootLog">主查看云平台日志</el-button>-->
+          <!--</div>-->
+          <el-table
+            :data="terminalListPage"
+            style="width: 100%">
+            <el-table-column
+              v-for="item in terminalList.tableColumn"
+              :key="item.prop"
+              :prop="item.prop"
+              :label="item.label"
+              :width="'auto'">
+              <template slot-scope="scope">
+                <div v-if="item.prop === 'F_device_state'">
+                  {{ getStatusText(scope.row['F_status']) }}
+                </div>
+                <div v-else>{{ scope.row[item.prop] }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="auto"
+              label="日志">
+              <template slot-scope="scope">
+                <el-button
+                  type="text"
+                  size="small"
+                  @click="openLogOutLayer(scope.row)">登录登出日志</el-button>
+                  <!--<el-button  type="text" size="small" @click="errLogLayer=true">错误日志</el-button>-->
+              </template>
+            </el-table-column>
+          </el-table>
+          <pager
+            v-if="terminalList.tableData && terminalList.tableData.length"
+            :data="terminalList.tableData"
+            :display-data="terminalListPage"/>
+        </el-row>
+        <!--家庭详情-->
+        <el-row class="p_r">
+          <h3 class="h3_pp">家庭详情</h3>
+          <el-dropdown
+            class="family_tab"
+            trigger="click"
+            @command="handleCommand">
+            <el-button
+              type=""
+              size="small">
+              {{ allFamily.length && allFamily[allFamilyIndex].name }}
+              <i class="el-icon-arrow-down el-icon--right"/>
+            </el-button>
+            <!--<span class="el-dropdown-link">-->
+            <!--{{allFamily.length && allFamily[0].name}}<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
+            <!--</span>-->
+            <el-dropdown-menu
+              slot="dropdown"
+              style="max-height:250px;overflow-y:auto">
+              <el-dropdown-item
+                v-for="item in allFamily"
+                :command="item.value"
+                :key="item.value">{{ item.name }}</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <div class="detail_tab_con p_r">
+            <el-button
+              class="operation-list"
+              size="small"
+              type="primary"
+              @click="openOperListLayer">用户操作轨迹</el-button>
+            <el-tabs
+              v-model="activeName"
+              @tab-click="tabClick">
+              <el-tab-pane
+                label="基本信息"
+                name="first"/>
+              <el-tab-pane
+                label="成员"
+                name="second"/>
+              <el-tab-pane
+                label="设备"
+                name="third"/>
+            </el-tabs>
+            <!--家庭-基本信息-->
+            <el-row
+              v-show="activeName==='first'"
+              class="user_msg_con">
+              <el-col :span="2">
+                <img src="../../images/u2978.png">
+              </el-col>
+              <el-col :span="22">
+                <el-form
+                  label-width="100px"
+                  class="user_msg">
+                  <el-row>
+                    <el-col
+                      v-for="(item, index) in family_info"
+                      :span="7"
+                      :key="index">
+                      <el-form-item :label="item.name">
+                        <span>{{ item.value }}</span>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-form>
+              </el-col>
+            </el-row>
+            <!--家庭-成员列表-->
+            <el-row
+              v-show="activeName==='second'"
+              class="user_msg_con">
+              <el-table
+                :data="memberList.tableData"
+                style="width: 100%">
+                <el-table-column
+                  v-for="item in memberList.tableColumn"
+                  :key="item.prop"
+                  :prop="item.prop"
+                  :label="item.label"
+                  :width="'auto'"/>
+              </el-table>
+            </el-row>
+            <!--家庭-设备列表-->
+            <el-row
+              v-show="activeName==='third'"
+              class="user_msg_con"
+              style="padding-top: 0">
+              <h3 class="h3_inner">路由器</h3>
+              <el-table
+                :data="routerList.tableData"
+                style="width: 100%; margin-bottom: 15px">
+                <el-table-column
+                  v-for="item in routerList.tableColumn"
+                  :key="item.prop"
+                  :prop="item.prop"
+                  :label="item.label"
+                  :width="'auto'">
+                  <template slot-scope="scope">
+                    <div v-if="item.prop === 'F_device_state'">
+                      {{ getRouterStatusText(scope.row['F_device_state']) }}
+                    </div>
+                    <div v-else>{{ scope.row[item.prop] }}</div>
+                  </template>
+                </el-table-column>
+              </el-table>
+              <h3 class="h3_inner">子设备</h3>
+              <div class="childDevice">
+                <el-table
+                  :data="deviceList.tableData"
+                  style="width: 100%">
+                  <el-table-column
+                    v-for="item in deviceList.tableColumn"
+                    :key="item.prop"
+                    :prop="item.prop"
+                    :label="item.label"
+                    :width="'auto'"
+                    sortable>
+                    <template slot-scope="scope">
+                      <div v-if="item.prop === 'F_device_state'">
+                        {{ getStatusText(scope.row['F_device_state']) }}
+                      </div>
+                      <div
+                        v-else
+                        :title="scope.row[item.prop]">{{ scope.row[item.prop] }}</div>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
+            </el-row>
+          </div>
+        </el-row>
+      </div>
+    </div>
+    <!--错误日志-->
+    <el-dialog
+      :visible.sync="errLogLayer"
+      title="错误日志">
+      <el-form
+        ref="errLogForm"
+        :model="errLogForm">
+        <el-form-item
+          label=""
+          class="errSearchForm">
+          <el-date-picker
+            v-model="errLogForm.date"
+            type="daterange"
+            placeholder="选择日期范围"/>
+          <el-select v-model="errLogForm.type">
+            <el-option
+              label="uuid"
+              value="uuid"/>
+            <el-option
+              label="msg_tag"
+              value="msg_tag"/>
+            <el-option
+              label="user_id"
+              value="user_id"/>
+            <el-option
+              label="route_id"
+              value="route_id"/>
+          </el-select>
+          <el-input
+            v-model="errLogForm.inner"
+            placeholder="包含"/>
+          <el-input
+            v-model="errLogForm.uid"
+            placeholder="uuid"/>
+          <el-button
+            type="primary"
+            @click="searchErrLog">搜 索</el-button>
+        </el-form-item>
+      </el-form>
+      <el-collapse
+        v-model="errActiveName"
+        accordion>
+        <el-collapse-item
+          v-for="(item, index) in errLogList"
+          :title="item.key"
+          :name="index"
+          :key="item.value">
+          <div>{{ item.value }}</div>
+        </el-collapse-item>
+      </el-collapse>
+      <span
+        slot="footer"
+        class="dialog-footer">
+        <el-button
+          style="border:none;"
+          @click="errLogLayer = false">取 消</el-button>
+      </span>
+    </el-dialog>
+    <!--登录登出日志-->
+    <el-dialog
+      :visible.sync="logOutLayer"
+      title="登录登出日志">
+      <div style="padding-bottom:15px">
+        <el-date-picker
+          v-model="logOutForm.date"
+          placeholder="今天"
+          @change="changeSelectLogOutDate"/>
+      </div>
+      <div class="childDevice">
+        <el-table
+          :data="logOutList.tableData"
+          style="width: 100%">
+          <el-table-column
+            v-for="item in logOutList.tableColumn"
+            :key="item.prop"
+            :prop="item.prop"
+            :label="item.label">
+            <template slot-scope="scope">
+              <div :title="scope.row[item.prop]">{{ scope.row[item.prop] }}</div>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div class="page-line">
+        <el-pagination
+          :total="totalItem"
+          :page-size="10"
+          :current-page.sync="currentPage"
+          small
+          layout="prev, pager, next"
+          @current-change="pageChange"/>
+      </div>
+      <span
+        slot="footer"
+        class="dialog-footer">
+        <el-button
+          style="border:none;"
+          @click="logOutLayer = false">取 消</el-button>
+      </span>
+    </el-dialog>
+    <!--子设备操作流水-->
+    <el-dialog
+      :visible.sync="operListLayer"
+      title="子设备操作流水">
+      <div style="padding-bottom:15px">
+        <el-date-picker
+          v-model="operListForm.date"
+          placeholder="今天"
+          @change="changeSelectOperList"/>
+      </div>
+      <div class="childDevice">
+        <el-table
+          :data="operList.tableData"
+          style="width: 100%">
+          <el-table-column
+            v-for="item in operList.tableColumn"
+            :key="item.prop"
+            :prop="item.prop"
+            :label="item.label">
+            <template slot-scope="scope">
+              <div
+                v-if="scope.row[item.prop]==='created_time'"
+                :title="scope.row[item.prop].Format('yyyy-MM-dd')">{{ scope.row[item.prop].Format('yyyy-MM-dd') }}</div>
+              <div
+                v-else-if="scope.row[item.prop]==='rsp_time'"
+                :title="scope.row[item.prop].Format('yyyy-MM-dd')">{{ scope.row[item.prop].Format('yyyy-MM-dd') }}</div>
+              <div
+                v-else
+                :title="scope.row[item.prop]">{{ scope.row[item.prop] }}</div>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div class="page-line">
+        <el-pagination
+          :total="totalItemOper"
+          :page-size="10"
+          :current-page.sync="currentOperPage"
+          small
+          layout="prev, pager, next"
+          @current-change="pageOperChange"/>
+      </div>
+      <span
+        slot="footer"
+        class="dialog-footer">
+        <el-button
+          style="border:none;"
+          @click="operListLayer = false">取 消</el-button>
+      </span>
+    </el-dialog>
+  </div>
 </template>
 <script>
 import { PREFIX } from "../../lib/util";
@@ -228,7 +402,6 @@ import "../../lib/util";
 import pager from "../../components/pagination/livePagination.vue";
 import API from "../../service/index";
 export default {
-    computed: {},
     components: {
         pager
     },
@@ -324,6 +497,8 @@ export default {
             suggestionSize: 10
         };
     },
+    computed: {},
+    watch: {},
     mounted() {
         if (this.$route.params.id) {
             this.searchKey = this.$route.params.id;
@@ -343,7 +518,6 @@ export default {
         );
         this.$refs.input.$el.querySelector(".el-autocomplete-suggestion").appendChild(this.$suggestionMoreBtn);
     },
-    watch: {},
     methods: {
         searchErrLog() {
             this.$message.error("123123");
