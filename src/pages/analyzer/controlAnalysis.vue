@@ -1,36 +1,48 @@
 <template>
   <div class="page-content config-page">
     <!-- 过滤条件 -->
-		<el-row>
-			<el-col>
-				<el-form :inline="true">
-					<el-form-item>
-						<el-date-picker placeholder="请选择时间段" v-model="dateRange" @change="changeDate" type="daterange" align="left" unlink-panels range-separator="至" :clearable="false" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
-						</el-date-picker>
-					</el-form-item>
+    <el-row>
+      <el-col>
+        <el-form :inline="true">
+          <el-form-item>
+            <el-date-picker
+              v-model="dateRange"
+              :clearable="false"
+              :picker-options="pickerOptions"
+              placeholder="请选择时间段"
+              type="daterange"
+              align="left"
+              unlink-panels
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              @change="changeDate"/>
+          </el-form-item>
 
-					<el-form-item>
-						<city-picker @change="onCitySelect"></city-picker>
-					</el-form-item>
+          <!-- <el-form-item>
+            <city-picker @change="onCitySelect"/>
+          </el-form-item> -->
 
-					<el-form-item style="margin-bottom:0">
-						<el-button type="primary" @click="search">查询</el-button>
-					</el-form-item>
-				</el-form>
-			</el-col>
-		</el-row>
+          <el-form-item style="margin-bottom:0">
+            <el-button
+              type="primary"
+              @click="search">查询</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </el-row>
     <!-- 数据头部展示 -->
     <el-row>
       <el-col class="col-280">
         <el-card class="box-card">
           <div class="data-list">
             <el-row :gutter="24">
-							<el-col :span="16">
-								<span>{{ equipmentAnalyzer.text }}</span>
-							</el-col>
-						</el-row>
-						<div>{{ equipmentAnalyzer.totalCount }}</div>
-						<div>截止到 {{ equipmentAnalyzer.lastDate }}</div>
+              <el-col :span="16">
+                <span>{{ equipmentAnalyzer.text }}</span>
+              </el-col>
+            </el-row>
+            <div>{{ equipmentAnalyzer.totalCount }}</div>
+            <div>截止到 {{ equipmentAnalyzer.lastDate }}</div>
           </div>
         </el-card>
       </el-col>
@@ -39,12 +51,12 @@
         <el-card class="box-card">
           <div class="data-list">
             <el-row :gutter="24">
-							<el-col :span="16">
-								<span>{{ userAnalyzer.text }}</span>
-							</el-col>
-						</el-row>
-						<div>{{ userAnalyzer.totalCount }}</div>
-						<div>截止到 {{ userAnalyzer.lastDate }}</div>
+              <el-col :span="16">
+                <span>{{ userAnalyzer.text }}</span>
+              </el-col>
+            </el-row>
+            <div>{{ userAnalyzer.totalCount }}</div>
+            <div>截止到 {{ userAnalyzer.lastDate }}</div>
           </div>
         </el-card>
       </el-col>
@@ -53,12 +65,12 @@
         <el-card class="box-card">
           <div class="data-list">
             <el-row :gutter="24">
-							<el-col :span="16">
-								<span>{{ controlAnalyzer.text }}</span>
-							</el-col>
-						</el-row>
-						<div>{{ controlAnalyzer.totalCount }}</div>
-						<div>截止到 {{ controlAnalyzer.lastDate }}</div>
+              <el-col :span="16">
+                <span>{{ controlAnalyzer.text }}</span>
+              </el-col>
+            </el-row>
+            <div>{{ controlAnalyzer.totalCount }}</div>
+            <div>截止到 {{ controlAnalyzer.lastDate }}</div>
           </div>
         </el-card>
       </el-col>
@@ -68,10 +80,14 @@
       <el-card shadow="hover">
         <el-row :gutter="24">
           <el-col :span="12">
-            <pie-chart id="pieChart1" title="控制途径分布" :result="controlWay" style="height:400px; width:100%;"></pie-chart>
+            <pie-chart
+              id="pieChart1"
+              :result="controlWay"
+              title="控制途径分布"
+              style="height:400px; width:100%;"/>
           </el-col>
           <el-col :span="12">
-            <circular-chart id="circularChart" title="网络制式分布" :result="networkType" style="height:400px; width:100%;"></circular-chart>
+            <!-- <circular-chart id="circularChart" title="网络制式分布" :result="networkType" style="height:400px; width:100%;"></circular-chart> -->
           </el-col>
         </el-row>
       </el-card>
@@ -81,12 +97,23 @@
       <el-card shadow="hover">
         <el-row :gutter="24">
           <el-col :span="12">
-            <simple-chart id="chart1" title="手机控制次数分析（单位：次）" rotate="45" :result="allAppNum" style="height:400px; width:100%;"></simple-chart>
-            <!-- <pie-chart id="pieChart111" title="手机控制次数分析（单位：次）" style="height:400px; width:100%;"></pie-chart> -->
+            <simple-chart
+              id="chart1"
+              :result="allAppNum"
+              title="手机控制次数分析（单位：次）"
+              rotate="45"
+              style="height:400px; width:100%;"/>
+              <!-- <pie-chart id="pieChart111" title="手机控制次数分析（单位：次）" style="height:400px; width:100%;"></pie-chart> -->
           </el-col>
           <el-col :span="12">
-            <simple-chart id="chart12" title="手机控制人数分析（单位：个）" rotate="45" barColor="#68D388" :result="allAppUserNum" style="height:400px; width:100%;"></simple-chart>
-            <!-- <pie-chart id="pieChart11133" title="手机控制人数分析（单位：个）" style="height:400px; width:100%;"></pie-chart> -->
+            <simple-chart
+              id="chart12"
+              :result="allAppUserNum"
+              title="手机控制人数分析（单位：个）"
+              rotate="45"
+              bar-color="#68D388"
+              style="height:400px; width:100%;"/>
+              <!-- <pie-chart id="pieChart11133" title="手机控制人数分析（单位：个）" style="height:400px; width:100%;"></pie-chart> -->
           </el-col>
         </el-row>
       </el-card>
@@ -96,7 +123,12 @@
       <el-card shadow="hover">
         <el-row :gutter="24">
           <el-col>
-            <line-chart id="phoneControlTimes" title="手机控制次数趋势图" rotate="0" :result="tendencyArray" style="height:400px; width:100%;"></line-chart>
+            <line-chart
+              id="phoneControlTimes"
+              :result="tendencyArray"
+              title="手机控制次数趋势图"
+              rotate="0"
+              style="height:400px; width:100%;"/>
           </el-col>
         </el-row>
       </el-card>
@@ -106,12 +138,23 @@
       <el-card shadow="hover">
         <el-row :gutter="24">
           <el-col :span="12">
-            <simple-chart id="voice-chart" title="语音控制次数分析（单位：次）" rotate="45" :result="allRouterNum" style="height:400px; width:100%;"></simple-chart>
-            <!-- <pie-chart id="pieChart113sss1" title="语音控制次数分析（单位：次）" style="height:400px; width:100%;"></pie-chart> -->
+            <simple-chart
+              id="voice-chart"
+              :result="allRouterNum"
+              title="语音控制次数分析（单位：次）"
+              rotate="45"
+              style="height:400px; width:100%;"/>
+              <!-- <pie-chart id="pieChart113sss1" title="语音控制次数分析（单位：次）" style="height:400px; width:100%;"></pie-chart> -->
           </el-col>
           <el-col :span="12">
-            <simple-chart id="voice-chart1" title="语音控制人数分析（单位：个）" rotate="45" barColor="#68D388" :result="allRouterUserNum" style="height:400px; width:100%;"></simple-chart>
-            <!-- <pie-chart id="pieChart113fff31" title="语音控制人数分析（单位：个）" style="height:400px; width:100%;"></pie-chart> -->
+            <simple-chart
+              id="voice-chart1"
+              :result="allRouterUserNum"
+              title="语音控制人数分析（单位：个）"
+              rotate="45"
+              bar-color="#68D388"
+              style="height:400px; width:100%;"/>
+              <!-- <pie-chart id="pieChart113fff31" title="语音控制人数分析（单位：个）" style="height:400px; width:100%;"></pie-chart> -->
           </el-col>
         </el-row>
       </el-card>
@@ -141,7 +184,8 @@ export default {
         date: '',
         province: '',
         city: ''
-      },
+	  },
+	  dateRange: [],
       pickerOptions: {
         shortcuts: [{
           text: '昨天',
@@ -204,7 +248,12 @@ export default {
     }
   },
   mounted () {
-    this.getControlAnalysis()
+	this.getControlAnalysis()
+	let end = new Date()
+    end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
+	this.equipmentAnalyzer.lastDate = this.formatDate(end)
+    this.userAnalyzer.lastDate = this.formatDate(end)
+    this.controlAnalyzer.lastDate = this.formatDate(end)
   },
   methods: {
     // 获取数据
@@ -227,7 +276,8 @@ export default {
           this.allAppNum = Object.values(result.category_data.F_app)
           this.allAppUserNum = Object.values(result.category_data.F_app_usr)
           this.allRouterNum = Object.values(result.category_data.F_router)
-          this.allRouterUserNum = Object.values(result.category_data.F_router_usr)
+		  this.allRouterUserNum = Object.values(result.category_data.F_router_usr)
+		  // 日期
         }
       })
     },
@@ -249,8 +299,18 @@ export default {
 			start_time: this.dateRange[0].Format('yyyy-MM-dd'),
 			end_time: this.dateRange[1].Format('yyyy-MM-dd')
 		}
-		console.log(777, param)
+		this.equipmentAnalyzer.lastDate = param.end_time
+		this.userAnalyzer.lastDate = param.end_time
+		this.controlAnalyzer.lastDate = param.end_time
 		this.getControlAnalysis(param)
+	},
+	// 格式化时间
+    formatDate(d) {
+      let padZero = num => {
+          num = num + ''
+          return num.length == 1 ? '0' + num : num
+      }
+      return d ? d.getFullYear() + '-' + padZero(d.getMonth() + 1) + '-' + padZero(d.getDate()) : ''
     }
   }
 }
