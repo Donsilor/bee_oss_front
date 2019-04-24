@@ -1,7 +1,7 @@
-import * as namespace from "../namespace";
-import { PREFIX } from "../../lib/util";
-import axios from "axios";
-const API_UPGRADE = "/api.php";
+import * as namespace from '../namespace'
+import { PREFIX } from '../../lib/util'
+import axios from 'axios'
+const API_UPGRADE = '/api.php'
 
 export default {
 	state: {
@@ -14,31 +14,31 @@ export default {
 
 	getters: {
 		[namespace.APPIOS](state) {
-			return state.appIos;
+			return state.appIos
 		},
 
 		[namespace.APPANDROID](state) {
-			return state.appAndroid;
+			return state.appAndroid
 		},
 
 		[namespace.ROUTER](state) {
-			return state.router;
+			return state.router
 		},
 
 		[namespace.SUBSET](state) {
-			return state.subset;
+			return state.subset
 		},
 
 		[namespace.BRAND](state) {
-			return state.product.brand;
+			return state.product.brand
 		},
 
 		[namespace.TYPE](state) {
-			return state.product.type;
+			return state.product.type
 		},
 
 		[namespace.PRODUCT](state) {
-			return state.product.product;
+			return state.product.product
 		}
 	},
 
@@ -47,52 +47,52 @@ export default {
 			axios
 				.post(API_UPGRADE, {
 					token: payload.token,
-					method: "released_versions",
+					method: 'released_versions',
 					type: 4
 				})
 				.then(res => {
-					const json = res.data;
+					const json = res.data
 					if (json.code === 0) {
-						const list = json.result;
+						const list = json.result
 						if (list.length) {
 							state.appIos = list.map(x => {
 								return {
 									label: `${x.title}-${x.version}`,
 									value: x.version
-								};
-							});
+								}
+							})
 						} else {
-							state.appIos = [];
+							state.appIos = []
 						}
 					} else {
 					}
-				});
+				})
 		},
 
 		[namespace.GETAPPANDROID](state, payload) {
 			axios
 				.post(API_UPGRADE, {
 					token: payload.token,
-					method: "released_versions",
+					method: 'released_versions',
 					type: 1
 				})
 				.then(res => {
-					const json = res.data;
+					const json = res.data
 					if (json.code === 0) {
-						const list = json.result;
+						const list = json.result
 						if (list.length) {
 							state.appAndroid = list.map(x => {
 								return {
 									label: x.title,
 									value: x.version
-								};
-							});
+								}
+							})
 						} else {
-							state.appAndroid = [];
+							state.appAndroid = []
 						}
 					} else {
 					}
-				});
+				})
 		},
 
 		[namespace.GETROUTER](state, payload) {
@@ -100,13 +100,13 @@ export default {
 				.post(API_UPGRADE, {
 					token: payload.token,
 					router_pid: payload.router_pid,
-					method: "released_versions",
+					method: 'released_versions',
 					type: 2
 				})
 				.then(res => {
-					const json = res.data;
+					const json = res.data
 					if (json.code === 0) {
-						const list = json.result;
+						const list = json.result
 						if (list.length) {
 							state.router = list.map(x => {
 								return {
@@ -114,56 +114,56 @@ export default {
 									value: x.version,
 									product_id: x.product_id,
 									pid_value: `${x.router_pid}-${x.version}`
-								};
-							});
+								}
+							})
 						} else {
-							state.router = [];
+							state.router = []
 						}
 					} else {
 					}
-				});
+				})
 		},
 
 		[namespace.GETSUBSET](state, payload) {
 			axios
 				.post(API_UPGRADE, {
 					token: payload.token,
-					method: "released_versions",
+					method: 'released_versions',
 					type: 3,
 					product_id: payload.product_id
 				})
 				.then(res => {
-					const json = res.data;
+					const json = res.data
 					if (json.code === 0) {
-						const list = json.result;
+						const list = json.result
 						if (list && list.length) {
 							state.subset = list.map(x => {
 								return {
 									label: x.title,
 									value: `${x.version}-${x.product_id}`
-								};
-							});
+								}
+							})
 						} else {
-							state.subset = [];
+							state.subset = []
 						}
 					} else {
 					}
-				});
+				})
 		},
 
 		[namespace.GETPRODUCT](state, payload) {
 			axios
-				.post(PREFIX + "version/product", {
+				.post(PREFIX + 'version/product', {
 					token: payload.token
 				})
 				.then(res => {
-					const json = res.data;
+					const json = res.data
 					if (json.code === 200) {
-						state.product = json.result;
+						state.product = json.result
 					} else {
-						state.product = {};
+						state.product = {}
 					}
-				});
+				})
 		}
 	},
 
@@ -172,7 +172,7 @@ export default {
 			commit({
 				type: namespace.GETAPPIOS,
 				token: payload.token
-			});
+			})
 		},
 
 		[namespace.INITAPPIOS]({ commit, state }, payload) {
@@ -180,7 +180,7 @@ export default {
 				commit({
 					type: namespace.GETAPPIOS,
 					token: payload
-				});
+				})
 			}
 		},
 
@@ -188,7 +188,7 @@ export default {
 			commit({
 				type: namespace.GETAPPANDROID,
 				token: payload.token
-			});
+			})
 		},
 
 		[namespace.INITAPPANDROID]({ commit, state }, payload) {
@@ -196,7 +196,7 @@ export default {
 				commit({
 					type: namespace.GETAPPANDROID,
 					token: payload.token
-				});
+				})
 			}
 		},
 
@@ -205,7 +205,7 @@ export default {
 				type: namespace.GETROUTER,
 				token: payload.token,
 				router_pid: payload.router_pid
-			});
+			})
 		},
 
 		[namespace.INITROUTER]({ commit, state }, payload) {
@@ -213,7 +213,7 @@ export default {
 				commit({
 					type: namespace.GETROUTER,
 					token: payload.token
-				});
+				})
 			}
 		},
 
@@ -222,7 +222,7 @@ export default {
 				type: namespace.GETSUBSET,
 				token: payload.token,
 				product_id: payload.product_id
-			});
+			})
 		},
 
 		[namespace.INITSUBSET]({ commit, state }, payload) {
@@ -231,7 +231,7 @@ export default {
 					type: namespace.GETSUBSET,
 					token: payload.token,
 					product_id: payload.product_id
-				});
+				})
 			}
 		},
 
@@ -239,7 +239,7 @@ export default {
 			commit({
 				type: namespace.GETPRODUCT,
 				token: payload.token
-			});
+			})
 		},
 
 		[namespace.INITPRODUCT]({ commit, state }, payload) {
@@ -247,8 +247,8 @@ export default {
 				commit({
 					type: namespace.GETPRODUCT,
 					token: payload.token
-				});
+				})
 			}
 		}
 	}
-};
+}
