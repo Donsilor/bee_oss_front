@@ -8,6 +8,7 @@
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
+          value-format="yyyy-MM-dd HH:mm:ss"
         />
 
         <el-input
@@ -25,16 +26,18 @@
           placeholder="购买套餐"
         />
 
-        <el-button type="primary">查询</el-button>
+        <el-button
+          type="primary"
+          @click="doSearch"
+        >查询</el-button>
       </div>
       <div class="right">
-        <el-button>导出数据</el-button>
+        <el-button @click="exportExel">导出数据</el-button>
       </div>
     </div>
     <div class="main">
       <el-table
         :data="tableData"
-        height="650"
         border
         style="width: 100%"
       >
@@ -61,10 +64,20 @@
           label="填写账号"
         />
         <el-table-column
-          prop="time"
+          prop="updated_at"
           label="提交时间"
         />
       </el-table>
+      <div class="block">
+        <el-pagination
+          :total="+pages.total"
+          :page-size="+pages.limit"
+          :current-page="+pages.page"
+          background
+          layout="prev, pager, next"
+          @current-change="handPageChange"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -80,49 +93,96 @@
     * {
       margin: 0 5px;
     }
-    el-input {
+    .el-input {
       flex: 1;
     }
   }
 }
+.block {
+  text-align: right;
+  margin: 30px 0;
+}
 </style>
 
 <script>
+import { PREFIX } from "../../lib/util"
 export default {
   data() {
     return {
+      pages: {
+        page: '1',
+        limit: '10',
+        total: ''
+      },
       search: {
         daterange: [],
         name: '',
         phone: '',
         type: ''
       },
-      tableData: [{
-        time: '2016-05-03',
-        name: '王小虎',
-        account: 'this is account',
-        tel: '18666594641',
-        content: '套餐一'
-      }, {
-        time: '2016-05-03',
-        name: '王小虎',
-        account: 'this is account',
-        tel: '18666594641',
-        content: '套餐一'
-      }, {
-        time: '2016-05-03',
-        name: '王小虎',
-        account: 'this is account',
-        tel: '18666594641',
-        content: '套餐一'
-      }, {
-        time: '2016-05-03',
-        name: '王小虎',
-        account: 'this is account',
-        tel: '18666594641',
-        content: '套餐一'
-      },]
+      tableData: []
     }
   },
+  mounted() {
+    this.getList()
+  },
+  methods: {
+    getList() {
+      let param = this.getParam()
+      this.$http
+        .post(PREFIX + "mall_record/lists", param)
+        .then(res => {
+          const json = res.data
+          if (json.code === 200) {
+            this.tableData = res.data.result.data
+            this.pages.total = res.data.result.total
+          } else {
+            this.$message.error(json.msg)
+          }
+        })
+        .catch(res => {
+          if (res && res.msg) {
+            this.$message.error(res.msg)
+          } else {
+            this.$message.error(res)
+          }
+        })
+    },
+    getParam() {
+      let param = {
+        page: this.pages.page,
+        limit: this.pages.limit
+      }
+      if (this.search.daterange) {
+        param.start_time = this.search.daterange[0]
+        param.end_time = this.search.daterange[1]
+      }
+      if (this.search.name) {
+        param.name = this.search.name
+      }
+      if (this.search.type) {
+        param.content = this.search.type
+      }
+      if (this.search.phone) {
+        param.tel = this.search.phone
+      }
+      return param
+    },
+    doSearch() {
+      this.pages = {
+        page: '0',
+        limit: '10',
+      }
+      this.getList()
+    },
+    handPageChange(val) {
+      this.pages.page = val
+      this.getList()
+    },
+    exportExel() {
+      let token = JSON.parse(localStorage.getItem("localData")).user.info.token
+      window.location.href = `${PREFIX}mall_record/export?token=${token}`
+    }
+  }
 }
 </script>

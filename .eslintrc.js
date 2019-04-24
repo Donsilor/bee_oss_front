@@ -30,6 +30,7 @@ module.exports = {
 		'comma-dangle': 0,
 		'no-mixed-operators': 0,
 		'eol-last': 0,
-		'prefer-promise-reject-errors': 0
+		'prefer-promise-reject-errors': 0,
+		'vue/require-prop-types': 'off'
 	}
 }

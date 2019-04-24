@@ -3,7 +3,7 @@
     <div class="title">入口配置</div>
     <el-form
       ref="form"
-      :model="form"
+      :model="config"
       :rules="rules"
       class="form-config"
       label-position="left"
@@ -11,38 +11,40 @@
     >
       <el-form-item
         label="开启家具商城"
-        prop="isOpen"
+        prop="status"
       >
-        <el-switch v-model="form.isOpen" />
+        <el-switch
+          v-model="config.status"
+          active-value="1"
+          inactive-value="0"
+        />
       </el-form-item>
 
-      <div v-show="form.isOpen">
+      <div v-show="+config.status === 1">
         <el-form-item
           label="按钮文案"
-          prop="btnTxt"
+          prop="content"
         >
-          <el-input v-model="form.btnTxt" />
+          <el-input v-model="config.content" />
         </el-form-item>
         <el-form-item
           label="链接地址"
-          prop="btnUrl"
+          prop="url"
         >
-          <el-input v-model="form.btnUrl" />
+          <el-input v-model="config.url" />
         </el-form-item>
-        <el-form-item
-          label="按钮图标"
-          prop="btnIcon"
-        >
+        <el-form-item label="按钮图标">
           <el-upload
+            :action="corsUrls"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
+            :data="uploadObj"
             :before-upload="beforeAvatarUpload"
-            action="https://jsonplaceholder.typicode.com/posts/"
             class="avatar-uploader"
           >
             <img
-              v-if="imageUrl"
-              :src="imageUrl"
+              v-if="image_file"
+              :src="image_file"
               class="avatar"
             >
             <i
@@ -56,7 +58,7 @@
       <el-form-item>
         <el-button
           type="primary"
-          @click="submitForm('ruleForm')"
+          @click="submitForm"
         >确定并生效</el-button>
       </el-form-item>
     </el-form>
@@ -100,41 +102,45 @@
 </style>
 
 <script>
+import { PREFIX } from "../../lib/util"
+import getCorsUrl from "../../lib/corsconfig"
 export default {
   data() {
     return {
-      imageUrl: '',
-      form: {
-        isOpen: false,
-        btnTxt: '',
-        btnUrl: '',
-        btnIcon: ''
+      corsUrls: getCorsUrl() + "/oss_file_upload",
+      uploadObj: {
+        token: JSON.parse(localStorage.getItem("localData")).user.info.token
+      },
+      image_file: '',
+      config: {
+        content: "",
+        image_url: "",
+        status: 1,
+        url: "www.baidu.com"
       },
       rules: {
-        isOpen: [
+        status: [
           { required: true, message: '', trigger: 'blur' }
         ],
-        btnTxt: [
+        content: [
           { required: true, message: '请输入按钮文案', trigger: 'blur' },
           { min: 1, max: 10, message: '按钮文案最长为10个中文字符', trigger: 'blur' }
         ],
-        btnUrl: [
+        url: [
           { required: true, message: '请输入链接地址', trigger: 'blur' },
           { min: 1, max: 200, message: '链接地址限制长度为200字', trigger: 'blur' }
         ]
       }
     }
   },
-  watch: {
-    'form.isOpen': function(val) {
-      console.log(val)
-    }
-  },
   mounted() {
+    this.getConfigInfo()
   },
   methods: {
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw)
+    handleAvatarSuccess(val) {
+      let data = val.result
+      this.config.image_url = data.object
+      this.image_file = data.download_url
     },
     beforeAvatarUpload(file) {
       const isType = (file.type === 'image/jpeg') || (file.type === 'image/png')
@@ -150,12 +156,55 @@ export default {
     submitForm() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          alert('submit!')
+          this.saveConfig()
         } else {
           console.log('error submit!!')
           return false
         }
       })
+    },
+    getConfigInfo() {
+      return this.$http
+        .post(PREFIX + "mall_record/info_config", {})
+        .then(res => {
+          const json = res.data
+          if (json.code === 200) {
+            this.config.content = res.data.result.content
+            this.config.status = res.data.result.status + '' // number 转string
+            this.config.url = res.data.result.url
+            this.config.image_url = res.data.result.image_url_object
+            this.image_file = res.data.result.image_url
+          } else {
+            this.$message.error(json.msg)
+          }
+        })
+        .catch(res => {
+          if (res && res.msg) {
+            this.$message.error(res.msg)
+          } else {
+            this.$message.error(res)
+          }
+        })
+    },
+    saveConfig() {
+      this.$http
+        .post(PREFIX + "mall_record/save_config", this.config)
+        .then(res => {
+          const json = res.data
+          if (json.code === 200) {
+            return this.getConfigInfo()
+          }
+        })
+        .then(() => {
+          this.$message.success('保存成功')
+        })
+        .catch(res => {
+          if (res && res.msg) {
+            this.$message.error(res.msg)
+          } else {
+            this.$message.error(res)
+          }
+        })
     }
   }
 }
