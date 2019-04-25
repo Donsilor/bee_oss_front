@@ -10,7 +10,7 @@
       label-width="200px"
     >
       <el-form-item
-        label="开启家具商城"
+        label="开启家居商城"
         prop="status"
       >
         <el-switch
@@ -18,6 +18,7 @@
           active-value="1"
           inactive-value="0"
         />
+        <div class="tips">开启商城将在星络App的家居页面开放按钮，可以点击进入H5商城</div>
       </el-form-item>
 
       <div v-show="+config.status === 1">
@@ -56,6 +57,7 @@
               @click.stop="clearImg"
             />
           </el-upload>
+          <div class="tips">只能上传jpg/png格式文件，单个文件不能超过500kb</div>
         </el-form-item>
       </div>
 
@@ -106,6 +108,9 @@
     height: 178px;
     display: block;
   }
+  .tips {
+    color: #999;
+  }
 }
 </style>
 
@@ -132,7 +137,7 @@ export default {
         ],
         content: [
           { required: true, message: '请输入按钮文案', trigger: 'blur' },
-          { min: 1, max: 10, message: '按钮文案最长为10个中文字符', trigger: 'blur' }
+          { min: 2, max: 6, message: '按钮文案文字限制为2-6个中文', trigger: 'blur' }
         ],
         url: [
           { required: true, message: '请输入链接地址', trigger: 'blur' },
