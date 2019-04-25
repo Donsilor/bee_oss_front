@@ -51,6 +51,10 @@
               v-else
               class="el-icon-plus avatar-uploader-icon"
             />
+            <i
+              class="clear el-icon-remove"
+              @click.stop="clearImg"
+            />
           </el-upload>
         </el-form-item>
       </div>
@@ -80,7 +84,11 @@
     border-radius: 6px;
     cursor: pointer;
     position: relative;
-    overflow: hidden;
+    .clear {
+      position: absolute;
+      top: 0;
+      right: -20px;
+    }
   }
   .avatar-uploader .el-upload:hover {
     border-color: #409eff;
@@ -205,6 +213,10 @@ export default {
             this.$message.error(res)
           }
         })
+    },
+    clearImg() {
+      this.image_file = ''
+      this.config.image_url = ''
     }
   }
 }
