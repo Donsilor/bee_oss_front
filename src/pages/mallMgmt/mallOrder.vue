@@ -170,7 +170,7 @@ export default {
     },
     doSearch() {
       this.pages = {
-        page: '0',
+        page: '1',
         limit: '10',
       }
       this.getList()
@@ -181,7 +181,33 @@ export default {
     },
     exportExel() {
       let token = JSON.parse(localStorage.getItem("localData")).user.info.token
-      window.location.href = `${PREFIX}mall_record/export?token=${token}`
+      let param = {
+        token: token,
+        page: '1',
+        limit: '10000'
+      }
+      if (this.search.daterange && this.search.daterange.length > 0) {
+        param.start_time = this.search.daterange[0]
+        param.end_time = this.search.daterange[1]
+      }
+      if (this.search.name) {
+        param.name = this.search.name
+      }
+      if (this.search.type) {
+        param.content = this.search.type
+      }
+      if (this.search.phone) {
+        param.tel = this.search.phone
+      }
+      var query = ""
+      for (var o in param) {
+        if (param[o] != -1) {
+          query += o + "=" + param[o] + "&"
+        }
+      }
+      query = query.substring(0, query.length - 1)
+      console.log(query)
+      window.open(`${PREFIX}mall_record/export?${query}`)
     }
   }
 }
