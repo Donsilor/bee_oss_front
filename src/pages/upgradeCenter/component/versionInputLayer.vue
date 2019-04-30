@@ -67,8 +67,12 @@
         v-model="importForm.selectRule"
         @change="ruleChange"
       >
-        <el-radio :label="1">是</el-radio>
-        <el-radio :label="0">否</el-radio>
+        <el-radio :label="1">
+          是
+        </el-radio>
+        <el-radio :label="0">
+          否
+        </el-radio>
       </el-radio-group>
     </el-form-item>
     <!-- 路由器版本 -->
@@ -312,7 +316,9 @@
         <el-button
           size="small"
           type="primary"
-        >点击上传</el-button>
+        >
+          点击上传
+        </el-button>
       </el-upload>
     </el-form-item>
     <el-form-item
@@ -355,8 +361,12 @@
       <el-button
         type="primary"
         @click="importSubmitForm('importForm')"
-      >确定</el-button>
-      <el-button @click="closeParentFlow">取消</el-button>
+      >
+        确定
+      </el-button>
+      <el-button @click="closeParentFlow">
+        取消
+      </el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -381,7 +391,7 @@ export default {
     "addEditFlag",
     "editDataObj",
     "releasedFlag",
-    "os_type",
+    "osType",
     "activeName",
     "osVersionList"
   ],
@@ -640,27 +650,27 @@ export default {
         this.$refs["uploadFileImg"].clearFiles()
         this.fileTipsIfShow = false
         this.$refs["uploadFile"].clearFiles()
-      } catch (e) { }
+      } catch (e) { console.log(e) }
       // }
 
       let form = this.importForm
       for (let attr in form) {
         switch (attr) {
-          case "routersList":
-          case "productsList":
-          case "appList":
-          case "rule":
-            form[attr] = []
-            break
-          case "force":
-            form[attr] = 0
-            break
-          case "selectRule":
-            form[attr] = 1
-            break
-          default:
-            form[attr] = ""
-            break
+        case "routersList":
+        case "productsList":
+        case "appList":
+        case "rule":
+          form[attr] = []
+          break
+        case "force":
+          form[attr] = 0
+          break
+        case "selectRule":
+          form[attr] = 1
+          break
+        default:
+          form[attr] = ""
+          break
         }
       }
       this.getAppReleasedVersionList()
@@ -767,48 +777,48 @@ export default {
             delete params.os_type
           }
           switch (currentType) {
-            case 1:
-            case 11:
-            case 12:
-              if (currentType == 12) {
-                delete params.router_pid
-              }
-              params.os_type = this.os_type
-              params.method = this.addEditFlag ? "create_app_version" : "update_app_version"
-              break
-            case 2:
-              params.method = this.addEditFlag ? "create_router_version" : "update_router_version"
-              break
-            case 3:
-              params.method = this.addEditFlag ? "create_device_version" : "update_device_version"
-              break
-            case 5:
-              params.method = this.addEditFlag ? "create_h5_version" : "update_h5_version"
-              break
-            case 7:
-              params.method = this.addEditFlag
-                ? "create_android_system_version"
-                : "update_android_system_version"
-              break
-            case 8:
-              params.method = this.addEditFlag
-                ? "create_device_android_system_version"
-                : "update_device_android_system_version"
-              break
-            case 9:
-              params.os_type = this.os_type
-              params.method = this.addEditFlag
-                ? "create_app_community_version"
-                : "update_app_community_version"
-              break
-            case 10:
-              params.os_type = this.os_type
-              params.method = this.addEditFlag
-                ? "create_app_community_plugin_version"
-                : "update_app_community_plugin_version"
-              break
-            default:
-              break
+          case 1:
+          case 11:
+          case 12:
+            if (currentType == 12) {
+              delete params.router_pid
+            }
+            params.os_type = this.os_type
+            params.method = this.addEditFlag ? "create_app_version" : "update_app_version"
+            break
+          case 2:
+            params.method = this.addEditFlag ? "create_router_version" : "update_router_version"
+            break
+          case 3:
+            params.method = this.addEditFlag ? "create_device_version" : "update_device_version"
+            break
+          case 5:
+            params.method = this.addEditFlag ? "create_h5_version" : "update_h5_version"
+            break
+          case 7:
+            params.method = this.addEditFlag
+              ? "create_android_system_version"
+              : "update_android_system_version"
+            break
+          case 8:
+            params.method = this.addEditFlag
+              ? "create_device_android_system_version"
+              : "update_device_android_system_version"
+            break
+          case 9:
+            params.os_type = this.os_type
+            params.method = this.addEditFlag
+              ? "create_app_community_version"
+              : "update_app_community_version"
+            break
+          case 10:
+            params.os_type = this.os_type
+            params.method = this.addEditFlag
+              ? "create_app_community_plugin_version"
+              : "update_app_community_plugin_version"
+            break
+          default:
+            break
           }
 
           if (currentType !== 3 && currentType !== 8 && currentType !== 5) {

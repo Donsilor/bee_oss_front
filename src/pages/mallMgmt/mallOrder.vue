@@ -29,10 +29,14 @@
         <el-button
           type="primary"
           @click="doSearch"
-        >查询</el-button>
+        >
+          查询
+        </el-button>
       </div>
       <div class="right">
-        <el-button @click="exportExel">导出数据</el-button>
+        <el-button @click="exportExel">
+          导出数据
+        </el-button>
       </div>
     </div>
     <div class="main">

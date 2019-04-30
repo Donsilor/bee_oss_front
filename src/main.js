@@ -9,31 +9,28 @@ import App from './App.vue'
 // import mock from './mockData';
 
 Vue.mixin({
-	computed: {
-		isAdmin() {
-			return (
-				this.$store.state.user.info &&
-				this.$store.state.user.info.isAdmin === true
-			)
-		}
-	},
-	methods: {
-		hasPermission(name) {
-			let permission_list = this.$store.state.user.permission_list
-			return (
-				permission_list &&
-				permission_list.length &&
-				permission_list.indexOf(name) >= 0
-			)
-		}
-	}
+  computed: {
+    isAdmin() {
+      return (
+        this.$store.state.user.info && this.$store.state.user.info.isAdmin === true
+      )
+    }
+  },
+  methods: {
+    hasPermission(name) {
+      let permission_list = this.$store.state.user.permission_list
+      return (
+        permission_list && permission_list.length && permission_list.indexOf(name) >= 0
+      )
+    }
+  }
 })
 //获取用户权限
 store.dispatch('getUserPermissionList')
 
 new Vue({
-	el: '#app',
-	router,
-	store,
-	render: h => h(App)
+  el: '#app',
+  router,
+  store,
+  render: h => h(App)
 })

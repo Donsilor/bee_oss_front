@@ -1,8 +1,9 @@
 <template>
   <div
-    :class="className"
     :id="id"
-    :style="{height:height,width:width}"/>
+    :class="className"
+    :style="{height:height,width:width}"
+  />
 </template>
 
 <script>
@@ -16,7 +17,7 @@ export default {
     },
     result: {
       type: Object,
-      default () {
+      default() {
         return {}
       }
     },
@@ -48,23 +49,23 @@ export default {
     }
   },
   watch: {
-    result () {
+    result() {
       let obj = {}
-      this.xAxisData = [];
-      this.legendData = [];
+      this.xAxisData = []
+      this.legendData = []
       this.seriesData = [{
-		  name: '',
-		  type: 'bar',
-		  stack: 'vistors',
-		  barWidth: '13%',
-		  data: []
-	  }];
+        name: '',
+        type: 'bar',
+        stack: 'vistors',
+        barWidth: '13%',
+        data: []
+      }]
 
-	  function getTotalCnt(arr) {
-		  return arr.reduce((total, num) => {
-			  return total + num
-		  })
-	  }
+      function getTotalCnt(arr) {
+        return arr.reduce((total, num) => {
+          return total + num
+        })
+      }
 
       for (let key in this.result) {
         this.xAxisData.push(key)
@@ -78,28 +79,28 @@ export default {
         })
       }
       for (let key in obj) {
-		let total = getTotalCnt(obj[key])
-		let name = `${key}(${total})`
-		if(total > 0){
-			this.legendData.push(name)
-			this.seriesData.push({
-			name: name,
-			type: 'bar',
-			stack: 'vistors',
-			barWidth: '13%',
-			data: obj[key]
-			})
-		}
-	  }
+        let total = getTotalCnt(obj[key])
+        let name = `${key}(${total})`
+        if (total > 0) {
+          this.legendData.push(name)
+          this.seriesData.push({
+            name: name,
+            type: 'bar',
+            stack: 'vistors',
+            barWidth: '13%',
+            data: obj[key]
+          })
+        }
+      }
 
-	  this.chart.dispose()
-	  this.$nextTick(() => {
-		  this.initChart()
-	  })
+      this.chart.dispose()
+      this.$nextTick(() => {
+        this.initChart()
+      })
     }
   },
   mounted() {
-	  this.initChart()
+    this.initChart()
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -182,8 +183,8 @@ export default {
           },
           splitLine: {
             show: true,
-            lineStyle:{
-                type:'dashed'
+            lineStyle: {
+              type: 'dashed'
             }
           }
         }],

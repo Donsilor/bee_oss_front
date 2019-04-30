@@ -1,5 +1,12 @@
 <template>
-  <div :class="className" :title="title" :barColor="barColor" :rotate="rotate" :id="id" :style="{height:height,width:width}"/>
+  <div
+    :id="id"
+    :class="className"
+    :title="title"
+    :barColor="barColor"
+    :rotate="rotate"
+    :style="{height:height,width:width}"
+  />
 </template>
 
 <script>
@@ -25,7 +32,7 @@ export default {
     },
     result: {
       type: Array,
-      default () {
+      default() {
         return []
       }
     },
@@ -42,22 +49,22 @@ export default {
       default: '300px'
     }
   },
-  watch: {
-    result () {
-	  this.xAxisData = [];
-	  this.seriesData = [];
-      for (let index = 0; index < this.result.length; index++) {
-        this.xAxisData.push(this.result[index].F_category_id_map)
-        this.seriesData.push(this.result[index].count)
-      }
-      this.initChart()
-    }
-  },
   data() {
     return {
       chart: null,
       xAxisData: [],
       seriesData: []
+    }
+  },
+  watch: {
+    result() {
+      this.xAxisData = []
+      this.seriesData = []
+      for (let index = 0; index < this.result.length; index++) {
+        this.xAxisData.push(this.result[index].F_category_id_map)
+        this.seriesData.push(this.result[index].count)
+      }
+      this.initChart()
     }
   },
   mounted() {
@@ -71,7 +78,7 @@ export default {
     this.chart = null
   },
   methods: {
-    initChart () {
+    initChart() {
       this.chart = echarts.init(document.getElementById(this.id))
       this.chart.setOption({
         title: {
@@ -134,8 +141,8 @@ export default {
           },
           splitLine: {
             show: true,
-            lineStyle:{
-                type:'dashed'
+            lineStyle: {
+              type: 'dashed'
             }
           }
         }],

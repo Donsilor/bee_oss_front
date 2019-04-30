@@ -1,42 +1,60 @@
 <template>
   <div class="left-menu">
-    <el-menu :default-active="defaultActive"
-             :router="true"
-             class="menu-list">
+    <el-menu
+      :default-active="defaultActive"
+      :router="true"
+      class="menu-list"
+    >
       <template v-for="item in menuData">
         <template v-if="item.children">
-          <el-submenu :index="item.path"
-                      :key="item.path">
+          <el-submenu
+            :key="item.path"
+            :index="item.path"
+          >
             <template slot="title">
-              <i :class="item.icon"
-                 class="icon-pp" />{{ item.title }}</template>
-            <div v-for="subItem in item.children"
-                 v-show="!subItem.needAdmin || (subItem.needAdmin && isAdmin)"
-                 :key="subItem.path"
-                 style="overflow: hidden">
-              <a v-if="subItem.elseUrl"
-                 :href="subItem.path"
-                 target="_blank"
-                 class="href-a">{{ subItem.title }}</a>
-              <el-menu-item v-if="!subItem.elseUrl"
-                            :index="subItem.path"
-                            :key="subItem.path"
-                            :route="{ path: subItem.path }">{{ subItem.title }}
+              <i
+                :class="item.icon"
+                class="icon-pp"
+              />{{ item.title }}
+            </template>
+            <div
+              v-for="subItem in item.children"
+              v-show="!subItem.needAdmin || (subItem.needAdmin && isAdmin)"
+              :key="subItem.path"
+              style="overflow: hidden"
+            >
+              <a
+                v-if="subItem.elseUrl"
+                :href="subItem.path"
+                target="_blank"
+                class="href-a"
+              >{{ subItem.title }}</a>
+              <el-menu-item
+                v-if="!subItem.elseUrl"
+                :key="subItem.path"
+                :index="subItem.path"
+                :route="{ path: subItem.path }"
+              >
+                {{ subItem.title }}
               </el-menu-item>
             </div>
           </el-submenu>
         </template>
         <template v-if="!item.children">
-          <el-menu-item :index="item.path"
-                        :key="item.path"
-                        :route="{ path: item.path }">
-            <i :class="item.icon"
-               class="icon-pp" />{{ item.title }}</el-menu-item>
+          <el-menu-item
+            :key="item.path"
+            :index="item.path"
+            :route="{ path: item.path }"
+          >
+            <i
+              :class="item.icon"
+              class="icon-pp"
+            />{{ item.title }}
+          </el-menu-item>
         </template>
       </template>
     </el-menu>
   </div>
-
 </template>
 <script>
 export default {
@@ -46,7 +64,7 @@ export default {
       default: null
     }
   },
-  data () {
+  data() {
     return {
       defaultActive: '',
       menuData: [
@@ -296,7 +314,7 @@ export default {
       ]
     }
   },
-  mounted () {
+  mounted() {
     const obj = this
     if (obj.default) {
       obj.defaultActive = obj.default

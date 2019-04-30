@@ -1,5 +1,9 @@
 <template>
-  <div :class="className" :id="id" :style="{height:height,width:width}"/>
+  <div
+    :id="id"
+    :class="className"
+    :style="{height:height,width:width}"
+  />
 </template>
 
 <script>
@@ -66,15 +70,15 @@ export default {
           bottom: '2%',
           containLabel: true
         },
-         xAxis: [{
-            type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-            axisTick: {
-                alignWithLabel: true
-            }
+        xAxis: [{
+          type: 'category',
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          axisTick: {
+            alignWithLabel: true
+          }
         }],
         yAxis: [{
-            type: 'value'
+          type: 'value'
         }],
         series: [{
           name: '直接访问',

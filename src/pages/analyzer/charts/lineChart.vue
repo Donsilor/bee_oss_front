@@ -1,5 +1,10 @@
 <template>
-  <div :class="className" :id="id" :title="title" :style="{height:height,width:width}"/>
+  <div
+    :id="id"
+    :class="className"
+    :title="title"
+    :style="{height:height,width:width}"
+  />
 </template>
 
 <script>
@@ -17,7 +22,7 @@ export default {
     },
     result: {
       type: Object,
-      default () {
+      default() {
         return {}
       }
     },
@@ -43,10 +48,10 @@ export default {
     }
   },
   watch: {
-    result () {
-      this.xAxisData = [];
-      this.legendData = [];
-      this.seriesData = [];
+    result() {
+      this.xAxisData = []
+      this.legendData = []
+      this.seriesData = []
       let obj = {}
       for (let key in this.result) {
         this.xAxisData.push(key)

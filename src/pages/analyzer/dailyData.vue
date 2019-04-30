@@ -8,13 +8,17 @@
             <el-date-picker
               v-model="fromDate.select_time"
               type="date"
-              placeholder="选择日期"/>
+              placeholder="选择日期"
+            />
           </el-form-item>
 
           <el-form-item style="margin-bottom:0">
             <el-button
               type="primary"
-              @click="searchdDilyData">查询</el-button>
+              @click="searchdDilyData"
+            >
+              查询
+            </el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -27,34 +31,45 @@
           <el-button
             type="warning"
             size="medium"
-            @click="exportData">导出数据</el-button>
+            @click="exportData"
+          >
+            导出数据
+          </el-button>
         </el-col>
         <el-col>
           <el-table
             :data="tableData1"
             border
-            style="width: 100%; margin-top: 20px">
+            style="width: 100%; margin-top: 20px"
+          >
             <el-table-column
               prop="category"
-              label="统计类别"/>
+              label="统计类别"
+            />
             <el-table-column
               prop="title"
-              label="统计指标项"/>
+              label="统计指标项"
+            />
             <el-table-column
               prop="today"
-              label="当日"/>
+              label="当日"
+            />
             <el-table-column
               prop="yesterday"
-              label="昨日"/>
+              label="昨日"
+            />
             <el-table-column
               prop="lastweek"
-              label="上周"/>
+              label="上周"
+            />
             <el-table-column
               prop="compare_yday"
-              label="同比昨日"/>
+              label="同比昨日"
+            />
             <el-table-column
               prop="compare_lw"
-              label="环比上周"/>
+              label="环比上周"
+            />
           </el-table>
         </el-col>
       </el-row>
@@ -66,7 +81,7 @@
 import axios from "axios"
 import * as URL from "~/lib/api"
 export default {
-  data () {
+  data() {
     return {
       tableData1: [],
       fromDate: {
@@ -76,21 +91,21 @@ export default {
       position: 0
     }
   },
-  mounted () {
+  mounted() {
     let preDate = new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
     this.fromDate.select_time = preDate
     this.getdailyData()
   },
   methods: {
     // 查询数据
-    searchdDilyData () {
-      this.getdailyData({select_time: this.fromDate.select_time})
+    searchdDilyData() {
+      this.getdailyData({ select_time: this.fromDate.select_time })
     },
     // 获取数据
-    getdailyData (params) {
-	  if (params && params.select_time) {
-		params.select_time = params.select_time.Format('yyyy-MM-dd')
-	  }
+    getdailyData(params) {
+      if (params && params.select_time) {
+        params.select_time = params.select_time.Format('yyyy-MM-dd')
+      }
       axios.post(URL.dailyDataURL, params).then(res => {
         if (res.data.code === 200) {
           let result = res.data.result.data
@@ -102,8 +117,8 @@ export default {
       })
     },
     // 导出数据
-    exportData () {
-      let token = JSON.parse(localStorage.getItem("localData")).user.info.token;
+    exportData() {
+      let token = JSON.parse(localStorage.getItem("localData")).user.info.token
       let select_time = (this.fromDate.select_time).Format('yyyy-MM-dd')
       window.open(URL.ExportURL + `?token=${token}&&select_time=${select_time}`)
     },
@@ -139,23 +154,23 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.page-content{
-  .col-280{
+.page-content {
+  .col-280 {
     width: 280px;
-    .box-card{
+    .box-card {
       width: 260px;
       .data-list > div {
         font-size: 14px;
         color: #666666;
         &:nth-child(2) {
-            color: #409eff;
-            margin: 10px 0;
-            font-size: 30px;
+          color: #409eff;
+          margin: 10px 0;
+          font-size: 30px;
         }
       }
     }
   }
-  .network-equipment{
+  .network-equipment {
     margin-top: 20px;
   }
 }

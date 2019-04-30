@@ -1,8 +1,8 @@
 <template>
-	<div class="center">
-		<i class="el-icon-circle-cross"></i>
-		<div>您访问的页面不存在</div>
-	</div>
+  <div class="center">
+    <i class="el-icon-circle-cross" />
+    <div>您访问的页面不存在</div>
+  </div>
 </template>
 
 <style scoped>

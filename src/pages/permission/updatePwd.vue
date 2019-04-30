@@ -47,7 +47,9 @@
         <el-button
           type="primary"
           @click="onSubmit"
-        >修改密码</el-button>
+        >
+          修改密码
+        </el-button>
       </el-form-item>
     </el-form>
   </div>

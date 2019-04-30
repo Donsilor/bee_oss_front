@@ -87,6 +87,7 @@ export default {
           keys.forEach(subV => {
             if (typeof v[subV] !== "function") {
               if (typeof v[subV] === "object") {
+                console.log('to do')
               } else {
                 if (
                   v[subV]

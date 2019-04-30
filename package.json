@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "webpack-dev-server --inline --hot --env.dev",
 		"build": "rimraf dist && webpack -p --progress --hide-modules",
-		"lint": "eslint --ext .js,.vue src"
+		"lint": "eslint --fix --ext .js,.vue src"
 	},
 	"dependencies": {
 		"axios": "^0.17.1",

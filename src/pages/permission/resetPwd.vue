@@ -10,7 +10,7 @@
         label="手机号"
         prop="mobile"
       >
-        <el-input v-model="formdata.mobile"/>
+        <el-input v-model="formdata.mobile" />
       </el-form-item>
 
       <el-form-item
@@ -27,7 +27,9 @@
         <el-button
           type="primary"
           @click="onSubmit"
-        >重置密码</el-button>
+        >
+          重置密码
+        </el-button>
       </el-form-item>
     </el-form>
   </div>

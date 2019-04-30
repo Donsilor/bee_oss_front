@@ -4,7 +4,8 @@
       <!--搜索框-->
       <el-row
         type="flex"
-        justify="space-between">
+        justify="space-between"
+      >
         <el-col :span="18">
           <el-autocomplete
             ref="input"
@@ -16,15 +17,21 @@
             type="text"
             placeholder="输入用户手机号码"
             value-key="phone"
-            @select="handleSelect">
+            @select="handleSelect"
+          >
             <template slot-scope="{ item }">
-              <div class="name">{{ item.phone }}</div>
+              <div class="name">
+                {{ item.phone }}
+              </div>
               <span class="addr">{{ item.user_name }}</span>
             </template>
           </el-autocomplete>
           <el-button
             type="primary"
-            @click="search">&nbsp;&nbsp;查询&nbsp;&nbsp;</el-button>
+            @click="search"
+          >
+            &nbsp;&nbsp;查询&nbsp;&nbsp;
+          </el-button>
         </el-col>
         <!--<el-col :span="6" style="text-align: right;">-->
         <!--<el-button v-show="searchedFlag" @click="searchedFlag = false">返回</el-button>-->
@@ -32,7 +39,8 @@
       </el-row>
       <div
         v-if="!hasAllMsg"
-        style="height: 400px; color: #999; width: 100%; text-align: center; line-height: 400px">
+        style="height: 400px; color: #999; width: 100%; text-align: center; line-height: 400px"
+      >
         请输入手机号码查询用户信息
       </div>
       <div v-if="hasAllMsg">
@@ -43,18 +51,21 @@
               <img
                 src="../../images/u2978.png"
                 width="95"
-                height="130">
+                height="130"
+              >
             </div>
           </el-col>
           <el-col :span="21">
             <el-form
               label-width="100px"
-              class="user_msg">
+              class="user_msg"
+            >
               <el-row>
                 <el-col
                   v-for="item in user_msg"
+                  :key="item.value"
                   :span="7"
-                  :key="item.value">
+                >
                   <el-form-item :label="item.name">
                     <span>{{ item.value }}</span>
                   </el-form-item>
@@ -65,66 +76,85 @@
         </el-row>
         <!--终端列表-->
         <el-row class="terminal_list p_r">
-          <h3 class="h3_pp">终端列表</h3>
+          <h3 class="h3_pp">
+            终端列表
+          </h3>
           <!--<div class="right_button">-->
           <!--<el-button type="primary" @click="toRootLog">主查看云平台日志</el-button>-->
           <!--</div>-->
           <el-table
             :data="terminalListPage"
-            style="width: 100%">
+            style="width: 100%"
+          >
             <el-table-column
               v-for="item in terminalList.tableColumn"
               :key="item.prop"
               :prop="item.prop"
               :label="item.label"
-              :width="'auto'">
+              :width="'auto'"
+            >
               <template slot-scope="scope">
                 <div v-if="item.prop === 'F_device_state'">
                   {{ getStatusText(scope.row['F_status']) }}
                 </div>
-                <div v-else>{{ scope.row[item.prop] }}</div>
+                <div v-else>
+                  {{ scope.row[item.prop] }}
+                </div>
               </template>
             </el-table-column>
             <el-table-column
               width="auto"
-              label="日志">
+              label="日志"
+            >
               <template slot-scope="scope">
                 <el-button
                   type="text"
                   size="small"
-                  @click="openLogOutLayer(scope.row)">登录登出日志</el-button>
-                  <!--<el-button  type="text" size="small" @click="errLogLayer=true">错误日志</el-button>-->
+                  @click="openLogOutLayer(scope.row)"
+                >
+                  登录登出日志
+                </el-button>
+                <!--<el-button  type="text" size="small" @click="errLogLayer=true">错误日志</el-button>-->
               </template>
             </el-table-column>
           </el-table>
           <pager
             v-if="terminalList.tableData && terminalList.tableData.length"
             :data="terminalList.tableData"
-            :display-data="terminalListPage"/>
+            :display-data="terminalListPage"
+          />
         </el-row>
         <!--家庭详情-->
         <el-row class="p_r">
-          <h3 class="h3_pp">家庭详情</h3>
+          <h3 class="h3_pp">
+            家庭详情
+          </h3>
           <el-dropdown
             class="family_tab"
             trigger="click"
-            @command="handleCommand">
+            @command="handleCommand"
+          >
             <el-button
               type=""
-              size="small">
+              size="small"
+            >
               {{ allFamily.length && allFamily[allFamilyIndex].name }}
-              <i class="el-icon-arrow-down el-icon--right"/>
+              <i class="el-icon-arrow-down el-icon--right" />
             </el-button>
             <!--<span class="el-dropdown-link">-->
             <!--{{allFamily.length && allFamily[0].name}}<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
             <!--</span>-->
             <el-dropdown-menu
               slot="dropdown"
-              style="max-height:250px;overflow-y:auto">
+              style="max-height:250px;overflow-y:auto"
+            >
               <el-dropdown-item
                 v-for="item in allFamily"
+                :key="item.value"
                 :command="item.value"
-                :key="item.value">{{ item.name }}</el-dropdown-item>
+              >
+                {{ item.name }}
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <div class="detail_tab_con p_r">
@@ -132,36 +162,46 @@
               class="operation-list"
               size="small"
               type="primary"
-              @click="openOperListLayer">用户操作轨迹</el-button>
+              @click="openOperListLayer"
+            >
+              用户操作轨迹
+            </el-button>
             <el-tabs
               v-model="activeName"
-              @tab-click="tabClick">
+              @tab-click="tabClick"
+            >
               <el-tab-pane
                 label="基本信息"
-                name="first"/>
+                name="first"
+              />
               <el-tab-pane
                 label="成员"
-                name="second"/>
+                name="second"
+              />
               <el-tab-pane
                 label="设备"
-                name="third"/>
+                name="third"
+              />
             </el-tabs>
             <!--家庭-基本信息-->
             <el-row
               v-show="activeName==='first'"
-              class="user_msg_con">
+              class="user_msg_con"
+            >
               <el-col :span="2">
                 <img src="../../images/u2978.png">
               </el-col>
               <el-col :span="22">
                 <el-form
                   label-width="100px"
-                  class="user_msg">
+                  class="user_msg"
+                >
                   <el-row>
                     <el-col
                       v-for="(item, index) in family_info"
+                      :key="index"
                       :span="7"
-                      :key="index">
+                    >
                       <el-form-item :label="item.name">
                         <span>{{ item.value }}</span>
                       </el-form-item>
@@ -173,60 +213,77 @@
             <!--家庭-成员列表-->
             <el-row
               v-show="activeName==='second'"
-              class="user_msg_con">
+              class="user_msg_con"
+            >
               <el-table
                 :data="memberList.tableData"
-                style="width: 100%">
+                style="width: 100%"
+              >
                 <el-table-column
                   v-for="item in memberList.tableColumn"
                   :key="item.prop"
                   :prop="item.prop"
                   :label="item.label"
-                  :width="'auto'"/>
+                  :width="'auto'"
+                />
               </el-table>
             </el-row>
             <!--家庭-设备列表-->
             <el-row
               v-show="activeName==='third'"
               class="user_msg_con"
-              style="padding-top: 0">
-              <h3 class="h3_inner">路由器</h3>
+              style="padding-top: 0"
+            >
+              <h3 class="h3_inner">
+                路由器
+              </h3>
               <el-table
                 :data="routerList.tableData"
-                style="width: 100%; margin-bottom: 15px">
+                style="width: 100%; margin-bottom: 15px"
+              >
                 <el-table-column
                   v-for="item in routerList.tableColumn"
                   :key="item.prop"
                   :prop="item.prop"
                   :label="item.label"
-                  :width="'auto'">
+                  :width="'auto'"
+                >
                   <template slot-scope="scope">
                     <div v-if="item.prop === 'F_device_state'">
                       {{ getRouterStatusText(scope.row['F_device_state']) }}
                     </div>
-                    <div v-else>{{ scope.row[item.prop] }}</div>
+                    <div v-else>
+                      {{ scope.row[item.prop] }}
+                    </div>
                   </template>
                 </el-table-column>
               </el-table>
-              <h3 class="h3_inner">子设备</h3>
+              <h3 class="h3_inner">
+                子设备
+              </h3>
               <div class="childDevice">
                 <el-table
                   :data="deviceList.tableData"
-                  style="width: 100%">
+                  style="width: 100%"
+                >
                   <el-table-column
                     v-for="item in deviceList.tableColumn"
                     :key="item.prop"
                     :prop="item.prop"
                     :label="item.label"
                     :width="'auto'"
-                    sortable>
+                    sortable
+                  >
                     <template slot-scope="scope">
                       <div v-if="item.prop === 'F_device_state'">
                         {{ getStatusText(scope.row['F_device_state']) }}
                       </div>
                       <div
                         v-else
-                        :title="scope.row[item.prop]">{{ scope.row[item.prop] }}</div>
+                        :title="scope.row[item.prop]"
+                      >
+                        {{ scope.row[item.prop] }}
+                      </div>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -239,82 +296,105 @@
     <!--错误日志-->
     <el-dialog
       :visible.sync="errLogLayer"
-      title="错误日志">
+      title="错误日志"
+    >
       <el-form
         ref="errLogForm"
-        :model="errLogForm">
+        :model="errLogForm"
+      >
         <el-form-item
           label=""
-          class="errSearchForm">
+          class="errSearchForm"
+        >
           <el-date-picker
             v-model="errLogForm.date"
             type="daterange"
-            placeholder="选择日期范围"/>
+            placeholder="选择日期范围"
+          />
           <el-select v-model="errLogForm.type">
             <el-option
               label="uuid"
-              value="uuid"/>
+              value="uuid"
+            />
             <el-option
               label="msg_tag"
-              value="msg_tag"/>
+              value="msg_tag"
+            />
             <el-option
               label="user_id"
-              value="user_id"/>
+              value="user_id"
+            />
             <el-option
               label="route_id"
-              value="route_id"/>
+              value="route_id"
+            />
           </el-select>
           <el-input
             v-model="errLogForm.inner"
-            placeholder="包含"/>
+            placeholder="包含"
+          />
           <el-input
             v-model="errLogForm.uid"
-            placeholder="uuid"/>
+            placeholder="uuid"
+          />
           <el-button
             type="primary"
-            @click="searchErrLog">搜 索</el-button>
+            @click="searchErrLog"
+          >
+            搜 索
+          </el-button>
         </el-form-item>
       </el-form>
       <el-collapse
         v-model="errActiveName"
-        accordion>
+        accordion
+      >
         <el-collapse-item
           v-for="(item, index) in errLogList"
+          :key="item.value"
           :title="item.key"
           :name="index"
-          :key="item.value">
+        >
           <div>{{ item.value }}</div>
         </el-collapse-item>
       </el-collapse>
       <span
         slot="footer"
-        class="dialog-footer">
+        class="dialog-footer"
+      >
         <el-button
           style="border:none;"
-          @click="errLogLayer = false">取 消</el-button>
+          @click="errLogLayer = false"
+        >取 消</el-button>
       </span>
     </el-dialog>
     <!--登录登出日志-->
     <el-dialog
       :visible.sync="logOutLayer"
-      title="登录登出日志">
+      title="登录登出日志"
+    >
       <div style="padding-bottom:15px">
         <el-date-picker
           v-model="logOutForm.date"
           placeholder="今天"
-          @change="changeSelectLogOutDate"/>
+          @change="changeSelectLogOutDate"
+        />
       </div>
       <div class="childDevice">
         <el-table
           :data="logOutList.tableData"
-          style="width: 100%">
+          style="width: 100%"
+        >
           <el-table-column
             v-for="item in logOutList.tableColumn"
             :key="item.prop"
             :prop="item.prop"
-            :label="item.label">
+            :label="item.label"
+          >
             <template slot-scope="scope">
-              <div :title="scope.row[item.prop]">{{ scope.row[item.prop] }}</div>
+              <div :title="scope.row[item.prop]">
+                {{ scope.row[item.prop] }}
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -326,45 +406,61 @@
           :current-page.sync="currentPage"
           small
           layout="prev, pager, next"
-          @current-change="pageChange"/>
+          @current-change="pageChange"
+        />
       </div>
       <span
         slot="footer"
-        class="dialog-footer">
+        class="dialog-footer"
+      >
         <el-button
           style="border:none;"
-          @click="logOutLayer = false">取 消</el-button>
+          @click="logOutLayer = false"
+        >取 消</el-button>
       </span>
     </el-dialog>
     <!--子设备操作流水-->
     <el-dialog
       :visible.sync="operListLayer"
-      title="子设备操作流水">
+      title="子设备操作流水"
+    >
       <div style="padding-bottom:15px">
         <el-date-picker
           v-model="operListForm.date"
           placeholder="今天"
-          @change="changeSelectOperList"/>
+          @change="changeSelectOperList"
+        />
       </div>
       <div class="childDevice">
         <el-table
           :data="operList.tableData"
-          style="width: 100%">
+          style="width: 100%"
+        >
           <el-table-column
             v-for="item in operList.tableColumn"
             :key="item.prop"
             :prop="item.prop"
-            :label="item.label">
+            :label="item.label"
+          >
             <template slot-scope="scope">
               <div
                 v-if="scope.row[item.prop]==='created_time'"
-                :title="scope.row[item.prop].Format('yyyy-MM-dd')">{{ scope.row[item.prop].Format('yyyy-MM-dd') }}</div>
+                :title="scope.row[item.prop].Format('yyyy-MM-dd')"
+              >
+                {{ scope.row[item.prop].Format('yyyy-MM-dd') }}
+              </div>
               <div
                 v-else-if="scope.row[item.prop]==='rsp_time'"
-                :title="scope.row[item.prop].Format('yyyy-MM-dd')">{{ scope.row[item.prop].Format('yyyy-MM-dd') }}</div>
+                :title="scope.row[item.prop].Format('yyyy-MM-dd')"
+              >
+                {{ scope.row[item.prop].Format('yyyy-MM-dd') }}
+              </div>
               <div
                 v-else
-                :title="scope.row[item.prop]">{{ scope.row[item.prop] }}</div>
+                :title="scope.row[item.prop]"
+              >
+                {{ scope.row[item.prop] }}
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -376,393 +472,396 @@
           :current-page.sync="currentOperPage"
           small
           layout="prev, pager, next"
-          @current-change="pageOperChange"/>
+          @current-change="pageOperChange"
+        />
       </div>
       <span
         slot="footer"
-        class="dialog-footer">
+        class="dialog-footer"
+      >
         <el-button
           style="border:none;"
-          @click="operListLayer = false">取 消</el-button>
+          @click="operListLayer = false"
+        >取 消</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
-import { PREFIX } from "../../lib/util";
-import * as namespace from "../../store/namespace";
-import { mapActions } from "vuex";
-import terminalLists from "../../json/terminalList.json";
-import deviceLists from "../../json/devices.json";
-import logOutLists from "../../json/logOut.json";
-import memberLists from "../../json/members.json";
-import routerLists from "../../json/routers.json";
-import operLists from "../../json/operList.json";
-import "../../lib/util";
-import pager from "../../components/pagination/livePagination.vue";
-import API from "../../service/index";
+import { PREFIX } from "../../lib/util"
+import * as namespace from "../../store/namespace"
+import { mapActions } from "vuex"
+import terminalLists from "../../json/terminalList.json"
+import deviceLists from "../../json/devices.json"
+import logOutLists from "../../json/logOut.json"
+import memberLists from "../../json/members.json"
+import routerLists from "../../json/routers.json"
+import operLists from "../../json/operList.json"
+import "../../lib/util"
+import pager from "../../components/pagination/livePagination.vue"
+import API from "../../service/index"
 export default {
-    components: {
-        pager
-    },
-    data() {
-        return {
-            hasAllMsg: false,
-            operListLayer: false,
-            logOutLayer: false,
-            errActiveName: [0],
-            errLogList: [
-                {
-                    key: "safdasfdsafd",
-                    value:
+  components: {
+    pager
+  },
+  data() {
+    return {
+      hasAllMsg: false,
+      operListLayer: false,
+      logOutLayer: false,
+      errActiveName: [0],
+      errLogList: [
+        {
+          key: "safdasfdsafd",
+          value:
                         "大分类的发上来开发家乐福大发的卡机福利发的卡老师附近溜达房" +
                         "价大力发动机奥拉夫大家了看法懒得卡附近溜达咖啡啊"
-                },
-                {
-                    key: "safdasfdsafd",
-                    value:
+        },
+        {
+          key: "safdasfdsafd",
+          value:
                         "大分类的发上来开发家乐福大发的卡机福利发的卡老师附近溜达房" +
                         "价大力发动机奥拉夫大家了看法懒得卡附近溜达咖啡啊"
-                },
-                {
-                    key: "safdasfdsafd",
-                    value:
+        },
+        {
+          key: "safdasfdsafd",
+          value:
                         "大分类的发上来开发家乐福大发的卡机福利发的卡老师附近溜达房" +
                         "价大力发动机奥拉夫大家了看法懒得卡附近溜达咖啡啊"
-                }
-            ],
-            today: [new Date(), new Date()],
-            errLogForm: {
-                inner: "",
-                uid: "",
-                type: "uuid",
-                date: ""
-            },
-            errLogLayer: false,
-            activeName: "first",
-            searchedFlag: true,
-            searchKey: "",
-            user_msg: [
-                { name: "昵称", value: "", prop: "F_nick" },
-                { name: "性别", value: "", prop: "F_gender" },
-                { name: "出生日期", value: "", prop: "F_birthday" },
-                { name: "手机号", value: "", prop: "F_phone_num" },
-                { name: "状态", value: "", prop: "F_state" },
-                { name: "注册时间", value: "", prop: "F_created_at" },
-                { name: "最近登录时间", value: "", prop: "F_last_login_time" },
-                { name: "最近登录IP", value: "", prop: "F_last_login_ip" },
-                { name: "最后一次访问的家庭id", value: "", prop: "F_last_family_id" },
-                { name: "在线状态", value: "", prop: "F_status_name" }
-            ],
-            family_info: [
-                { name: "内部ID", value: "", prop: "F_owner_id" },
-                { name: "家庭名称", value: "", prop: "F_name" },
-                { name: "户主ID", value: "", prop: "F_owner_id" },
-                { name: "路由器uuid", value: "", prop: "F_router_id" },
-                { name: "省份", value: "", prop: "F_provice" },
-                { name: "城市", value: "", prop: "F_city" },
-                { name: "小区", value: "", prop: "F_district" },
-                { name: "地址", value: "", prop: "F_addr" },
-                { name: "栋", value: "", prop: "F_building_no" },
-                { name: "房号", value: "", prop: "F_room_no" },
-                { name: "创建时间", value: "", prop: "F_created_at" },
-                { name: "更新时间", value: "", prop: "F_updated_at" }
-            ],
-            terminalList: {},
-            memberList: {},
-            deviceList: {},
-            logOutList: {},
-            routerList: {},
-            operList: {},
-            allFamily: [],
-            allFamilyIndex: 0,
-            user_id: "",
-            logOutForm: {
-                date: new Date(),
-                client_id: "",
-                uuid: "",
-                userId: ""
-            },
-            operListForm: {
-                date: new Date()
-            },
-            totalItem: 0,
-            currentPage: 1,
-            totalItemOper: 0,
-            currentOperPage: 1,
-            terminalListPage: [],
-            suggestionData: [],
-            suggestionMore: 0,
-            suggestionBegin: 0,
-            suggestionSize: 10
-        };
-    },
-    computed: {},
-    watch: {},
-    mounted() {
-        if (this.$route.params.id) {
-            this.searchKey = this.$route.params.id;
-            this.getUserData(this.searchKey);
         }
-        //element的auto complete不支持分页加载，在这里hack添加支持
-        this.$suggestionMoreBtn = document.createElement("div");
-        this.$suggestionMoreBtn.className = "loadmore";
-        this.$suggestionMoreBtn.innerHTML = "加载更多";
-        this.$suggestionMoreBtn.addEventListener(
-            "click",
-            () => {
-                const next = this.suggestionBegin + Math.min(this.suggestionMore, this.suggestionSize);
-                this.loadSuggestions(next);
-            },
-            false
-        );
-        this.$refs.input.$el.querySelector(".el-autocomplete-suggestion").appendChild(this.$suggestionMoreBtn);
+      ],
+      today: [new Date(), new Date()],
+      errLogForm: {
+        inner: "",
+        uid: "",
+        type: "uuid",
+        date: ""
+      },
+      errLogLayer: false,
+      activeName: "first",
+      searchedFlag: true,
+      searchKey: "",
+      user_msg: [
+        { name: "昵称", value: "", prop: "F_nick" },
+        { name: "性别", value: "", prop: "F_gender" },
+        { name: "出生日期", value: "", prop: "F_birthday" },
+        { name: "手机号", value: "", prop: "F_phone_num" },
+        { name: "状态", value: "", prop: "F_state" },
+        { name: "注册时间", value: "", prop: "F_created_at" },
+        { name: "最近登录时间", value: "", prop: "F_last_login_time" },
+        { name: "最近登录IP", value: "", prop: "F_last_login_ip" },
+        { name: "最后一次访问的家庭id", value: "", prop: "F_last_family_id" },
+        { name: "在线状态", value: "", prop: "F_status_name" }
+      ],
+      family_info: [
+        { name: "内部ID", value: "", prop: "F_owner_id" },
+        { name: "家庭名称", value: "", prop: "F_name" },
+        { name: "户主ID", value: "", prop: "F_owner_id" },
+        { name: "路由器uuid", value: "", prop: "F_router_id" },
+        { name: "省份", value: "", prop: "F_provice" },
+        { name: "城市", value: "", prop: "F_city" },
+        { name: "小区", value: "", prop: "F_district" },
+        { name: "地址", value: "", prop: "F_addr" },
+        { name: "栋", value: "", prop: "F_building_no" },
+        { name: "房号", value: "", prop: "F_room_no" },
+        { name: "创建时间", value: "", prop: "F_created_at" },
+        { name: "更新时间", value: "", prop: "F_updated_at" }
+      ],
+      terminalList: {},
+      memberList: {},
+      deviceList: {},
+      logOutList: {},
+      routerList: {},
+      operList: {},
+      allFamily: [],
+      allFamilyIndex: 0,
+      user_id: "",
+      logOutForm: {
+        date: new Date(),
+        client_id: "",
+        uuid: "",
+        userId: ""
+      },
+      operListForm: {
+        date: new Date()
+      },
+      totalItem: 0,
+      currentPage: 1,
+      totalItemOper: 0,
+      currentOperPage: 1,
+      terminalListPage: [],
+      suggestionData: [],
+      suggestionMore: 0,
+      suggestionBegin: 0,
+      suggestionSize: 10
+    }
+  },
+  computed: {},
+  watch: {},
+  mounted() {
+    if (this.$route.params.id) {
+      this.searchKey = this.$route.params.id
+      this.getUserData(this.searchKey)
+    }
+    //element的auto complete不支持分页加载，在这里hack添加支持
+    this.$suggestionMoreBtn = document.createElement("div")
+    this.$suggestionMoreBtn.className = "loadmore"
+    this.$suggestionMoreBtn.innerHTML = "加载更多"
+    this.$suggestionMoreBtn.addEventListener(
+      "click",
+      () => {
+        const next = this.suggestionBegin + Math.min(this.suggestionMore, this.suggestionSize)
+        this.loadSuggestions(next)
+      },
+      false
+    )
+    this.$refs.input.$el.querySelector(".el-autocomplete-suggestion").appendChild(this.$suggestionMoreBtn)
+  },
+  methods: {
+    searchErrLog() {
+      this.$message.error("123123")
     },
-    methods: {
-        searchErrLog() {
-            this.$message.error("123123");
-        },
-        search() {
-            if (!this.searchKey) {
-                this.$message.error("请输入手机号码");
-                return;
-            }
-            this.getUserData(this.searchKey);
-        },
-        updateSuggestions(result, cb) {
-            this.$refs.input.loading = false;
-            this.suggestionMore = result.more;
-            this.suggestionBegin = result.begin;
+    search() {
+      if (!this.searchKey) {
+        this.$message.error("请输入手机号码")
+        return
+      }
+      this.getUserData(this.searchKey)
+    },
+    updateSuggestions(result, cb) {
+      this.$refs.input.loading = false
+      this.suggestionMore = result.more
+      this.suggestionBegin = result.begin
 
-            if (result.begin <= 0) {
-                this.suggestionData = result.data;
-            } else {
-                this.suggestionData = this.suggestionData.concat(result.data);
-            }
+      if (result.begin <= 0) {
+        this.suggestionData = result.data
+      } else {
+        this.suggestionData = this.suggestionData.concat(result.data)
+      }
 
-            this.$refs.input.suggestions = this.suggestionData;
-            this.toggleMoreBtn(result.more);
-        },
-        toggleMoreBtn(show) {
-            this.$suggestionMoreBtn.style.display = show ? "" : "none";
-        },
-        loadSuggestions(begin) {
-            API.searchUserList(this.searchKey, begin, this.suggestionSize).then(res => {
-                if (res.data.result.list.length) {
-                    this.updateSuggestions({
-                        data: res.data.result.list,
-                        more: res.data.result.more,
-                        begin: begin
-                    });
-                } else {
-                    this.updateSuggestions({
-                        data: [],
-                        more: 0,
-                        begin: 0
-                    });
-                }
-            });
-        },
-        querySearch(queryString, cb) {
-            var phoneLen = this.searchKey.replace(/\*/g, "").length;
-            if (phoneLen >= 5) {
-                this.loadSuggestions(0);
-            } else {
-                this.updateSuggestions({
-                    data: [],
-                    more: 0,
-                    begin: 0
-                });
-            }
-        },
-        handleSelect(item) {
-            this.getUserData(item.phone);
-        },
-        // 拉取数据
-        getUserData(key) {
-            let obj = this;
-            API.searchUserMsg({ phone_num: key }).then(result => {
-                obj.user_id = result.info.F_uid;
-                obj.setUsermsg(result.info);
-                obj.hasAllMsg = true;
-                obj.setAllData(result);
-            });
-        },
-        setAllData(dataObj) {
-            terminalLists.tableData = dataObj.client_list;
-            if (dataObj.family_list && dataObj.family_list.length) {
-                let familys = dataObj.family_list;
-                this.allFamily = [];
-                familys.forEach((item, index) => {
-                    this.allFamily.push({
-                        name: "家庭" + (index + 1),
-                        value: index + 1,
-                        list: item,
-                        family_id: item.info.F_family_id
-                    });
-                });
-                this.changeFamilyData(familys[0]);
-            }
-            this.terminalList = terminalLists;
-        },
-        changeFamilyData(dataObj) {
-            memberLists.tableData = dataObj.member_list;
-            deviceLists.tableData = dataObj.device_list;
-            let arr = [];
-            arr.push(dataObj.router_info);
-            routerLists.tableData = arr;
-            this.setFamilyInfo(dataObj.info);
-            this.memberList = memberLists;
-            this.deviceList = deviceLists;
-            this.routerList = routerLists;
-        },
-        setFamilyInfo(data) {
-            this.family_info.forEach(item => {
-                let thisProp = item.prop;
-                let thisVal = data[thisProp];
-                let text = "";
-                switch (thisProp) {
-                    case "F_state":
-                        text = thisVal === 0 ? "有效" : thisVal === 1 ? "禁用" : "删除";
-                        break;
-                    default:
-                        text = thisVal;
-                        break;
-                }
-                item.value = text || "------";
-            });
-        },
-        tabClick() {
-            // console.log('输出tab')
-        },
-        handleCommand(command) {
-            this.allFamilyIndex = command - 1;
-            this.changeFamilyData(this.allFamily[command - 1].list);
-            // this.$message('click on item ' + command);
-        },
-        setUsermsg(data) {
-            this.user_msg.forEach(item => {
-                let thisProp = item.prop;
-                let thisVal = data[thisProp];
-                let text = "";
-                switch (thisProp) {
-                    case "F_state":
-                        text = thisVal === 0 ? "有效" : thisVal === 1 ? "禁用" : "删除";
-                        break;
-                    case "F_gender":
-                        text = thisVal === 0 ? "未配置" : thisVal === 1 ? "男" : "删除";
-                        break;
-                    default:
-                        text = thisVal;
-                        break;
-                }
-                item.value = text || "------";
-            });
-        },
-        openLogOutLayer(data) {
-            this.logOutLayer = true;
-            let form = this.logOutForm;
-            form.date = new Date();
-            form.uuid = data.F_uuid;
-            form.client_id = data.F_clientId;
-            form.user_id = this.user_id;
-            this.changeLogOut(1);
-        },
-        changeSelectLogOutDate() {
-            this.changeLogOut(1);
-        },
-        changeLogOut(page) {
-            // let date = this.logOutForm.date.Format('yyyy-MM-dd')
-            let obj = this;
-            let form = this.logOutForm;
-            let param = {
-                select_date: form.date.Format("yyyy-MM-dd"),
-                client_id: form.client_id,
-                uuid: form.uuid,
-                user_id: obj.user_id,
-                page: page,
-                limit: 10
-            };
-            API.searchLogOut(param).then(result => {
-                logOutLists.tableData = result.data;
-                obj.logOutList = logOutLists;
-                obj.totalItem = result.total;
-            });
-        },
-        pageChange() {
-            this.changeLogOut(this.currentPage);
-        },
-        pageOperChange() {
-            this.getOperaList(this.currentOperPage);
-        },
-        toRootLog() {
-            this.$router.push({ path: "/main/rootLog/" + this.searchKey });
-        },
-        getStatusText(type) {
-            let text = "";
-            switch (type) {
-                case 1:
-                    text = "有效";
-                    break;
-                case 0:
-                    text = "无效";
-                    break;
-                default:
-                    text = "未知";
-                    break;
-            }
-            return text;
-        },
-        getRouterStatusText(type) {
-            let text = "";
-            switch (type) {
-                case 1:
-                    text = "工厂测试";
-                    break;
-                case 2:
-                    text = "库存";
-                    break;
-                case 3:
-                    text = "销售出";
-                    break;
-                case 5:
-                    text = "返修";
-                    break;
-                default:
-                    text = "失效";
-                    break;
-            }
-            return text;
-        },
-        getOperaList(page) {
-            let obj = this;
-            let param = {
-                select_date: this.operListForm.date,
-                family_id: 0,
-                limit: 5,
-                page: page
-                // family_id: this.allFamily[this.allFamilyIndex].family_id
-            };
-            API.operaList(param).then(result => {
-                if (result && result.data) {
-                    operLists.tableData = result.data;
-                    obj.totalItemOper = result.total;
-                } else {
-                    operLists.tableData = [];
-                }
-                obj.operList = operLists;
-            });
-        },
-        openOperListLayer() {
-            this.operListLayer = true;
-            this.getOperaList(1);
-        },
-        changeSelectOperList() {
-            this.getOperaList(1);
+      this.$refs.input.suggestions = this.suggestionData
+      this.toggleMoreBtn(result.more)
+    },
+    toggleMoreBtn(show) {
+      this.$suggestionMoreBtn.style.display = show ? "" : "none"
+    },
+    loadSuggestions(begin) {
+      API.searchUserList(this.searchKey, begin, this.suggestionSize).then(res => {
+        if (res.data.result.list.length) {
+          this.updateSuggestions({
+            data: res.data.result.list,
+            more: res.data.result.more,
+            begin: begin
+          })
+        } else {
+          this.updateSuggestions({
+            data: [],
+            more: 0,
+            begin: 0
+          })
         }
+      })
     },
-    ...mapActions(["searchUserMsg", "searchLogOut", "operaList"])
-};
+    querySearch(queryString, cb) {
+      var phoneLen = this.searchKey.replace(/\*/g, "").length
+      if (phoneLen >= 5) {
+        this.loadSuggestions(0)
+      } else {
+        this.updateSuggestions({
+          data: [],
+          more: 0,
+          begin: 0
+        })
+      }
+    },
+    handleSelect(item) {
+      this.getUserData(item.phone)
+    },
+    // 拉取数据
+    getUserData(key) {
+      let obj = this
+      API.searchUserMsg({ phone_num: key }).then(result => {
+        obj.user_id = result.info.F_uid
+        obj.setUsermsg(result.info)
+        obj.hasAllMsg = true
+        obj.setAllData(result)
+      })
+    },
+    setAllData(dataObj) {
+      terminalLists.tableData = dataObj.client_list
+      if (dataObj.family_list && dataObj.family_list.length) {
+        let familys = dataObj.family_list
+        this.allFamily = []
+        familys.forEach((item, index) => {
+          this.allFamily.push({
+            name: "家庭" + (index + 1),
+            value: index + 1,
+            list: item,
+            family_id: item.info.F_family_id
+          })
+        })
+        this.changeFamilyData(familys[0])
+      }
+      this.terminalList = terminalLists
+    },
+    changeFamilyData(dataObj) {
+      memberLists.tableData = dataObj.member_list
+      deviceLists.tableData = dataObj.device_list
+      let arr = []
+      arr.push(dataObj.router_info)
+      routerLists.tableData = arr
+      this.setFamilyInfo(dataObj.info)
+      this.memberList = memberLists
+      this.deviceList = deviceLists
+      this.routerList = routerLists
+    },
+    setFamilyInfo(data) {
+      this.family_info.forEach(item => {
+        let thisProp = item.prop
+        let thisVal = data[thisProp]
+        let text = ""
+        switch (thisProp) {
+        case "F_state":
+          text = thisVal === 0 ? "有效" : thisVal === 1 ? "禁用" : "删除"
+          break
+        default:
+          text = thisVal
+          break
+        }
+        item.value = text || "------"
+      })
+    },
+    tabClick() {
+      // console.log('输出tab')
+    },
+    handleCommand(command) {
+      this.allFamilyIndex = command - 1
+      this.changeFamilyData(this.allFamily[command - 1].list)
+      // this.$message('click on item ' + command);
+    },
+    setUsermsg(data) {
+      this.user_msg.forEach(item => {
+        let thisProp = item.prop
+        let thisVal = data[thisProp]
+        let text = ""
+        switch (thisProp) {
+        case "F_state":
+          text = thisVal === 0 ? "有效" : thisVal === 1 ? "禁用" : "删除"
+          break
+        case "F_gender":
+          text = thisVal === 0 ? "未配置" : thisVal === 1 ? "男" : "删除"
+          break
+        default:
+          text = thisVal
+          break
+        }
+        item.value = text || "------"
+      })
+    },
+    openLogOutLayer(data) {
+      this.logOutLayer = true
+      let form = this.logOutForm
+      form.date = new Date()
+      form.uuid = data.F_uuid
+      form.client_id = data.F_clientId
+      form.user_id = this.user_id
+      this.changeLogOut(1)
+    },
+    changeSelectLogOutDate() {
+      this.changeLogOut(1)
+    },
+    changeLogOut(page) {
+      // let date = this.logOutForm.date.Format('yyyy-MM-dd')
+      let obj = this
+      let form = this.logOutForm
+      let param = {
+        select_date: form.date.Format("yyyy-MM-dd"),
+        client_id: form.client_id,
+        uuid: form.uuid,
+        user_id: obj.user_id,
+        page: page,
+        limit: 10
+      }
+      API.searchLogOut(param).then(result => {
+        logOutLists.tableData = result.data
+        obj.logOutList = logOutLists
+        obj.totalItem = result.total
+      })
+    },
+    pageChange() {
+      this.changeLogOut(this.currentPage)
+    },
+    pageOperChange() {
+      this.getOperaList(this.currentOperPage)
+    },
+    toRootLog() {
+      this.$router.push({ path: "/main/rootLog/" + this.searchKey })
+    },
+    getStatusText(type) {
+      let text = ""
+      switch (type) {
+      case 1:
+        text = "有效"
+        break
+      case 0:
+        text = "无效"
+        break
+      default:
+        text = "未知"
+        break
+      }
+      return text
+    },
+    getRouterStatusText(type) {
+      let text = ""
+      switch (type) {
+      case 1:
+        text = "工厂测试"
+        break
+      case 2:
+        text = "库存"
+        break
+      case 3:
+        text = "销售出"
+        break
+      case 5:
+        text = "返修"
+        break
+      default:
+        text = "失效"
+        break
+      }
+      return text
+    },
+    getOperaList(page) {
+      let obj = this
+      let param = {
+        select_date: this.operListForm.date,
+        family_id: 0,
+        limit: 5,
+        page: page
+        // family_id: this.allFamily[this.allFamilyIndex].family_id
+      }
+      API.operaList(param).then(result => {
+        if (result && result.data) {
+          operLists.tableData = result.data
+          obj.totalItemOper = result.total
+        } else {
+          operLists.tableData = []
+        }
+        obj.operList = operLists
+      })
+    },
+    openOperListLayer() {
+      this.operListLayer = true
+      this.getOperaList(1)
+    },
+    changeSelectOperList() {
+      this.getOperaList(1)
+    }
+  },
+  ...mapActions(["searchUserMsg", "searchLogOut", "operaList"])
+}
 </script>
 <style lang="less" scope>
 .el-collapse-item__header {

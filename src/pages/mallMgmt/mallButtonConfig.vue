@@ -1,6 +1,8 @@
 <template>
   <div class="page-content">
-    <div class="title">入口配置</div>
+    <div class="title">
+      入口配置
+    </div>
     <el-form
       ref="form"
       :model="config"
@@ -18,7 +20,9 @@
           active-value="1"
           inactive-value="0"
         />
-        <div class="tips">开启商城将在星络App的家居页面开放按钮，可以点击进入H5商城</div>
+        <div class="tips">
+          开启商城将在星络App的家居页面开放按钮，可以点击进入H5商城
+        </div>
       </el-form-item>
 
       <div v-show="+config.status === 1">
@@ -57,7 +61,9 @@
               @click.stop="clearImg"
             />
           </el-upload>
-          <div class="tips">只能上传jpg/png格式文件，单个文件不能超过500kb</div>
+          <div class="tips">
+            只能上传jpg/png格式文件，单个文件不能超过500kb
+          </div>
         </el-form-item>
       </div>
 
@@ -65,7 +71,9 @@
         <el-button
           type="primary"
           @click="submitForm"
-        >确定并生效</el-button>
+        >
+          确定并生效
+        </el-button>
       </el-form-item>
     </el-form>
   </div>
