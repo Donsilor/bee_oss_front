@@ -275,6 +275,11 @@ const routes = [
 			{
 				path: 'mallOrder',
 				component: Pages.MallOrder
+			},
+			// 场景管理
+			{
+				path: 'sceneAdmin',
+				component: Pages.SceneAdmin
 			}
 		]
 	},

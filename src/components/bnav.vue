@@ -188,6 +188,11 @@ export default {
               title: '商城配置',
               path: '/main/mallButtonConfig',
               icon: 'facility'
+            },
+            {
+              title: '场景管理',
+              path: '/main/sceneAdmin',
+              icon: 'facility'
             }
           ]
         },

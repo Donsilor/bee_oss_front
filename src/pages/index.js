@@ -57,6 +57,8 @@ import AppUpgradeDetail from './upgradeCenter/appUpgradeDetail.vue'
 import MallButtonConfig from './mallMgmt/mallButtonConfig.vue'
 import MallOrder from './mallMgmt/mallOrder.vue'
 
+import SceneAdmin from './sceneAdmin/sceneAdmin.vue'
+
 export {
   Login,
   Main,
@@ -110,5 +112,6 @@ export {
   RoutingAnalysis,
   DailyData,
   MallButtonConfig,
-  MallOrder
+  MallOrder,
+  SceneAdmin
 }
