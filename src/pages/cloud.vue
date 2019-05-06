@@ -1,17 +1,17 @@
 <template>
-	<div class="page-content cloud-page">
-		<h1>需求待定，敬请期待！</h1>
-	</div>
+  <div class="page-content cloud-page">
+    <h1>需求待定，敬请期待！</h1>
+  </div>
 </template>
 <script>
 export default {
-    data() {
-        return {};
-    },
-    mounted() {},
-    methods: {},
-    components: {}
-};
+  components: {},
+  data() {
+    return {}
+  },
+  mounted() {},
+  methods: {}
+}
 </script>
 <style lang="less">
 .cloud-page {

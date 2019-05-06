@@ -1,6 +1,8 @@
 <template>
   <div class="page-content">
-    <div class="title">入口配置</div>
+    <div class="title">
+      入口配置
+    </div>
     <el-form
       ref="form"
       :model="config"
@@ -10,7 +12,7 @@
       label-width="200px"
     >
       <el-form-item
-        label="开启家具商城"
+        label="开启家居商城"
         prop="status"
       >
         <el-switch
@@ -18,6 +20,9 @@
           active-value="1"
           inactive-value="0"
         />
+        <div class="tips">
+          开启商城将在星络App的家居页面开放按钮，可以点击进入H5商城
+        </div>
       </el-form-item>
 
       <div v-show="+config.status === 1">
@@ -51,7 +56,14 @@
               v-else
               class="el-icon-plus avatar-uploader-icon"
             />
+            <i
+              class="clear el-icon-remove"
+              @click.stop="clearImg"
+            />
           </el-upload>
+          <div class="tips">
+            只能上传jpg/png格式文件，单个文件不能超过500kb
+          </div>
         </el-form-item>
       </div>
 
@@ -59,7 +71,9 @@
         <el-button
           type="primary"
           @click="submitForm"
-        >确定并生效</el-button>
+        >
+          确定并生效
+        </el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -80,7 +94,11 @@
     border-radius: 6px;
     cursor: pointer;
     position: relative;
-    overflow: hidden;
+    .clear {
+      position: absolute;
+      top: 0;
+      right: -20px;
+    }
   }
   .avatar-uploader .el-upload:hover {
     border-color: #409eff;
@@ -97,6 +115,9 @@
     width: 178px;
     height: 178px;
     display: block;
+  }
+  .tips {
+    color: #999;
   }
 }
 </style>
@@ -124,7 +145,7 @@ export default {
         ],
         content: [
           { required: true, message: '请输入按钮文案', trigger: 'blur' },
-          { min: 1, max: 10, message: '按钮文案最长为10个中文字符', trigger: 'blur' }
+          { min: 2, max: 6, message: '按钮文案文字限制为2-6个中文', trigger: 'blur' }
         ],
         url: [
           { required: true, message: '请输入链接地址', trigger: 'blur' },
@@ -205,6 +226,10 @@ export default {
             this.$message.error(res)
           }
         })
+    },
+    clearImg() {
+      this.image_file = ''
+      this.config.image_url = ''
     }
   }
 }

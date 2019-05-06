@@ -23,12 +23,12 @@ export default {
     Bheader,
     Bnav
   },
-  data () {
-    return {};
+  data() {
+    return {}
   },
-  mounted () { },
+  mounted() { },
   methods: {},
-};
+}
 </script>
 <style lang="less">
 </style>

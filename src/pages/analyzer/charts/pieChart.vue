@@ -1,5 +1,11 @@
 <template>
-  <div :class="className" :title="title" :barColor="barColor" :id="id" :style="{height:height,width:width}"/>
+  <div
+    :id="id"
+    :class="className"
+    :title="title"
+    :barColor="barColor"
+    :style="{height:height,width:width}"
+  />
 </template>
 
 <script>
@@ -21,7 +27,7 @@ export default {
     },
     result: {
       type: Object,
-      default () {
+      default() {
         return {}
       }
     },
@@ -49,11 +55,11 @@ export default {
   },
   watch: {
     result: {
-      handler (newVal) {
-		this.legendData = [];
-		this.seriesData = [];
+      handler(newVal) {
+        this.legendData = []
+        this.seriesData = []
         for (let key in newVal) {
-          this.legendData.push(key=== 'app' ? '星络App' : '路由器语音')
+          this.legendData.push(key === 'app' ? '星络App' : '路由器语音')
           this.seriesData.push({
             value: newVal[key],
             name: key === 'app' ? '星络App' : '路由器语音'
@@ -75,7 +81,7 @@ export default {
     this.chart = null
   },
   methods: {
-    initChart () {
+    initChart() {
       this.chart = echarts.init(document.getElementById(this.id))
       this.chart.setOption({
         title: {
@@ -92,17 +98,17 @@ export default {
           formatter: "{a} <br/>{b} : {c} ({d}%)"
         },
         legend: {
-            // orient: 'vertical',
-            // top: 'middle',
-            icon: 'circle',
-            bottom: 10,
-            left: 'center',
-            data: this.legendData
+          // orient: 'vertical',
+          // top: 'middle',
+          icon: 'circle',
+          bottom: 10,
+          left: 'center',
+          data: this.legendData
         },
         series: [{
-          name:'分布情况',
+          name: '分布情况',
           type: 'pie',
-          radius : '65%',
+          radius: '65%',
           center: ['50%', '50%'],
           data: this.seriesData
         }]

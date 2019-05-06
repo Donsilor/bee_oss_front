@@ -74,7 +74,8 @@
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
-              @change="changeDate"/>
+              @change="changeDate"
+            />
           </el-form-item>
 
           <el-form-item>
@@ -84,7 +85,10 @@
           <el-form-item style="margin-bottom:0">
             <el-button
               type="primary"
-              @click="search">查询</el-button>
+              @click="search"
+            >
+              查询
+            </el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -103,7 +107,8 @@
               :chart-data2="chartDataMonUser"
               title="活跃用户数"
               rotate="0"
-              style="height:400px; width:100%;"/>
+              style="height:400px; width:100%;"
+            />
           </el-col>
         </el-row>
       </el-card>
@@ -122,7 +127,8 @@
               :chart-data2="chartDataMonFa"
               title="活跃家庭数"
               rotate="0"
-              style="height:400px; width:100%;"/>
+              style="height:400px; width:100%;"
+            />
           </el-col>
         </el-row>
       </el-card>
@@ -140,7 +146,7 @@ export default {
     CityPicker,
     LineChart2
   },
-  data () {
+  data() {
     return {
       formdata: {
         date: '',
@@ -151,32 +157,32 @@ export default {
         shortcuts: [{
           text: '昨天',
           onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24);
-            picker.$emit('pick', [start, end]);
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', [start, end])
           }
-        },{
+        }, {
           text: '最近7天',
           onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit('pick', [start, end]);
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
           }
         }, {
           text: '最近30天',
           onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-            picker.$emit('pick', [start, end]);
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
           }
         }]
       },
-      formdata: {
-        date: ''
-      },
+      // formdata: {
+      //   date: ''
+      // },
       DAUS: {
         totalCount: 0,
         lastDate: null,
@@ -198,32 +204,32 @@ export default {
         text: '30日活跃家庭数'
       },
       xAxisData: [],
-	  chartDataDayUser: [],
-	  chartDataMonUser: [],
-	  chartDataDayFa: [],
-	  chartDataMonFa: [],
-	  dateRange: '',
+      chartDataDayUser: [],
+      chartDataMonUser: [],
+      chartDataDayFa: [],
+      chartDataMonFa: [],
+      dateRange: '',
       activeUser: [{
-        name:'单日',
-        type:'line',
-        data:[3, 45]
+        name: '单日',
+        type: 'line',
+        data: [3, 45]
       }, {
-        name:'30日',
-        type:'line',
-        data:[2, 16]
+        name: '30日',
+        type: 'line',
+        data: [2, 16]
       }],
       activeFamily: [{
-        name:'单日',
-        type:'line',
-        data:[1, 10]
+        name: '单日',
+        type: 'line',
+        data: [1, 10]
       }, {
-        name:'30日',
-        type:'line',
-        data:[6, 17]
+        name: '30日',
+        type: 'line',
+        data: [6, 17]
       }]
     }
   },
-  mounted () {
+  mounted() {
     let end = new Date()
     let start = new Date()
     end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
@@ -237,92 +243,92 @@ export default {
   },
   methods: {
     // 获取数据
-    getActiveAnalysis (params) {
+    getActiveAnalysis(params) {
       axios.post(URL.ActiveAnalysisURL, params).then(res => {
         let obj = {}, activeList = {}
         if (res.data.code === 200) {
           let result = res.data.result.data
-           console.log(result, 'result')
+          console.log(result, 'result')
           this.DAUS.totalCount = result.summary.F_dau
           this.MAUS.totalCount = result.summary.F_mau
           this.DAFS.totalCount = result.summary.F_daf
           this.MAFS.totalCount = result.summary.F_maf
 
-		  this.filterChartData(result.detail_data)
-		  this.$refs.activeChart1.initChart()
-		  this.$refs.activeChart2.initChart()
-		}
+          this.filterChartData(result.detail_data)
+          this.$refs.activeChart1.initChart()
+          this.$refs.activeChart2.initChart()
+        }
       })
     },
     // 选择开始结束日后 决定是否显示留存筛选的周月
     changeDate(date) {
-      const start = date ? date[0].getTime() : "";
-      const end = date ? date[1].getTime() : "";
-      const diff = end - start;
+      const start = date ? date[0].getTime() : ""
+      const end = date ? date[1].getTime() : ""
+      const diff = end - start
       // 至少2个月才显示月 至少2周才显示周
-      this.isShowUnitMon = diff > 1000 * 3600 * 24 * 30 + 1000 * 3600 * 24 * 31;
-      this.isShowUnitWeek = diff > 1000 * 3600 * 24 * 7 * 2;
+      this.isShowUnitMon = diff > 1000 * 3600 * 24 * 30 + 1000 * 3600 * 24 * 31
+      this.isShowUnitWeek = diff > 1000 * 3600 * 24 * 7 * 2
     },
     onCitySelect(val) {
-      this.formdata.province = val[0];
-      this.formdata.city = val[1];
+      this.formdata.province = val[0]
+      this.formdata.city = val[1]
     },
-    search () {
-		this.reset()
-		const param = {
-			start_time: this.dateRange[0].Format('yyyy-MM-dd'),
-			end_time: this.dateRange[1].Format('yyyy-MM-dd')
-		}
-		console.log(777, param)
-		this.getActiveAnalysis(param)
+    search() {
+      this.reset()
+      const param = {
+        start_time: this.dateRange[0].Format('yyyy-MM-dd'),
+        end_time: this.dateRange[1].Format('yyyy-MM-dd')
+      }
+      console.log(777, param)
+      this.getActiveAnalysis(param)
     },
     // 格式化时间
     formatDate(d) {
       let padZero = num => {
-          num = num + ''
-          return num.length == 1 ? '0' + num : num
+        num = num + ''
+        return num.length == 1 ? '0' + num : num
       }
       return d ? d.getFullYear() + '-' + padZero(d.getMonth() + 1) + '-' + padZero(d.getDate()) : ''
     },
-	filterChartData (val) {
-		for (let item in val) {
-			this.xAxisData.push(item)
-			this.chartDataDayUser.push(val[item][0].F_dau)
-			this.chartDataMonUser.push(val[item][0].F_daf)
-			this.chartDataDayFa.push(val[item][0].F_mau)
-			this.chartDataMonFa.push(val[item][0].F_maf)
-		}
-		console.log(88, this.xAxisData.sort())
-	},
-	  reset () {
-    	this.xAxisData = [];
-    	this.chartDataDayUser = [];
-    	this.chartDataMonUser = [];
-    	this.chartDataDayFa = [];
-    	this.chartDataMonFa = [];
-	  }
+    filterChartData(val) {
+      for (let item in val) {
+        this.xAxisData.push(item)
+        this.chartDataDayUser.push(val[item][0].F_dau)
+        this.chartDataMonUser.push(val[item][0].F_daf)
+        this.chartDataDayFa.push(val[item][0].F_mau)
+        this.chartDataMonFa.push(val[item][0].F_maf)
+      }
+      console.log(88, this.xAxisData.sort())
+    },
+    reset() {
+      this.xAxisData = []
+      this.chartDataDayUser = []
+      this.chartDataMonUser = []
+      this.chartDataDayFa = []
+      this.chartDataMonFa = []
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
-.page-content{
-  .col-280{
+.page-content {
+  .col-280 {
     width: 280px;
-    .box-card{
+    .box-card {
       width: 260px;
       .data-list > div {
         font-size: 14px;
         color: #666666;
         &:nth-child(2) {
-            color: #409eff;
-            margin: 10px 0;
-            font-size: 30px;
+          color: #409eff;
+          margin: 10px 0;
+          font-size: 30px;
         }
       }
     }
   }
-  .network-equipment{
+  .network-equipment {
     margin-top: 20px;
   }
 }

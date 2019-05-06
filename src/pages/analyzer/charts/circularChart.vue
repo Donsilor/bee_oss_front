@@ -1,5 +1,11 @@
 <template>
-  <div :class="className" :title="title" :barColor="barColor" :id="id" :style="{height:height,width:width}"/>
+  <div
+    :id="id"
+    :class="className"
+    :title="title"
+    :barColor="barColor"
+    :style="{height:height,width:width}"
+  />
 </template>
 
 <script>
@@ -21,7 +27,7 @@ export default {
     },
     result: {
       type: Object,
-      default () {
+      default() {
         return {}
       }
     },
@@ -47,9 +53,9 @@ export default {
   },
   watch: {
     result: {
-      handler (newVal) {
-      	this.xAxisData = [];
-      	this.seriesData = [];
+      handler(newVal) {
+        this.xAxisData = []
+        this.seriesData = []
         for (let key in newVal) {
           this.xAxisData.push(key)
           this.seriesData.push({
@@ -73,7 +79,7 @@ export default {
     this.chart = null
   },
   methods: {
-    initChart () {
+    initChart() {
       this.chart = echarts.init(document.getElementById(this.id))
       this.chart.setOption({
         title: {
@@ -93,18 +99,18 @@ export default {
           // }
         },
         legend: {
-            // orient: 'vertical',
-            // top: 'middle',
-            icon: 'circle',
-            bottom: 10,
-            left: 'center',
-            // data: ['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
-            data: this.xAxisData
+          // orient: 'vertical',
+          // top: 'middle',
+          icon: 'circle',
+          bottom: 10,
+          left: 'center',
+          // data: ['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+          data: this.xAxisData
         },
         series: [{
-          name:'分布情况',
+          name: '分布情况',
           type: 'pie',
-          radius : ['50%', '70%'],
+          radius: ['50%', '70%'],
           center: ['50%', '50%'],
           avoidLabelOverlap: false,
           label: {
@@ -115,15 +121,15 @@ export default {
             emphasis: {
               show: true,
               textStyle: {
-                  fontSize: '24',
-                  fontWeight: 'bold'
+                fontSize: '24',
+                fontWeight: 'bold'
               }
             }
           },
           labelLine: {
-              normal: {
-                  show: true
-              }
+            normal: {
+              show: true
+            }
           },
           // itemStyle: {
           //   emphasis: {

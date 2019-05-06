@@ -10,19 +10,19 @@ import feedback from './modules/feedback'
 // import cmdata from './modules/cmdata';
 
 export default new Vuex.Store({
-	state: {}, //state
-	getters: {},
-	mutations: {},
-	actions: {},
-	modules: {
-		user,
-		website: {},
-		chosen,
-		// ops,
-		// upgrade,
-		// family,
-		// strategy,
-		feedback
-		// cmdata
-	}
+  state: {}, //state
+  getters: {},
+  mutations: {},
+  actions: {},
+  modules: {
+    user,
+    website: {},
+    chosen,
+    // ops,
+    // upgrade,
+    // family,
+    // strategy,
+    feedback
+    // cmdata
+  }
 })

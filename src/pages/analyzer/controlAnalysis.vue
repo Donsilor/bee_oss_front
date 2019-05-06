@@ -16,7 +16,8 @@
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
-              @change="changeDate"/>
+              @change="changeDate"
+            />
           </el-form-item>
 
           <!-- <el-form-item>
@@ -26,7 +27,10 @@
           <el-form-item style="margin-bottom:0">
             <el-button
               type="primary"
-              @click="search">查询</el-button>
+              @click="search"
+            >
+              查询
+            </el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -84,7 +88,8 @@
               id="pieChart1"
               :result="controlWay"
               title="控制途径分布"
-              style="height:400px; width:100%;"/>
+              style="height:400px; width:100%;"
+            />
           </el-col>
           <el-col :span="12">
             <!-- <circular-chart id="circularChart" title="网络制式分布" :result="networkType" style="height:400px; width:100%;"></circular-chart> -->
@@ -102,8 +107,9 @@
               :result="allAppNum"
               title="手机控制次数分析（单位：次）"
               rotate="45"
-              style="height:400px; width:100%;"/>
-              <!-- <pie-chart id="pieChart111" title="手机控制次数分析（单位：次）" style="height:400px; width:100%;"></pie-chart> -->
+              style="height:400px; width:100%;"
+            />
+            <!-- <pie-chart id="pieChart111" title="手机控制次数分析（单位：次）" style="height:400px; width:100%;"></pie-chart> -->
           </el-col>
           <el-col :span="12">
             <simple-chart
@@ -112,8 +118,9 @@
               title="手机控制人数分析（单位：个）"
               rotate="45"
               bar-color="#68D388"
-              style="height:400px; width:100%;"/>
-              <!-- <pie-chart id="pieChart11133" title="手机控制人数分析（单位：个）" style="height:400px; width:100%;"></pie-chart> -->
+              style="height:400px; width:100%;"
+            />
+            <!-- <pie-chart id="pieChart11133" title="手机控制人数分析（单位：个）" style="height:400px; width:100%;"></pie-chart> -->
           </el-col>
         </el-row>
       </el-card>
@@ -128,7 +135,8 @@
               :result="tendencyArray"
               title="手机控制次数趋势图"
               rotate="0"
-              style="height:400px; width:100%;"/>
+              style="height:400px; width:100%;"
+            />
           </el-col>
         </el-row>
       </el-card>
@@ -143,8 +151,9 @@
               :result="allRouterNum"
               title="语音控制次数分析（单位：次）"
               rotate="45"
-              style="height:400px; width:100%;"/>
-              <!-- <pie-chart id="pieChart113sss1" title="语音控制次数分析（单位：次）" style="height:400px; width:100%;"></pie-chart> -->
+              style="height:400px; width:100%;"
+            />
+            <!-- <pie-chart id="pieChart113sss1" title="语音控制次数分析（单位：次）" style="height:400px; width:100%;"></pie-chart> -->
           </el-col>
           <el-col :span="12">
             <simple-chart
@@ -153,8 +162,9 @@
               title="语音控制人数分析（单位：个）"
               rotate="45"
               bar-color="#68D388"
-              style="height:400px; width:100%;"/>
-              <!-- <pie-chart id="pieChart113fff31" title="语音控制人数分析（单位：个）" style="height:400px; width:100%;"></pie-chart> -->
+              style="height:400px; width:100%;"
+            />
+            <!-- <pie-chart id="pieChart113fff31" title="语音控制人数分析（单位：个）" style="height:400px; width:100%;"></pie-chart> -->
           </el-col>
         </el-row>
       </el-card>
@@ -178,38 +188,38 @@ export default {
     SimpleChart,
     LineChart
   },
-  data () {
+  data() {
     return {
       formdata: {
         date: '',
         province: '',
         city: ''
-	  },
-	  dateRange: [],
+      },
+      dateRange: [],
       pickerOptions: {
         shortcuts: [{
           text: '昨天',
           onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24);
-            picker.$emit('pick', [start, end]);
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', [start, end])
           }
-        },{
+        }, {
           text: '最近7天',
           onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit('pick', [start, end]);
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
           }
         }, {
           text: '最近30天',
           onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-            picker.$emit('pick', [start, end]);
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
           }
         }]
       },
@@ -244,20 +254,20 @@ export default {
         'app': '',
         'router': ''
       },
-		dataRange: ''
+      dataRange: ''
     }
   },
-  mounted () {
-	this.getControlAnalysis()
-	let end = new Date()
+  mounted() {
+    this.getControlAnalysis()
+    let end = new Date()
     end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
-	this.equipmentAnalyzer.lastDate = this.formatDate(end)
+    this.equipmentAnalyzer.lastDate = this.formatDate(end)
     this.userAnalyzer.lastDate = this.formatDate(end)
     this.controlAnalyzer.lastDate = this.formatDate(end)
   },
   methods: {
     // 获取数据
-    getControlAnalysis (param) {
+    getControlAnalysis(param) {
       axios.post(URL.ControlAnalysisURL, param).then(res => {
         if (res.data.code === 200) {
           let result = res.data.result.data
@@ -276,39 +286,39 @@ export default {
           this.allAppNum = Object.values(result.category_data.F_app)
           this.allAppUserNum = Object.values(result.category_data.F_app_usr)
           this.allRouterNum = Object.values(result.category_data.F_router)
-		  this.allRouterUserNum = Object.values(result.category_data.F_router_usr)
-		  // 日期
+          this.allRouterUserNum = Object.values(result.category_data.F_router_usr)
+          // 日期
         }
       })
     },
     // 选择开始结束日后 决定是否显示留存筛选的周月
     changeDate(date) {
-      const start = date ? date[0].getTime() : "";
-      const end = date ? date[1].getTime() : "";
-      const diff = end - start;
+      const start = date ? date[0].getTime() : ""
+      const end = date ? date[1].getTime() : ""
+      const diff = end - start
       // 至少2个月才显示月 至少2周才显示周
-      this.isShowUnitMon = diff > 1000 * 3600 * 24 * 30 + 1000 * 3600 * 24 * 31;
-      this.isShowUnitWeek = diff > 1000 * 3600 * 24 * 7 * 2;
+      this.isShowUnitMon = diff > 1000 * 3600 * 24 * 30 + 1000 * 3600 * 24 * 31
+      this.isShowUnitWeek = diff > 1000 * 3600 * 24 * 7 * 2
     },
     onCitySelect(val) {
-      this.formdata.province = val[0];
-      this.formdata.city = val[1];
+      this.formdata.province = val[0]
+      this.formdata.city = val[1]
     },
-    search () {
-		const param = {
-			start_time: this.dateRange[0].Format('yyyy-MM-dd'),
-			end_time: this.dateRange[1].Format('yyyy-MM-dd')
-		}
-		this.equipmentAnalyzer.lastDate = param.end_time
-		this.userAnalyzer.lastDate = param.end_time
-		this.controlAnalyzer.lastDate = param.end_time
-		this.getControlAnalysis(param)
-	},
-	// 格式化时间
+    search() {
+      const param = {
+        start_time: this.dateRange[0].Format('yyyy-MM-dd'),
+        end_time: this.dateRange[1].Format('yyyy-MM-dd')
+      }
+      this.equipmentAnalyzer.lastDate = param.end_time
+      this.userAnalyzer.lastDate = param.end_time
+      this.controlAnalyzer.lastDate = param.end_time
+      this.getControlAnalysis(param)
+    },
+    // 格式化时间
     formatDate(d) {
       let padZero = num => {
-          num = num + ''
-          return num.length == 1 ? '0' + num : num
+        num = num + ''
+        return num.length == 1 ? '0' + num : num
       }
       return d ? d.getFullYear() + '-' + padZero(d.getMonth() + 1) + '-' + padZero(d.getDate()) : ''
     }
@@ -317,23 +327,23 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.page-content{
-  .col-280{
+.page-content {
+  .col-280 {
     width: 280px;
-    .box-card{
+    .box-card {
       width: 260px;
       .data-list > div {
         font-size: 14px;
         color: #666666;
         &:nth-child(2) {
-            color: #409eff;
-            margin: 10px 0;
-            font-size: 30px;
+          color: #409eff;
+          margin: 10px 0;
+          font-size: 30px;
         }
       }
     }
   }
-  .network-equipment{
+  .network-equipment {
     margin-top: 20px;
   }
 }

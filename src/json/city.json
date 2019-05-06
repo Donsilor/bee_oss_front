@@ -1,7 +1,5 @@
-[
-	{
-		"list": [
-			{
+[{
+		"list": [{
 				"name_py": "huhehaoteshi",
 				"weathercnid": "101080101",
 				"name_en": "Hohhot",
@@ -132,8 +130,7 @@
 		"name_py": "neimengguzizhiqu"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "lasashi",
 				"weathercnid": "101140101",
 				"name_en": "Lhasa",
@@ -166,8 +163,7 @@
 		"name_py": "xizangzizhiqu"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "guiyangshi",
 				"weathercnid": "101260101",
 				"name_en": "Guiyang",
@@ -263,8 +259,7 @@
 		"name_py": "guizhousheng"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "shijiazhuangshi",
 				"weathercnid": "101090101",
 				"name_en": "Shijiazhuang",
@@ -486,21 +481,18 @@
 		"name_py": "hebeisheng"
 	},
 	{
-		"list": [
-			{
-				"name_py": "beijingshi",
-				"weathercnid": "101010100",
-				"name_en": "Beijing",
-				"name": "北京市",
-				"city_id": "2"
-			}
-		],
+		"list": [{
+			"name_py": "beijingshi",
+			"weathercnid": "101010100",
+			"name_en": "Beijing",
+			"name": "北京市",
+			"city_id": "2"
+		}],
 		"name": "北京市",
 		"name_py": "beijingshi"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "jinanshi",
 				"weathercnid": "101120101",
 				"name_en": "Jinan",
@@ -827,8 +819,7 @@
 		"name_py": "shandongsheng"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "zhengzhoushi",
 				"weathercnid": "101180101",
 				"name_en": "Zhengzhou",
@@ -1099,8 +1090,7 @@
 		"name_py": "henansheng"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "nanningshi",
 				"weathercnid": "101300101",
 				"name_en": "Nanning",
@@ -1259,8 +1249,7 @@
 		"name_py": "guangxizhuangzuzizhiqu"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "wulumuqishi",
 				"weathercnid": "101130101",
 				"name_en": "Urumqi",
@@ -1391,8 +1380,7 @@
 		"name_py": "xinjiangweiwuerzuzizhiqu"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "fuzhoushi",
 				"weathercnid": "101230101",
 				"name_en": "Fuzhou",
@@ -1551,8 +1539,7 @@
 		"name_py": "fujiansheng"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "changchunshi",
 				"weathercnid": "101060101",
 				"name_en": "Changchun",
@@ -1753,8 +1740,7 @@
 		"name_py": "jilinsheng"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "nanchangshi",
 				"weathercnid": "101240101",
 				"name_en": "Nanchang",
@@ -1906,8 +1892,7 @@
 		"name_py": "jiangxisheng"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "wuhanshi",
 				"weathercnid": "101200101",
 				"name_en": "Wuhan",
@@ -2157,8 +2142,7 @@
 		"name_py": "hubeisheng"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "changshashi",
 				"weathercnid": "101250101",
 				"name_en": "Changsha",
@@ -2366,8 +2350,7 @@
 		"name_py": "hunansheng"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "taiyuanshi",
 				"weathercnid": "101100101",
 				"name_en": "Taiyuan",
@@ -2526,8 +2509,7 @@
 		"name_py": "shanxisheng"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "nanjingshi",
 				"weathercnid": "101190101",
 				"name_en": "Nanjing",
@@ -2777,8 +2759,7 @@
 		"name_py": "jiangsusheng"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "hangzhoushi",
 				"weathercnid": "101210101",
 				"name_en": "Hangzhou",
@@ -3000,8 +2981,7 @@
 		"name_py": "zhejiangsheng"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "xiningshi",
 				"weathercnid": "101150101",
 				"name_en": "Xining",
@@ -3041,8 +3021,7 @@
 		"name_py": "qinghaisheng"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "yinchuanshi",
 				"weathercnid": "101170101",
 				"name_en": "Yinchuan",
@@ -3096,8 +3075,7 @@
 		"name_py": "ningxiahuizuzizhiqu"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "guangzhoushi",
 				"weathercnid": "101280101",
 				"name_en": "Guangzhou",
@@ -3389,8 +3367,7 @@
 		"name_py": "guangdongsheng"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "haikoushi",
 				"weathercnid": "101310101",
 				"name_en": "Haikou",
@@ -3458,8 +3435,7 @@
 		"name_py": "hainansheng"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "kunmingshi",
 				"weathercnid": "101290101",
 				"name_en": "Kunming",
@@ -3611,47 +3587,40 @@
 		"name_py": "yunnansheng"
 	},
 	{
-		"list": [
-			{
-				"name_py": "chongqingshi",
-				"weathercnid": "101040100",
-				"name_en": "Chongqing",
-				"name": "重庆市",
-				"city_id": "52"
-			}
-		],
+		"list": [{
+			"name_py": "chongqingshi",
+			"weathercnid": "101040100",
+			"name_en": "Chongqing",
+			"name": "重庆市",
+			"city_id": "52"
+		}],
 		"name": "重庆市",
 		"name_py": "chongqingshi"
 	},
 	{
-		"list": [
-			{
-				"name_py": "shanghaishi",
-				"weathercnid": "101020100",
-				"name_en": "Shanghai",
-				"name": "上海市",
-				"city_id": "39"
-			}
-		],
+		"list": [{
+			"name_py": "shanghaishi",
+			"weathercnid": "101020100",
+			"name_en": "Shanghai",
+			"name": "上海市",
+			"city_id": "39"
+		}],
 		"name": "上海市",
 		"name_py": "shanghaishi"
 	},
 	{
-		"list": [
-			{
-				"name_py": "tianjinshi",
-				"weathercnid": "101030100",
-				"name_en": "Tianjin",
-				"name": "天津市",
-				"city_id": "24"
-			}
-		],
+		"list": [{
+			"name_py": "tianjinshi",
+			"weathercnid": "101030100",
+			"name_en": "Tianjin",
+			"name": "天津市",
+			"city_id": "24"
+		}],
 		"name": "天津市",
 		"name_py": "tianjinshi"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "xianshi",
 				"weathercnid": "101110101",
 				"name_en": "Xian",
@@ -3747,8 +3716,7 @@
 		"name_py": "shanaxisheng"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "lanzhoushi",
 				"weathercnid": "101160101",
 				"name_en": "Lanzhou",
@@ -3865,8 +3833,7 @@
 		"name_py": "gansusheng"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "haerbinshi",
 				"weathercnid": "101050101",
 				"name_en": "Harbin",
@@ -4081,8 +4048,7 @@
 		"name_py": "heilongjiangsheng"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "shenyangshi",
 				"weathercnid": "101070101",
 				"name_en": "Shenyang",
@@ -4297,8 +4263,7 @@
 		"name_py": "liaoningsheng"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "hefeishi",
 				"weathercnid": "101220101",
 				"name_en": "Hefei",
@@ -4457,8 +4422,7 @@
 		"name_py": "anhuisheng"
 	},
 	{
-		"list": [
-			{
+		"list": [{
 				"name_py": "chengdushi",
 				"weathercnid": "101270101",
 				"name_en": "Chengdu",

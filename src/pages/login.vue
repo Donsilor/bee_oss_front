@@ -46,7 +46,9 @@
                     native-type="submit"
                     type="primary"
                     size="large"
-                  >登录</el-button>
+                  >
+                    登录
+                  </el-button>
                 </el-form-item>
               </li>
             </ol>
