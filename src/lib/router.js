@@ -281,10 +281,15 @@ const routes = [
         path: 'sceneAdmin',
         component: Pages.SceneAdmin
       },
-      // 场景添加
+      // 启动模式管理
       {
-        path: 'sceneAdd',
-        component: Pages.SceneAdd
+        path: 'modeManage',
+        component: Pages.ModeManage
+      },
+      // 情景管理
+      {
+        path: 'sightManage',
+        component: Pages.SightManage
       }
     ]
   },

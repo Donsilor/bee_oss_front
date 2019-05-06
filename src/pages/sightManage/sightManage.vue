@@ -1,10 +1,10 @@
 <template>
   <div class="page-content">
     <!-- 顶部tab -->
-    <div class="filter">
+    <div class="filter">          
       <span>情景管理</span>
       <el-button
-        type="primary"
+        type="primary" 
         @click="showConfig('add')">添加情景</el-button>
     </div>
     <!-- 列表 -->
@@ -38,17 +38,13 @@
           <template slot-scope="scope">
             <el-button
               type="text"
-              size="small"
-              @click="showConfig('modify', scope.row)">查看</el-button>
-            <el-button
-              type="text"
-              size="small"
+              size="small" 
               @click="showConfig('modify', scope.row)">编辑</el-button>
             <el-button
               type="text"
-              size="small"
-              @click="handeStateClick(scope.$index,scope.row.state)">
-              {{ scope.row.state ? '启用':'禁用' }}
+              size="small" 
+              @click="handeStateClick(scope.row.state)">
+              {{ scope.row.state ? '禁用':'启用' }}
             </el-button>
             <el-button
               type="text"
@@ -140,24 +136,16 @@ export default {
   methods: {
     getList() {
     },
-    handeStateClick(index,state) {
-      console.log(state)
-      let type = '禁用'
+    handeStateClick(state) {
+      let type = '启用'
       if(state){
-        type = '启用'
+        type = '禁用'
       }
       this.$confirm(`您是否确定${type}该情景？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if(state==1){
-          this.list[index].state = 0
-          console.log(state)
-        }else{
-          this.list[index].state = 1
-          console.log(state)
-        }
       }).catch(() => {
       })
     },

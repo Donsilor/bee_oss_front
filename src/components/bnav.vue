@@ -201,6 +201,16 @@ export default {
               title: '场景管理',
               path: '/main/sceneAdmin',
               icon: 'facility'
+            },
+            {
+              title: '启动模式配置',
+              path: '/main/modeManage',
+              icon: 'facility'
+            },
+            {
+              title: '情景管理',
+              path: '/main/sightManage',
+              icon: 'facility'
             }
           ]
         },

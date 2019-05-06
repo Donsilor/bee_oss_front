@@ -2,10 +2,10 @@
   <div class="page-content">
     <!-- 顶部tab -->
     <div class="filter">
-      <span>情景管理</span>
+      <span>启动模式配置</span>
       <el-button
         type="primary"
-        @click="showConfig('add')">添加情景</el-button>
+        @click="showConfig('add')">添加模式</el-button>
     </div>
     <!-- 列表 -->
     <div style="margin-top: 60px">
@@ -17,29 +17,27 @@
           type="index"
           label="序号"
           width="80"/>
-        <el-table-column
+        <!-- <el-table-column
           prop="name"
-          label="情景名称"/>
+          label="情景名称"/> -->
         <el-table-column
           prop="upmode"
-          label="启动方式"/>
+          label="启动模式名称"/>
         <el-table-column
           prop="time"
+          width="200"
           label="添加时间"/>
-        <el-table-column
+        <!-- <el-table-column
           prop="state"
           label="是否启用">
           <template slot-scope="scope">
             {{ scope.row.state ? '禁用':'启用' }}
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
+          width="200"
           label="操作">
           <template slot-scope="scope">
-            <el-button
-              type="text"
-              size="small"
-              @click="showConfig('modify', scope.row)">查看</el-button>
             <el-button
               type="text"
               size="small"
@@ -47,8 +45,8 @@
             <el-button
               type="text"
               size="small"
-              @click="handeStateClick(scope.$index,scope.row.state)">
-              {{ scope.row.state ? '启用':'禁用' }}
+              @click="handeStateClick(scope.row.state)">
+              {{ scope.row.state ? '禁用':'启用' }}
             </el-button>
             <el-button
               type="text"
@@ -140,24 +138,16 @@ export default {
   methods: {
     getList() {
     },
-    handeStateClick(index,state) {
-      console.log(state)
-      let type = '禁用'
+    handeStateClick(state) {
+      let type = '启用'
       if(state){
-        type = '启用'
+        type = '禁用'
       }
       this.$confirm(`您是否确定${type}该情景？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if(state==1){
-          this.list[index].state = 0
-          console.log(state)
-        }else{
-          this.list[index].state = 1
-          console.log(state)
-        }
       }).catch(() => {
       })
     },

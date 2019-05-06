@@ -58,7 +58,8 @@ import MallButtonConfig from './mallMgmt/mallButtonConfig.vue'
 import MallOrder from './mallMgmt/mallOrder.vue'
 
 import SceneAdmin from './sceneAdmin/sceneAdmin.vue'
-import SceneAdd from './sceneAdmin/son/sceneAdd.vue'
+import SightManage from './sightManage/sightManage.vue'
+import ModeManage from './modeManage/modeManage.vue'
 
 export {
   Login,
@@ -115,5 +116,6 @@ export {
   MallButtonConfig,
   MallOrder,
   SceneAdmin,
-  SceneAdd
+  SightManage,
+  ModeManage
 }
