@@ -24,7 +24,7 @@ module.exports = {
 		'space-in-parens': 0,
 		'spaced-comment': 0,
 		'no-tabs': 0,
-		indent: 0,
+    indent: [2, 2],
 		'operator-linebreak': 0,
 		'space-before-blocks': 0,
 		'comma-dangle': 0,
