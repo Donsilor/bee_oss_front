@@ -66,26 +66,34 @@
     <!-- 启用/禁用 -->
     <!-- <div>
       <el-dialog
-        title="禁用场景提示"
         :visible.sync="dialogVisible"
+        title="禁用场景提示"
         width="30%"
       >
         <span>您是否确定禁用该场景？</span>
-        <span slot="footer" class="dialog-footer">
+        <span
+          slot="footer"
+          class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="ok(index)">确 定</el-button>
+          <el-button
+            type="primary"
+            @click="ok(index)">确 定</el-button>
         </span>
       </el-dialog>
 
       <el-dialog
-        title="删除场景提示"
         :visible.sync="deleteVisible"
+        title="删除场景提示"
         width="30%"
       >
         <span>您是否确定删除该场景？</span>
-        <span slot="footer" class="dialog-footer">
+        <span
+          slot="footer"
+          class="dialog-footer">
           <el-button @click="deleteVisible = false">取 消</el-button>
-          <el-button type="primary" @click="deleteOK123()">确 定</el-button>
+          <el-button
+            type="primary"
+            @click="deleteOK123()">确 定</el-button>
         </span>
       </el-dialog>
     </div> -->
@@ -177,7 +185,22 @@ export default {
     //   rows.splice(index, 1)
     // },
     deleteRow(index, rows) {
-      rows.splice(index, 1)
+      this.$confirm('您是否确定删除该场景？', ' 删除场景提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+        rows.splice(index, 1)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
 
   }
