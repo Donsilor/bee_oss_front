@@ -203,13 +203,13 @@ export default {
               icon: 'facility'
             },
             {
-              title: '启动模式配置',
-              path: '/main/modeManage',
+              title: '情景管理',
+              path: '/main/sightManage',
               icon: 'facility'
             },
             {
-              title: '情景管理',
-              path: '/main/sightManage',
+              title: '启动模式管理',
+              path: '/main/startMode',
               icon: 'facility'
             }
           ]
