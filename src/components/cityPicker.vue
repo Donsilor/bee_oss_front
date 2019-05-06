@@ -5,8 +5,7 @@
     :clearable="true"
     placeholder="请选择地区"
     change-on-select
-    @change="change"
-  />
+    @change="change"/>
 </template>
 
 
