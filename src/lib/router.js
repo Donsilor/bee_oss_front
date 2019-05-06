@@ -280,6 +280,15 @@ const routes = [
       {
         path: 'sceneAdmin',
         component: Pages.SceneAdmin
+      },
+      {
+        path: 'sceneAdmin',
+        component: Pages.SceneAdmin
+      },
+      // 情景管理
+      {
+        path: 'sightManage',
+        component: Pages.SightManage
       }
     ]
   },

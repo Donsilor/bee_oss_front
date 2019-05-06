@@ -201,6 +201,11 @@ export default {
               title: '场景管理',
               path: '/main/sceneAdmin',
               icon: 'facility'
+            },
+            {
+              title: '情景管理',
+              path: '/main/sightManage',
+              icon: 'facility'
             }
           ]
         },
