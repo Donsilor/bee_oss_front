@@ -21,9 +21,6 @@
           prop="name"
           label="情景名称"/>
         <el-table-column
-          prop="upmode"
-          label="启动方式"/>
-        <el-table-column
           prop="time"
           label="添加时间"/>
         <el-table-column

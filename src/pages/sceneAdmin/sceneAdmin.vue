@@ -2,10 +2,10 @@
   <div class="page-content">
     <!-- 顶部tab -->
     <div class="filter">
-      <span>情景管理</span>
+      <span>场景管理</span>
       <el-button
         type="primary"
-        @click="showConfig('add')">添加情景</el-button>
+        @click="showConfig('add')">添加场景</el-button>
     </div>
     <!-- 列表 -->
     <div style="margin-top: 60px">
@@ -19,7 +19,7 @@
           width="80"/>
         <el-table-column
           prop="name"
-          label="情景名称"/>
+          label="场景名称"/>
         <el-table-column
           prop="upmode"
           label="启动方式"/>
@@ -146,7 +146,7 @@ export default {
       if(state){
         type = '启用'
       }
-      this.$confirm(`您是否确定${type}该情景？`, '提示', {
+      this.$confirm(`您是否确定${type}该场景？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -162,7 +162,7 @@ export default {
       })
     },
     handeDeleteClick() {
-      this.$confirm(`您是否确定删除该情景？`, '提示', {
+      this.$confirm(`您是否确定删除该场景？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
