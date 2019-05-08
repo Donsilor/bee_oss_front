@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import router from './lib/router'
+import router from './router/index.js'
 import store from './store/index.js'
 // import cache from './store/cache.js';
 import App from './App.vue'
