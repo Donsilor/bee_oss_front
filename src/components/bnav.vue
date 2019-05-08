@@ -12,7 +12,8 @@
             <template slot="title">
               <i
                 :class="item.icon"
-                class="icon-pp" />{{ item.title }}</template>
+                class="icon-pp" />{{ item.title }}
+            </template>
             <div
               v-for="subItem in item.children"
               v-show="!subItem.needAdmin || (subItem.needAdmin && isAdmin)"
