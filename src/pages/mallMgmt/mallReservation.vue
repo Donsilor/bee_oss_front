@@ -40,10 +40,11 @@
           label="操作">
           <template slot-scope="scope">
             <el-button
+              :disabled="!!scope.row.state"
               type="text"
               size="small"
               @click="handeStateClick(scope.$index,scope.row.state)">
-              <!-- {{ scope.row.state ? '启用':'禁用' }} -->处理
+              处理
             </el-button>
           </template>
         </el-table-column>
@@ -59,8 +60,6 @@
         layout="prev, pager, next"
         @current-change="handPageChange"/>
     </div>
-    <!-- config -->
-    <!-- <Config :config="config"/> -->
   </div>
 </template>
 <style lang="less" scoped>
@@ -77,11 +76,7 @@
 }
 </style>
 <script>
-// import Config from './components/config.vue'
 export default {
-  // components: {
-  //   Config
-  // },
   data() {
     return {
       pages: {
@@ -128,15 +123,13 @@ export default {
         address: '深圳市罗湖区文锦路爱国大厦1203',
         time: '2019-01-09 15:21:21',
         state: 1
-      } ],
-      // config : {}
+      } ]
     }
   },
   methods: {
     getList() {
     },
     handeStateClick(index,state) {
-      console.log(state)
       if(state==0) {
         const h = this.$createElement
         this.$msgbox({
@@ -151,48 +144,18 @@ export default {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           beforeClose: (action, instance, done) => {
-          // if (action === 'confirm') {
-          //   done()
-          // } else {
-          //   done()
-          // }
             done()
           }
         }).then(action => {
           if(state==0){
             this.list[index].state = 1
-            console.log(state)
-          }/* else{
-          this.list[index].state = 1
-          console.log(state)
-        } */
+          }
           this.$message({
             type: 'success',
             message: '处理成功，已发货'
           })
         }).catch()
       }
-
-
-    //   console.log(state)
-    //   let type = '禁用'
-    //   if(state){
-    //     type = '启用'
-    //   }
-    //   this.$confirm(`您是否确定${type}该场景？`, '处理', {
-    //     confirmButtonText: '确定',
-    //     cancelButtonText: '取消',
-    //     type: 'warning'
-    //   }).then(() => {
-    //     if(state==1){
-    //       this.list[index].state = 0
-    //       console.log(state)
-    //     }else{
-    //       this.list[index].state = 1
-    //       console.log(state)
-    //     }
-    //   }).catch(() => {
-    //   })
     },
     handPageChange(val) {
       this.pages.page = val

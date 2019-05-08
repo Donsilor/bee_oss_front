@@ -211,11 +211,6 @@ export default {
               title: '启动模式管理',
               path: '/main/startMode',
               icon: 'facility'
-            },
-            {
-              title: '商城预定',
-              path: '/main/mallReservation',
-              icon: 'facility'
             }
           ]
         },
@@ -317,10 +312,10 @@ export default {
           ]
         },
         {
-          title: '商城预约',
-          path: '/main/mallOrder',
-          icon: 'family'
-        },
+          title: '商城预定',
+          path: '/main/mallReservation',
+          icon: 'facility'
+        }
       ]
     }
   },
