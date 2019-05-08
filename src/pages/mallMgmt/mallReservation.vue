@@ -2,7 +2,7 @@
   <div class="page-content">
     <!-- 顶部tab -->
     <div class="filter">
-      <span>场景管理</span>
+      <span>商城预定</span>
     </div>
     <!-- 列表 -->
     <div style="margin-top: 60px">
