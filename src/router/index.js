@@ -6,6 +6,11 @@ import updateManage from './modules/updateManage.js'
 import businessData from './modules/businessData.js'
 import log from './modules/log.js'
 import configManage from './modules/configManage.js'
+import switchInfo from './modules/switchInfo'
+import dataStatistics from './modules/dataStatistics'
+import permissionSettings from './modules/permissionSettings'
+import warningManagement from './modules/warningManagement'
+import subData from './modules/subData'
 
 const routes = [
   {
@@ -28,63 +33,24 @@ const routes = [
       ...businessData,
       ...log,
       ...configManage,
+      ...switchInfo,
+      ...dataStatistics,
+      ...permissionSettings,
+      ...warningManagement,
+      ...subData,
       {
         path: 'cloud',
         name: 'cloud',
         component: Pages.Cloud
       },
-      {
-        path: 'throughData',
-        name: 'throughData',
-        component: Pages.ThroughData,
-        children: [
-          {
-            path: '',
-            name: 'throughAll',
-            component: Pages.AllThroughData
-          },
-          {
-            path: 'appRouterData',
-            name: 'hasParent/main/throughData',
-            component: Pages.AppRouterData
-          },
-          {
-            path: 'devicesData',
-            name: 'hasParent/main/throughData',
-            component: Pages.DevicesData
-          },
-          {
-            path: 'logRegData',
-            name: 'hasParent/main/throughData',
-            component: Pages.LogRegData
-          },
-          {
-            path: 'qpsData',
-            name: 'hasParent/main/throughData',
-            component: Pages.QpsData
-          }
-        ]
-      },
+
       {
         path: 'cmdb',
         name: 'cmdb',
         component: Pages.CMDB
       },
-      {
-        path: 'warnManage',
-        name: 'warnManage',
-        component: Pages.WarnManage
-      },
-      {
-        path: 'warnDataSearch',
-        name: 'warnDataSearch',
-        component: Pages.WarnDataSearch
-      },
-      {
-        path: 'familyList',
-        name: 'familyList',
-        component: Pages.FamilyList
-      },
+
+
       {
         path: 'routerManager',
         name: 'routerIndex',
@@ -102,69 +68,7 @@ const routes = [
           }
         ]
       },
-      {
-        path: 'user',
-        name: 'user',
-        component: Pages.User
-      },
-      {
-        path: 'role',
-        name: 'role',
-        component: Pages.Role
-      },
-      {
-        path: 'updatePassword',
-        name: 'updatePassword',
-        component: Pages.UpdatePwd
-      },
-      {
-        path: 'resetPassword',
-        name: 'resetPassword',
-        component: Pages.ResetPwd
-      },
-      {
-        path: 'analyzer',
-        name: 'analyzer',
-        component: Pages.RouterIndex,
-        children: [
-          {
-            path: 'userData',
-            name: 'userData',
-            component: Pages.UserData
-          },
-          {
-            path: 'deviceData',
-            name: 'deviceData',
-            component: Pages.DeviceData
-          },
-          {
-            path: 'accessStatistics',
-            name: 'accessStatistics',
-            component: Pages.AccessStatistics
-          },
-          {
-            path: 'controlAnalysis',
-            name: 'controlAnalysis',
-            component: Pages.ControlAnalysis
-          },
-          {
-            path: 'activeAnalysis',
-            name: 'activeAnalysis',
-            component: Pages.ActiveAnalysis
-          },
-          {
-            path: 'routingAnalysis',
-            name: 'routingAnalysis',
-            component: Pages.RoutingAnalysis
-          },
-          {
-            path: 'dailyData',
-            name: 'dailyData',
-            component: Pages.DailyData
-          }
-        ]
-      },
-      {
+      {//用户反馈
         path: 'feedback/list',
         name: 'feedbackList',
         component: Pages.FeedbackList
@@ -174,19 +78,7 @@ const routes = [
         name: 'feedbackDetail',
         component: Pages.FeedbackDetail
       },
-      // 开关生产信息查询
-      {
-        path: 'switchproduct/history',
-        component: Pages.SwitchProductHistory
-      },
-      {
-        path: 'switchproduct/import',
-        component: Pages.SwitchProductImport
-      },
-      {
-        path: 'switchproduct/search',
-        component: Pages.SwitchProductSearch
-      },
+
       // 商城预定
       {
         path: 'mallReservation',
