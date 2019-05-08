@@ -211,6 +211,11 @@ export default {
               title: '启动模式管理',
               path: '/main/startMode',
               icon: 'facility'
+            },
+            {
+              title: '商城预定',
+              path: '/main/mallReservation',
+              icon: 'facility'
             }
           ]
         },

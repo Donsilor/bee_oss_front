@@ -60,6 +60,7 @@ import MallOrder from './mallMgmt/mallOrder.vue'
 import SceneAdmin from './sceneAdmin/sceneAdmin.vue'
 import SightManage from './sightManage/sightManage.vue'
 import StartMode from './startMode/startMode.vue'
+import MallReservation from './mallMgmt/mallReservation.vue'
 
 export {
   Login,
@@ -117,5 +118,6 @@ export {
   MallOrder,
   SceneAdmin,
   SightManage,
-  StartMode
+  StartMode,
+  MallReservation
 }

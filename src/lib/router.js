@@ -293,6 +293,11 @@ const routes = [
       { // startMode
         path: 'startMode',
         component: Pages.StartMode
+      },
+      // 商城预定
+      {
+        path: 'mallReservation',
+        component: Pages.MallReservation
       }
     ]
   },
