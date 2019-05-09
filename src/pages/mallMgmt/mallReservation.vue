@@ -2,7 +2,43 @@
   <div class="page-content">
     <!-- 顶部tab -->
     <div class="filter">
-      <span>商城预定</span>
+      <div class="left">
+        <el-date-picker
+          v-model="search.daterange"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          value-format="yyyy-MM-dd HH:mm:ss"
+        />
+
+        <el-input
+          v-model="search.name"
+          placeholder="请输入姓名"
+        />
+
+        <el-input
+          v-model="search.phone"
+          placeholder="请输入联系方式"
+        />
+
+        <el-input
+          v-model="search.type"
+          placeholder="购买套餐"
+        />
+
+        <el-button
+          type="primary"
+          @click="doSearch"
+        >
+          查询
+        </el-button>
+      </div>
+      <div class="right">
+        <el-button @click="exportExel">
+          导出数据
+        </el-button>
+      </div>
     </div>
     <!-- 列表 -->
     <div style="margin-top: 60px">
@@ -15,35 +51,35 @@
           label="序号"
           width="80"/>
         <el-table-column
-          prop="goods"
-          label="预定设备"/>
+          prop="content"
+          label="购买套餐"/>
         <el-table-column
           prop="name"
           label="用户姓名"/>
         <el-table-column
-          prop="phone"
+          prop="tel"
           label="联系方式"/>
         <el-table-column
           prop="address"
           label="收货地址"/>
         <el-table-column
-          prop="time"
+          prop="updated_at"
           label="预定时间"/>
         <el-table-column
-          prop="state"
+          prop="status"
           label="状态">
           <template slot-scope="scope">
-            {{ scope.row.state ? '已发货':'未处理' }}
+            {{ scope.row.status ? '已发货':'未处理' }}
           </template>
         </el-table-column>
         <el-table-column
           label="操作">
           <template slot-scope="scope">
             <el-button
-              :disabled="!!scope.row.state"
+              :disabled="!!scope.row.status"
               type="text"
               size="small"
-              @click="handeStateClick(scope.$index,scope.row.state)">
+              @click="handestatusClick(scope.$index, scope.row.status, scope.row.id)">
               处理
             </el-button>
           </template>
@@ -63,12 +99,20 @@
   </div>
 </template>
 <style lang="less" scoped>
-.filter{
+.filter {
   display: flex;
   justify-content: space-between;
-  flex-direction: row;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #ccc;
+  border-bottom: 1px solid #ececec;
+  padding-bottom: 30px;
+  .left {
+    display: flex;
+    * {
+      margin: 0 5px;
+    }
+    .el-input {
+      flex: 1;
+    }
+  }
 }
 .block {
   text-align: right;
@@ -76,6 +120,7 @@
 }
 </style>
 <script>
+import { PREFIX } from "../../lib/util"
 export default {
   data() {
     return {
@@ -84,53 +129,100 @@ export default {
         limit: '10',
         total: '40'
       },
-      list: [{
-        goods: '路由器  电视  立式空调  挂式空调  电动窗帘  开关',
-        name: '蔡高泽',
-        phone: "13631631226",
-        address: '深圳市罗湖区文锦路爱国大厦1203',
-        time: '2019-01-09 15:21:21',
-        state: 0
+      search: {
+        daterange: [],
+        name: '',
+        phone: '',
+        type: ''
       },
-      {
-        goods: '路由器  电视  立式空调  挂式空调  电动窗帘  开关',
-        name: '蔡高泽',
-        phone: "13631631226",
-        address: '深圳市罗湖区文锦路爱国大厦1203',
-        time: '2019-01-09 15:21:21',
-        state: 0
-      },
-      {
-        goods: '路由器  电视  立式空调  挂式空调  电动窗帘  开关',
-        name: '蔡高泽',
-        phone: "13631631226",
-        address: '深圳市罗湖区文锦路爱国大厦1203',
-        time: '2019-01-09 15:21:21',
-        state: 0
-      },
-      {
-        goods: '路由器  电视  立式空调  挂式空调  电动窗帘  开关',
-        name: '蔡高泽',
-        phone: "13631631226",
-        address: '深圳市罗湖区文锦路爱国大厦1203',
-        time: '2019-01-09 15:21:21',
-        state: 1
-      },
-      {
-        goods: '路由器  电视  立式空调  挂式空调  电动窗帘  开关',
-        name: '蔡高泽',
-        phone: "13631631226",
-        address: '深圳市罗湖区文锦路爱国大厦1203',
-        time: '2019-01-09 15:21:21',
-        state: 1
-      } ]
+      list: []
     }
+  },
+  mounted() {
+    this.getList()
   },
   methods: {
     getList() {
+      let param = this.getParam()
+      this.$http
+        .post(PREFIX + "mall_record/lists", param)
+        .then(res => {
+          const json = res.data
+          if (json.code === 200) {
+            this.list = res.data.result.data
+            this.pages.total = res.data.result.total
+          } else {
+            this.$message.error(json.msg)
+          }
+        })
+        .catch(res => {
+          if (res && res.msg) {
+            this.$message.error(res.msg)
+          } else {
+            this.$message.error(res)
+          }
+        })
     },
-    handeStateClick(index,state) {
-      if(state==0) {
+    getParam() {
+      let param = {
+        page: this.pages.page,
+        limit: this.pages.limit
+      }
+      if (this.search.daterange) {
+        param.start_time = this.search.daterange[0]
+        param.end_time = this.search.daterange[1]
+      }
+      if (this.search.name) {
+        param.name = this.search.name
+      }
+      if (this.search.type) {
+        param.content = this.search.type
+      }
+      if (this.search.phone) {
+        param.tel = this.search.phone
+      }
+      return param
+    },
+    doSearch() {
+      this.pages = {
+        page: '1',
+        limit: '10',
+      }
+      this.getList()
+    },
+    exportExel() {
+      let token = JSON.parse(localStorage.getItem("localData")).user.info.token
+      let param = {
+        token: token,
+        page: '1',
+        limit: '10000'
+      }
+      if (this.search.daterange && this.search.daterange.length > 0) {
+        param.start_time = this.search.daterange[0]
+        param.end_time = this.search.daterange[1]
+      }
+      if (this.search.name) {
+        param.name = this.search.name
+      }
+      if (this.search.type) {
+        param.content = this.search.type
+      }
+      if (this.search.phone) {
+        param.tel = this.search.phone
+      }
+      var query = ""
+      for (var o in param) {
+        if (param[o] != -1) {
+          query += o + "=" + param[o] + "&"
+        }
+      }
+      query = query.substring(0, query.length - 1)
+      console.log(query)
+      window.open(`${PREFIX}mall_record/export?${query}`)
+    },
+    handestatusClick(index,status,id) {
+      console.log(status)
+      if(status ==0 ) {
         const h = this.$createElement
         this.$msgbox({
           title: '处理',
@@ -147,15 +239,35 @@ export default {
             done()
           }
         }).then(action => {
-          if(state==0){
-            this.list[index].state = 1
-          }
-          this.$message({
-            type: 'success',
-            message: '处理成功，已发货'
-          })
-        }).catch()
+          this.changeStatus('1', id)
+        })
       }
+    },
+    changeStatus(status, selectId){
+      let param = {
+        id: selectId,
+        status: status
+      }
+      this.$http
+        .post(PREFIX + "mall_record/save_status", param)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.getList()
+            this.$message({
+              type: 'success',
+              message: '处理成功!'
+            })
+          } else {
+            this.$message.error(res.data.msg)
+          }
+        })
+        .catch(res => {
+          if (res && res.msg) {
+            this.$message.error(res.msg)
+          } else {
+            this.$message.error(res)
+          }
+        })
     },
     handPageChange(val) {
       this.pages.page = val

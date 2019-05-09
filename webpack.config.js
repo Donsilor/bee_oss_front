@@ -88,8 +88,8 @@ module.exports = (options = {}) => ({
     open: true,
     proxy: {
       '/api/index.php/*': {
-        //target: 'http://beeossdev.egtest.cn:7777',
-        target: 'http://beeoss.egtest.cn:7777',
+        target: 'http://beeossdev.egtest.cn:7777',
+        // target: 'http://beeoss.egtest.cn:7777',
         // target: 'http://beeoss.evergrande.com',
         changeOrigin: true
         /*pathRewrite: {
