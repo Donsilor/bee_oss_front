@@ -1,7 +1,6 @@
 import VueRouter from 'vue-router'
 import * as Pages from '../pages/index.js'
 
-
 import updateManage from './modules/updateManage.js'
 import businessData from './modules/businessData.js'
 import log from './modules/log.js'
@@ -23,12 +22,6 @@ const routes = [
     name: 'main',
     component: Pages.Main,
     children: [
-      {
-        path: '',
-        alias: 'home',
-        name: 'home',
-        component: Pages.Home
-      },
       ...updateManage,
       ...businessData,
       ...log,
@@ -39,18 +32,21 @@ const routes = [
       ...warningManagement,
       ...subData,
       {
+        path: '',
+        alias: 'home',
+        name: 'home',
+        component: Pages.Home
+      },
+      {
         path: 'cloud',
         name: 'cloud',
         component: Pages.Cloud
       },
-
       {
         path: 'cmdb',
         name: 'cmdb',
         component: Pages.CMDB
       },
-
-
       {
         path: 'routerManager',
         name: 'routerIndex',
@@ -78,7 +74,6 @@ const routes = [
         name: 'feedbackDetail',
         component: Pages.FeedbackDetail
       },
-
       // 商城预定
       {
         path: 'mallReservation',
@@ -92,9 +87,7 @@ const routes = [
     component: Pages.Error
   }
 ]
-
 const router = new VueRouter({
   routes
 })
-
 export default router
