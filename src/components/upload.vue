@@ -9,8 +9,8 @@
       class="avatar-uploader"
     >
       <img
-        v-if="image_file"
-        :src="image_file"
+        v-if="imageFile"
+        :src="imageFile"
         class="avatar"
       >
       <i
@@ -31,26 +31,18 @@
 <script>
 import getCorsUrl from "../lib/corsconfig.js"
 export default {
+  props: ['imageFile'],
   data() {
     return {
       corsUrls: getCorsUrl() + "/oss_file_upload",
       uploadObj: {
         token: JSON.parse(localStorage.getItem("localData")).user.info.token
-      },
-      image_file: '',
-      config: {
-        content: "",
-        image_url: "",
-        status: 1,
-        url: "www.baidu.com"
-      },
+      }
     }
   },
   methods: {
     handleAvatarSuccess(val) {
-      let data = val.result
-      this.config.image_url = data.object
-      this.image_file = data.download_url
+      this.$emit('emitImageData', val.result)
     },
     beforeAvatarUpload(file) {
       const isType = (file.type === 'image/jpeg') || (file.type === 'image/png')
@@ -64,9 +56,41 @@ export default {
       return isType && isLt2M
     },
     clearImg() {
-      this.image_file = ''
-      this.config.image_url = ''
+      this.$emit('emitImageData', {})
     }
   }
 }
 </script>
+<style lang="less">
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    .clear {
+      position: absolute;
+      top: 0;
+      right: -20px;
+    }
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409eff;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+  .tips {
+    color: #999;
+  }
+</style>
+

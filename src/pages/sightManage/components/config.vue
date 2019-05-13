@@ -12,7 +12,9 @@
           autocomplete="off"/>
       </el-form-item>
       <el-form-item label="情景icon">
-        <Upload :upload="upload"/>
+        <Upload 
+          :image-file="imageFile" 
+          @emitImageData="emitImageData" />
       </el-form-item>
       <el-form-item label="状态">
         <el-radio-group v-model="config.state">
@@ -31,38 +33,7 @@
     </div>
   </el-dialog>
 </template>
-<style lang="less">
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    .clear {
-      position: absolute;
-      top: 0;
-      right: -20px;
-    }
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409eff;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 78px;
-    height: 78px;
-    line-height: 78px;
-    text-align: center;
-  }
-  .avatar {
-    width: 78px;
-    height: 78px;
-    display: block;
-  }
-  .tips {
-    color: #999;
-  }
-</style>
+
 <script>
 import { PREFIX } from "../../../lib/util"
 import getCorsUrl from "../../../lib/corsconfig"
@@ -74,10 +45,15 @@ export default {
   props: ['config'],
   data() {
     return {
-      upload: {}
+      imageFile: '', // download_url
+      image_url: '', // image object
     }
   },
   methods: {
+    emitImageData(data) {
+      this.image_url = data.object
+      this.imageFile = data.download_url 
+    }
   }
 }
 </script>

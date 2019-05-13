@@ -40,7 +40,9 @@
         </el-form-item>
         <el-form-item label="按钮图标">
           <!-- Upload -->
-          <Upload :upload="upload"/>
+          <Upload 
+            :image-file="imageFile" 
+            @emitImageData="emitImageData" />
         </el-form-item>
       </div>
 
@@ -66,36 +68,6 @@
     margin: auto;
     width: 40%;
   }
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    .clear {
-      position: absolute;
-      top: 0;
-      right: -20px;
-    }
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409eff;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
-  .tips {
-    color: #999;
-  }
 }
 </style>
 
@@ -109,7 +81,7 @@ export default {
   },
   data() {
     return {
-      upload: {},
+      imageFile: '',
       config: {
         content: "",
         image_url: "",
@@ -155,7 +127,7 @@ export default {
             this.config.status = res.data.result.status + '' // number 转string
             this.config.url = res.data.result.url
             this.config.image_url = res.data.result.image_url_object
-            this.image_file = res.data.result.image_url
+            this.imageFile = res.data.result.image_url
           } else {
             this.$message.error(json.msg)
           }
@@ -169,6 +141,7 @@ export default {
         })
     },
     saveConfig() {
+      console.log(this.config)
       this.$http
         .post(PREFIX + "mall_record/save_config", this.config)
         .then(res => {
@@ -187,6 +160,10 @@ export default {
             this.$message.error(res)
           }
         })
+    },
+    emitImageData(data) {
+      this.config.image_url = data.object
+      this.imageFile = data.download_url
     }
   }
 }
