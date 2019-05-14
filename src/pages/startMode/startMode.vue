@@ -41,9 +41,9 @@
     </div>
     <div class="block">
       <el-pagination
-        :total="pages.total"
-        :page-size="10"
-        :current-page="pages.page"
+        :total="+pages.total"
+        :page-size="+pages.limit"
+        :current-page="+pages.page"
         background
         layout="prev, pager, next"
         @current-change="handPageChange"/>
@@ -78,8 +78,9 @@ export default {
   data() {
     return {
       pages: {
-        page: 1,
-        total: 0
+        page: '1',
+        limit: '10',
+        total: '40'
       },
       list: [],
       config : {}
@@ -95,14 +96,14 @@ export default {
     getList() {
       this.$http
         .post(PREFIX + "iotscenemode/lists", {
-          page_size: this.pages.page
+          limit: this.pages.limit,
+          page: this.pages.page
         })
         .then(res => {
           const json = res.data
           if (json.code === 0) {
             this.list = res.data.result.list
             this.pages.total = res.data.result.total
-            console.log(this.pages.total,this.pages.page)
           } else {
             this.$message.error(json.msg)
           }
@@ -192,7 +193,6 @@ export default {
     },
     handPageChange(val) {
       this.pages.page = val
-      console.log("当前页:",val)
       this.getList()
     },
     indexMethod(index) {
