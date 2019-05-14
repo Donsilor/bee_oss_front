@@ -1,5 +1,5 @@
 /**
- * 业务数据路由
+ * 警告管理路由
  *
  * @summary short description for the file
  * @author songwh

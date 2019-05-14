@@ -1,5 +1,5 @@
 /**
- * 业务数据路由
+ * 日志查询路由
  *
  * @summary short description for the file
  * @author songwh

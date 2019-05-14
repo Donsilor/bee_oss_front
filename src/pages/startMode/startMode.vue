@@ -66,6 +66,7 @@
 }
 </style>
 <script>
+import { PREFIX } from "../../lib/util"
 import Config from './components/config.vue'
 export default {
   components: {
@@ -94,8 +95,29 @@ export default {
       config : {}
     }
   },
+  mounted() {
+    this.getList()
+  },
   methods: {
     getList() {
+      this.$http
+        .post(PREFIX + "iotscenemode/lists", {})
+        .then(res => {
+          const json = res.data
+          if (json.code === 200) {
+            this.list = res.data.result.data
+            this.pages.total = res.data.result.total
+          } else {
+            this.$message.error(json.msg)
+          }
+        })
+        .catch(res => {
+          if (res && res.msg) {
+            this.$message.error(res.msg)
+          } else {
+            this.$message.error(res)
+          }
+        })
     },
     handeStateClick(state) {
       let type = '启用'

@@ -1,5 +1,5 @@
 /**
- * 业务数据路由
+ * 权限设置路由
  *
  * @summary short description for the file
  * @author songwh
