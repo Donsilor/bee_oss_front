@@ -3,7 +3,7 @@
     <!-- 顶部tab -->
     <div class="filter">
       <el-button
-        type="primary" 
+        type="primary"
         @click="showConfig('add')">添加模式</el-button>
     </div>
     <!-- 列表 -->
@@ -12,28 +12,28 @@
         :data="list"
         border>
         <el-table-column
-          prop="name"
+          prop="mode_name"
           label="模式名称"/>
         <el-table-column
-          prop="time"
+          prop="created_at"
           label="添加时间"/>
         <el-table-column
           label="操作">
           <template slot-scope="scope">
             <el-button
               type="text"
-              size="small" 
+              size="small"
               @click="showConfig('modify', scope.row)">编辑</el-button>
             <el-button
               type="text"
-              size="small" 
-              @click="handeStateClick(scope.row.state)">
-              {{ scope.row.state ? '禁用':'启用' }}
+              size="small"
+              @click="handeStateClick(scope.row)">
+              {{ scope.row.enable ? '禁用':'启用' }}
             </el-button>
             <el-button
               type="text"
               size="small"
-              @click="handeDeleteClick(scope.row.state)">删除</el-button>
+              @click="handeDeleteClick(scope.row.mode_id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -41,15 +41,18 @@
     </div>
     <div class="block">
       <el-pagination
-        :total="+pages.total"
-        :page-size="+pages.limit"
-        :current-page="+pages.page"
+        :total="pages.total"
+        :page-size="10"
+        :current-page="pages.page"
         background
         layout="prev, pager, next"
         @current-change="handPageChange"/>
     </div>
     <!-- config -->
-    <Config :config="config"/>
+    <Config
+      :config="config"
+      @son="call"
+    />
   </div>
 </template>
 <style lang="less" scoped>
@@ -75,23 +78,10 @@ export default {
   data() {
     return {
       pages: {
-        page: '1',
-        limit: '10',
-        total: '40'
+        page: 1,
+        total: 0
       },
-      list: [{
-        name: '手动点击',
-        time: '2019-01-09 15:21:21',
-        state: 0
-      }, {
-        name: '定时启动',
-        time: '2019-01-09 15:21:21',
-        state: 0
-      }, {
-        name: '进入wifi',
-        time: '2019-01-09 15:21:21',
-        state: 0
-      }],
+      list: [],
       config : {}
     }
   },
@@ -99,14 +89,20 @@ export default {
     this.getList()
   },
   methods: {
+    call() {
+      this.getList()
+    },
     getList() {
       this.$http
-        .post(PREFIX + "iotscenemode/lists", {})
+        .post(PREFIX + "iotscenemode/lists", {
+          page_size: this.pages.page
+        })
         .then(res => {
           const json = res.data
-          if (json.code === 200) {
-            this.list = res.data.result.data
+          if (json.code === 0) {
+            this.list = res.data.result.list
             this.pages.total = res.data.result.total
+            console.log(this.pages.total,this.pages.page)
           } else {
             this.$message.error(json.msg)
           }
@@ -120,8 +116,9 @@ export default {
         })
     },
     handeStateClick(state) {
+      let enable = state.enable
       let type = '启用'
-      if(state){
+      if(enable){
         type = '禁用'
       }
       this.$confirm(`您是否确定${type}该模式？`, '提示', {
@@ -129,20 +126,73 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        this.$http
+          .post(PREFIX+ "iotscenemode/save", {
+            mode_id: state.mode_id,
+            mode_name: state.mode_name,
+            order: state.order,
+            enable: Number(!enable)
+          })
+          .then(res => {
+            if (res.data.code === 0) {
+              this.$message({
+                type: 'success',
+                message: '处理成功!'
+              })
+            } else {
+              this.$message.error(res.data.msg)
+            }
+            this.getList()
+          })
+          .catch(res => {
+            if (res && res.msg) {
+              this.$message.error(res.msg)
+            } else {
+              this.$message.error(res)
+            }
+          })
       }).catch(() => {
       })
     },
-    handeDeleteClick() {
+    handeDeleteClick(enable) {
       this.$confirm(`您是否确定删除该模式？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        this.delStatus(enable)
       }).catch(() => {
       })
     },
+    delStatus(enable) {
+      this.$http
+        .post(PREFIX + "iotscenemode/del", {
+          mode_id: enable
+        })
+        .then(res => {
+          if(res.data.code === 0) {
+            this.$message({
+              type: 'success',
+              message: '处理成功!'
+            })
+          } else {
+            this.$message.error(res.data.code)
+          }
+          this.getList()
+        })
+        .catch(res => {
+          if (res && res.msg) {
+            this.$message.error(res.msg)
+          } else {
+            this.$message.error(res)
+          }
+          this.getList()
+        })
+
+    },
     handPageChange(val) {
       this.pages.page = val
+      console.log("当前页:",val)
       this.getList()
     },
     indexMethod(index) {
