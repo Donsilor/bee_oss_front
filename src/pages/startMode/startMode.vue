@@ -79,7 +79,7 @@ export default {
     return {
       pages: {
         page: '1',
-        limit: '10',
+        limit: '3',
         total: '40'
       },
       list: [],
