@@ -16,7 +16,7 @@
           autocomplete="off"/>
       </el-form-item>
 
-      <el-form-item 
+      <el-form-item
         prop="list_pic.normal"
         label="列表配图">
         <el-input
@@ -26,11 +26,12 @@
         <!-- Upload -->
         <Upload
           :class="{'is-disabled': config.type === 'look'}"
-          :image-file="config.list_pic.normal" 
+          :image-file="config.list_pic.normal"
+          :type="config.type=='look'? 'look': '' "
           @emitImageData="emitListData" />
       </el-form-item>
 
-      <el-form-item 
+      <el-form-item
         prop="detail_pic"
         label="详情页配图">
         <el-input
@@ -40,7 +41,8 @@
         <!-- Upload -->
         <Upload
           :class="{'is-disabled': config.type === 'look'}"
-          :image-file="config.detail_pic" 
+          :image-file="config.detail_pic"
+          :type="config.type=='look'? 'look': '' "
           @emitImageData="emitDetailData" />
       </el-form-item>
 
@@ -60,11 +62,11 @@
       </el-form-item>
 
       <el-form-item label="选择设备">
-        <div 
-          v-for="it in categoryList" 
+        <div
+          v-for="it in categoryList"
           class="item">
-          <el-checkbox 
-            v-model="checkList" 
+          <el-checkbox
+            v-model="checkList"
             :label="it.category_id">选择</el-checkbox>
           <img
             :src="it.category_icon"
