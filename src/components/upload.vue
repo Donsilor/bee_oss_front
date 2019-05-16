@@ -73,7 +73,7 @@ export default {
       right: -20px;
     }
   }
-  .avatar-uploader .el-upload:hover {
+  .avatar-uploader .el-upload:hover { 
     border-color: #409eff;
   }
   .avatar-uploader-icon {
@@ -91,6 +91,13 @@ export default {
   }
   .tips {
     color: #999;
+  }
+
+  .is-disabled .avatar-uploader-icon{
+    background-color: #f5f7fa;
+    border-color: #e4e7ed;
+    color: #c0c4cc;
+    cursor: not-allowed;
   }
 </style>
 

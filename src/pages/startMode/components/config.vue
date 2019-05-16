@@ -34,10 +34,10 @@
     <div
       slot="footer"
       class="dialog-footer">
-      <el-button @click="submitForm('ruleForm')">取 消</el-button>
+      <el-button @click="config.show = false">取 消</el-button>
       <el-button
         type="primary"
-        @click="determine(config.type, 'ruleForm')">确 定</el-button>
+        @click="submit(config.type, 'ruleForm')">确 定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -65,73 +65,58 @@ export default {
       }
     }
   },
+  watch: {
+    'config.show'(val){
+      if(val){
+        this.$refs['ruleForm'].resetFields()
+      }
+    }
+  },
   methods: {
-    determine(type, formName) {
+    submit(type, formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if(type == 'add') {
-            this.$http
-              .post(PREFIX + "iotscenemode/save", {
-                mode_id: 0,
-                mode_name: this.$props.config.mode_name,
-                enable: this.$props.config.enable,
-                order: this.$props.config.order
-              })
-              .then(res => {
-                if (res.data.code === 0) {
-                  this.$message({
-                    type: 'success',
-                    message: '处理成功!'
-                  })
-                } else {
-                  this.$message.error(res.data.msg)
-                }
-                this.$emit("son")
-              })
-              .catch(res => {
-                if (res && res.msg) {
-                  this.$message.error(res.msg)
-                } else {
-                  this.$message.error(res)
-                }
-              })
-            this.$props.config.show = false
+            this.add()
           } else {
-            this.$http
-              .post(PREFIX + "iotscenemode/save", {
-                mode_id: this.$props.config.mode_id,
-                mode_name: this.$props.config.mode_name,
-                enable: this.$props.config.enable,
-                order: this.$props.config.order
-              })
-              .then(res => {
-                if (res.data.code === 0) {
-                  this.$message({
-                    type: 'success',
-                    message: '处理成功!'
-                  })
-                } else {
-                  this.$message.error(res.data.msg)
-                }
-                this.$emit("son")
-              })
-              .catch(res => {
-                if (res && res.msg) {
-                  this.$message.error(res.msg)
-                } else {
-                  this.$message.error(res)
-                }
-              })
-            this.$props.config.show = false
+            this.modify()
           }
         } else {
           return false
         }
       })
     },
-    submitForm(formName) {
-      this.$refs[formName].resetFields()
-      this.$props.config.show = false
+    add() {
+      this.$http
+        .post(PREFIX + 'iotscenemode/save', {
+          mode_id: 0,
+          mode_name: this.config.mode_name,
+          enable: this.config.enable,
+          order: this.config.order
+        })
+        .then(res => {
+          this.callSuccess()
+        })
+    },
+    modify() {
+      this.$http
+        .post(PREFIX + 'iotscenemode/save', {
+          mode_id: this.config.mode_id,
+          mode_name: this.config.mode_name,
+          enable: this.config.enable,
+          order: this.config.order
+        })
+        .then(res => {
+          this.callSuccess()
+        })
+    },
+    callSuccess() {
+      this.config.show = false
+      this.$message({
+        type: 'success',
+        message: '处理成功!'
+      })
+      this.$emit('refresh', 'true')
     }
   }
 }

@@ -5,7 +5,7 @@
  * @author songwh
  *
  * Created at     : 2019-05-08 16:59:55
- * Last modified  : 2019-05-13 10:50:35
+ * Last modified  : 2019-05-16 09:00:43
  */
 import {
   FamilyImgList,
@@ -60,11 +60,11 @@ const configManage = [
     path: 'sceneAdmin',
     component: SceneAdmin
   },
-  // 情景管理
-  {
-    path: 'sightManage',
-    component: SightManage
-  },
+  // // 情景管理
+  // {
+  //   path: 'sightManage',
+  //   component: SightManage
+  // },
   { // startMode
     path: 'startMode',
     component: StartMode

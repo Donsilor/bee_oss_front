@@ -39,7 +39,7 @@
       </el-table>
 
     </div>
-    <div class="block">
+    <!-- <div class="block">
       <el-pagination
         :total="+pages.total"
         :page-size="+pages.limit"
@@ -47,11 +47,11 @@
         background
         layout="prev, pager, next"
         @current-change="handPageChange"/>
-    </div>
+    </div> -->
     <!-- config -->
     <Config
       :config="config"
-      @son="call"
+      @refresh="refresh"
     />
   </div>
 </template>
@@ -78,7 +78,7 @@ export default {
   data() {
     return {
       pages: {
-        page: '1',
+        page: '10',
         limit: '3',
         total: '40'
       },
@@ -90,30 +90,11 @@ export default {
     this.getList()
   },
   methods: {
-    call() {
-      this.getList()
-    },
     getList() {
       this.$http
-        .post(PREFIX + "iotscenemode/lists", {
-          limit: this.pages.limit,
-          page: this.pages.page
-        })
+        .post(PREFIX + "iotscenemode/lists", {})
         .then(res => {
-          const json = res.data
-          if (json.code === 0) {
-            this.list = res.data.result.list
-            this.pages.total = res.data.result.total
-          } else {
-            this.$message.error(json.msg)
-          }
-        })
-        .catch(res => {
-          if (res && res.msg) {
-            this.$message.error(res.msg)
-          } else {
-            this.$message.error(res)
-          }
+          this.list = res.data.result.list
         })
     },
     handeStateClick(state) {
@@ -135,24 +116,12 @@ export default {
             enable: Number(!enable)
           })
           .then(res => {
-            if (res.data.code === 0) {
-              this.$message({
-                type: 'success',
-                message: '处理成功!'
-              })
-            } else {
-              this.$message.error(res.data.msg)
-            }
+            this.$message({
+              type: 'success',
+              message: '处理成功!'
+            })
             this.getList()
           })
-          .catch(res => {
-            if (res && res.msg) {
-              this.$message.error(res.msg)
-            } else {
-              this.$message.error(res)
-            }
-          })
-      }).catch(() => {
       })
     },
     handeDeleteClick(enable) {
@@ -162,7 +131,6 @@ export default {
         type: 'warning'
       }).then(() => {
         this.delStatus(enable)
-      }).catch(() => {
       })
     },
     delStatus(enable) {
@@ -171,25 +139,12 @@ export default {
           mode_id: enable
         })
         .then(res => {
-          if(res.data.code === 0) {
-            this.$message({
-              type: 'success',
-              message: '处理成功!'
-            })
-          } else {
-            this.$message.error(res.data.code)
-          }
+          this.$message({
+            type: 'success',
+            message: '处理成功!'
+          })
           this.getList()
         })
-        .catch(res => {
-          if (res && res.msg) {
-            this.$message.error(res.msg)
-          } else {
-            this.$message.error(res)
-          }
-          this.getList()
-        })
-
     },
     handPageChange(val) {
       this.pages.page = val
@@ -203,6 +158,7 @@ export default {
         this.config ={
           type: type,
           show: true,
+          enable: 1,
           name: ''
         }
       } else {
@@ -212,6 +168,9 @@ export default {
           ...item
         }
       }
+    },
+    refresh(val) {
+      if(val) this.getList()
     }
   }
 }

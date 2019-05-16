@@ -63,10 +63,7 @@ axios.interceptors.response.use(
   function(response) {
     // Do something with response data
     if (response.status === 200) {
-      if (
-        response.data.code !== CODE.SUCCEE &&
-				response.data.code !== CODE.SUCCEEELSE
-      ) {
+      if (response.data.code !== CODE.SUCCEE && response.data.code !== CODE.SUCCEEELSE) {
         // console.error(response.data)
         if (response.data.code === CODE.NO_LOGIN) {
           // 未登录的情况

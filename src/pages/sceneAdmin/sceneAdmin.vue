@@ -18,19 +18,19 @@
           label="序号"
           width="80"/>
         <el-table-column
-          prop="name"
+          prop="scene_name"
           label="场景名称"/>
         <el-table-column
-          prop="upmode"
+          prop="mode_name"
           label="启动方式"/>
         <el-table-column
-          prop="time"
+          prop="created_at"
           label="添加时间"/>
         <el-table-column
-          prop="state"
+          prop="enable"
           label="是否启用">
           <template slot-scope="scope">
-            {{ scope.row.state ? '禁用':'启用' }}
+            {{ scope.row.enable ? '禁用':'启用' }}
           </template>
         </el-table-column>
         <el-table-column
@@ -39,7 +39,7 @@
             <el-button
               type="text"
               size="small"
-              @click="showConfig('modify', scope.row)">查看</el-button>
+              @click="showConfig('look', scope.row)">查看</el-button>
             <el-button
               type="text"
               size="small"
@@ -47,19 +47,19 @@
             <el-button
               type="text"
               size="small"
-              @click="handeStateClick(scope.$index,scope.row.state)">
-              {{ scope.row.state ? '启用':'禁用' }}
+              @click="handeEnableClick(scope.$index,scope.row.enable)">
+              {{ scope.row.enable ? '启用':'禁用' }}
             </el-button>
             <el-button
               type="text"
               size="small"
-              @click="handeDeleteClick(scope.row.state)">删除</el-button>
+              @click="handeDeleteClick(scope.row.scene_id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
 
     </div>
-    <div class="block">
+    <!-- <div class="block">
       <el-pagination
         :total="+pages.total"
         :page-size="+pages.limit"
@@ -67,9 +67,11 @@
         background
         layout="prev, pager, next"
         @current-change="handPageChange"/>
-    </div>
+    </div> -->
     <!-- config -->
-    <Config :config="config"/>
+    <Config 
+      ref="configDialog" 
+      @refresh="refresh"/>
   </div>
 </template>
 <style lang="less" scoped>
@@ -86,6 +88,7 @@
 }
 </style>
 <script>
+import { PREFIX } from "../../lib/util"
 import Config from './components/config.vue'
 export default {
   components: {
@@ -93,57 +96,60 @@ export default {
   },
   data() {
     return {
-      pages: {
-        page: '1',
-        limit: '10',
-        total: '40'
-      },
-      list: [{
-        date: '01',
-        name: '离家',
-        upmode: "手动点击",
-        time: '2019-01-09 15:21:21',
-        state: 0,
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '02',
-        name: '回家',
-        upmode: "进入wifi",
-        time: '2019-01-09 15:21:21',
-        state: 0,
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '03',
-        name: '睡觉',
-        upmode: "定时启动",
-        time: '2019-01-09 15:21:21',
-        state: 0,
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '04',
-        name: '影院',
-        upmode: "手动点击",
-        time: '2019-02-09 15:21:21',
-        state: 1,
-        address: '上海市普陀区金沙江路 1516 弄'
-      }, {
-        date: '05',
-        name: '排队',
-        upmode: "语音命令",
-        time: '2019-03-09 15:21:21',
-        state: 1,
-        address: '上海市普陀区金沙江路 1516 弄'
-      }],
-      config : {}
+      list: []
     }
+  },
+  mounted() {
+    this.getList()
   },
   methods: {
     getList() {
+      this.$http
+        .post(PREFIX + 'iotscene/lists', {})
+        .then(res => {
+          this.list = res.data.result.list
+        })
+        .catch(res => {
+          if (res && res.msg) {
+            this.$message.error(res.msg)
+          } else {
+            this.$message.error(res)
+          }
+        })
     },
-    handeStateClick(index,state) {
-      console.log(state)
+    submitEdit(param) {
+      this.$http
+        .post(PREFIX + 'iotscene/save', param)
+        .then(res => {
+          this.$message.info('操作成功')
+        })
+        .catch(res => {
+          if (res && res.msg) {
+            this.$message.error(res.msg)
+          } else {
+            this.$message.error(res)
+          }
+        })
+    },
+    delete(cId) {
+      this.$http
+        .post(PREFIX + 'iotscene/del', {
+          scene_id: cId
+        })
+        .then(res => {
+          this.$message.info('删除成功')
+        })
+        .catch(res => {
+          if (res && res.msg) {
+            this.$message.error(res.msg)
+          } else {
+            this.$message.error(res)
+          }
+        })
+    },
+    handeEnableClick(index,enable) {
       let type = '禁用'
-      if(state){
+      if(enable){
         type = '启用'
       }
       this.$confirm(`您是否确定${type}该场景？`, '提示', {
@@ -151,23 +157,22 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if(state==1){
-          this.list[index].state = 0
-          console.log(state)
-        }else{
-          this.list[index].state = 1
-          console.log(state)
-        }
+        let param = this.list[index]
+        param.enable = +!+enable
+        this.submitEdit(param)
       }).catch(() => {
+        this.$message.info('已取消')
       })
     },
-    handeDeleteClick() {
+    handeDeleteClick(cId) {
       this.$confirm(`您是否确定删除该场景？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        this.delete(cId)
       }).catch(() => {
+        this.$message.info('已取消')
       })
     },
     handPageChange(val) {
@@ -178,19 +183,31 @@ export default {
       return index + 1
     },
     showConfig(type, item) {
-      if(type == 'add'){
-        this.config ={
-          type: type,
-          show: true,
-          name: ''
-        }
-      } else {
-        this.config = {
-          type: type,
-          show: true,
-          ...item
+      let defaultConfig = {
+        type: type,
+        show: true,
+        scene_name: '',
+        list_pic: {
+          normal: ''
+        },
+        detail_pic: '',
+        mode_id: '',
+        enable: 1,
+        content: {
+          list: []
         }
       }
+      if(type == 'add'){
+        this.$refs.configDialog.config = defaultConfig
+      } else {
+        this.$refs.configDialog.config = Object.assign({}, defaultConfig, item)
+      }
+      // 处理分类设备选中状态
+      this.$refs.configDialog.dealList()
+    },
+    // 子组件传过来的 列表图片信息
+    refresh(val) {
+      if(val) this.getList()
     }
   }
 }

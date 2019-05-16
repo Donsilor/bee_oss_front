@@ -82,3 +82,21 @@ export const PREFIX = (function() {
   const host = window.location.href
   return '/api/index.php/'
 })()
+
+
+export function deepCopy(obj){
+  if(!obj || typeof obj !== 'object'){
+    return 
+  }
+  var dcObj = Array.isArray(obj) ? [] : {}
+  for(var key in obj){
+    if(obj.hasOwnProperty(key)){
+      if(obj[key] && typeof obj[key] === 'object'){
+        dcObj[key] = Array.isArray(obj[key]) ? [] : {}
+        dcObj[key] = deepCopy(obj[key])
+      }
+      dcObj[key] = obj[key]
+    }
+  }
+  return dcObj
+}

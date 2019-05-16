@@ -203,11 +203,11 @@ export default {
               path: '/main/sceneAdmin',
               icon: 'facility'
             },
-            {
-              title: '情景管理',
-              path: '/main/sightManage',
-              icon: 'facility'
-            },
+            // {
+            //   title: '情景管理',
+            //   path: '/main/sightManage',
+            //   icon: 'facility'
+            // },
             {
               title: '启动模式管理',
               path: '/main/startMode',
