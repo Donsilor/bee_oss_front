@@ -83,20 +83,75 @@ export const PREFIX = (function() {
   return '/api/index.php/'
 })()
 
+export function deepClone(obj) {
 
-export function deepCopy(obj){
-  if(!obj || typeof obj !== 'object'){
-    return 
+  if (isBaseDataType(obj)) {
+    return obj
   }
-  var dcObj = Array.isArray(obj) ? [] : {}
-  for(var key in obj){
-    if(obj.hasOwnProperty(key)){
-      if(obj[key] && typeof obj[key] === 'object'){
-        dcObj[key] = Array.isArray(obj[key]) ? [] : {}
-        dcObj[key] = deepCopy(obj[key])
+
+  /**
+   * 判断数据类型
+   * 不考虑Symbol类型
+   * @param {*} obj 
+   */
+  function judgeType(_obj) {
+    return _obj === null ? 'null' : _obj instanceof Array ? 'array' : typeof _obj !== 'object' ? typeof _obj : 'object'
+  }
+
+  /**
+   * 基本数据类型判断
+   * @param {*} obj 
+   */
+  function isBaseDataType(_obj) {
+    var types = ['boolean', 'number', 'string', 'function', 'null', 'undefined']
+    var type = judgeType(_obj)
+    return types.indexOf(type) !== -1
+  }
+
+  /**
+   * 数组深拷贝
+   * @param {*} _obj 
+   * @param {*} res 
+   */
+  function _cloneArry(_obj) {
+    var res = []
+    for (var i = 0, len = _obj.length; i < len; i++) {
+      var value = _obj[i]
+      if (isBaseDataType(value)) {
+        res.push(value)
+      } else if (judgeType(value) === 'object') {
+        res.push(_cloneObj(value))
+      } else if (judgeType(value) === 'array') {
+        res.push(_cloneArry(value))
       }
-      dcObj[key] = obj[key]
     }
+    return res
   }
-  return dcObj
+
+  /**
+   * 对象深拷贝
+   * @param {*} _obj 
+   * @param {*} res 
+   */
+  function _cloneObj(_obj) {
+    var res = {}
+    for (var attr in _obj) {
+      var value = _obj[attr]
+      if (isBaseDataType(value)) {
+        res[attr] = value
+      } else if (judgeType(value) === 'object') {
+        res[attr] = _cloneObj(value)
+      } else if (judgeType(value) === 'array') {
+        res[attr] = _cloneArry(value)
+      }
+    }
+    return res
+  }
+
+  if (judgeType(obj) === 'array') {
+    return _cloneArry(obj)
+  } else {
+    return _cloneObj(obj)
+  }
 }
+

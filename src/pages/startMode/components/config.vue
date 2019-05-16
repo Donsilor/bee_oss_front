@@ -67,7 +67,7 @@ export default {
   },
   watch: {
     'config.show'(val){
-      if(val){
+      if(this.$refs['ruleForm'] && val){
         this.$refs['ruleForm'].resetFields()
       }
     }

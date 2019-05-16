@@ -144,7 +144,7 @@ export default {
   methods: {
     getList() {
       let param = this.getParam()
-      this.$http
+      return this.$http
         .post(PREFIX + "mall_record/lists", param)
         .then(res => {
           const json = res.data
@@ -270,11 +270,13 @@ export default {
         })
     },
     handPageChange(val) {
-      this.pages.page = val
       this.getList()
+        .then(() => {
+          this.pages.page = val
+        })
     },
     indexMethod(index) {
-      return index + 1
+      return (this.pages.page - 1) * this.pages.limit + index + 1
     }
   }
 }

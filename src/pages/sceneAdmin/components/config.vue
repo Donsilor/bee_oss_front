@@ -12,8 +12,7 @@
         prop="scene_name"
         label="场景名称">
         <el-input
-          v-model="config.scene_name"
-          autocomplete="off"/>
+          v-model="config.scene_name"/>
       </el-form-item>
 
       <el-form-item 
@@ -21,8 +20,7 @@
         label="列表配图">
         <el-input
           v-model="config.list_pic.normal"
-          class="hide"
-          autocomplete="off"/>
+          class="hide"/>
         <!-- Upload -->
         <Upload
           :class="{'is-disabled': config.type === 'look'}"
@@ -35,8 +33,7 @@
         label="详情页配图">
         <el-input
           v-model="config.detail_pic"
-          class="hide"
-          autocomplete="off"/>
+          class="hide"/>
         <!-- Upload -->
         <Upload
           :class="{'is-disabled': config.type === 'look'}"
@@ -81,8 +78,7 @@
           <div class="link">
             <label>预定链接:</label>
             <el-input
-              v-model="it.purchace_link"
-              autocomplete="off"/>
+              v-model="it.purchace_link"/>
           </div>
         </div>
       </el-form-item>
@@ -127,7 +123,7 @@
 }
 </style>
 <script>
-import { PREFIX, deepCopy } from "../../../lib/util"
+import { PREFIX, deepClone } from "../../../lib/util"
 import getCorsUrl from "../../../lib/corsconfig"
 import Upload from "../../../components/upload.vue"
 export default {
@@ -186,7 +182,7 @@ export default {
   },
   watch: {
     'config.show'(val){
-      if(val){
+      if(this.$refs['form'] && val){
         this.$refs['form'].resetFields()
       }
     }
@@ -252,6 +248,8 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           let param = this.getParam()
+          console.log(param)
+          console.log(this.config)
           this.$http
             .post(PREFIX + 'iotscene/save', param)
             .then(res => {
@@ -265,7 +263,7 @@ export default {
       })
     },
     getParam(){
-      let param = deepCopy(this.config)
+      let param = deepClone(this.config)
       delete param['type']
       delete param['show']
       param.list_pic.normal = param.list_pic.normal_object
