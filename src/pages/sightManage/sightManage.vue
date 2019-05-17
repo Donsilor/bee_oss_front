@@ -69,9 +69,7 @@
 .filter{
   display: flex;
   justify-content: space-between;
-  flex-direction: row;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #ccc;
+  margin-bottom: 20px;
 }
 .block {
   text-align: right;

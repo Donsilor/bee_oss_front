@@ -5,11 +5,11 @@ import updateManage from './modules/updateManage.js'
 import businessData from './modules/businessData.js'
 import log from './modules/log.js'
 import configManage from './modules/configManage.js'
-import switchInfo from './modules/switchInfo'
-import dataStatistics from './modules/dataStatistics'
-import permissionSettings from './modules/permissionSettings'
-import warningManagement from './modules/warningManagement'
-import subData from './modules/subData'
+import switchInfo from './modules/switchInfo.js'
+import dataStatistics from './modules/dataStatistics.js'
+import permissionSettings from './modules/permissionSettings.js'
+import warningManagement from './modules/warningManagement.js'
+import subData from './modules/subData.js'
 
 const routes = [
   {

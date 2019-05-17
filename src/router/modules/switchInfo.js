@@ -5,7 +5,7 @@
  * @author songwh
  *
  * Created at     : 2019-05-08 16:59:55
- * Last modified  : 2019-05-13 10:50:31
+ * Last modified  : 2019-05-17 10:41:42
  */
 import {
   SwitchProductHistory,
@@ -13,7 +13,7 @@ import {
   SwitchProductSearch
 } from '../../pages/index'
 
-const switchInfo = [
+var switchInfo = [
   // 开关生产信息查询
   {
     path: 'switchproduct/history',

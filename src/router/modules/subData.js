@@ -5,7 +5,7 @@
  * @author songwh
  *
  * Created at     : 2019-05-08 16:59:55
- * Last modified  : 2019-05-13 10:51:04
+ * Last modified  : 2019-05-17 10:41:42
  */
 import {
   ThroughData,
@@ -16,7 +16,7 @@ import {
   QpsData
 } from '../../pages/index'
 
-const subData = [
+var subData = [
   {
     path: 'throughData',
     name: 'throughData',
