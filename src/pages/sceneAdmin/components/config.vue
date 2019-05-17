@@ -259,8 +259,6 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           let param = this.getParam()
-          console.log(param)
-          console.log(this.config)
           this.$http
             .post(PREFIX + 'iotscene/save', param)
             .then(res => {

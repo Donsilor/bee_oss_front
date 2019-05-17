@@ -139,6 +139,7 @@ export default {
         })
         .then(res => {
           this.$message.info('删除成功')
+          this.getList()
         })
         .catch(res => {
           if (res && res.msg) {
@@ -167,7 +168,6 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(enable)
         let param = this.dealUpdateParam(index, enable)
         this.submitEdit(param)
       }).catch(() => {
