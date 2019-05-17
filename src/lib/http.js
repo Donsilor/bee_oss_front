@@ -2,10 +2,12 @@ import axios from 'axios'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import {
-  Message
+  Message,
+  Loading
 } from 'element-ui'
 import getCorsUrl from './corsconfig'
 
+var instenceLoading = {}
 const CODE = {
   SUCCEE: 200,
   SUCCEEELSE: 0,
@@ -15,6 +17,14 @@ const CODE = {
 // Add a request interceptor
 axios.interceptors.request.use(
   function(config) {
+
+    instenceLoading = Loading.service({
+      lock: true,
+      text: '加载中...',
+      spinner: 'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.2)'
+    })
+
     if (config.url.indexOf('noToken') > -1) {
       //大文件分片上传接口不加token验证，通过noToken参数来判断是否需要token验证，存在这个参数说明不需要进行Token验证
       return config
@@ -61,6 +71,7 @@ axios.interceptors.request.use(
 // Add a response interceptor
 axios.interceptors.response.use(
   function(response) {
+    instenceLoading.close()
     // Do something with response data
     if (response.status === 200) {
       if (response.data.code !== CODE.SUCCEE && response.data.code !== CODE.SUCCEEELSE) {
@@ -96,6 +107,7 @@ axios.interceptors.response.use(
     return response
   },
   function(error) {
+    instenceLoading.close()
     // Do something with response error
     // miniToastr.error('服务器出错', 'ERROR')
     // iziToast.error({ title: 'ERROR', message: '服务器出错', position: 'topRight' })

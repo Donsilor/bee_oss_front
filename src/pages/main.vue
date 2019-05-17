@@ -7,7 +7,9 @@
           <bnav />
         </el-col>
         <el-col :span="21">
-          <div class="page">
+          <div 
+            id="page" 
+            class="page">
             <router-view />
           </div>
         </el-col>

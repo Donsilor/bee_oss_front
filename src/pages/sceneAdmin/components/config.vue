@@ -153,7 +153,7 @@ export default {
           { required: true, message: '请选择详情页配图', trigger: 'change' }
         ],
         mode_id: [
-          { required: true, message: '请选择启动模式', trigger: 'change' }
+          { required: true, message: '请选择启动模式'}
         ],
         enable: [
           { required: true, message: '请选择状态', trigger: 'change' }
@@ -182,9 +182,13 @@ export default {
   },
   watch: {
     'config.show'(val){
-      if(this.$refs['form'] && val){
-        this.$refs['form'].resetFields()
-      }
+      this.$nextTick(() =>{
+        if(this.config.type === 'add'){
+          this.$refs['form'].resetFields()
+        } else {
+          this.$refs['form'].clearValidate()
+        }
+      })
     }
   },
   mounted() {
@@ -225,17 +229,20 @@ export default {
         this.checkList = []
         return
       }
-
       let newArr = []
-      let arr = this.config.content.list.concat(this.allList)
+      let arr = this.allList
+      let selectArr = this.config.content.list
       arr.forEach(el=>{
-        const result = newArr.findIndex(ol=>{return el.category_id == ol.category_id})
-        if(result === -1){
+        const result = selectArr.findIndex(ol=>{return el.category_id == ol.category_id})
+        if(result === -1){ // 新的
+          newArr.push(el)
+        } else { // 已存在
+          el.category_status = selectArr[result].status + '' //选中option
+          el.purchace_link = selectArr[result].purchace_link
           newArr.push(el)
         }
       })
       this.categoryList = newArr
-
       this.checkList = []
       this.config.content.list.forEach(el=>{
         this.checkList.push(el.category_id)
@@ -253,7 +260,6 @@ export default {
           this.$http
             .post(PREFIX + 'iotscene/save', param)
             .then(res => {
-              this.$message.info('操作成功')
               this.$emit('refresh', true)
               this.config.show = false
             })
@@ -276,7 +282,10 @@ export default {
       this.checkList.forEach(el=>{
         Object.values(this.categoryList).forEach(val => {
           if(val.category_id === el){
-            param.content.list.push(val)
+            let copyeEl = deepClone(val)
+            copyeEl['status'] = +copyeEl['category_status']
+            delete copyeEl['category_status']
+            param.content.list.push(copyeEl)
           }
         })
       })
