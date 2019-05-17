@@ -254,6 +254,8 @@ export default {
       this.config.show = false
     },
     submit() {
+      if(this.config.type === 'look') return this.config.show = false
+
       this.$refs['form'].validate((valid) => {
         if (valid) {
           let param = this.getParam()

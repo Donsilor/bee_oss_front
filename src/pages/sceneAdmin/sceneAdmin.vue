@@ -30,7 +30,7 @@
           prop="enable"
           label="是否启用">
           <template slot-scope="scope">
-            {{ scope.row.enable ? '禁用':'启用' }}
+            {{ scope.row.enable ? '启用':'禁用' }}
           </template>
         </el-table-column>
         <el-table-column
@@ -48,7 +48,7 @@
               type="text"
               size="small"
               @click="handeEnableClick(scope.$index,scope.row.enable)">
-              {{ scope.row.enable ? '启用':'禁用' }}
+              {{ scope.row.enable ? '禁用':'启用' }}
             </el-button>
             <el-button
               type="text"
@@ -88,7 +88,7 @@
 }
 </style>
 <script>
-import { PREFIX } from "../../lib/util"
+import { PREFIX, deepClone } from "../../lib/util"
 import Config from './components/config.vue'
 export default {
   components: {
@@ -122,6 +122,7 @@ export default {
         .post(PREFIX + 'iotscene/save', param)
         .then(res => {
           this.$message.info('操作成功')
+          this.getList()
         })
         .catch(res => {
           if (res && res.msg) {
@@ -147,6 +148,15 @@ export default {
           }
         })
     },
+    dealUpdateParam(index, enable) {
+      let param = deepClone(this.list[index])
+      param.enable = +!+enable
+      param.list_pic.normal = param.list_pic.normal_object
+      delete param['list_pic']['normal_object']
+      param.detail_pic = param.detail_pic_object
+      delete param['detail_pic_object']
+      return param
+    },
     handeEnableClick(index,enable) {
       let type = '禁用'
       if(enable){
@@ -157,8 +167,8 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        let param = this.list[index]
-        param.enable = +!+enable
+        console.log(enable)
+        let param = this.dealUpdateParam(index, enable)
         this.submitEdit(param)
       }).catch(() => {
         this.$message.info('已取消')
