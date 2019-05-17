@@ -5,7 +5,7 @@
  * @author songwh
  *
  * Created at     : 2019-05-08 16:59:55 
- * Last modified  : 2019-05-08 17:38:22
+ * Last modified  : 2019-05-17 10:41:50
  */
 import {
   VersionManager, 
@@ -16,7 +16,7 @@ import {
   PushManager
 } from '../../pages/index.js'
 
-const updateManage = [
+var updateManage = [
   {
     path: 'versionManager',
     name: 'versionManager',

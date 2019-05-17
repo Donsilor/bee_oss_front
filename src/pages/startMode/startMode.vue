@@ -7,7 +7,7 @@
         @click="showConfig('add')">添加模式</el-button>
     </div>
     <!-- 列表 -->
-    <div style="margin-top: 60px">
+    <div>
       <el-table
         :data="list"
         border>
@@ -59,9 +59,7 @@
 .filter{
   display: flex;
   justify-content: space-between;
-  flex-direction: row;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #ccc;
+  margin-bottom: 20px;
 }
 .block {
   text-align: right;

@@ -5,7 +5,7 @@
  * @author songwh
  *
  * Created at     : 2019-05-08 16:59:55
- * Last modified  : 2019-05-13 10:50:51
+ * Last modified  : 2019-05-17 10:41:28
  */
 import {
   UserData,
@@ -18,7 +18,7 @@ import {
   RouterIndex
 } from '../../pages/index'
 
-const dataStatistics = [
+var dataStatistics = [
   {
     path: 'analyzer',
     name: 'analyzer',

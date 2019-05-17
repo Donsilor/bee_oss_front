@@ -5,7 +5,7 @@
  * @author songwh
  *
  * Created at     : 2019-05-08 16:59:55
- * Last modified  : 2019-05-16 09:00:43
+ * Last modified  : 2019-05-17 10:41:20
  */
 import {
   FamilyImgList,
@@ -20,7 +20,7 @@ import {
   StartMode
 } from '../../pages/index.js'
 
-const configManage = [
+var configManage = [
   {//家庭背景图
     path: 'familyImgList',
     name: 'familyImgList',

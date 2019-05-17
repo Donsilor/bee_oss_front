@@ -5,7 +5,7 @@
  * @author songwh
  *
  * Created at     : 2019-05-08 16:59:55
- * Last modified  : 2019-05-08 17:34:37
+ * Last modified  : 2019-05-17 10:41:38
  */
 import {
   User,
@@ -14,7 +14,7 @@ import {
   ResetPwd
 } from '../../pages/index'
 
-const permissionSettings = [
+var permissionSettings = [
   {
     path: 'user',
     name: 'user',

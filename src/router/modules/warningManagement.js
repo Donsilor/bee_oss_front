@@ -5,14 +5,14 @@
  * @author songwh
  *
  * Created at     : 2019-05-08 16:59:55
- * Last modified  : 2019-05-08 17:34:37
+ * Last modified  : 2019-05-17 10:41:53
  */
 import {
   WarnManage,
   WarnDataSearch
 } from '../../pages/index'
 
-const warningManagement = [
+var warningManagement = [
   {
     path: 'warnManage',
     name: 'warnManage',

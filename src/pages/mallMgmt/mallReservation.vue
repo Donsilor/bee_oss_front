@@ -41,7 +41,7 @@
       </div>
     </div>
     <!-- 列表 -->
-    <div style="margin-top: 60px">
+    <div>
       <el-table
         :data="list"
         border>
@@ -102,8 +102,7 @@
 .filter {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #ececec;
-  padding-bottom: 30px;
+  margin-bottom: 20px;
   .left {
     display: flex;
     * {
