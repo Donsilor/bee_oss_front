@@ -31,7 +31,7 @@
 <script>
 import getCorsUrl from "../lib/corsconfig.js"
 export default {
-  props: ['imageFile'],
+  props: ['imageFile','type'],
   data() {
     return {
       corsUrls: getCorsUrl() + "/oss_file_upload",
@@ -56,7 +56,11 @@ export default {
       return isType && isLt2M
     },
     clearImg() {
-      this.$emit('emitImageData', {})
+      if(this.$props.type === 'look') {
+        return false
+      } else {
+        this.$emit('emitImageData', {})
+      }
     }
   }
 }
@@ -73,8 +77,9 @@ export default {
       right: -20px;
     }
   }
-  .avatar-uploader .el-upload:hover { 
+  .avatar-uploader .el-upload:hover {
     border-color: #409eff;
+
   }
   .avatar-uploader-icon {
     font-size: 28px;
@@ -97,6 +102,9 @@ export default {
     background-color: #f5f7fa;
     border-color: #e4e7ed;
     color: #c0c4cc;
+    cursor: not-allowed;
+  }
+  .is-disabled .el-upload:hover{
     cursor: not-allowed;
   }
 </style>
