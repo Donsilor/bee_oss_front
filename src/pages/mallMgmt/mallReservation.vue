@@ -270,10 +270,8 @@ export default {
         })
     },
     handPageChange(val) {
+      this.pages.page = val
       this.getList()
-        .then(() => {
-          this.pages.page = val
-        })
     },
     indexMethod(index) {
       return (this.pages.page - 1) * this.pages.limit + index + 1
