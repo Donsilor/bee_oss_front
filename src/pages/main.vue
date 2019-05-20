@@ -19,7 +19,7 @@
 </template>
 <script>
 import Bheader from "../components/bheader.vue"
-import Bnav from "../components/bnav.vue"
+import Bnav from "../components/bnav/bnav.vue"
 export default {
   components: {
     Bheader,

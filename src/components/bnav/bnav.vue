@@ -48,15 +48,15 @@
 
 </template>
 <script>
-import updateManage from './nav-modules/updateManage.js'
-import businessData from './nav-modules/businessData.js'
-import log from './nav-modules/log.js'
-import configManage from './nav-modules/configManage.js'
-import switchInfo from './nav-modules/switchInfo.js'
-import dataStatistics from './nav-modules/dataStatistics.js'
-import permissionSettings from './nav-modules/permissionSettings.js'
-import warningManagement from './nav-modules/warningManagement.js'
-import subData from './nav-modules/subData.js'
+import updateManage from './modules/updateManage'
+import businessData from './modules/businessData'
+import log from './modules/log'
+import configManage from './modules/configManage'
+import switchInfo from './modules/switchInfo'
+import dataStatistics from './modules/dataStatistics'
+import permissionSettings from './modules/permissionSettings'
+import warningManagement from './modules/warningManagement'
+import subData from './modules/subData'
 
 export default {
   props: {
@@ -179,42 +179,42 @@ export default {
       left: -8px;
     }
     .home:before {
-      background-image: url("../images/home.png");
+      background-image: url("../../images/home.png");
       .iconStyle(20px, 20px);
     }
 
     .config:before {
-      background-image: url("../images/upgrade.png");
+      background-image: url("../../images/upgrade.png");
       .iconStyle(20px, 20px);
     }
 
     .ops:before {
-      background-image: url("../images/dev.png");
+      background-image: url("../../images/dev.png");
       .iconStyle(20px, 20px);
     }
 
     .facility:before {
-      background-image: url("../images/through.png");
+      background-image: url("../../images/through.png");
       .iconStyle(20px, 20px);
     }
 
     .cloud:before {
-      background-image: url("../images/log.png");
+      background-image: url("../../images/log.png");
       .iconStyle(20px, 20px);
     }
 
     .warn:before {
-      background-image: url("../images/warn.png");
+      background-image: url("../../images/warn.png");
       .iconStyle(20px, 20px);
     }
 
     .cmdb:before {
-      background-image: url("../images/u59.png");
+      background-image: url("../../images/u59.png");
       .iconStyle(20px, 20px);
     }
 
     .family:before {
-      background-image: url("../images/family.png");
+      background-image: url("../../images/family.png");
       .iconStyle(20px, 20px);
     }
   }

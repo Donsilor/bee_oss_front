@@ -115,44 +115,30 @@ export default {
         .post(PREFIX + "auth/login", this.loginForm)
         .then(res => {
           const json = res.data
-          if (json.code === 200) {
-            this.$message.success("登录成功")
-            let userObj = {
-              user: {
-                info: json.result
-              }
+          this.$message.success("登录成功")
+          let userObj = {
+            user: {
+              info: json.result
             }
-            localStorage.setItem("localData", JSON.stringify(userObj))
-            this.$store
-              .dispatch({
-                type: namespace.SETUSER,
-                info: json.result
-              })
-              .then(() => {
-                this.$router.push("main")
-              })
-          } else {
-            this.$message.error(json.msg)
           }
-        })
-        .catch(res => {
-          if (res && res.msg) {
-            this.$message.error(res.msg)
-          } else {
-            this.$message.error(res)
-          }
+          localStorage.setItem("localData", JSON.stringify(userObj))
+          this.$store
+            .dispatch({
+              type: namespace.SETUSER,
+              info: json.result
+            })
+            .then(() => {
+              this.$router.push("main")
+            })
         })
     }
   }
 }
 </script>
-<style lang="less">
-.container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
+<style lang="less" scope>
+
+html, body , #app, .container {
+  height: 100%;
 }
 .login-content {
   height: 100%;
