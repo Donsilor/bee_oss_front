@@ -57,20 +57,19 @@ export default {
 .bnheader {
   position: relative;
   z-index: 100;
-  background: #2b2b37;
   color: #ffffff;
-  height: 80px;
+  height: 60px;
   z-index: 1000;
 }
 .bnh-logo {
   font-size: 1.5em;
   padding-left: 2em;
-  height: 80px;
+  height: 50px;
   display: flex;
   align-items: center;
 }
 .bnh-info {
-  height: 80px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
