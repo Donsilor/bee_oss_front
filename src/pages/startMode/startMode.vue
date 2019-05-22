@@ -3,43 +3,42 @@
     <!-- 顶部tab -->
     <div class="filter">
       <span>启动模式管理</span>
-      <el-button
+      <el-button 
         type="primary"
         @click="showConfig('add')">添加模式</el-button>
     </div>
     <!-- 列表 -->
     <div>
-      <el-table
+      <el-table 
         :data="list"
         border>
-        <el-table-column
+        <el-table-column 
           prop="mode_name"
-          label="模式名称"/>
-        <el-table-column
+          label="模式名称" />
+        <el-table-column 
           prop="created_at"
-          label="添加时间"/>
+          label="添加时间" />
 
-        <el-table-column
+        <el-table-column 
           prop="state"
           label="是否启用">
           <template slot-scope="scope">
             {{ scope.row.enable ? '启用':'禁用' }}
           </template>
         </el-table-column>
-        <el-table-column
-          label="操作">
+        <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button
+            <el-button 
               type="text"
               size="small"
               @click="showConfig('modify', scope.row)">编辑</el-button>
-            <el-button
+            <el-button 
               type="text"
               size="small"
               @click="handeStateClick(scope.row)">
               {{ scope.row.enable ? '禁用':'启用' }}
             </el-button>
-            <el-button
+            <el-button 
               type="text"
               size="small"
               @click="handeDeleteClick(scope.row.mode_id)">删除</el-button>
@@ -58,14 +57,13 @@
         @current-change="handPageChange"/>
     </div> -->
     <!-- config -->
-    <Config
+    <Config 
       :config="config"
-      @refresh="refresh"
-    />
+      @refresh="refresh" />
   </div>
 </template>
 <style lang="less" scoped>
-.filter{
+.filter {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
@@ -90,7 +88,7 @@ export default {
         total: '40'
       },
       list: [],
-      config : {}
+      config: {}
     }
   },
   mounted() {
@@ -107,7 +105,7 @@ export default {
     handeStateClick(state) {
       let enable = state.enable
       let type = '启用'
-      if(enable){
+      if (enable) {
         type = '禁用'
       }
       this.$confirm(`您是否确定${type}该模式？`, '提示', {
@@ -116,7 +114,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http
-          .post(PREFIX+ "iotscenemode/save", {
+          .post(PREFIX + "iotscenemode/save", {
             mode_id: state.mode_id,
             mode_name: state.mode_name,
             order: state.order,
@@ -161,8 +159,8 @@ export default {
       return index + 1
     },
     showConfig(type, item) {
-      if(type == 'add'){
-        this.config ={
+      if (type == 'add') {
+        this.config = {
           type: type,
           show: true,
           enable: 1,
@@ -177,7 +175,7 @@ export default {
       }
     },
     refresh(val) {
-      if(val) this.getList()
+      if (val) this.getList()
     }
   }
 }

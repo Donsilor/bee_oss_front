@@ -1,126 +1,124 @@
 <template>
-  <el-dialog
+  <el-dialog 
     :visible.sync="config.show"
     :title="title">
-    <el-form
+    <el-form 
       ref="form"
       :model="config"
       :rules="rules"
       :disabled="config.type === 'look'"
       label-width="100px">
-      <el-form-item
+      <el-form-item 
         prop="scene_name"
         label="场景名称">
-        <el-input
-          v-model="config.scene_name"/>
+        <el-input v-model="config.scene_name" />
       </el-form-item>
 
-      <el-form-item
+      <el-form-item 
         prop="list_pic.normal"
         label="列表配图">
-        <el-input
+        <el-input 
           v-model="config.list_pic.normal"
-          class="hide"/>
+          class="hide" />
         <!-- Upload -->
-        <Upload
+        <Upload 
           :class="{'is-disabled': config.type === 'look'}"
           :image-file="config.list_pic.normal"
           :type="config.type=='look'? 'look': '' "
           @emitImageData="emitListData" />
       </el-form-item>
 
-      <el-form-item
+      <el-form-item 
         prop="detail_pic"
         label="详情页配图">
-        <el-input
+        <el-input 
           v-model="config.detail_pic"
-          class="hide"/>
+          class="hide" />
         <!-- Upload -->
-        <Upload
+        <Upload 
           :class="{'is-disabled': config.type === 'look'}"
           :image-file="config.detail_pic"
           :type="config.type=='look'? 'look': '' "
           @emitImageData="emitDetailData" />
       </el-form-item>
 
-      <el-form-item
+      <el-form-item 
         prop="mode_id"
         label="启动模式">
-        <el-select
+        <el-select 
           v-model="config.mode_id"
           clearable
           placeholder="请选择">
-          <el-option
+          <el-option 
             v-for="it in startModeList"
             :key="it.mode_id"
             :label="it.mode_name"
-            :value="it.mode_id"/>
+            :value="it.mode_id" />
         </el-select>
       </el-form-item>
 
       <el-form-item label="选择设备">
-        <div
+        <div 
           v-for="it in categoryList"
           class="item">
-          <el-checkbox
+          <el-checkbox 
             v-model="checkList"
             :label="it.category_id">选择</el-checkbox>
-          <img
+          <img 
             :src="it.category_icon"
             class="icon"
             alt="">
           <span class="name">{{ it.category_name }}</span>
           <el-select v-model="it.category_status">
-            <el-option
+            <el-option 
               v-for="(i, idx) in it.status"
               :key="idx"
               :label="i"
-              :value="idx"/>
+              :value="idx" />
           </el-select>
           <div class="link">
             <label>预定链接:</label>
-            <el-input
-              v-model="it.purchace_link"/>
+            <el-input v-model="it.purchace_link" />
           </div>
         </div>
       </el-form-item>
 
       <el-form-item label="状态">
         <el-radio-group v-model="config.enable">
-          <el-radio :label= "1">启用</el-radio>
-          <el-radio :label= "0">禁用</el-radio>
+          <el-radio :label="1">启用</el-radio>
+          <el-radio :label="0">禁用</el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>
-    <div
+    <div 
       slot="footer"
       class="dialog-footer">
       <el-button @click="cancel">取 消</el-button>
-      <el-button
+      <el-button 
         type="primary"
         @click="submit">确 定</el-button>
     </div>
   </el-dialog>
 </template>
 <style lang="less" scoped>
-.item{
+.item {
   display: flex;
   margin-bottom: 40px;
-  .icon{
+  .icon {
     margin: 0 10px;
   }
-  .name{
+  .name {
     margin: 0 20px;
   }
-  .link{
+  .link {
     margin-left: 20px;
     display: flex;
-    label{
+    label {
       width: 100px;
     }
   }
 }
-.hide{
+.hide {
   display: none;
 }
 </style>
@@ -155,7 +153,7 @@ export default {
           { required: true, message: '请选择详情页配图', trigger: 'change' }
         ],
         mode_id: [
-          { required: true, message: '请选择启动模式'}
+          { required: true, message: '请选择启动模式' }
         ],
         enable: [
           { required: true, message: '请选择状态', trigger: 'change' }
@@ -166,7 +164,7 @@ export default {
   computed: {
     title() {
       let title = ''
-      switch(this.config.type){
+      switch (this.config.type) {
       case 'add':
         title = '添加场景'
         break
@@ -174,18 +172,18 @@ export default {
         title = '编辑场景'
         break
       case 'look':
-        title ='查看场景'
+        title = '查看场景'
         break
       default:
-        title ='查看场景'
+        title = '查看场景'
       }
       return title
     }
   },
   watch: {
-    'config.show'(val){
-      this.$nextTick(() =>{
-        if(this.config.type === 'add'){
+    'config.show'(val) {
+      this.$nextTick(() => {
+        if (this.config.type === 'add') {
           this.$refs['form'].resetFields()
         } else {
           this.$refs['form'].clearValidate()
@@ -213,7 +211,7 @@ export default {
       this.$http
         .post(PREFIX + 'iotscenemode/lists', {})
         .then(res => {
-          this.startModeList = res.data.result.list
+          this.startModeList = res.data.result.list.filter(item => item.enable)
         })
     },
     // 获取设备分类列表
@@ -225,8 +223,8 @@ export default {
         })
     },
     // 处理分类设备选中状态
-    dealList(){
-      if(this.config.type === 'add'){
+    dealList() {
+      if (this.config.type === 'add') {
         this.categoryList = this.allList
         this.checkList = []
         return
@@ -234,9 +232,9 @@ export default {
       let newArr = []
       let arr = this.allList
       let selectArr = this.config.content.list
-      arr.forEach(el=>{
-        const result = selectArr.findIndex(ol=>{return el.category_id == ol.category_id})
-        if(result === -1){ // 新的
+      arr.forEach(el => {
+        const result = selectArr.findIndex(ol => { return el.category_id == ol.category_id })
+        if (result === -1) { // 新的
           newArr.push(el)
         } else { // 已存在
           el.category_status = selectArr[result].status + '' //选中option
@@ -246,7 +244,7 @@ export default {
       })
       this.categoryList = newArr
       this.checkList = []
-      this.config.content.list.forEach(el=>{
+      this.config.content.list.forEach(el => {
         this.checkList.push(el.category_id)
       })
     },
@@ -254,7 +252,7 @@ export default {
       this.config.show = false
     },
     submit() {
-      if(this.config.type === 'look') return this.config.show = false
+      if (this.config.type === 'look') return this.config.show = false
 
       this.$refs['form'].validate((valid) => {
         if (valid) {
@@ -270,7 +268,7 @@ export default {
         }
       })
     },
-    getParam(){
+    getParam() {
       let param = deepClone(this.config)
       delete param['type']
       delete param['show']
@@ -281,9 +279,9 @@ export default {
       delete param['detail_pic_object']
 
       param.content.list = []
-      this.checkList.forEach(el=>{
+      this.checkList.forEach(el => {
         Object.values(this.categoryList).forEach(val => {
-          if(val.category_id === el){
+          if (val.category_id === el) {
             let copyeEl = deepClone(val)
             copyeEl['status'] = +copyeEl['category_status']
             delete copyeEl['category_status']
