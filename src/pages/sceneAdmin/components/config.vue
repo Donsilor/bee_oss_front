@@ -24,7 +24,8 @@
         <Upload 
           :class="{'is-disabled': config.type === 'look'}"
           :image-file="config.list_pic.normal"
-          :type="config.type=='look'? 'look': '' "
+          :type="config.type"
+          :valid="validList"
           @emitImageData="emitListData" />
       </el-form-item>
 
@@ -38,8 +39,9 @@
         <Upload 
           :class="{'is-disabled': config.type === 'look'}"
           :image-file="config.detail_pic"
-          :type="config.type=='look'? 'look': '' "
-          @emitImageData="emitDetailData" />
+          :type="config.type"
+          :valid="validDetail" 
+          @emitImageData="emitDetailData"/>
       </el-form-item>
 
       <el-form-item 
@@ -132,6 +134,19 @@ export default {
   },
   data() {
     return {
+      validList: {
+        type: 2, // 验证图片尺寸
+        width: 850,
+        height: 450,
+        tips: '尺寸：850*450， 支持jpg，png'
+      },
+      validDetail: {
+        type: 2, // 验证图片尺寸
+        width: 1123,
+        height: 633,
+        tips: '尺寸：1123*633， 支持jpg，png'
+      },
+
       categoryList: [],
       startModeList: [],
       checkList: [],
