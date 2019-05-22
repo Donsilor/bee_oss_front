@@ -2,6 +2,7 @@
   <div class="page-content">
     <!-- 顶部tab -->
     <div class="filter">
+      <span>启动模式管理</span>
       <el-button
         type="primary"
         @click="showConfig('add')">添加模式</el-button>
@@ -17,6 +18,14 @@
         <el-table-column
           prop="created_at"
           label="添加时间"/>
+
+        <el-table-column
+          prop="state"
+          label="是否启用">
+          <template slot-scope="scope">
+            {{ scope.row.enable ? '启用':'禁用' }}
+          </template>
+        </el-table-column>
         <el-table-column
           label="操作">
           <template slot-scope="scope">
