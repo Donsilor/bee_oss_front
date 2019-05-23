@@ -206,6 +206,8 @@ export default {
         }
       }
       if(type == 'add'){
+        console.log(type)
+        console.log(defaultConfig)
         this.$refs.configDialog.config = defaultConfig
       } else {
         this.$refs.configDialog.config = Object.assign({}, defaultConfig, item)

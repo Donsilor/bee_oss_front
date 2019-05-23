@@ -59,30 +59,38 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="选择设备">
-        <div 
-          v-for="it in categoryList"
-          class="item">
-          <el-checkbox 
-            v-model="checkList"
-            :label="it.category_id">选择</el-checkbox>
-          <img 
-            :src="it.category_icon"
-            class="icon"
-            alt="">
-          <span class="name">{{ it.category_name }}</span>
-          <el-select v-model="it.category_status">
-            <el-option 
-              v-for="(i, idx) in it.status"
-              :key="idx"
-              :label="i"
-              :value="idx" />
-          </el-select>
-          <div class="link">
-            <label>预定链接:</label>
-            <el-input v-model="it.purchace_link" />
+      <el-form-item 
+        prop="checkList"
+        label="选择设备">
+
+        <el-checkbox-group 
+          v-model="config.checkList" 
+          @change="handleCheckedChange">
+          <div 
+            v-for="it in categoryList"
+            class="item">
+            
+            <el-checkbox
+              :label="it.category_id">选择</el-checkbox>
+
+            <img 
+              :src="it.category_icon"
+              class="icon"
+              alt="">
+            <span class="name">{{ it.category_name }}</span>
+            <el-select v-model="it.category_status">
+              <el-option 
+                v-for="(i, idx) in it.status"
+                :key="idx"
+                :label="i"
+                :value="idx" />
+            </el-select>
+            <div class="link">
+              <label>预定链接:</label>
+              <el-input v-model="it.purchace_link" />
+            </div>
           </div>
-        </div>
+        </el-checkbox-group>
       </el-form-item>
 
       <el-form-item label="状态">
@@ -149,9 +157,12 @@ export default {
 
       categoryList: [],
       startModeList: [],
-      checkList: [],
       // 配置内容
       config: {
+        checkList: [],
+        content: {
+          list: []
+        },
         list_pic: {
           normal: '',
           normal_object: ''
@@ -172,6 +183,9 @@ export default {
         ],
         enable: [
           { required: true, message: '请选择状态', trigger: 'change' }
+        ],
+        checkList: [
+          { type:'array', required: true, message: '至少选择一个设备', trigger: 'change' }
         ]
       }
     }
@@ -198,11 +212,7 @@ export default {
   watch: {
     'config.show'(val) {
       this.$nextTick(() => {
-        if (this.config.type === 'add') {
-          this.$refs['form'].resetFields()
-        } else {
-          this.$refs['form'].clearValidate()
-        }
+        this.$refs['form'].clearValidate()
       })
     }
   },
@@ -239,13 +249,14 @@ export default {
     },
     // 处理分类设备选中状态
     dealList() {
+      let allList = deepClone(this.allList)
       if (this.config.type === 'add') {
-        this.categoryList = this.allList
-        this.checkList = []
+        this.categoryList = allList
+        this.config.checkList = []
         return
       }
       let newArr = []
-      let arr = this.allList
+      let arr = allList
       let selectArr = this.config.content.list
       arr.forEach(el => {
         const result = selectArr.findIndex(ol => { return el.category_id == ol.category_id })
@@ -258,14 +269,15 @@ export default {
         }
       })
       this.categoryList = newArr
-      this.checkList = []
+      this.config.checkList = []
       this.config.content.list.forEach(el => {
-        this.checkList.push(el.category_id)
+        this.config.checkList.push(el.category_id)
       })
     },
     cancel() {
       this.config.show = false
     },
+    // 点击确定按钮
     submit() {
       if (this.config.type === 'look') return this.config.show = false
 
@@ -283,6 +295,7 @@ export default {
         }
       })
     },
+    // 获取保存到后台的参数
     getParam() {
       let param = deepClone(this.config)
       delete param['type']
@@ -294,17 +307,23 @@ export default {
       delete param['detail_pic_object']
 
       param.content.list = []
-      this.checkList.forEach(el => {
+      this.config.checkList.forEach(el => {
         Object.values(this.categoryList).forEach(val => {
           if (val.category_id === el) {
             let copyeEl = deepClone(val)
-            copyeEl['status'] = +copyeEl['category_status']
+            copyeEl['status'] = +copyeEl['category_status'] || ''
             delete copyeEl['category_status']
             param.content.list.push(copyeEl)
           }
         })
       })
+      delete param['checkList']
       return param
+    },
+    // 选择和取消设备
+    handleCheckedChange(value) {
+      // 对象属性改变，才会更新dom， 需创建新对象重新赋值
+      this.config = Object.assign({}, this.config)
     }
   },
 }
