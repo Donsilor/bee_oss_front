@@ -119,6 +119,7 @@
   }
   .name {
     margin: 0 20px;
+    font-size: 14px;
   }
   .link {
     margin-left: 20px;
