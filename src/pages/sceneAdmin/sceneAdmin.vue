@@ -30,7 +30,7 @@
           prop="enable"
           label="是否启用">
           <template slot-scope="scope">
-            {{ scope.row.enable ? '启用':'禁用' }}
+            <span :class="scope.row.enable ? 'red':''">{{ scope.row.enable ? '启用':'禁用' }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -51,6 +51,7 @@
               {{ scope.row.enable ? '禁用':'启用' }}
             </el-button>
             <el-button
+              :disabled="scope.row.enable ? true:false"
               type="text"
               size="small"
               @click="handeDeleteClick(scope.row.scene_id)">删除</el-button>
@@ -69,12 +70,15 @@
         @current-change="handPageChange"/>
     </div> -->
     <!-- config -->
-    <Config 
-      ref="configDialog" 
+    <Config
+      ref="configDialog"
       @refresh="refresh"/>
   </div>
 </template>
 <style lang="less" scoped>
+.red{
+  color: #F56C6C;
+}
 .filter{
   display: flex;
   justify-content: space-between;
@@ -128,7 +132,9 @@ export default {
           } else {
             this.$message.error(res)
           }
+          this.getList()
         })
+
     },
     delete(cId) {
       this.$http
