@@ -41,7 +41,8 @@
         <el-form-item label="按钮图标">
           <!-- Upload -->
           <Upload 
-            :image-file="imageFile" 
+            :image-file="imageFile"
+            :valid="valid" 
             @emitImageData="emitImageData" />
         </el-form-item>
       </div>
@@ -81,6 +82,10 @@ export default {
   },
   data() {
     return {
+      valid: {
+        type: 1, // 验证图片大小
+        tips: '只能上传jpg/png格式文件，单个文件不能超过500kb'
+      },
       imageFile: '',
       config: {
         content: "",

@@ -97,7 +97,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.menuData)
     const obj = this
     if (obj.default) {
       obj.defaultActive = obj.default
@@ -131,15 +130,12 @@ export default {
   background-size: @width @height;
 }
 .left-menu {
-  overflow-y: auto;
-  height: calc(~"100vh - 80px");
-  background-color: #2b2b37;
-
   .el-menu {
     border-radius: 0;
   }
 }
 .menu-list {
+  min-height: 100vh;
   .el-submenu__title {
     font-size: 16px;
     color: #95959b;

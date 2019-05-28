@@ -1,25 +1,16 @@
-body {
+html, body, #app{
+  height: 100vh;
 }
 
 .dn {
 	display: none;
 }
 
-.page {
-	height: 100vh;
-	position: relative;
-	margin-top: -80px;
-	&:before {
-		content: " ";
-		display: block;
-		height: 80px;
-	}
-	overflow-x: hidden;
-	overflow-y: auto;
+.el-header{
+  background: #2b2b37;
 }
-
-.page-content {
-	padding: 20px 30px;
+.el-main, .el-aside{
+  height: 100vh;
 }
 
 .btitle {

@@ -1,21 +1,21 @@
 <template>
-  <div class="container">
-    <bheader />
-    <div class="content">
-      <el-row>
-        <el-col :span="3">
-          <bnav />
-        </el-col>
-        <el-col :span="21">
-          <div 
-            id="page" 
-            class="page">
-            <router-view />
-          </div>
-        </el-col>
-      </el-row>
-    </div>
-  </div>
+  <el-container>
+    <el-header>
+      <bheader />
+    </el-header>
+
+    <el-container>
+      <el-aside width="190px">
+        <bnav />
+      </el-aside>
+
+      <el-main 
+        id="page" 
+        class="page">
+        <router-view />
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 <script>
 import Bheader from "../components/bheader.vue"

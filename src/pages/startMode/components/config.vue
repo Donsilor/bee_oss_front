@@ -67,9 +67,9 @@ export default {
   },
   watch: {
     'config.show'(val){
-      if(this.$refs['ruleForm'] && val){
-        this.$refs['ruleForm'].resetFields()
-      }
+      this.$nextTick(() => {
+        this.$refs['ruleForm'].clearValidate()
+      })
     }
   },
   methods: {

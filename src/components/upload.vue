@@ -23,7 +23,8 @@
       />
     </el-upload>
     <div class="tips">
-      只能上传jpg/png格式文件，单个文件不能超过500kb
+      <!-- 只能上传jpg/png格式文件，单个文件不能超过500kb -->
+      {{ valid.tips }}
     </div>
   </div>
 </template>
@@ -31,7 +32,7 @@
 <script>
 import getCorsUrl from "../lib/corsconfig.js"
 export default {
-  props: ['imageFile','type'],
+  props: ['imageFile','type', 'valid'],
   data() {
     return {
       corsUrls: getCorsUrl() + "/oss_file_upload",
@@ -46,14 +47,34 @@ export default {
     },
     beforeAvatarUpload(file) {
       const isType = (file.type === 'image/jpeg') || (file.type === 'image/png')
-      const isLt2M = file.size / 1024 < 500
-      if (!isType) {
-        this.$message.error('只能上传jpg或者png格式!')
+      if(this.valid.type == '1'){
+        const isLt2M = file.size / 1024 < 500
+        if (!isType) {
+          this.$message.error('只能上传jpg或者png格式!')
+        }
+        if (!isLt2M) {
+          this.$message.error('大小不能超过 500kb!')
+        }
+        return isType && isLt2M
+      } else{
+        const isSize = new Promise((resolve, reject) =>{
+          let width = this.valid.width // 限制图片尺寸为654X270
+          let height = this.valid.height
+          let _URL = window.URL || window.webkitURL
+          let img = new Image()
+          img.onload = function() {
+            let valid = img.width === width && img.height === height
+            valid ? resolve() : reject()
+          }
+          img.src = _URL.createObjectURL(file)
+        }).then(() => {
+          return file
+        }, () => {
+          this.$message.error(`图片尺寸限制为${this.valid.width} x ${this.valid.height}`)
+          return Promise.reject()
+        })
+        return isType && isSize
       }
-      if (!isLt2M) {
-        this.$message.error('大小不能超过 500kb!')
-      }
-      return isType && isLt2M
     },
     clearImg() {
       if(this.$props.type === 'look') {
