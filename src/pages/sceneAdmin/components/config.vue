@@ -50,8 +50,7 @@
         <el-select
           v-model="config.mode_id"
           clearable
-          placeholder="请选择"
-          @change="mode">
+          placeholder="请选择">
           <el-option
             v-for="it in startModeList"
             :key="it.mode_id"
@@ -79,15 +78,10 @@
               class="icon"
               alt="">
             <span class="name">{{ it.category_name }}</span>
-<<<<<<< HEAD
-            <el-select v-model="it.category_status">
-              <el-option
-=======
-            <el-select 
-              v-model="it.category_status" 
+            <el-select
+              v-model="it.category_status"
               clearable >
-              <el-option 
->>>>>>> 153a7bb276db99907f9b07e429c1c2e177efd933
+              <el-option
                 v-for="(i, idx) in it.status"
                 :key="idx"
                 :label="i"
@@ -230,15 +224,15 @@ export default {
     this.getStartModeList()
   },
   methods: {
-    mode(val) {
-      console.log(val)
-      this.startModeList.map(item => {
-        if(item.mode_id === val) {
-          this.config.mode_name = item.mode_name
-          console.log(item)
-        }
-      })
-    },
+    // mode(val) {
+    //   console.log(val)
+    //   this.startModeList.map(item => {
+    //     if(item.mode_id === val) {
+    //       this.config.mode_name = item.mode_name
+    //       console.log(item)
+    //     }
+    //   })
+    // },
     // 子组件传过来的 列表图片信息
     emitListData(data) {
       this.config.list_pic.normal = data.download_url
@@ -254,7 +248,12 @@ export default {
       this.$http
         .post(PREFIX + 'iotscenemode/lists', {})
         .then(res => {
-          this.startModeList = res.data.result.list.filter(item => item.enable)
+          this.startModeList = res.data.result.list.map(item => {
+            return {
+              mode_id: item.mode_id,
+              mode_name: item.mode_name
+            }
+          })
         })
     },
     // 获取设备分类列表
@@ -336,13 +335,14 @@ export default {
             } else {
               copyeEl['status'] = +copyeEl['category_status']
             }
-            
+
             delete copyeEl['category_status']
             param.content.list.push(copyeEl)
           }
         })
       })
       delete param['checkList']
+      delete param['mode_name']
       console.log(param)
       return param
     },
