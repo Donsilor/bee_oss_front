@@ -63,7 +63,7 @@
           prop="address"
           label="收货地址"/>
         <el-table-column
-          prop="updated_at"
+          prop="created_at"
           label="预定时间"/>
         <el-table-column
           prop="status"
