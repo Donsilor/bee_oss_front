@@ -130,12 +130,13 @@ export default {
   background-size: @width @height;
 }
 .left-menu {
+  height: 100%;
+  background: #2b2b37;
   .el-menu {
     border-radius: 0;
   }
 }
 .menu-list {
-  min-height: 100vh;
   .el-submenu__title {
     font-size: 16px;
     color: #95959b;

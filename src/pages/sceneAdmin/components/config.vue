@@ -78,7 +78,9 @@
               class="icon"
               alt="">
             <span class="name">{{ it.category_name }}</span>
-            <el-select v-model="it.category_status">
+            <el-select 
+              v-model="it.category_status" 
+              clearable >
               <el-option 
                 v-for="(i, idx) in it.status"
                 :key="idx"
@@ -264,7 +266,7 @@ export default {
         if (result === -1) { // 新的
           newArr.push(el)
         } else { // 已存在
-          el.category_status = selectArr[result].status + '' //选中option
+          el.category_status = selectArr[result].status == '-1' ? '' : selectArr[result].status + ''
           el.purchace_link = selectArr[result].purchace_link
           newArr.push(el)
         }
@@ -312,13 +314,20 @@ export default {
         Object.values(this.categoryList).forEach(val => {
           if (val.category_id === el) {
             let copyeEl = deepClone(val)
-            copyeEl['status'] = +copyeEl['category_status'] || ''
+
+            if(copyeEl['category_status'] === ''){
+              copyeEl['status'] = -1
+            } else {
+              copyeEl['status'] = +copyeEl['category_status']
+            }
+            
             delete copyeEl['category_status']
             param.content.list.push(copyeEl)
           }
         })
       })
       delete param['checkList']
+      console.log(param)
       return param
     },
     // 选择和取消设备
