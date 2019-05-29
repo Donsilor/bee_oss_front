@@ -1,27 +1,27 @@
 <template>
-  <el-dialog 
+  <el-dialog
     :visible.sync="config.show"
     :title="title">
-    <el-form 
+    <el-form
       ref="form"
       :model="config"
       :rules="rules"
       :disabled="config.type === 'look'"
       label-width="100px">
-      <el-form-item 
+      <el-form-item
         prop="scene_name"
         label="场景名称">
         <el-input v-model="config.scene_name" />
       </el-form-item>
 
-      <el-form-item 
+      <el-form-item
         prop="list_pic.normal"
         label="列表配图">
-        <el-input 
+        <el-input
           v-model="config.list_pic.normal"
           class="hide" />
         <!-- Upload -->
-        <Upload 
+        <Upload
           :class="{'is-disabled': config.type === 'look'}"
           :image-file="config.list_pic.normal"
           :type="config.type"
@@ -29,29 +29,30 @@
           @emitImageData="emitListData" />
       </el-form-item>
 
-      <el-form-item 
+      <el-form-item
         prop="detail_pic"
         label="详情页配图">
-        <el-input 
+        <el-input
           v-model="config.detail_pic"
           class="hide" />
         <!-- Upload -->
-        <Upload 
+        <Upload
           :class="{'is-disabled': config.type === 'look'}"
           :image-file="config.detail_pic"
           :type="config.type"
-          :valid="validDetail" 
+          :valid="validDetail"
           @emitImageData="emitDetailData"/>
       </el-form-item>
 
-      <el-form-item 
+      <el-form-item
         prop="mode_id"
         label="启动模式">
-        <el-select 
+        <el-select
           v-model="config.mode_id"
           clearable
-          placeholder="请选择">
-          <el-option 
+          placeholder="请选择"
+          @change="mode">
+          <el-option
             v-for="it in startModeList"
             :key="it.mode_id"
             :label="it.mode_name"
@@ -59,27 +60,27 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item 
+      <el-form-item
         prop="checkList"
         label="选择设备">
 
-        <el-checkbox-group 
-          v-model="config.checkList" 
+        <el-checkbox-group
+          v-model="config.checkList"
           @change="handleCheckedChange">
-          <div 
+          <div
             v-for="it in categoryList"
             class="item">
-            
+
             <el-checkbox
               :label="it.category_id">选择</el-checkbox>
 
-            <img 
+            <img
               :src="it.category_icon"
               class="icon"
               alt="">
             <span class="name">{{ it.category_name }}</span>
             <el-select v-model="it.category_status">
-              <el-option 
+              <el-option
                 v-for="(i, idx) in it.status"
                 :key="idx"
                 :label="i"
@@ -100,11 +101,11 @@
         </el-radio-group>
       </el-form-item>
     </el-form>
-    <div 
+    <div
       slot="footer"
       class="dialog-footer">
       <el-button @click="cancel">取 消</el-button>
-      <el-button 
+      <el-button
         type="primary"
         @click="submit">确 定</el-button>
     </div>
@@ -222,6 +223,15 @@ export default {
     this.getStartModeList()
   },
   methods: {
+    mode(val) {
+      console.log(val)
+      this.startModeList.map(item => {
+        if(item.mode_id === val) {
+          this.config.mode_name = item.mode_name
+          console.log(item)
+        }
+      })
+    },
     // 子组件传过来的 列表图片信息
     emitListData(data) {
       this.config.list_pic.normal = data.download_url
@@ -288,6 +298,7 @@ export default {
           this.$http
             .post(PREFIX + 'iotscene/save', param)
             .then(res => {
+              console.log(param)
               this.$emit('refresh', true)
               this.config.show = false
             })

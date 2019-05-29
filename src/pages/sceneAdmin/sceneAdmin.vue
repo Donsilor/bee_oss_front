@@ -164,7 +164,7 @@ export default {
     },
     handeEnableClick(index,enable) {
       let type = '禁用'
-      if(enable){
+      if(!enable){
         type = '启用'
       }
       this.$confirm(`您是否确定${type}该场景？`, '提示', {
