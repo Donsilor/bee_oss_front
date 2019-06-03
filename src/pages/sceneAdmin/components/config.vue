@@ -129,6 +129,7 @@
     margin-left: 20px;
     display: flex;
     label {
+      font-size: 14px;
       width: 100px;
     }
   }
