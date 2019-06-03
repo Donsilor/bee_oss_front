@@ -26,6 +26,7 @@
           :image-file="config.list_pic.normal"
           :type="config.type"
           :valid="validList"
+          path= "scene/"
           @emitImageData="emitListData" />
       </el-form-item>
 
@@ -41,6 +42,7 @@
           :image-file="config.detail_pic"
           :type="config.type"
           :valid="validDetail"
+          path= "scene/"
           @emitImageData="emitDetailData"/>
       </el-form-item>
 

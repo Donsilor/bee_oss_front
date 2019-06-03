@@ -32,13 +32,17 @@
 <script>
 import getCorsUrl from "../lib/corsconfig.js"
 export default {
-  props: ['imageFile','type', 'valid'],
+  props: ['imageFile','type', 'valid', 'path'],
   data() {
+    let uploadObj = {
+      token: JSON.parse(localStorage.getItem("localData")).user.info.token
+    }
+    if (this.path) {
+      uploadObj.path = this.path
+    }
     return {
       corsUrls: getCorsUrl() + "/oss_file_upload",
-      uploadObj: {
-        token: JSON.parse(localStorage.getItem("localData")).user.info.token
-      }
+      uploadObj: uploadObj
     }
   },
   methods: {
