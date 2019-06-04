@@ -274,6 +274,7 @@ export default {
       if (this.config.type === 'add') {
         this.categoryList = allList
         this.config.checkList = []
+        this.config.enable = 0
         return
       }
       let newArr = []
