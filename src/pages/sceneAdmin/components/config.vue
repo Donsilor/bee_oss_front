@@ -333,7 +333,7 @@ export default {
           if (val.category_id === el) {
             let copyeEl = deepClone(val)
 
-            if(copyeEl['category_status'] === ''){
+            if(!copyeEl['category_status'] && copyeEl['category_status'] !== 0){
               copyeEl['status'] = -1
             } else {
               copyeEl['status'] = +copyeEl['category_status']
