@@ -1,5 +1,6 @@
 <template>
   <el-dialog
+    :close-on-click-modal="false"
     :visible.sync="config.show"
     :title="title">
     <el-form
