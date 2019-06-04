@@ -69,7 +69,7 @@
           v-model="config.checkList"
           @change="handleCheckedChange">
           <div
-            v-for="it in categoryList"
+            v-for="(it, index) in categoryList"
             class="item">
 
             <el-checkbox
@@ -91,7 +91,10 @@
             </el-select>
             <div class="link">
               <label>预定链接:</label>
-              <el-input v-model="it.purchace_link" />
+              <el-input
+                v-model="it.purchace_link"
+                @change="reg(it, index)"
+              />
             </div>
           </div>
         </el-checkbox-group>
@@ -227,6 +230,10 @@ export default {
     this.getStartModeList()
   },
   methods: {
+    reg(it, index) {
+      let val = it.purchace_link.trim()
+      this.categoryList[index].purchace_link = val
+    },
     // mode(val) {
     //   console.log(val)
     //   this.startModeList.map(item => {
