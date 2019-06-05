@@ -3,23 +3,23 @@
     <!-- 顶部tab -->
     <div class="filter">
       <span>启动模式管理</span>
-      <el-button 
+      <el-button
         type="primary"
         @click="showConfig('add')">添加模式</el-button>
     </div>
     <!-- 列表 -->
     <div>
-      <el-table 
+      <el-table
         :data="list"
         border>
-        <el-table-column 
+        <el-table-column
           prop="mode_name"
           label="模式名称" />
-        <el-table-column 
+        <el-table-column
           prop="created_at"
           label="添加时间" />
 
-        <el-table-column 
+        <el-table-column
           prop="state"
           label="是否启用">
           <template slot-scope="scope">
@@ -28,17 +28,17 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button 
+            <el-button
               type="text"
               size="small"
               @click="showConfig('modify', scope.row)">编辑</el-button>
-            <el-button 
+            <el-button
               type="text"
               size="small"
               @click="handeStateClick(scope.row)">
               {{ scope.row.enable ? '禁用':'启用' }}
             </el-button>
-            <el-button 
+            <el-button
               type="text"
               size="small"
               @click="handeDeleteClick(scope.row.mode_id)">删除</el-button>
@@ -57,7 +57,7 @@
         @current-change="handPageChange"/>
     </div> -->
     <!-- config -->
-    <Config 
+    <Config
       :config="config"
       @refresh="refresh" />
   </div>
@@ -95,11 +95,20 @@ export default {
     this.getList()
   },
   methods: {
+    // 根据order排序
+    compare(property){
+      return function(a,b){
+        var value1 = a[property]
+        var value2 = b[property]
+        return value1 - value2
+      }
+    },
     getList() {
       this.$http
         .post(PREFIX + "iotscenemode/lists", {})
         .then(res => {
           this.list = res.data.result.list
+          this.list = this.list.sort(this.compare('order'))
         })
     },
     handeStateClick(state) {
