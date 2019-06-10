@@ -1,5 +1,6 @@
 <template>
   <el-dialog
+    :close-on-click-modal="false"
     :visible.sync="config.show"
     :title="config.type === 'add' ? '添加模式' : '编辑模式'"
     width="560px">
