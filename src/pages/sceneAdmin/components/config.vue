@@ -56,6 +56,7 @@
           placeholder="请选择">
           <el-option
             v-for="it in startModeList"
+            v-if="+it.enable === 1"
             :key="it.mode_id"
             :label="it.mode_name"
             :value="it.mode_id" />
@@ -258,13 +259,19 @@ export default {
       this.$http
         .post(PREFIX + 'iotscenemode/lists', {})
         .then(res => {
-          this.startModeList = res.data.result.list.sort(this.compare('order'))
-          this.startModeList = res.data.result.list.map(item => {
-            return {
-              mode_id: item.mode_id,
-              mode_name: item.mode_name
+          let orderList = res.data.result.list.sort(this.compare('order'))
+          this.startModeList = []
+          orderList.forEach(el =>{
+            if(+el.enable === 1){
+              this.startModeList.push(el)
             }
           })
+          // this.startModeList = res.data.result.list.map(item => {
+          //   return {
+          //     mode_id: item.mode_id,
+          //     mode_name: item.mode_name
+          //   }
+          // })
         })
     },
     // 获取设备分类列表
