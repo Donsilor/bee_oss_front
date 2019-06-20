@@ -266,12 +266,6 @@ export default {
               this.startModeList.push(el)
             }
           })
-          // this.startModeList = res.data.result.list.map(item => {
-          //   return {
-          //     mode_id: item.mode_id,
-          //     mode_name: item.mode_name
-          //   }
-          // })
         })
     },
     // 获取设备分类列表
