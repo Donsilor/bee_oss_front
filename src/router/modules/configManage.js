@@ -5,7 +5,7 @@
  * @author songwh
  *
  * Created at     : 2019-05-08 16:59:55
- * Last modified  : 2019-05-17 10:41:20
+ * Last modified  : 2019-07-09 08:57:37
  */
 import {
   FamilyImgList,
@@ -17,7 +17,10 @@ import {
   MallOrder,
   SceneAdmin,
   SightManage,
-  StartMode
+  StartMode,
+  AppHomeConfig,
+  HomeConfig,
+  MusicConfig
 } from '../../pages/index.js'
 
 var configManage = [
@@ -46,6 +49,30 @@ var configManage = [
     name: 'CmData',
     component: CmData
   },
+  // {//家居组件
+  //   path: 'appHomeConfig',
+  //   name: 'appHomeConfig',
+  //   component: AppHomeConfig
+  // },
+  { //家居组件
+    path: 'appHomeConfig',
+    name: 'appHomeConfig',
+    component: AppHomeConfig,
+    children: [
+      {
+        path: 'home',
+        name: 'home',
+        component: HomeConfig
+      },
+      {
+        path: 'music',
+        name: 'music',
+        component: MusicConfig
+      }
+    ]
+  },
+
+
   //家居销售按钮
   {//
     path: 'mallButtonConfig',

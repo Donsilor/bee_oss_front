@@ -5,7 +5,7 @@
  * @author songwh
  *
  * Created at     : 2019-05-08 16:59:55
- * Last modified  : 2019-05-17 10:40:13
+ * Last modified  : 2019-07-09 08:57:55
  */
 var configManage = {
   title: '配置管理',
@@ -35,6 +35,11 @@ var configManage = {
     {
       title: '文案配置',
       path: '/main/CmData',
+      icon: 'facility'
+    },
+    {
+      title: '家具组件',
+      path: '/main/appHomeConfig/home',
       icon: 'facility'
     },
     {

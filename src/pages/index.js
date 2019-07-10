@@ -62,6 +62,11 @@ import SightManage from './sightManage/sightManage.vue'
 import StartMode from './startMode/startMode.vue'
 import MallReservation from './mallMgmt/mallReservation.vue'
 
+// 家居组件
+import AppHomeConfig from './homeConfig/index.vue'
+import HomeConfig from './homeConfig/home/home.vue'
+import MusicConfig from './homeConfig/music/music.vue'
+
 export {
   Login,
   Main,
@@ -119,5 +124,8 @@ export {
   SceneAdmin,
   SightManage,
   StartMode,
-  MallReservation
+  MallReservation,
+  AppHomeConfig,
+  HomeConfig,
+  MusicConfig
 }
