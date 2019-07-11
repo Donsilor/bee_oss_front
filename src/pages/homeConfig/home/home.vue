@@ -16,7 +16,9 @@
           prop="F_picture"
           label="图片" >
           <template slot-scope="scope">
-            <img :src="scope.row.F_picture" >
+            <img 
+              :src="scope.row.F_picture" 
+              class="f-img" >
           </template>
         </el-table-column>
 
@@ -38,7 +40,7 @@
             <el-button
               type="text"
               size="small"
-              @click="handeDeleteClick(scope.row.mode_id)">删除</el-button>
+              @click="handeDeleteClick(scope.row.F_id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -59,6 +61,10 @@
 .block {
   text-align: right;
   margin: 30px 0;
+}
+.f-img{
+  width: 200px;
+  max-height: 240px;
 }
 </style>
 <script>
@@ -83,62 +89,26 @@ export default {
     this.getList()
   },
   methods: {
-    // 根据order排序
-    compare(property){
-      return function(a,b){
-        var value1 = a[property]
-        var value2 = b[property]
-        return value1 - value2
-      }
-    },
     getList() {
       this.$http
         .post(PREFIX + "music_config/lists", {})
         .then(res => {
-          this.list = res.data.result.list
-          this.list = this.list.sort(this.compare('order'))
+          this.list = res.data.result.data
         })
     },
-    handeStateClick(state) {
-      let enable = state.enable
-      let type = '启用'
-      if (enable) {
-        type = '禁用'
-      }
-      this.$confirm(`您是否确定${type}该模式？`, '提示', {
+    handeDeleteClick(F_id) {
+      this.$confirm(`您是否确定删除？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$http
-          .post(PREFIX + "iotscenemode/save", {
-            mode_id: state.mode_id,
-            mode_name: state.mode_name,
-            order: state.order,
-            enable: Number(!enable)
-          })
-          .then(res => {
-            this.$message({
-              type: 'success',
-              message: '处理成功!'
-            })
-            this.getList()
-          })
+        this.delStatus(F_id)
       })
     },
-    handeDeleteClick(enable) {
-      this.$confirm(`您是否确定删除该模式？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.delStatus(enable)
-      })
-    },
-    delStatus(enable) {
+    delStatus(F_id) {
       this.$http
-        .post(PREFIX + "iotscenemode/del", {
-          mode_id: enable
+        .post(PREFIX + "music_config/del", {
+          F_id: F_id
         })
         .then(res => {
           this.$message({
@@ -148,21 +118,15 @@ export default {
           this.getList()
         })
     },
-    handPageChange(val) {
-      this.pages.page = val
-      this.getList()
-    },
-    indexMethod(index) {
-      return index + 1
-    },
     showConfig(type, item) {
       console.log(type)
       if (type == 'add') {
         this.$refs.configDialog.config = {
           type: type,
           show: true,
-          enable: 1,
-          name: ''
+          F_picture: '',
+          F_title: '',
+          F_stitle: '',
         }
       } else {
         this.$refs.configDialog.config = {

@@ -6,6 +6,7 @@
     width="560px">
     <el-form
       ref="ruleForm"
+      :rules="rules"
       :model="config"
       label-width="80px">
 
@@ -19,9 +20,8 @@
         <Upload
           :class="{'is-disabled': config.type === 'look'}"
           :image-file="config.F_picture"
-          :type="config.type"
           :valid="validList"
-          path= "scene/"
+          :type="config.type"
           @emitImageData="emitListData" />
       </el-form-item>
 
@@ -44,7 +44,7 @@
       <el-button @click="config.show = false">取 消</el-button>
       <el-button
         type="primary"
-        @click="submit(config.type, 'ruleForm')">确 定</el-button>
+        @click="submit">确 定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -83,10 +83,8 @@ export default {
   data() {
     return {
       validList: {
-        type: 2, // 验证图片尺寸
-        width: 850,
-        height: 450,
-        tips: '尺寸：850*450， 支持jpg，png'
+        type: '', // 不做验证
+        tips: ''
       },
 
       // 配置内容
@@ -94,6 +92,17 @@ export default {
         F_picture: [],
         F_title: '',
         F_stitle: ''
+      },
+      rules: {
+        F_title: [
+          { required: true, message: '请输入主标题', trigger: 'blur' },
+        ],
+        F_stitle: [
+          { required: true, message: '请输入副标题', trigger: 'blur' },
+        ],
+        F_picture: [
+          { required: true, message: '请选择图片', trigger: 'change' }
+        ]
       }
     }
   },
@@ -116,19 +125,21 @@ export default {
       return title
     }
   },
+  watch: {
+    'config.show'(val) {
+      this.$nextTick(() => {
+        this.$refs['ruleForm'].clearValidate()
+      })
+    }
+  },
   mounted() {
     console.log(this.config)
   },
   methods: {
     // 子组件传过来的 列表图片信息
     emitListData(data) {
-      this.config.list_pic.normal = data.download_url
-      this.config.list_pic.normal_object = data.object
-    },
-    // 子组件传过来的 详情图片信息
-    emitDetailData(data) {
-      this.config.detail_pic = data.download_url
-      this.config.detail_pic_object = data.object
+      this.config.F_picture = data.download_url
+      this.config.F_picture_object = data.object
     },
     cancel() {
       this.config.show = false
@@ -137,20 +148,45 @@ export default {
     submit() {
       if (this.config.type === 'look') return this.config.show = false
 
-      this.$refs['form'].validate((valid) => {
+      this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
-          let param = {}
-          this.$http
-            .post(PREFIX + 'iotscene/save', param)
-            .then(res => {
-              console.log(param)
-              this.$emit('refresh', true)
-              this.config.show = false
-            })
+          console.log(this.config.type)
+          if(this.config.type == 'add'){
+            this.add()
+          } else {
+            this.edit()
+          }
         } else {
           return false
         }
       })
+    },
+    add() {
+      let param = {
+        F_title: this.config.F_title,
+        F_stitle: this.config.F_stitle,
+        F_picture: this.config.F_picture_object,
+      }
+      this.$http
+        .post(PREFIX + 'music_config/add', param)
+        .then(res => {
+          this.$emit('refresh', true)
+          this.config.show = false
+        })
+    },
+    edit() {
+      let param = {
+        F_id: this.config.F_id,
+        F_title: this.config.F_title,
+        F_stitle: this.config.F_stitle,
+        F_picture: this.config.F_picture_object,
+      }
+      this.$http
+        .post(PREFIX + 'music_config/edit', param)
+        .then(res => {
+          this.$emit('refresh', true)
+          this.config.show = false
+        })
     }
   },
 }
