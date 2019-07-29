@@ -163,8 +163,8 @@ export default {
     },
     add() {
       let param = {
-        F_title: this.config.F_title,
-        F_stitle: this.config.F_stitle,
+        F_title: this.config.F_title.trim(),
+        F_stitle: this.config.F_stitle.trim(),
         F_picture: this.config.F_picture_object,
       }
       this.$http
