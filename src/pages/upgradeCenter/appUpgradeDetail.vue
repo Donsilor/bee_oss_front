@@ -142,7 +142,9 @@
             prop="description"
           >
             <el-input
+              :rows="3"
               v-model="form.description"
+              type="textarea"
               placeholder=""
             />
           </el-form-item>

@@ -781,13 +781,17 @@ export default {
       this.info = scope.row
     },
     initBrandIDOptions() {
-      if (!this.brandIDOptions.length) {
-        this.brandIDOptions = this.brand.map(x => {
-          return {
-            label: x.brand_name,
-            value: x.brand_id
-          }
-        })
+      try {
+        if (!this.brandIDOptions.length) {
+          this.brandIDOptions = this.brand.map(x => {
+            return {
+              label: x.brand_name,
+              value: x.brand_id
+            }
+          })
+        }
+      } catch (error) {
+        console.log(error)
       }
     },
     openImportLayer() {

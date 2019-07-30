@@ -60,7 +60,7 @@ export default {
           this.$message.error('大小不能超过 500kb!')
         }
         return isType && isLt2M
-      } else{
+      } else if(this.valid.type == '2'){
         const isSize = new Promise((resolve, reject) =>{
           let width = this.valid.width // 限制图片尺寸为654X270
           let height = this.valid.height
@@ -78,6 +78,8 @@ export default {
           return Promise.reject()
         })
         return isType && isSize
+      } else {
+        return true
       }
     },
     clearImg() {

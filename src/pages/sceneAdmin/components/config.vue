@@ -56,6 +56,7 @@
           placeholder="请选择">
           <el-option
             v-for="it in startModeList"
+            v-if="+it.enable === 1"
             :key="it.mode_id"
             :label="it.mode_name"
             :value="it.mode_id" />
@@ -250,15 +251,14 @@ export default {
       let val = it.purchace_link.trim()
       this.categoryList[index].purchace_link = val
     },
-    // mode(val) {
-    //   console.log(val)
-    //   this.startModeList.map(item => {
-    //     if(item.mode_id === val) {
-    //       this.config.mode_name = item.mode_name
-    //       console.log(item)
-    //     }
-    //   })
-    // },
+    // 根据order排序
+    compare(property){
+      return function(a,b){
+        var value1 = a[property]
+        var value2 = b[property]
+        return value1 - value2
+      }
+    },
     // 子组件传过来的 列表图片信息
     emitListData(data) {
       this.config.list_pic.normal = data.download_url
@@ -274,10 +274,11 @@ export default {
       this.$http
         .post(PREFIX + 'iotscenemode/lists', {})
         .then(res => {
-          this.startModeList = res.data.result.list.map(item => {
-            return {
-              mode_id: item.mode_id,
-              mode_name: item.mode_name
+          let orderList = res.data.result.list.sort(this.compare('order'))
+          this.startModeList = []
+          orderList.forEach(el =>{
+            if(+el.enable === 1){
+              this.startModeList.push(el)
             }
           })
         })
