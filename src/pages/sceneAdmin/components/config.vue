@@ -83,7 +83,8 @@
             <span class="name">{{ it.category_name }}</span>
             <el-select
               v-model="it.category_status"
-              clearable >
+              clearable
+              @change="handleSelectChange">
               <el-option
                 v-for="(i, idx) in it.status"
                 :key="idx"
@@ -99,6 +100,9 @@
             </div>
           </div>
         </el-checkbox-group>
+        <div
+          v-show="judgeData == 'off'"
+          class="tis">勾选的设备状态必填</div>
       </el-form-item>
 
       <el-form-item label="状态">
@@ -138,6 +142,15 @@
     }
   }
 }
+.tis {
+    color: #f56c6c;
+    font-size: 12px;
+    line-height: 1;
+    padding-top: 4px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+  }
 .hide {
   display: none;
 }
@@ -146,6 +159,7 @@
 import { PREFIX, deepClone } from "../../../lib/util"
 import getCorsUrl from "../../../lib/corsconfig"
 import Upload from "../../../components/upload.vue"
+import { Message } from 'element-ui'
 export default {
   components: {
     Upload
@@ -167,6 +181,7 @@ export default {
 
       categoryList: [],
       startModeList: [],
+      judgeData: '', //判断勾选的设备的状态是否有选择
       // 配置内容
       config: {
         checkList: [],
@@ -305,6 +320,7 @@ export default {
     },
     cancel() {
       this.config.show = false
+      this.judgeData = ''
     },
     // 点击确定按钮
     submit() {
@@ -313,13 +329,14 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           let param = this.getParam()
-          this.$http
-            .post(PREFIX + 'iotscene/save', param)
-            .then(res => {
-              console.log(param)
-              this.$emit('refresh', true)
-              this.config.show = false
-            })
+          if (this.judgeData == '') {
+            this.$http
+              .post(PREFIX + 'iotscene/save', param)
+              .then(res => {
+                this.$emit('refresh', true)
+                this.config.show = false
+              })
+          }
         } else {
           return false
         }
@@ -355,13 +372,34 @@ export default {
       })
       delete param['checkList']
       delete param['mode_name']
-      console.log(param)
       return param
     },
     // 选择和取消设备
-    handleCheckedChange(value) {
+    handleCheckedChange() {
       // 对象属性改变，才会更新dom， 需创建新对象重新赋值
       this.config = Object.assign({}, this.config)
+      this.judgmentMethod()
+    },
+    //勾选设备的状态下拉框的回调
+    handleSelectChange() {
+      this.judgmentMethod()
+    },
+    //设备验证的判断
+    judgmentMethod() {
+      let param = this.getParam()
+      let jud = ''
+      //遍历勾选的设备是否有状态没选的
+      param.content.list.map(val => {
+        if(val.status == '-1') {
+          jud = 'off'
+        }
+      })
+      if(jud == 'off') {
+        this.judgeData = 'off'
+        return
+      }
+      this.judgeData = ''
+      return
     }
   },
 }
