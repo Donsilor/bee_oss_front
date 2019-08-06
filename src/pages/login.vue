@@ -63,6 +63,7 @@ import { PREFIX } from "../lib/util"
 import * as namespace from "../store/namespace"
 import { mapGetters } from "vuex"
 // import cache from '../../store/cache.js';
+const md5 = require('js-md5')
 export default {
   data() {
     const checkName = (rule, value, callback) => {
@@ -112,6 +113,10 @@ export default {
   methods: {
     login() {
       this.$http
+        // .post(PREFIX + "auth/login", {
+        //   username: this.loginForm.username,
+        //   password: md5(this.loginForm.password)
+        // })
         .post(PREFIX + "auth/login", this.loginForm)
         .then(res => {
           const json = res.data

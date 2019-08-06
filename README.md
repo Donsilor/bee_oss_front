@@ -32,5 +32,6 @@ npm run build
 ```
 
 # admin 111111
+# 开发  admin 123456
 
 # eslint 报错 请执行 npm run lint

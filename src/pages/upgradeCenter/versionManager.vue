@@ -150,7 +150,7 @@ export default {
         2: "路由器",
         3: "子设备",
         5: "H5",
-        7: "Android system",
+        7: "android_system",
         11: "route_app",
         12: "video_app"
       },
@@ -232,7 +232,7 @@ export default {
         device: 3
       }
       for (let attr in dataObj) {
-        if (attr === "android" || attr === "android_pad" || attr === "android_system" || attr === "ios" || attr === 'video_app' || attr === 'route_app') {
+        if (attr === "android" || attr === "android_pad" || attr === "ios" || attr === 'video_app' || attr === 'route_app') {
           this.versionsFirst.tableData.push(dataObj[attr])
         } else {
           if (JSON.stringify(dataObj[attr]) === "{}") {
@@ -328,13 +328,14 @@ export default {
       this.$router.push({ path: `/main/versionManager/${dataObj.id}` })
     },
     getPidName(dataObj) {
-      if (dataObj.type === 3 || dataObj.type === 8 || dataObj.type === 5) {
+      if (dataObj.type === 3 || dataObj.type === 8 || dataObj.type === 5 ) {
+        console.log(dataObj.type)
         if (dataObj.product_id) {
           return "--" + dataObj.product_id
         } else {
           return ""
         }
-      } else if (dataObj.type === 2) {
+      } else if (dataObj.type === 2 || dataObj.type === 7) {
         if (dataObj.router_pid) {
           return "--" + dataObj.router_pid
         } else {
