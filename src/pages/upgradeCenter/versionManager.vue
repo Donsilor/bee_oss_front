@@ -152,7 +152,8 @@ export default {
         5: "H5",
         7: "android_system",
         11: "route_app",
-        12: "video_app"
+        12: "video_app",
+        13: "旗舰版音箱--lua_app",
       },
       getGrayStatus: {
         0: "无",
@@ -232,7 +233,7 @@ export default {
         device: 3
       }
       for (let attr in dataObj) {
-        if (attr === "android" || attr === "android_pad" || attr === "ios" || attr === 'video_app' || attr === 'route_app') {
+        if (attr === "android" || attr === "android_pad" || attr === "ios" || attr === 'video_app' || attr === 'route_app' || attr === 'lua_app') {
           this.versionsFirst.tableData.push(dataObj[attr])
         } else {
           if (JSON.stringify(dataObj[attr]) === "{}") {
@@ -328,14 +329,14 @@ export default {
       this.$router.push({ path: `/main/versionManager/${dataObj.id}` })
     },
     getPidName(dataObj) {
+      console.log(dataObj.type)
       if (dataObj.type === 3 || dataObj.type === 8 || dataObj.type === 5 ) {
-        console.log(dataObj.type)
         if (dataObj.product_id) {
           return "--" + dataObj.product_id
         } else {
           return ""
         }
-      } else if (dataObj.type === 2 || dataObj.type === 7) {
+      } else if (dataObj.type === 2 || dataObj.type === 7 || dataObj.type === 13) {
         if (dataObj.router_pid) {
           return "--" + dataObj.router_pid
         } else {

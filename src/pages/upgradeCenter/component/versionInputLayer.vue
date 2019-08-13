@@ -3,8 +3,40 @@
     ref="importForm"
     :model="importForm"
     :rules="rulesImport"
-    label-width="8em"
+    label-width="10em"
   >
+    <el-form-item
+      v-if="!releasedFlag && inputType == 13"
+      label="版本号"
+      prop="version"
+    >
+      <div>
+        <el-input
+          v-model="versionList[0]"
+          class="unit"
+          min="0"
+          type="number"
+          @change="setVersion"
+        />
+        .
+        <el-input
+          v-model="versionList[1]"
+          class="unit"
+          min="0"
+          type="number"
+          @change="setVersion"
+        />
+        .
+        <el-input
+          v-model="versionList[2]"
+          class="unit"
+          min="0"
+          type="number"
+          @change="setVersion"
+        />
+      </div>
+    </el-form-item>
+
     <el-form-item
       label="版本title"
       prop="title"
@@ -53,14 +85,14 @@
     </el-form-item>
     <!-- H5，社区不显示 -->
     <el-form-item
-      v-if="inputType !== 5 && inputType !== 9 && inputType !== 10"
+      v-if="inputType !== 5 && inputType !== 9 && inputType !== 10 && inputType !== 13"
       label="升级数量限制"
     >
       <el-input v-model="importForm.upgrade_limit" />
       0或者空为不限制
     </el-form-item>
     <el-form-item
-      v-if="inputType!==9 && !releasedFlag"
+      v-if="inputType!==9 && !releasedFlag && inputType !== 13"
       label="是否限制规则"
     >
       <el-radio-group
@@ -77,7 +109,7 @@
     </el-form-item>
     <!-- 路由器版本 -->
     <el-form-item
-      v-if="(inputType !== 2 && inputType!==9 && inputType!==10 && inputType!==12) && !releasedFlag && importForm.selectRule"
+      v-if="(inputType !== 2 && inputType!==9 && inputType!==10 && inputType!==12 && inputType!==13) && !releasedFlag && importForm.selectRule"
       label="路由pid"
     >
       <el-select
@@ -96,7 +128,7 @@
     </el-form-item>
     <!-- 路由器版本 -->
     <el-form-item
-      v-if="(inputType !== 2 && inputType!==9 && inputType!==10 && inputType!==12) && !releasedFlag && importForm.selectRule"
+      v-if="(inputType !== 2 && inputType!==9 && inputType!==10 && inputType!==12 && inputType!==13) && !releasedFlag && importForm.selectRule"
       label="支持路由"
       prop="routersList"
     >
@@ -229,7 +261,7 @@
     </el-form-item>
 
     <el-form-item
-      v-if="!releasedFlag"
+      v-if="!releasedFlag && inputType !== 13"
       label="版本号"
       prop="version"
     >
@@ -239,16 +271,54 @@
         type="text"
       />
     </el-form-item>
+
     <el-form-item
       label="概要描述"
       prop="note"
     >
       <el-input
         v-model="importForm.note"
-        type="text"
+        type="textarea"
+        rows="3"
       />
     </el-form-item>
+
     <el-form-item
+      v-if="inputType === 13"
+      label="适用语音app版本"
+      prop="enableVersion"
+    >
+      <div>
+        <el-input
+          v-model="enableVersionList[0]"
+          class="unit"
+          min="0"
+          type="number"
+          @change="setEnableVersion"
+        />
+        .
+        <el-input
+          v-model="enableVersionList[1]"
+          class="unit"
+          min="0"
+          type="number"
+          @change="setEnableVersion"
+        />
+        .
+        <el-input
+          v-model="enableVersionList[2]"
+          class="unit"
+          min="0"
+          type="number"
+          @change="setEnableVersion"
+        />
+        及以上
+      </div>
+
+    </el-form-item>
+
+    <el-form-item
+      v-if="inputType !== 13"
       label="详细事项"
       prop="description"
     >
@@ -263,7 +333,8 @@
     >
       <el-input
         v-model="importForm.extra_note"
-        type="text"
+        type="textarea"
+        rows="3"
       />
     </el-form-item>
     <el-form-item
@@ -298,6 +369,7 @@
       >请先上传文件</span>
     </el-form-item>
     <el-form-item
+      v-if="inputType !== 13"
       label="上传img图片"
       prop="img_url_object"
     >
@@ -454,6 +526,9 @@ export default {
         upgrade_limit: "",
         rule: []
       },
+      versionList: ['', '', ''], // 拆分的版本号
+      enableVersionList: ['', '', ''],// 拆分的适用版本号
+
       rulesImport: {
         router_pid: [{ required: true, message: "请输入路由器pid" }],
         os_type: [{ required: true, message: "请选择os_type" }],
@@ -461,6 +536,8 @@ export default {
         title: [{ required: true, message: "请输入版本标题" }],
         description: [{ required: true, message: "请输入概要描述" }],
         note: [{ required: true, message: "请输入详细事项" }],
+        enableVersion: [{ required: true, message: "请输入适用语音app版本" }],
+
         extra_note: [{ required: false, message: "请输入详细事项" }],
         product_id: [{ required: true, message: "请输入子设备" }],
         routersList: [{ required: true, message: "请选择支持版本" }],
@@ -503,7 +580,9 @@ export default {
       fileTipsIfShow: false //文件未上传的提示：上传文件不能为空
     }
   },
-  computed: {},
+  computed: {
+
+  },
   watch: {
     "importForm.brand_id"(curVal, oldVal) {
       this.importForm.type_id = ""
@@ -529,8 +608,24 @@ export default {
         })
     }
   },
-  mounted() { },
+  mounted() {
+    console.log(this.inputType)
+  },
   methods: {
+    setVersion() {
+      if(this.versionList[0].trim() === ''  || this.versionList[1].trim() === '' || this.versionList[2].trim() === ''){
+        this.importForm.version = ''
+      } else {
+        this.importForm.version = this.versionList.join('.')
+      }
+    },
+    setEnableVersion() {
+      if(this.enableVersionList[0].trim() === ''  || this.enableVersionList[1].trim() === '' || this.enableVersionList[2].trim() === ''){
+        this.importForm.enableVersion = ''
+      } else {
+        this.importForm.enableVersion = this.enableVersionList.join('.')
+      }
+    },
     getSuccessNews: function(val) {
       if (val) {
         this.importForm.download_url_object = val.download_url_object
@@ -750,35 +845,44 @@ export default {
 
           let attrName = currentType === 2 ? "product_id" : "router_pid"
           let ruleName = currentType === 2 ? "productsList" : "routersList"
-          if (params.selectRule) {
-            if (currentType === 10) {
-              params.rules = params.appList.map(item => {
-                return {
-                  rule: item
-                }
-              })
-            } else {
-              params.rules = params[ruleName].map(item => {
-                let arr = item.split("--")
-                return {
-                  [attrName]: arr[0],
-                  rule: arr[1]
-                }
-              })
-            }
+          if( currentType === 13 ){
+            params.rules = [{ router_id: "*", rule: this.enableVersionList.join('.') }]
           } else {
-            if (currentType === 10) {
-              delete params.rules
+            if (params.selectRule) {
+              if (currentType === 10) {
+                params.rules = params.appList.map(item => {
+                  return {
+                    rule: item
+                  }
+                })
+              } else {
+                params.rules = params[ruleName].map(item => {
+                  let arr = item.split("--")
+                  return {
+                    [attrName]: arr[0],
+                    rule: arr[1]
+                  }
+                })
+              }
             } else {
-              params.rules = params[ruleName]
+              if (currentType === 10) {
+                delete params.rules
+              } else {
+                params.rules = params[ruleName]
+              }
             }
           }
+
           if (currentType !== 5) {
             delete params.os_type
           }
           switch (currentType) {
           case 1:
           case 11:
+          case 13:
+            params.os_type = this.os_type
+            delete params.enableVersion
+            break
           case 12:
             if (currentType == 12) {
               delete params.router_pid
@@ -937,5 +1041,8 @@ export default {
   line-height: 12px;
   margin-top: 0;
   display: block;
+}
+.unit{
+  width: 100px;
 }
 </style>

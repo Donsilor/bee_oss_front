@@ -505,7 +505,6 @@ export default {
         "method": "released_versions",
         "type": 7
       }).then(res => {
-        console.log('released_versions: ', res)
         this.osVersionList = res.result.map(item => {
           return {
             label: item.version,
@@ -564,7 +563,6 @@ export default {
     openVersionEdit(dataObj) {
       this.initBrandIDOptions()
       this.filterPopoverFlag = false
-      console.log('openVersionEdit: ', dataObj)
       let cur_os_type = ""
       if (dataObj.os_type) {
         switch (dataObj.os_type) {
@@ -955,8 +953,6 @@ export default {
       this.currentDataObj = dataObj //此操作是为了进入列表，进行各种操作时需要重新刷新列表
       this.inputType = dataObj.type
       this.os_type = dataObj.os_type || ""
-      console.log('getVersionHistory-------------')
-      console.log(this.os_type)
       this.secondTitle = this.getVersionTitle(dataObj)
       this.getVersionHistoryList(page, dataObj)
     },
