@@ -458,16 +458,16 @@ export default {
       type: namespace.TYPE,
       product: namespace.PRODUCT
     }),
-    currentName() {
-      let name = this.getTypeText(this.currentDataObj.type, this.currentDataObj.os_type) + " "
-      if (this.currentDataObj.product_id) {
-        name += this.currentDataObj.product_id
-      }
-      if (this.currentDataObj.router_pid) {
-        name += this.currentDataObj.router_pid
-      }
-      return name
-    }
+    // currentName() {
+    //   let name = this.getTypeText(this.currentDataObj.type, this.currentDataObj.os_type) + " "
+    //   if (this.currentDataObj.product_id) {
+    //     name += this.currentDataObj.product_id
+    //   }
+    //   if (this.currentDataObj.router_pid) {
+    //     name += this.currentDataObj.router_pid
+    //   }
+    //   return name
+    // }
   },
   watch: {
     filterPopoverFlag(curVal, oldVal) {
@@ -955,6 +955,8 @@ export default {
       this.currentDataObj = dataObj //此操作是为了进入列表，进行各种操作时需要重新刷新列表
       this.inputType = dataObj.type
       this.os_type = dataObj.os_type || ""
+      console.log('getVersionHistory-------------')
+      console.log(this.os_type)
       this.secondTitle = this.getVersionTitle(dataObj)
       this.getVersionHistoryList(page, dataObj)
     },

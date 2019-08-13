@@ -177,16 +177,16 @@ export default {
       type: namespace.TYPE,
       product: namespace.PRODUCT
     }),
-    currentName() {
-      let name = this.getTypeText(this.currentDataObj.type, this.currentDataObj.os_type) + " "
-      if (this.currentDataObj.product_id) {
-        name += this.currentDataObj.product_id
-      }
-      if (this.currentDataObj.router_pid) {
-        name += this.currentDataObj.router_pid
-      }
-      return name
-    }
+    // currentName() {
+    //   let name = this.getTypeText(this.currentDataObj.type, this.currentDataObj.os_type) + " "
+    //   if (this.currentDataObj.product_id) {
+    //     name += this.currentDataObj.product_id
+    //   }
+    //   if (this.currentDataObj.router_pid) {
+    //     name += this.currentDataObj.router_pid
+    //   }
+    //   return name
+    // }
   },
   mounted() {
     this.$store.dispatch({

@@ -391,7 +391,7 @@ export default {
     "addEditFlag",
     "editDataObj",
     "releasedFlag",
-    "osType",
+    "os_type",
     "activeName",
     "osVersionList"
   ],
@@ -646,10 +646,10 @@ export default {
 
       // if (this.os_type !== "ios" && !this.releasedFlag) {
       try {
-        this.$refs["importForm"].resetFields()
-        this.$refs["uploadFileImg"].clearFiles()
+        if(this.$refs["importForm"]) this.$refs["importForm"].resetFields()
+        if(this.$refs["uploadFileImg"]) this.$refs["uploadFileImg"].clearFiles()
         this.fileTipsIfShow = false
-        this.$refs["uploadFile"].clearFiles()
+        if(this.$refs["uploadFile"]) this.$refs["uploadFile"].clearFiles()
       } catch (e) { console.log(e) }
       // }
 
