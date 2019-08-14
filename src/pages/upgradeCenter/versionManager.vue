@@ -337,13 +337,15 @@ export default {
         } else {
           return ""
         }
-      } else if (dataObj.type === 2 || dataObj.type === 7 || dataObj.type === 13) {
+      } else if (dataObj.type === 2 || dataObj.type === 7) {
         if (dataObj.router_pid) {
           return "--" + dataObj.router_pid
         } else {
           return ""
         }
-      } else {
+      } else if(dataObj.type === 13) {
+        return "--lua_app"
+      }else {
         return ""
       }
     },

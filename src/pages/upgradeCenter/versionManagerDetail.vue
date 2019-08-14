@@ -59,15 +59,10 @@
         :label="item.label"
         :width="'auto'"
       >
-        <template slot-scope="scope">
+        <template slot-scope="scope" >
           <div v-if="item.prop == 'type'">
             {{ getTypeText(scope.row.type, scope.row.os_type) }}
           </div>
-
-          <div v-if="item.prop == 'rule'">
-            {{ scope.row.rule }}
-          </div>
-          
           <div v-else-if="item.prop == 'status'">
             {{ getStatusText(scope.row.status) }}
           </div>
@@ -954,7 +949,12 @@ export default {
             versions_children_json.tableData = temp
           }
           obj.versionList = Object.assign({}, versions_children_json)
-          console.log('versionList= ' + obj.versionList)
+          // 适用版app 字段显隐
+          if(this.inputType === 13 && obj.versionList.tableColumn.length == 6){
+            obj.versionList.tableColumn.push({ "prop": "rule", "label": "适用语音APP版本" })
+          }else if(obj.versionList.tableColumn.length > 6) {
+            obj.versionList.tableColumn.pop()
+          }
           obj.totalItem_two = currentData.page.total
         }
       })

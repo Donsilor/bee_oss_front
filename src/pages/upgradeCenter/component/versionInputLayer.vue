@@ -13,6 +13,7 @@
       <div>
         <el-input
           v-model="versionList[0]"
+          :disabled="!addEditFlag"
           class="unit"
           min="0"
           type="number"
@@ -21,6 +22,7 @@
         .
         <el-input
           v-model="versionList[1]"
+          :disabled="!addEditFlag"
           class="unit"
           min="0"
           type="number"
@@ -29,6 +31,7 @@
         .
         <el-input
           v-model="versionList[2]"
+          :disabled="!addEditFlag"
           class="unit"
           min="0"
           type="number"
@@ -682,7 +685,8 @@ export default {
         size: "",
         download_url_object: "",
         audit_switch: 0,
-        upgrade_limit: ""
+        upgrade_limit: "",
+        status: ""
       }
       if (this.inputType === 2) {
         attrObj["router_pid"] = ""
@@ -739,8 +743,13 @@ export default {
       if (this.inputType === 13) {
         thisForm.enableVersion = this.editDataObj.rule
         this.enableVersionList = this.editDataObj.rule.split('.')
+
+        thisForm.version = this.editDataObj.version
+        this.versionList = this.editDataObj.version.split('.')
       }
 
+      console.log('------editData--------')
+      console.log(this.editData)
       // 由于接口设计，要求编辑的时候带上详情的几个字段
       for (let attr in this.editData) {
         this.editData[attr] = this.editDataObj[attr]
@@ -962,6 +971,7 @@ export default {
 
           if (!this.addEditFlag) {
             for (let attr in this.editData) {
+              if(attr == 'status' && this.inputType == 13) continue
               params[attr] = this.editData[attr]
             }
           }
@@ -974,6 +984,8 @@ export default {
             this.fileTipsIfShow = true
             return
           }
+          console.log('------------submit----------')
+          console.log(params)
           obj.$emit("importSubmitParent", params)
         } else {
           return false

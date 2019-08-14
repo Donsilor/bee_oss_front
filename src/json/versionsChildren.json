@@ -3,7 +3,6 @@
 		{ "prop": "title", "label": "版本Title", "width": 239 },
 		{ "prop": "version", "label": "版本号" },
     { "prop": "release_time", "label": "发布时间" },
-		{ "prop": "rule", "label": "适用语音APP版本" },
 		{ "prop": "status", "label": "版本状态" },
 		{ "prop": "gray", "label": "名单标识" },
 		{ "prop": "force", "label": "是否强制升级" }
