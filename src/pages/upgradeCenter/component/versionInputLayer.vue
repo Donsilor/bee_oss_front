@@ -337,6 +337,7 @@
       />
     </el-form-item>
     <el-form-item
+      v-if="inputType !== 13"
       label="备注"
       prop="extra_note"
     >
@@ -542,11 +543,11 @@ export default {
       rulesImport: {
         router_pid: [{ required: true, message: "请输入路由器pid" }],
         os_type: [{ required: true, message: "请选择os_type" }],
-        version: [{ required: true, message: "请输入版本号" }],
+        version: [{ required: true, message: "请输入版本号", trigger: 'blur' }],
         title: [{ required: true, message: "请输入版本标题" }],
         description: [{ required: true, message: "请输入概要描述" }],
         note: [{ required: true, message: "请输入详细事项" }],
-        enableVersion: [{ required: true, message: "请输入适用语音app版本" }],
+        enableVersion: [{ required: true, message: "请输入适用语音app版本", trigger: 'blur'}],
         status: [{ required: true, message: "请选择是否启用" }],
 
         extra_note: [{ required: false, message: "请输入详细事项" }],
@@ -586,7 +587,8 @@ export default {
       os_type_text: {
         1: "android_app",
         4: "ios_app",
-        6: "android_pad"
+        6: "android_pad",
+        13: "lua_app"
       },
       fileTipsIfShow: false //文件未上传的提示：上传文件不能为空
     }
@@ -733,6 +735,11 @@ export default {
       }
 
       thisForm.rule = thisForm.rule || []
+      // 版本号拆分
+      if (this.inputType === 13) {
+        thisForm.enableVersion = this.editDataObj.rule
+        this.enableVersionList = this.editDataObj.rule.split('.')
+      }
 
       // 由于接口设计，要求编辑的时候带上详情的几个字段
       for (let attr in this.editData) {
@@ -749,7 +756,6 @@ export default {
         })
         this.rulesImport["product_id"] = [{ required: true, message: "请输入子设备" }]
       }
-
       // if (this.os_type !== "ios" && !this.releasedFlag) {
       try {
         if(this.$refs["importForm"]) this.$refs["importForm"].resetFields()
@@ -781,6 +787,10 @@ export default {
           form[attr] = ""
           break
         }
+      }
+      if(this.inputType === 13 ) {
+        this.enableVersionList = ['', '', '']
+        form.enableVersion = ''
       }
       this.getAppReleasedVersionList()
       this.fileListObj = []

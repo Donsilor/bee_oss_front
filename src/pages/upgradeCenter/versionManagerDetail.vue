@@ -432,7 +432,8 @@ export default {
         4: "ios_app",
         6: "android_pad",
         11: "route_app",
-        12: "video_app"
+        12: "video_app",
+        13: "lua_app",
       },
       device_type_text: {
         2: "路由器",
@@ -566,7 +567,6 @@ export default {
       }
     },
     openVersionEdit(dataObj) {
-      console.log('111111111111--------')
       this.initBrandIDOptions()
       this.filterPopoverFlag = false
       let cur_os_type = ""
@@ -586,6 +586,9 @@ export default {
           break
         case 12:
           cur_os_type = "video_app"
+          break
+        case 13:
+          cur_os_type = "lua_app"
           break
         default:
           cur_os_type = dataObj.os_type

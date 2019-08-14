@@ -144,7 +144,8 @@ export default {
       os_type_text: {
         1: "android_app",
         4: "ios_app",
-        6: "android_pad"
+        6: "android_pad",
+        13: "lua_app"
       },
       device_type_text: {
         2: "路由器",

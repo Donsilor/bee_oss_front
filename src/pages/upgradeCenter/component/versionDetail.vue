@@ -210,7 +210,8 @@ export default {
         4: "ios_app",
         6: "android_pad",
         11: "route_app",
-        12: "video_app"
+        12: "video_app",
+        13: "lua_app",
       }
     }
   },
