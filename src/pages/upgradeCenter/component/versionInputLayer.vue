@@ -116,6 +116,7 @@
     >
       <el-select
         v-model="importForm.router_pid"
+        :disabled="inputType == 7"
         style="width: 100%;"
         placeholder="路由pid"
         @change="routerPidChange"
@@ -473,6 +474,7 @@ export default {
     "routerPidList",
     "inputType",
     "product",
+    "router_pid",
     "addEditFlag",
     "editDataObj",
     "releasedFlag",
@@ -565,7 +567,7 @@ export default {
       appVersionList: [],
       subsetProduct: [],
       router: [],
-      router_pid: "",
+      // router_pid: "",
       corsUrls: getCorsUrl() + "/oss_file_upload",
       editData: {
         user_id: "",
@@ -801,6 +803,10 @@ export default {
         this.enableVersionList = ['', '', '']
         form.enableVersion = ''
       }
+      if(this.inputType === 7) {
+        this.importForm.router_pid = this.router_pid
+        this.routerPidChange(this.router_pid)
+      }
       this.getAppReleasedVersionList()
       this.fileListObj = []
     },
@@ -904,6 +910,11 @@ export default {
                 params.rules = params[ruleName]
               }
             }
+          }
+
+
+          if( currentType === 7 && !obj.importForm["selectRule"]){
+            params.rules = [{ router_pid: this.router_pid, rule: "*" }]
           }
 
           if (currentType !== 5) {

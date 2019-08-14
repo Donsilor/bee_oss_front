@@ -222,6 +222,7 @@
         :input-type="inputType"
         :product="product"
         :type="type"
+        :router_pid="router_pid"
         :os_type="os_type"
         :add-edit-flag="addEditFlag"
         :edit-data-obj="editDataObj"
@@ -442,7 +443,8 @@ export default {
         2: "黑名单",
         3: "全量"
       },
-      activeName: "devices"
+      activeName: "devices",
+      router_pid: ''
     }
   },
   ...mapActions([
@@ -492,6 +494,7 @@ export default {
 
     try {
       const dataObj = JSON.parse(sessionStorage.getItem('CurrentAppInfo'))
+      this.router_pid = dataObj.router_pid || ''
       this.getVersionHistory(dataObj)
     } catch (e) {
       this.$router.push({ path: '/main/versionManager' })
