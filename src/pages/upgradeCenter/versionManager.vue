@@ -153,7 +153,7 @@ export default {
         7: "android_system",
         11: "route_app",
         12: "video_app",
-        13: "旗舰版音箱--lua_app",
+        13: "旗舰版音箱",
       },
       getGrayStatus: {
         0: "无",

@@ -97,7 +97,6 @@
     >
       <el-radio-group
         v-model="importForm.selectRule"
-        @change="ruleChange"
       >
         <el-radio :label="1">
           是
@@ -318,6 +317,16 @@
     </el-form-item>
 
     <el-form-item
+      v-if="inputType === 13"
+      prop="status"
+      label="是否启用">
+      <el-radio-group v-model="importForm.status">
+        <el-radio :label="1">是</el-radio>
+        <el-radio :label="0">否</el-radio>
+      </el-radio-group>
+    </el-form-item>
+
+    <el-form-item
       v-if="inputType !== 13"
       label="详细事项"
       prop="description"
@@ -524,6 +533,7 @@ export default {
         os_type: "",
         appList: [],
         upgrade_limit: "",
+        status: 1, // 1 启用 0 禁用
         rule: []
       },
       versionList: ['', '', ''], // 拆分的版本号
@@ -537,6 +547,7 @@ export default {
         description: [{ required: true, message: "请输入概要描述" }],
         note: [{ required: true, message: "请输入详细事项" }],
         enableVersion: [{ required: true, message: "请输入适用语音app版本" }],
+        status: [{ required: true, message: "请选择是否启用" }],
 
         extra_note: [{ required: false, message: "请输入详细事项" }],
         product_id: [{ required: true, message: "请输入子设备" }],
@@ -763,6 +774,9 @@ export default {
         case "selectRule":
           form[attr] = 1
           break
+        case "status":
+          form[attr] = 1
+          break
         default:
           form[attr] = ""
           break
@@ -846,7 +860,7 @@ export default {
           let attrName = currentType === 2 ? "product_id" : "router_pid"
           let ruleName = currentType === 2 ? "productsList" : "routersList"
           if( currentType === 13 ){
-            params.rules = [{ router_id: "*", rule: this.enableVersionList.join('.') }]
+            params.rules = [{ router_pid: "*", rule: this.enableVersionList.join('.') }]
           } else {
             if (params.selectRule) {
               if (currentType === 10) {
@@ -881,6 +895,7 @@ export default {
           case 11:
           case 13:
             params.os_type = this.os_type
+            params.method = this.addEditFlag ? "create_app_version" : "update_app_version"
             delete params.enableVersion
             break
           case 12:

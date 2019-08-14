@@ -63,6 +63,11 @@
           <div v-if="item.prop == 'type'">
             {{ getTypeText(scope.row.type, scope.row.os_type) }}
           </div>
+
+          <div v-if="item.prop == 'rule'">
+            {{ scope.row.rule }}
+          </div>
+          
           <div v-else-if="item.prop == 'status'">
             {{ getStatusText(scope.row.status) }}
           </div>
@@ -561,6 +566,7 @@ export default {
       }
     },
     openVersionEdit(dataObj) {
+      console.log('111111111111--------')
       this.initBrandIDOptions()
       this.filterPopoverFlag = false
       let cur_os_type = ""
@@ -945,6 +951,7 @@ export default {
             versions_children_json.tableData = temp
           }
           obj.versionList = Object.assign({}, versions_children_json)
+          console.log('versionList= ' + obj.versionList)
           obj.totalItem_two = currentData.page.total
         }
       })

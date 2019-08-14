@@ -5,86 +5,71 @@
         <el-button @click="back">
           返回
         </el-button>
-        <el-button
+        <el-button 
           type="primary"
-          @click="addAppVer"
-        >
+          @click="addAppVer">
           录入版本
         </el-button>
       </el-col>
     </el-row>
 
     <el-table :data="list">
-      <el-table-column
+      <el-table-column 
         label="版本标题"
-        prop="title"
-      />
-      <el-table-column
+        prop="title" />
+      <el-table-column 
         label="版本号"
-        prop="version"
-      />
-      <el-table-column
+        prop="version" />
+      <el-table-column 
         :formatter="(row, col, val)=>formatValue('force', val)"
         label="强制升级"
-        prop="force"
-      />
-      <el-table-column
+        prop="force" />
+      <el-table-column 
         :formatter="(row, col, val)=>formatValue('release_type', val)"
         label="发布类型"
-        prop="release_type"
-      />
-      <el-table-column
+        prop="release_type" />
+      <el-table-column 
         label="升级数量限制"
-        prop="upgrade_limit"
-      />
-      <el-table-column
+        prop="upgrade_limit" />
+      <el-table-column 
         label="升级成功数"
-        prop="current_upgrade_count"
-      />
-      <el-table-column
+        prop="current_upgrade_count" />
+      <el-table-column 
         label="创建时间"
-        prop="created_at"
-      />
-      <el-table-column
+        prop="created_at" />
+      <el-table-column 
         label="更新时间"
-        prop="updated_at"
-      />
-      <el-table-column
+        prop="updated_at" />
+      <el-table-column 
         width="300px"
-        label="操作"
-      >
+        label="操作">
         <template slot-scope="scope">
           <p style="margin-bottom: 5px;">
-            <el-button
+            <el-button 
               size="mini"
-              @click="view(scope.row)"
-            >
+              @click="view(scope.row)">
               查看
             </el-button>
 
-            <el-button
+            <el-button 
               size="mini"
-              @click="edit(scope.row)"
-            >
+              @click="edit(scope.row)">
               编辑
             </el-button>
-            <el-button
+            <el-button 
               size="mini"
-              @click="del(scope.row)"
-            >
+              @click="del(scope.row)">
               删除
             </el-button>
           </p>
-          <el-button
+          <el-button 
             size="mini"
-            @click="setConf(scope.row)"
-          >
+            @click="setConf(scope.row)">
             升级设置
           </el-button>
-          <el-button
+          <el-button 
             size="mini"
-            @click="setStatus(scope.row)"
-          >
+            @click="setStatus(scope.row)">
             {{ scope.row.status===1?'禁用':'启用' }}
           </el-button>
         </template>
@@ -92,162 +77,135 @@
     </el-table>
 
     <div class="page-line">
-      <el-pagination
+      <el-pagination 
         :total="total"
         :page-size="limit"
         :current-page.sync="currentPage"
         small
         layout="prev, pager, next"
-        @current-change="onPageChange"
-      />
+        @current-change="onPageChange" />
     </div>
 
     <!-- 新增,编辑 -->
-    <el-dialog
+    <el-dialog 
       :visible.sync="dialogVisible"
       :title="isEdit?'编辑':'新增'"
-      @close="onClose"
-    >
-      <el-form
+      @close="onClose">
+      <el-form 
         ref="ruleForm"
         :model="form"
         :rules="rules"
-        label-width="150px"
-      >
+        label-width="150px">
         <el-row>
           <!-- <el-col :span="12"> -->
-          <el-form-item
+          <el-form-item 
             label="版本Title"
-            prop="title"
-          >
-            <el-input
+            prop="title">
+            <el-input 
               v-model="form.title"
-              placeholder=""
-            />
+              placeholder="" />
           </el-form-item>
 
-          <el-form-item
+          <el-form-item 
             label="版本号"
-            prop="version"
-          >
-            <el-input
+            prop="version">
+            <el-input 
               v-model="form.version"
               :disabled="isEdit"
-              placeholder=""
-            />
+              placeholder="" />
           </el-form-item>
 
-          <el-form-item
+          <el-form-item 
             label="升级描述"
-            prop="description"
-          >
-            <el-input
+            prop="description">
+            <el-input 
               :rows="3"
               v-model="form.description"
               type="textarea"
-              placeholder=""
-            />
+              placeholder="" />
           </el-form-item>
         </el-row>
 
-        <el-form-item
+        <el-form-item 
           v-if="appInfo.os_type!=1"
           label="appstore链接"
-          prop="download_url_object"
-        >
-          <el-input
+          prop="download_url_object">
+          <el-input 
             v-model="form.download_url_object"
-            type="text"
-          />
+            type="text" />
         </el-form-item>
 
-        <el-form-item
+        <el-form-item 
           v-if="appInfo.os_type==1"
           label="上传固件包"
-          prop="download_url_object"
-        >
-          <upload-file
+          prop="download_url_object">
+          <upload-file 
             ref="uploadFile"
             :file-list="fileListObj"
             class="newButtonStyle"
-            @uploadSuccess="getSuccessNews"
-          />
+            @uploadSuccess="getSuccessNews" />
         </el-form-item>
 
-        <el-form-item
+        <el-form-item 
           label="上传img图片"
-          prop="img_url_object"
-        >
-          <el-upload
+          prop="img_url_object">
+          <el-upload 
             ref="uploadFileImg"
             :action="corsUrls"
             :on-success="getUploadDataImg"
             :data="uploadObj"
             :limit="1"
             :file-list="fileListImg"
-            class="upload-demo"
-          >
-            <el-button
+            class="upload-demo">
+            <el-button 
               size="small"
-              type="primary"
-            >
+              type="primary">
               点击上传
             </el-button>
           </el-upload>
         </el-form-item>
 
-        <el-form-item
+        <el-form-item 
           label="是否强制升级"
-          prop="force"
-        >
-          <el-select
+          prop="force">
+          <el-select 
             v-model="form.force"
-            placeholder="请选择"
-          >
-            <el-option
+            placeholder="请选择">
+            <el-option 
               :value="1"
-              label="是"
-            />
-            <el-option
+              label="是" />
+            <el-option 
               :value="0"
-              label="否"
-            />
+              label="否" />
           </el-select>
         </el-form-item>
 
-        <el-form-item
+        <el-form-item 
           label="升级数量限制"
-          prop="upgrade_limit"
-        >
+          prop="upgrade_limit">
           <el-input v-model="form.upgrade_limit" />
         </el-form-item>
 
-        <el-form-item
+        <el-form-item 
           label="版本状态"
-          prop="status"
-        >
-          <el-select
+          prop="status">
+          <el-select 
             v-model="form.status"
-            placeholder="请选择"
-          >
-            <el-option
+            placeholder="请选择">
+            <el-option 
               :value="1"
-              label="启用"
-            />
-            <el-option
+              label="启用" />
+            <el-option 
               :value="0"
-              label="停用"
-            />
+              label="停用" />
           </el-select>
         </el-form-item>
-        <el-form-item
+        <el-form-item 
           label="备注"
-          prop="note"
-        >
-          <el-input
+          prop="note">
+          <el-input 
             v-model="form.note"
-            placeholder=""
-          />
+            placeholder="" />
         </el-form-item>
 
         <el-form-item>
@@ -259,39 +217,32 @@
     </el-dialog>
 
     <!-- 升级设置 -->
-    <el-dialog
+    <el-dialog 
       :visible.sync="pushBoxFlag"
-      title="升级设置"
-    >
+      title="升级设置">
       <el-form label-width="100px">
-        <el-form-item
+        <el-form-item 
           label="升级类型"
-          prop="push_type"
-        >
-          <el-select
+          prop="push_type">
+          <el-select 
             v-model="pushForm.release_type"
-            placeholder="选择类型"
-          >
-            <el-option
+            placeholder="选择类型">
+            <el-option 
               :value="0"
-              label="全量升级"
-            />
-            <el-option
+              label="全量升级" />
+            <el-option 
               :value="1"
-              label="白名单"
-            />
-            <el-option
+              label="白名单" />
+            <el-option 
               :value="2"
-              label="黑名单"
-            />
+              label="黑名单" />
           </el-select>
         </el-form-item>
 
         <el-row v-if="pushForm.release_type">
-          <el-form-item
+          <el-form-item 
             label="推送客户端"
-            prop="push_type"
-          >
+            prop="push_type">
             <el-radio-group v-model="pushForm.terminal_type">
               <el-radio :label="1">
                 输入uuid
@@ -302,16 +253,14 @@
             </el-radio-group>
           </el-form-item>
         </el-row>
-        <el-form-item
+        <el-form-item 
           v-if="pushForm.release_type && pushForm.terminal_type"
           label="uuid_list"
-          prop="uuid_list"
-        >
+          prop="uuid_list">
           <el-row :gutter="24">
-            <el-col
+            <el-col 
               :span="17"
-              style="padding-left:0"
-            >
+              style="padding-left:0">
               <el-input v-model="pushForm.uuid_list" />
             </el-col>
           </el-row>
@@ -319,28 +268,24 @@
             <span style="font-size: 12px; color: #999">可输入多个uuid，用逗号隔开</span>
           </el-row>
         </el-form-item>
-        <el-form-item
+        <el-form-item 
           v-if="pushForm.release_type && !pushForm.terminal_type"
           label="uuid_csv"
-          prop="uuid_csv"
-        >
+          prop="uuid_csv">
           <el-row :gutter="24">
-            <el-col
+            <el-col 
               :span="17"
-              style="padding-left:0"
-            >
-              <el-upload
+              style="padding-left:0">
+              <el-upload 
                 ref="uploadFile"
                 :action="uuid_upload"
                 :data="uploadObj"
                 :on-success="getUploadDataUUid"
                 :limit="1"
-                class="upload-demo"
-              >
-                <el-button
+                class="upload-demo">
+                <el-button 
                   size="small"
-                  type="primary"
-                >
+                  type="primary">
                   点击上传
                 </el-button>
               </el-upload>
@@ -348,10 +293,9 @@
           </el-row>
         </el-form-item>
         <el-form-item>
-          <el-button
+          <el-button 
             type="primary"
-            @click="pushUpdateForm('pushForm')"
-          >
+            @click="pushUpdateForm('pushForm')">
             确定
           </el-button>
         </el-form-item>
@@ -359,10 +303,9 @@
     </el-dialog>
 
     <!-- 详情 -->
-    <el-dialog
+    <el-dialog 
       :visible.sync="detailDialogVisible"
-      :title="'详情 - '+currentRow.title"
-    >
+      :title="'详情 - '+currentRow.title">
       <el-row>
         <el-col :span="12">
           <p>版本号：{{ currentRow.version }}</p>
@@ -390,20 +333,18 @@
       </el-row>
       <el-row style="padding: 20px 0">
         <el-table :data="uuidList">
-          <el-table-column
+          <el-table-column 
             prop="app_uuid"
-            label="app_uuid"
-          />
+            label="app_uuid" />
         </el-table>
         <div class="page-line">
-          <el-pagination
+          <el-pagination 
             :total="uuidsTotal"
             :page-size="5"
             :current-page.sync="uuidsCurrentPage"
             small
             layout="prev, pager, next"
-            @current-change="onUuidPageChange"
-          />
+            @current-change="onUuidPageChange" />
         </div>
       </el-row>
     </el-dialog>
