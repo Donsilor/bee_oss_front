@@ -315,6 +315,14 @@
           type="number"
           @change="setEnableVersion"
         />
+        .
+        <el-input
+          v-model="enableVersionList[3]"
+          class="unit"
+          min="0"
+          type="number"
+          @change="setEnableVersion"
+        />
         及以上
       </div>
 
@@ -374,6 +382,7 @@
       <upload-file
         ref="uploadFile"
         :file-list="fileListObj"
+        :valid-file-name="validFileName"
         class="newButtonStyle"
         @uploadSuccess="getSuccessNews"
       />
@@ -407,7 +416,9 @@
         </el-button>
       </el-upload>
     </el-form-item>
+
     <el-form-item
+      v-if="inputType !== 13"
       label="是否强制升级"
       prop="force"
     >
@@ -543,7 +554,7 @@ export default {
         rule: []
       },
       versionList: ['', '', ''], // 拆分的版本号
-      enableVersionList: ['', '', ''],// 拆分的适用版本号
+      enableVersionList: ['', '', '', ''],// 拆分的适用版本号
 
       rulesImport: {
         router_pid: [{ required: true, message: "请输入路由器pid" }],
@@ -630,6 +641,20 @@ export default {
     console.log(this.inputType)
   },
   methods: {
+    /*
+    * 云平台存放的文件名格式：厂商编码_设备编码_Lua版本号_App最低版本号_日期.后缀（示例：HDKJ_0210_V0.1.0.0_V0.9.3.3_20190813.zip）
+    * 各字段的位数：4、4、8、8、8
+    * 特别地，恒大科技厂商编码HDKJ，旗舰版音箱、标准版音箱的设备编码分别为0210、0220
+    **/
+    validFileName(fileName) {
+      let name = fileName.substr(0,fileName.lastIndexOf("."))
+      let extName = fileName.substr(fileName.lastIndexOf(".") + 1).toLowerCase()
+      let nameList = name.split('_')
+      if(extName !== 'zip') return false
+      if(nameList[0].toLowerCase() !== 'HDKJ' || nameList[1] !=='0210') return false
+      if(nameList[2].length !==8 || nameList[3].length !==8 || nameList[4].length !==8)  return false
+      return true
+    },
     setVersion() {
       if(this.versionList[0].trim() === ''  || this.versionList[1].trim() === '' || this.versionList[2].trim() === ''){
         this.importForm.version = ''
@@ -638,7 +663,7 @@ export default {
       }
     },
     setEnableVersion() {
-      if(this.enableVersionList[0].trim() === ''  || this.enableVersionList[1].trim() === '' || this.enableVersionList[2].trim() === ''){
+      if(this.enableVersionList[0].trim() === ''  || this.enableVersionList[1].trim() === '' || this.enableVersionList[2].trim() === ''|| this.enableVersionList[3].trim() === ''){
         this.importForm.enableVersion = ''
       } else {
         this.importForm.enableVersion = this.enableVersionList.join('.')
@@ -800,9 +825,11 @@ export default {
         }
       }
       if(this.inputType === 13 ) {
-        this.enableVersionList = ['', '', '']
+        this.enableVersionList = ['', '', '', '']
         form.enableVersion = ''
       }
+
+      // adnroid system 指定路由器id 并且不可修改
       if(this.inputType === 7) {
         this.importForm.router_pid = this.router_pid
         this.routerPidChange(this.router_pid)
@@ -912,7 +939,7 @@ export default {
             }
           }
 
-
+          // adnroid system 指定路由器id
           if( currentType === 7 && !obj.importForm["selectRule"]){
             params.rules = [{ router_pid: this.router_pid, rule: "*" }]
           }
