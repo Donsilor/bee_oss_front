@@ -651,7 +651,7 @@ export default {
       let extName = fileName.substr(fileName.lastIndexOf(".") + 1).toLowerCase()
       let nameList = name.split('_')
       if(extName !== 'zip') return false
-      if(nameList[0].toLowerCase() !== 'HDKJ' || nameList[1] !==4) return false
+      if(nameList[0].toLowerCase() !== 'hdkj' || nameList[1] !==4) return false
       if(nameList[2].length !==8 || nameList[3].length !==8 || nameList[4].length !==8)  return false
       return true
     },
