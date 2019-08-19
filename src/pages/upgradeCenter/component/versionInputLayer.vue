@@ -383,6 +383,7 @@
         ref="uploadFile"
         :file-list="fileListObj"
         :valid-file-name="validFileName"
+        :input-type="inputType"
         class="newButtonStyle"
         @uploadSuccess="getSuccessNews"
       />

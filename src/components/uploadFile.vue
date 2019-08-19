@@ -77,7 +77,7 @@ import axios from "axios"
 import * as URL from "~/lib/api"
 
 export default {
-  props: ['fileList', 'className', 'validFileName'],
+  props: ['fileList', 'className', 'validFileName', 'inputType'],
   data() {
     return {
       isNotUpload: true,
@@ -125,7 +125,7 @@ export default {
       this.zeroFile()
       let file = e.target.files[0]
       this.file_name = file.name || ""
-      if(typeof this.validFileName == 'function' && !this.validFileName(this.file_name)){
+      if(this.inputType == 13 && typeof this.validFileName == 'function' && !this.validFileName(this.file_name)){
         return this.$message({
           message: '文件名,格式不对！',
           type: 'warning'
