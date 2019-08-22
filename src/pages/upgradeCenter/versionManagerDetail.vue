@@ -58,6 +58,7 @@
         :prop="item.prop"
         :label="item.label"
         :width="'auto'"
+        align="center"
       >
         <template slot-scope="scope" >
           <div v-if="item.prop == 'type'">
@@ -76,7 +77,7 @@
             {{ getGrayStatus[scope.row.gray] }}
           </div>
           <div v-else-if="item.prop === 'release_time'">
-            {{ formatTime(scope.row['release_time']) }}
+            {{ formatTime(scope.row['created_at']) }}
           </div>
           <div v-else>
             {{ scope.row[item.prop] }}
@@ -87,6 +88,7 @@
         v-if="inputType == 13"
         :width="'auto'"
         prop="rule"
+        align="center"
         label="适用语音APP版本">
         <template slot-scope="scope">
           <div>
