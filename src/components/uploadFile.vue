@@ -21,7 +21,7 @@
       class="successObj"
     >
       <p class="objText">
-        {{ fileList[0].name }}
+        {{ fileList[0].name[10] === '/' ? fileList[0].name.slice(11) : fileList[0].name }}
       </p>
     </div>
 
@@ -33,7 +33,7 @@
         v-if="back_file_name"
         class="objText"
       >
-        {{ back_file_name }}
+        {{ back_file_name[10] === '/' ? back_file_name.slice(11) : back_file_name }}
       </p>
       <P
         class="closeImg"
@@ -102,7 +102,9 @@ export default {
   mounted() { },
   methods: {
     clearFiles() {
+      this.$refs.fileGet.value = ""
       this.isNotUpload = true
+      this.back_file_name = ''
       this.zeroFile()
     },
     zeroFile() {
@@ -116,13 +118,15 @@ export default {
       this.shard_index_list = []
       this.file_md5 = ""
       this.dealCount = ""
-      this.success = false
+      this.success = this.back_file_name ? true : false
       this.showStatus = false
       this.showAgainButton = false
-      this.back_file_name = ""
+      this.back_file_name = this.back_file_name ? this.back_file_name : ''
     },
     fileUpLoad: function(e) {
       this.zeroFile()
+      console.log(e.target.files[0])
+      if(!e.target.files[0]) return
       let file = e.target.files[0]
       this.file_name = file.name || ""
       if(this.inputType == 13 && typeof this.validFileName == 'function' && !this.validFileName(this.file_name)){
@@ -369,6 +373,7 @@ export default {
       this.$refs.fileGet.click.call(this.$refs.fileGet, this.$refs.fileGet.$event)
     },
     cutFile: function() {
+      this.back_file_name = ''
       this.zeroFile()
       this.$refs.fileGet.value = ""
       this.$emit("uploadSuccess", { download_file_md5: "", download_url_object: "", size: 0 })
@@ -397,6 +402,7 @@ export default {
   background-color: #f4f4f8;
 }
 .chooseFileButton {
+  height: 40px !important;
   width: 90px;
   position: relative;
 }
@@ -434,6 +440,9 @@ export default {
       height: 12px;
     }
   }
+}
+.newButtonStyle .chooseFileButton span {
+  line-height: 20px !important;
 }
 // .deal{
 // 	position: fixed;

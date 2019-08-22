@@ -11,30 +11,36 @@
       prop="version"
     >
       <div>
-        <el-input
+        <el-input-number
           v-model="versionList[0]"
           :disabled="!addEditFlag"
+          :min="0"
+          :max="99"
+          :precision="0"
+          :controls="false"
           class="unit"
-          min="0"
-          type="number"
           @change="setVersion"
         />
         .
-        <el-input
+        <el-input-number
           v-model="versionList[1]"
           :disabled="!addEditFlag"
+          :min="0"
+          :max="99"
+          :precision="0"
+          :controls="false"
           class="unit"
-          min="0"
-          type="number"
           @change="setVersion"
         />
         .
-        <el-input
+        <el-input-number
           v-model="versionList[2]"
           :disabled="!addEditFlag"
+          :min="0"
+          :max="99"
+          :precision="0"
+          :controls="false"
           class="unit"
-          min="0"
-          type="number"
           @change="setVersion"
         />
       </div>
@@ -47,6 +53,7 @@
       <el-input
         v-model="importForm.title"
         type="text"
+        maxlength="20"
       />
     </el-form-item>
     <el-form-item
@@ -283,6 +290,7 @@
         v-model="importForm.note"
         type="textarea"
         rows="3"
+        maxlength="200"
       />
     </el-form-item>
 
@@ -292,35 +300,43 @@
       prop="enableVersion"
     >
       <div>
-        <el-input
+        <el-input-number
           v-model="enableVersionList[0]"
+          :min="0"
+          :max="99"
+          :precision="0"
+          :controls="false"
           class="unit"
-          min="0"
-          type="number"
           @change="setEnableVersion"
         />
         .
-        <el-input
+        <el-input-number
           v-model="enableVersionList[1]"
+          :min="0"
+          :max="99"
+          :precision="0"
+          :controls="false"
           class="unit"
-          min="0"
-          type="number"
           @change="setEnableVersion"
         />
         .
-        <el-input
+        <el-input-number
           v-model="enableVersionList[2]"
+          :min="0"
+          :max="99"
+          :precision="0"
+          :controls="false"
           class="unit"
-          min="0"
-          type="number"
           @change="setEnableVersion"
         />
         .
-        <el-input
+        <el-input-number
           v-model="enableVersionList[3]"
+          :min="0"
+          :max="99"
+          :precision="0"
+          :controls="false"
           class="unit"
-          min="0"
-          type="number"
           @change="setEnableVersion"
         />
         及以上
@@ -387,10 +403,10 @@
         class="newButtonStyle"
         @uploadSuccess="getSuccessNews"
       />
-      <span
+      <!-- <span
         v-show="fileTipsIfShow"
         class="fileObjectTips"
-      >请先上传文件</span>
+      >请先上传文件</span> -->
     </el-form-item>
     <el-form-item
       v-if="inputType !== 13"
@@ -554,8 +570,9 @@ export default {
         status: 1, // 1 启用 0 禁用
         rule: []
       },
-      versionList: ['', '', ''], // 拆分的版本号
-      enableVersionList: ['', '', '', ''],// 拆分的适用版本号
+      // versionList: ['', '', ''], // 拆分的版本号
+      versionList: [undefined, undefined, undefined], // 拆分的版本号
+      enableVersionList: [undefined, undefined, undefined, undefined],// 拆分的适用版本号
 
       rulesImport: {
         router_pid: [{ required: true, message: "请输入路由器pid" }],
@@ -571,8 +588,8 @@ export default {
         product_id: [{ required: true, message: "请输入子设备" }],
         routersList: [{ required: true, message: "请选择支持版本" }],
         productsList: [{ required: true, message: "请选择支持版本" }],
-        // download_url_object: [{ required: true, message: '请上传固件包' }],
-        download_url_object: [],
+        download_url_object: [{ required: true, message: '请上传固件包' }],
+        // download_url_object: [],
         img_url_object: [{ required: true, message: "请上传img图片" }],
         force: [{ required: true, message: "请选择是否强制升级" }]
       },
@@ -657,18 +674,17 @@ export default {
       if(nameList[2].length !==8) return false
       if(nameList[3].length !==8) return false
       if(nameList[4].length !==8) return false
-      console.log('passs')
       return true
     },
     setVersion() {
-      if(this.versionList[0].trim() === ''  || this.versionList[1].trim() === '' || this.versionList[2].trim() === ''){
+      if(this.versionList[0] === undefined || this.versionList[1] === undefined || this.versionList[2] === undefined){
         this.importForm.version = ''
       } else {
         this.importForm.version = this.versionList.join('.')
       }
     },
     setEnableVersion() {
-      if(this.enableVersionList[0].trim() === ''  || this.enableVersionList[1].trim() === '' || this.enableVersionList[2].trim() === ''|| this.enableVersionList[3].trim() === ''){
+      if(this.enableVersionList[0] === undefined  || this.enableVersionList[1] === undefined || this.enableVersionList[2] === undefined|| this.enableVersionList[3] === undefined){
         this.importForm.enableVersion = ''
       } else {
         this.importForm.enableVersion = this.enableVersionList.join('.')
@@ -830,8 +846,10 @@ export default {
         }
       }
       if(this.inputType === 13 ) {
-        this.enableVersionList = ['', '', '', '']
+        this.versionList = [undefined, undefined, undefined]
+        this.enableVersionList = [undefined, undefined, undefined, undefined]
         form.enableVersion = ''
+        form.version = ''
       }
 
       // adnroid system 指定路由器id 并且不可修改
@@ -1024,6 +1042,7 @@ export default {
           }
           if (!this.importForm.download_url_object) {
             //如果文件还没有上传，则不发送请求，直接退出
+            console.log(123)
             this.fileTipsIfShow = true
             return
           }

@@ -84,6 +84,17 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="inputType == 13"
+        :width="'auto'"
+        prop="rule"
+        label="适用语音APP版本">
+        <template slot-scope="scope">
+          <div>
+            {{ getRule(scope.row['status'], scope.row['rule']) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column
         :width="250"
         label="操作"
       >
@@ -564,6 +575,13 @@ export default {
         //                return date.Format('yyyy-MM-dd hh:mm:ss')
       }
     },
+    getRule(num, val) {
+      if(num == 0) {
+        return "------"
+      } else {
+        return val
+      }
+    },
     openVersionEdit(dataObj) {
       this.initBrandIDOptions()
       this.filterPopoverFlag = false
@@ -953,11 +971,11 @@ export default {
           }
           obj.versionList = Object.assign({}, versions_children_json)
           // 适用版app 字段显隐
-          if(this.inputType === 13 && obj.versionList.tableColumn.length == 6){
-            obj.versionList.tableColumn.push({ "prop": "rule", "label": "适用语音APP版本" })
-          }else if(obj.versionList.tableColumn.length > 6) {
-            obj.versionList.tableColumn.pop()
-          }
+          // if(this.inputType === 13 && obj.versionList.tableColumn.length == 6){
+          //   obj.versionList.tableColumn.push({ "prop": "rule", "label": "适用语音APP版本" })
+          // }else if(obj.versionList.tableColumn.length > 6) {
+          //   obj.versionList.tableColumn.pop()
+          // }
           obj.totalItem_two = currentData.page.total
         }
       })
