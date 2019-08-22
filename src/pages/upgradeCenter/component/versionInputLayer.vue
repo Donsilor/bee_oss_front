@@ -306,6 +306,7 @@
           :max="99"
           :precision="0"
           :controls="false"
+          :disabled="!addEditFlag"
           class="unit"
           @change="setEnableVersion"
         />
@@ -316,6 +317,7 @@
           :max="99"
           :precision="0"
           :controls="false"
+          :disabled="!addEditFlag"
           class="unit"
           @change="setEnableVersion"
         />
@@ -326,6 +328,7 @@
           :max="99"
           :precision="0"
           :controls="false"
+          :disabled="!addEditFlag"
           class="unit"
           @change="setEnableVersion"
         />
@@ -336,6 +339,7 @@
           :max="99"
           :precision="0"
           :controls="false"
+          :disabled="!addEditFlag"
           class="unit"
           @change="setEnableVersion"
         />
@@ -400,6 +404,7 @@
         :file-list="fileListObj"
         :valid-file-name="validFileName"
         :input-type="inputType"
+        :edit-flag-only = "editFlag"
         class="newButtonStyle"
         @uploadSuccess="getSuccessNews"
       />
@@ -628,7 +633,13 @@ export default {
     }
   },
   computed: {
-
+    editFlag(){
+      if(!this.addEditFlag){
+        return true
+      }else{
+        return false
+      }
+    }
   },
   watch: {
     "importForm.brand_id"(curVal, oldVal) {
