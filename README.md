@@ -31,7 +31,11 @@ npm run dev
 npm run build
 ```
 
+# eslint 报错 请执行 npm run lint
+	引入了eslint
+	如需修改，eslint规则： 可以再 .eslintrc.js 中修改	
+	如需去掉，请在 webpack 配置webpack.config.js，中注释掉 eslint-loader
+
+
 # admin 111111
 # 开发  admin 123456
-
-# eslint 报错 请执行 npm run lint
