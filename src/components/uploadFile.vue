@@ -2,6 +2,7 @@
   <div :class="className">
     <div class="chooseFileButton">
       <el-button
+        :disabled="editFlagOnly"
         class="buttonText"
         size="small"
         type="primary"
@@ -11,6 +12,7 @@
       <input
         id="file"
         ref="fileGet"
+        :disabled="editFlagOnly"
         type="file"
         value=""
         @change="fileUpLoad"
@@ -77,7 +79,7 @@ import axios from "axios"
 import * as URL from "~/lib/api"
 
 export default {
-  props: ['fileList', 'className', 'validFileName', 'inputType'],
+  props: ['fileList', 'className', 'validFileName', 'inputType','editFlagOnly'],
   data() {
     return {
       isNotUpload: true,
@@ -434,6 +436,9 @@ export default {
       height: 12px;
     }
   }
+}
+.disabled{
+  cursor: not-allowed;
 }
 // .deal{
 // 	position: fixed;

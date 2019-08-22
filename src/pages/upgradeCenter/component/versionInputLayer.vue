@@ -294,6 +294,7 @@
       <div>
         <el-input
           v-model="enableVersionList[0]"
+          :disabled="!addEditFlag"
           class="unit"
           min="0"
           type="number"
@@ -302,6 +303,7 @@
         .
         <el-input
           v-model="enableVersionList[1]"
+          :disabled="!addEditFlag"
           class="unit"
           min="0"
           type="number"
@@ -310,6 +312,7 @@
         .
         <el-input
           v-model="enableVersionList[2]"
+          :disabled="!addEditFlag"
           class="unit"
           min="0"
           type="number"
@@ -318,6 +321,7 @@
         .
         <el-input
           v-model="enableVersionList[3]"
+          :disabled="!addEditFlag"
           class="unit"
           min="0"
           type="number"
@@ -384,6 +388,7 @@
         :file-list="fileListObj"
         :valid-file-name="validFileName"
         :input-type="inputType"
+        :edit-flag-only = "editFlag"
         class="newButtonStyle"
         @uploadSuccess="getSuccessNews"
       />
@@ -611,7 +616,13 @@ export default {
     }
   },
   computed: {
-
+    editFlag(){
+      if(!this.addEditFlag){
+        return true
+      }else{
+        return false
+      }
+    }
   },
   watch: {
     "importForm.brand_id"(curVal, oldVal) {
