@@ -18,7 +18,7 @@
           :max="99"
           :precision="0"
           :controls="false"
-          class="unit"
+          :class="['unit', {'flag': colorFlag == true}]"
           @change="setVersion"
         />
         .
@@ -29,7 +29,7 @@
           :max="99"
           :precision="0"
           :controls="false"
-          class="unit"
+          :class="['unit', {'flag': colorFlag == true}]"
           @change="setVersion"
         />
         .
@@ -40,7 +40,7 @@
           :max="99"
           :precision="0"
           :controls="false"
-          class="unit"
+          :class="['unit', {'flag': colorFlag == true}]"
           @change="setVersion"
         />
       </div>
@@ -513,10 +513,12 @@ export default {
     "releasedFlag",
     "os_type",
     "activeName",
-    "osVersionList"
+    "osVersionList",
+    "flag"
   ],
   data() {
     return {
+      colorFlag: this.flag,
       brandIDOptionsChild: this.brandIDOptions,
       typeIDOptionsChild: this.typeIDOptions,
       productIDOptionsChild: this.productIDOptions,
@@ -629,7 +631,7 @@ export default {
         6: "android_pad",
         13: "lua_app"
       },
-      fileTipsIfShow: false //文件未上传的提示：上传文件不能为空
+      fileTipsIfShow: false, //文件未上传的提示：上传文件不能为空
     }
   },
   computed: {
@@ -639,7 +641,7 @@ export default {
       }else{
         return false
       }
-    }
+    },
   },
   watch: {
     "importForm.brand_id"(curVal, oldVal) {
@@ -664,6 +666,12 @@ export default {
             value: x.product_id
           }
         })
+    },
+    "versionList"(curVal, oldVal) {
+      return this.colorFlag = false
+    },
+    "flag"(curVal, oldVal) {
+      return this.colorFlag = true
     }
   },
   mounted() {
@@ -1053,7 +1061,6 @@ export default {
           }
           if (!this.importForm.download_url_object) {
             //如果文件还没有上传，则不发送请求，直接退出
-            console.log(123)
             this.fileTipsIfShow = true
             return
           }
@@ -1154,5 +1161,8 @@ export default {
 }
 .unit{
   width: 100px;
+}
+.flag>.el-input>input {
+  border-color: #f56c6c !important;
 }
 </style>

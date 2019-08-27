@@ -226,6 +226,7 @@
       <version-input
         key="versionInputs"
         ref="versionInputs"
+        :flag="flag"
         :brand-idoptions="brandIDOptions"
         :type-idoptions="typeIDOptions"
         :product-idoptions="productIDOptions"
@@ -455,7 +456,8 @@ export default {
         3: "全量"
       },
       activeName: "devices",
-      router_pid: ''
+      router_pid: '',
+      flag: false
     }
   },
   ...mapActions([
@@ -830,13 +832,22 @@ export default {
     },
     // 版本录入
     importSubmit(params) {
-      API.pubilcCorsAction(params).then(result => {
-        if (result.code === 0) {
-          this.$message.success(this.addEditFlag ? "录入成功" : "编辑成功")
-          this.importBoxFlag = false
-          this.pageChange_two(1)
-        }
-      })
+      API.pubilcCorsAction(params)
+        .then(result => {
+          if (result.code === 0) {
+            this.$message.success(this.addEditFlag ? "录入成功" : "编辑成功")
+            this.importBoxFlag = false
+            this.pageChange_two(1)
+          }
+        })
+        .catch(result => {
+          if(result.message == '该版本信息已存在') {
+            this.flag = true
+          }
+        })
+        .then(() => {
+          this.flag = false
+        })
     },
     // 推送升级
     pushUpdate(params) {
