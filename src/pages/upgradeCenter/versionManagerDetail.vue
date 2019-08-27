@@ -91,9 +91,7 @@
         align="center"
         label="适用语音APP版本">
         <template slot-scope="scope">
-          <div>
-            {{ getRule(scope.row['status'], scope.row['rule']) }}
-          </div>
+          {{ scope.row['rule'] }}
         </template>
       </el-table-column>
       <el-table-column
@@ -575,13 +573,6 @@ export default {
         return val
         //                let date = new Date(val*1000)
         //                return date.Format('yyyy-MM-dd hh:mm:ss')
-      }
-    },
-    getRule(num, val) {
-      if(num == 0) {
-        return "------"
-      } else {
-        return val
       }
     },
     openVersionEdit(dataObj) {
