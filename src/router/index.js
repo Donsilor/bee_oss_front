@@ -10,6 +10,7 @@ import dataStatistics from './modules/dataStatistics.js'
 import permissionSettings from './modules/permissionSettings.js'
 import warningManagement from './modules/warningManagement.js'
 import subData from './modules/subData.js'
+import semanticMange from './modules/semanticMange.js'
 
 const routes = [
   {
@@ -31,6 +32,7 @@ const routes = [
       ...permissionSettings,
       ...warningManagement,
       ...subData,
+      ...semanticMange,
       {
         path: '',
         alias: 'home',

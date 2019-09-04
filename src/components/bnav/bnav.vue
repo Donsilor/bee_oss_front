@@ -57,6 +57,7 @@ import dataStatistics from './modules/dataStatistics'
 import permissionSettings from './modules/permissionSettings'
 import warningManagement from './modules/warningManagement'
 import subData from './modules/subData'
+import semanticMange from './modules/semanticMange'
 
 export default {
   props: {
@@ -82,6 +83,7 @@ export default {
         configManage,
         permissionSettings,
         dataStatistics,
+        semanticMange,
         {
           title: '用户反馈',
           path: '/main/feedback/list',

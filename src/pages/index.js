@@ -62,6 +62,9 @@ import SightManage from './sightManage/sightManage.vue'
 import StartMode from './startMode/startMode.vue'
 import MallReservation from './mallMgmt/mallReservation.vue'
 
+import SemanticMange from './semanticMange/index.vue'
+
+
 // 家居组件
 import AppHomeConfig from './homeConfig/index.vue'
 import HomeConfig from './homeConfig/home/home.vue'
@@ -127,5 +130,6 @@ export {
   MallReservation,
   AppHomeConfig,
   HomeConfig,
-  MusicConfig
+  MusicConfig,
+  SemanticMange
 }
