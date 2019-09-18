@@ -17,8 +17,8 @@ export default () => {
   } else if (/sandbox-oss.egtest.cn/.test(curUrl)) {
     return sx_url
   } else if (/yfb-oss.xl.cn/.test(curUrl)) {
-		return yfb_url
-	} else if (/oss-uat.evergrande.cn/.test(curUrl)) {
+    return yfb_url
+  } else if (/oss-uat.evergrande.cn/.test(curUrl)) {
     return 'http://upgrade-uat.evergrande.cn'
   } else {
     return bees_url
