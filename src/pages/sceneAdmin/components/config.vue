@@ -169,15 +169,21 @@ export default {
     return {
       validList: {
         type: 2, // 验证图片尺寸
-        width: 850,
-        height: 450,
-        tips: '尺寸：850*450， 支持jpg，png'
+        // width: 850,
+        // height: 450,
+        // tips: '尺寸：850*450， 支持jpg，png'
+        width: [1005, 670],
+        height: [402, 268],
+        tips: '尺寸：1005*402，670*268， 支持jpg，png'
       },
       validDetail: {
         type: 2, // 验证图片尺寸
-        width: 1123,
-        height: 633,
-        tips: '尺寸：1123*633， 支持jpg，png'
+        // width: 1123,
+        // height: 633,
+        // tips: '尺寸：1123*633， 支持jpg，png'
+        width: [1005, 670],
+        height: [402, 268],
+        tips: '尺寸：1005*402，670*268， 支持jpg，png'
       },
 
       categoryList: [],
