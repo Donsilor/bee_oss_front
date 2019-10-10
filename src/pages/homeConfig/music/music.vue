@@ -202,8 +202,8 @@ export default {
       isEdit: false,
       validList: {
         type: 2, // 验证图片尺寸
-        width: 850,
-        height: 450,
+        width: [850],
+        height: [450],
         tips: '尺寸：850*450， 支持jpg，png'
       },
       model: {}
