@@ -67,14 +67,14 @@ export default {
           let _URL = window.URL || window.webkitURL
           let img = new Image()
           img.onload = function() {
-            let valid = (img.width === width[0] || img.width === width[1]) && (img.height === height[0] || img.height === height[1])
+            let valid = (img.width === width[0] || img.width === width[1] || img.width === width[2]) && (img.height === height[0] || img.height === height[1] || img.height === height[2])
             valid ? resolve() : reject()
           }
           img.src = _URL.createObjectURL(file)
         }).then(() => {
           return file
         }, () => {
-          this.$message.error(`图片尺寸限制为${this.valid.width[0]} x ${this.valid.height[0]}，${this.valid.width[1]} x ${this.valid.height[1]}`)
+          this.$message.error(`图片尺寸限制为${this.valid.width[0]} x ${this.valid.height[0]}，${this.valid.width[1]} x ${this.valid.height[1]}，${this.valid.width[2]} x ${this.valid.height[2]}`)
           return Promise.reject()
         })
         return isType && isSize
