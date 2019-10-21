@@ -63,6 +63,9 @@
             <div v-if="item.prop == 'device_state'">
               {{ getStatusText(scope.row.device_state) }}
             </div>
+            <div v-else-if="item.prop == 'is_sound'">
+              {{ getIs_sound(scope.row.is_sound) }}
+            </div>
             <div v-else>
               {{ scope.row[item.prop] }}
             </div>
@@ -203,6 +206,26 @@
                 />
               </el-form-item>
             </el-col>
+            <el-col :span="12">
+              <el-form-item
+                label="智能语音"
+                prop="is_sound"
+              >
+                <el-select
+                  v-model="AddEditForm.is_sound"
+                  placeholder="请选择"
+                >
+                  <el-option
+                    :value="1"
+                    label="是"
+                  />
+                  <el-option
+                    :value="0"
+                    label="否"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
           </el-row>
         </el-form>
       </div>
@@ -269,7 +292,8 @@ export default {
         device_mac: "",
         device_state: "",
         device_params: "",
-        router_id: ""
+        router_id: "",
+        is_sound: ""
       },
       rulesAddEdit: {
         device_name: [{ required: true, message: "请输入设备名称" }],
@@ -277,7 +301,8 @@ export default {
         device_auth_key: [{ required: true, message: "请输入设备验证KEY" }],
         device_sn: [{ required: true, message: "请输入设备编号" }],
         device_mac: [{ required: true, message: "请输入设备MAC" }],
-        device_state: [{ required: true, message: "请选择设备状态" }]
+        device_state: [{ required: true, message: "请选择设备状态" }],
+        is_sound: [{ required: true, message: "请选择是否智能语音" }],
       }
     }
   },
@@ -382,6 +407,21 @@ export default {
         break
       default:
         text = "未知"
+        break
+      }
+      return text
+    },
+    getIs_sound(type) {
+      let text = ""
+      switch (type) {
+      case 0:
+        text = "否"
+        break
+      case 1:
+        text = "是"
+        break
+      default:
+        text = "否"
         break
       }
       return text
