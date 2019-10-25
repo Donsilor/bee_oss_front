@@ -18,6 +18,11 @@ var businessData = {
       icon: ''
     },
     {
+      title: '云端设备直连',
+      path: '/main/cloudConnectDevice',
+      icon: ''
+    },
+    {
       title: '用户信息',
       path: '/main/ops',
       icon: ''

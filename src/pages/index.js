@@ -70,6 +70,11 @@ import AppHomeConfig from './homeConfig/index.vue'
 import HomeConfig from './homeConfig/home/home.vue'
 import MusicConfig from './homeConfig/music/music.vue'
 
+// 云端直连设备
+import CloudIndex from './cloudConnectDevice/index.vue'
+import CloudConnectDevice from './cloudConnectDevice/cloudConnectDevice.vue'
+import ImportCloud from './cloudConnectDevice/importCloud.vue'
+
 export {
   Login,
   Main,
@@ -131,5 +136,8 @@ export {
   AppHomeConfig,
   HomeConfig,
   MusicConfig,
-  SemanticMange
+  SemanticMange,
+  CloudIndex,
+  CloudConnectDevice,
+  ImportCloud,
 }

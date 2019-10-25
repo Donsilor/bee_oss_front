@@ -112,5 +112,31 @@ export default {
     return axios
       .post(OPS_API.familyList, params)
       .then(response => response.data)
-  }
+  },
+  // 云端设备直连
+  directdeviceList(params) {
+    return axios
+      .post(OPS_API.directdeviceList, params)
+      .then(response => response.data.result)
+  },
+  addDirectdevice(params) {
+    return axios
+      .post(OPS_API.addDirectdevice, params)
+      .then(response => response.data.result)
+  },
+  editDirectdevice(params) {
+    return axios
+      .post(OPS_API.editDirectdevice, params)
+      .then(response => response.data)
+  },
+  deleteDirectdevice(params) {
+    return axios
+      .post(OPS_API.deleteDirectdevice, params)
+      .then(response => response.data)
+  },
+  importDirectdevice(params) {
+    return axios
+      .post(OPS_API.importDirectdevice, params)
+      .then(response => response.data.result)
+  },
 }

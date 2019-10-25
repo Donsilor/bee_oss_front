@@ -17,7 +17,13 @@ export const OPS_API = {
   deleteRouter: API_MASTER + 'iotrouter/del', //删除路由
   importRouter: API_MASTER + 'iotrouter/import', //路由批量导入
   familyList: API_MASTER + 'iotuser/familylist', //家庭列表
-  userList: API_MASTER + 'iotuser/userList' //家庭列表
+  userList: API_MASTER + 'iotuser/userList', //家庭列表
+
+  directdeviceList: API_MASTER + 'iotdirectdevice/lists', //获取直连设备列表
+  addDirectdevice: API_MASTER + 'iotdirectdevice/add', //添加直连设备
+  editDirectdevice: API_MASTER + 'iotdirectdevice/edit', //编辑直连设备
+  deleteDirectdevice: API_MASTER + 'iotdirectdevice/del', //删除直连设备
+  importDirectdevice: API_MASTER + 'iotdirectdevice/import', //直连设备批量导入
 }
 export const UPGRADE_API = {
   // getVersions: API_MASTER + 'version/list',  // 版本列表

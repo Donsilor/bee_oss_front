@@ -49,7 +49,7 @@ const routes = [
         name: 'cmdb',
         component: Pages.CMDB
       },
-      {
+      {//路由器管理
         path: 'routerManager',
         name: 'routerIndex',
         component: Pages.RouterIndex,
@@ -63,6 +63,23 @@ const routes = [
             path: 'import',
             name: 'hasParent/main/routerManager',
             component: Pages.ImportRouter
+          }
+        ]
+      },
+      {//云端直连设备
+        path: 'cloudConnectDevice',
+        name: 'cloudIndex',
+        component: Pages.CloudIndex,
+        children: [
+          {
+            path: '',
+            name: 'cloudConnectDevice',
+            component: Pages.CloudConnectDevice
+          },
+          {
+            path: 'import',
+            name: 'hasParent/main/cloudConnectDevice',
+            component: Pages.ImportCloud
           }
         ]
       },
