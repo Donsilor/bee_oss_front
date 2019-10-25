@@ -329,7 +329,7 @@ export default {
     delRouter(dataObj) {
       const obj = this
       let currentParam = {
-        router_list: [
+        device_list: [
           {
             device_id: dataObj.device_id,
             device_uuid: dataObj.device_uuid
