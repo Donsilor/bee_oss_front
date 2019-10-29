@@ -25,17 +25,17 @@ module.exports = (options = {}) => ({
         use: ['vue-loader']
       },
       // 引入 eslint检查报告的格式规范
-      {
-        test: /\.(js|vue)$/,
-        loader: 'eslint-loader',
-        enforce: 'pre',
-        //指定检查的目录
-        include: [resolve(__dirname, 'src')],
-        options: {
-          configFile: path.join(projectRoot, '.eslintrc.js'),
-          formatter: require('eslint-friendly-formatter')
-        }
-      },
+      // {
+      //   test: /\.(js|vue)$/,
+      //   loader: 'eslint-loader',
+      //   enforce: 'pre',
+      //   //指定检查的目录
+      //   include: [resolve(__dirname, 'src')],
+      //   options: {
+      //     configFile: path.join(projectRoot, '.eslintrc.js'),
+      //     formatter: require('eslint-friendly-formatter')
+      //   }
+      // },
       {
         test: /\.js$/,
         use: ['babel-loader'],
@@ -88,8 +88,8 @@ module.exports = (options = {}) => ({
     open: true,
     proxy: {
       '/api/index.php/*': {
-        target: 'http://beeossdev.egtest.cn:7777',
-        // target: 'http://beeoss.egtest.cn:7777',
+        // target: 'http://beeossdev.egtest.cn:7777',
+        target: 'http://beeoss.egtest.cn:7777',
         // target: 'http://beeoss.evergrande.com',
         changeOrigin: true
         /*pathRewrite: {

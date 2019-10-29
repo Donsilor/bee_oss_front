@@ -557,7 +557,7 @@ export default {
         { name: "内部ID", value: "", prop: "F_owner_id" },
         { name: "家庭名称", value: "", prop: "F_name" },
         { name: "户主ID", value: "", prop: "F_owner_id" },
-        { name: "路由器uuid", value: "", prop: "F_router_id" },
+        { name: "路由器uuid", value: "", prop: "F_device_id" },
         { name: "省份", value: "", prop: "F_provice" },
         { name: "城市", value: "", prop: "F_city" },
         { name: "小区", value: "", prop: "F_district" },
@@ -691,7 +691,8 @@ export default {
       terminalLists.tableData = dataObj.client_list
       if (dataObj.family_list && dataObj.family_list.length) {
         let familys = dataObj.family_list
-        this.allFamily = []
+				// console.log('familys', familys)
+				this.allFamily = []
         familys.forEach((item, index) => {
           this.allFamily.push({
             name: "家庭" + (index + 1),
@@ -700,7 +701,8 @@ export default {
             family_id: item.info.F_family_id
           })
         })
-        this.changeFamilyData(familys[0])
+				// console.log('this.allFamily', this.allFamily);
+				this.changeFamilyData(familys[0])
       }
       this.terminalList = terminalLists
     },

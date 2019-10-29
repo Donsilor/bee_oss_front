@@ -102,7 +102,7 @@
       <span> 家庭栋号:{{ familyInfo.F_building_no }}</span><br>
       <span> 家庭房号:{{ familyInfo.F_room_no }}</span><br>
       <span> 电话（账户）:{{ familyInfo.F_phone_num }}</span><br>
-      <span> 户主:{{ familyInfo.F_user_name }}</span><br>
+<!--      <span> 户主:{{ familyInfo.F_user_name }}</span><br>-->
       <span> 关联设备数:{{ familyInfo.F_device_num }}</span><br>
       <span> 异常设备数:{{ familyInfo.F_device_abnormal_num }}</span><br>
       <span> 创建时间:{{ familyInfo.F_created_at }}</span><br>
@@ -136,7 +136,7 @@ export default {
           { prop: "F_owner_id", label: "户主用户内部ID" },
           { prop: "F_router_id", label: "路由器内部ID" },
           { prop: "F_phone_num", label: "电话" },
-          { prop: "F_user_name", label: "户主" },
+          // { prop: "F_user_name", label: "户主" },
           { prop: "F_created_at", label: "创建时间" }
         ],
         tableData: []
