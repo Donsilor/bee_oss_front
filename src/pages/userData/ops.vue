@@ -712,6 +712,7 @@ export default {
       let arr = []
       arr.push(dataObj.router_info)
       routerLists.tableData = arr
+			dataObj.info['F_device_id'] = dataObj['router_info']['F_device_id']
       this.setFamilyInfo(dataObj.info)
       this.memberList = memberLists
       this.deviceList = deviceLists
