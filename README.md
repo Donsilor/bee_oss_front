@@ -28,7 +28,7 @@ npm run dev
 
 ```bash
 # build for production with minification
-npm run build
+nbb
 ```
 
 # eslint 报错 请执行 npm run lint
