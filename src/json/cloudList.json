@@ -6,7 +6,8 @@
 		{ "prop": "device_sn", "label": "设备编号" },
 		{ "prop": "device_mac", "label": "设备MAC" },
 		{ "prop": "device_state", "label": "设备状态" },
-    { "prop": "device_params", "label": "设备参数" }
+    { "prop": "device_params", "label": "设备参数" },
+    { "prop": "parent_uuid", "label": "路由器UUID" }
 	],
 	"tableData": []
 }

@@ -206,6 +206,17 @@
                 />
               </el-form-item>
             </el-col>
+            <el-col :span="12">
+              <el-form-item
+                label="路由器UUID"
+              >
+                <el-input
+                  :disabled="!addEditFlag"
+                  v-model="AddEditForm.parent_uuid"
+                  placeholder=""
+                />
+              </el-form-item>
+            </el-col>
             <!-- <el-col :span="12">
               <el-form-item
                 label="智能语音"
@@ -293,6 +304,7 @@ export default {
         device_state: "",
         device_params: "",
         device_id: "",
+        parent_uuid: ""
         // is_sound: ""
       },
       rulesAddEdit: {
@@ -302,6 +314,7 @@ export default {
         device_sn: [{ required: true, message: "请输入设备编号" }],
         device_mac: [{ required: true, message: "请输入设备MAC" }],
         device_state: [{ required: true, message: "请选择设备状态" }],
+        parent_uuid: [{ required: true, message: "请输入路由器UUID" }],
         // is_sound: [{ required: true, message: "请选择是否智能语音" }],
       }
     }
