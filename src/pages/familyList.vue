@@ -77,7 +77,7 @@
       <div class="page-line">
         <el-pagination
           :total="totalItem"
-          :page-size="15"
+          :page-size="10"
           :current-page.sync="currentPage"
           small
           layout="prev, pager, next"
