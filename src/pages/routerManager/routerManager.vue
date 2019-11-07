@@ -208,10 +208,11 @@
             </el-col>
             <el-col :span="12">
               <el-form-item
+                :prop="addEditFlag?'is_sound':'no_sound'"
                 label="智能语音"
-                prop="is_sound"
               >
                 <el-select
+                  :disabled="!addEditFlag"
                   v-model="AddEditForm.is_sound"
                   placeholder="请选择"
                 >
@@ -303,6 +304,7 @@ export default {
         device_mac: [{ required: true, message: "请输入设备MAC" }],
         device_state: [{ required: true, message: "请选择设备状态" }],
         is_sound: [{ required: true, message: "请选择是否智能语音" }],
+        no_sound: [{ required: false, message: "" }],
       }
     }
   },
@@ -310,7 +312,8 @@ export default {
   computed: {
     ...mapGetters({})
   },
-  watch: {},
+  watch: {
+  },
   mounted() {
     this.getRouterList(1)
   },
