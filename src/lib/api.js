@@ -10,6 +10,7 @@ export const OPS_API = {
   searchLogOut: API_MASTER + 'iotuser/history', //获取用户登录登出日志
   rootLogs: API_MASTER + 'mongodebug/index', //云平台日志
   errLogs: API_MASTER + 'mongodebug/approuter', //错误日志
+  deviceLogs: API_MASTER + 'monitor/execsh', //路由器日志和设备日志
   operaList: API_MASTER + 'iotuser/operlist', //子设备操作流水
   routerList: API_MASTER + 'iotrouter/lists', //获取路由列表
   addRouter: API_MASTER + 'iotrouter/add', //添加路由

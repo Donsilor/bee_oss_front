@@ -84,7 +84,7 @@ module.exports = (options = {}) => ({
   },
   devServer: {
     host: 'localhost',
-    port: 8080,
+    port: 9999,
     open: true,
     proxy: {
       '/api/index.php/*': {

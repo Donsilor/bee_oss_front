@@ -38,6 +38,11 @@ export default {
       .post(OPS_API.errLogs, params)
       .then(response => response.data.result)
   },
+	deviceLogs(params) {
+		return axios
+			.post(OPS_API.deviceLogs, params)
+			.then(response => response.data.result)
+	},
   throughDatas(params) {
     return axios
       .post(THROUGH_API.throughDatas, params)

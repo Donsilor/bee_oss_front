@@ -20,6 +20,8 @@ import WarnManage from './warnManager/warnManage.vue'
 import WarnDataSearch from './warnManager/warnDataSearch.vue'
 import RootLog from './allLogs/rootLogs.vue'
 import ErrLog from './allLogs/errLogs.vue'
+import remoteDeviceLogs from './allLogs/remoteDeviceLogs.vue'
+import remoteRouterLogs from './allLogs/remoteRouterLogs.vue'
 import RouterIndex from './routerManager/index.vue'
 import RouterManager from './routerManager/routerManager.vue'
 import ImportRouter from './routerManager/importRouter.vue'
@@ -140,4 +142,6 @@ export {
   CloudIndex,
   CloudConnectDevice,
   ImportCloud,
+	remoteDeviceLogs,
+	remoteRouterLogs
 }

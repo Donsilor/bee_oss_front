@@ -4,12 +4,14 @@
  * @summary short description for the file
  * @author songwh
  *
- * Created at     : 2019-05-08 16:59:55 
+ * Created at     : 2019-05-08 16:59:55
  * Last modified  : 2019-05-17 10:42:09
  */
 import {
-  RootLog, 
-  ErrLog
+  RootLog,
+  ErrLog,
+	remoteDeviceLogs,
+	remoteRouterLogs
 } from '../../pages/index.js'
 
 const log = [
@@ -22,7 +24,17 @@ const log = [
     path: 'errLog',
     name: 'errLog',
     component: ErrLog
-  }
+  },
+	{
+		path: 'remoteRouterLog',
+		name: 'remoteRouterLog',
+		component: remoteRouterLogs
+	},
+	{
+		path: 'remoteDeviceLog',
+		name: 'remoteDeviceLog',
+		component: remoteDeviceLogs
+	}
 ]
 
 export default log
