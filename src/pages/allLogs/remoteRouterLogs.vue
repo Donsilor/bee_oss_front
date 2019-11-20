@@ -24,6 +24,7 @@
 
 <script>
 		import API from "../../service/index"
+		import axios from "~/lib/http"
     export default {
 			data () {
 				return {
@@ -40,16 +41,11 @@
 						router_uuid: this.routerUuid
 					}
 					API.deviceLogs(obj).then(res => {
-						// var a = document.createElement('a')
-						// a.setAttribute('href', res.url)
-						// a.setAttribute('target', '_blank')
-						// a.setAttribute('id', '123')
-						// // 防止反复添加
-						// if(!document.getElementById('123')) document.body.appendChild(a)
-						// a.click()
-						// window.open(res.url, '_self')
-						//window.open(res.url, '_blank')
-						this.newWin(res.url)
+						let info =
+							(localStorage.getItem('localData') &&
+								JSON.parse(localStorage.getItem('localData')).user &&
+								JSON.parse(localStorage.getItem('localData')).user.info) || {}
+						window.open('/api/index.php/monitor/download?token='+ info.token, '_self')
 					})
 				},
 				newWin(url){ //新窗口打开

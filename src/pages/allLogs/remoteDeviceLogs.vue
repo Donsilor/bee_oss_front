@@ -54,7 +54,12 @@
 					// a.click()
 					// window.open(res.url, '_self')
 					//newWin.location.href = res.url
-					this.newWin(res.url)
+					// this.newWin(res.url)
+					let info =
+						(localStorage.getItem('localData') &&
+							JSON.parse(localStorage.getItem('localData')).user &&
+							JSON.parse(localStorage.getItem('localData')).user.info) || {}
+					window.open('/api/index.php/monitor/download?token='+ info.token, '_self')
 				})
 			},
 			newWin(url){ //新窗口打开
