@@ -71,6 +71,39 @@
         alt=""
       >
     </div>
+		<div v-if="has_reply">
+			<p>已回复：</p>
+			<p>{{ contentReply }}</p>
+		</div>
+    <!--回复按钮-->
+    <div v-if="!has_reply">
+      <el-button
+        type="primary"
+				style="margin-top: 20px;"
+        @click="dialogVisible = true">回复</el-button>
+    </div>
+		<div v-if="dialogVisible">
+			<el-dialog
+				:visible.sync="dialogVisible"
+				title="请输入回复的内容"
+				width="30%">
+				<el-input
+					v-model.trim="replyText"
+					type="textarea"
+					placeholder="请输入内容"
+					maxlength="100"
+					show-word-limit
+				/>
+				<span
+					slot="footer"
+					class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button
+					type="primary"
+					@click="reply">回 复</el-button>
+      </span>
+			</el-dialog>
+		</div>
   </div>
 </template>
 
@@ -84,7 +117,11 @@ export default {
     return {
       detail: {},
       prevDisabled: false,
-      nextDisabled: false
+      nextDisabled: false,
+      dialogVisible: false,
+      replyText: '',
+			has_reply: false,
+			contentReply: ''
     }
   },
   computed: {
@@ -94,6 +131,13 @@ export default {
     // 点击列表页某条反馈进来
     this.getFeedbackDetails(this.$route.params.id, 0)
   },
+	watch: {
+		dialogVisible (val) {
+			if (!val) {
+				this.replyText = ''
+			}
+		}
+	},
   methods: {
     goList() {
       // needQueryOptionStorage为true
@@ -124,6 +168,8 @@ export default {
         const result = res.data.result
         this.prevDisabled = false
         this.nextDisabled = false
+				this.has_reply = result.has_reply === 0 ? false : true
+				this.contentReply = result.reply_content
         if (result) {
           this.detail = result
           this.detail.img_list = result.img_list ? result.img_list.split(",") : []
@@ -138,6 +184,22 @@ export default {
             this.$message("已经是最后面一条")
           }
         }
+      })
+    },
+    reply() {
+    	if (!this.replyText) {
+    		this.$message.warning("请输入内容")
+        return
+      }
+    	let obj = {
+        reply_content: this.replyText,
+        id: this.$route.params.id
+      }
+      axios.post(URL.feedbackReply, obj).then(res => {
+				if (res.data.code === 200) {
+					this.dialogVisible = false
+					this.getFeedbackDetails(this.$route.params.id, 0)
+				}
       })
     },
     // 上一条

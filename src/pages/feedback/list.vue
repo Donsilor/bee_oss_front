@@ -2,12 +2,20 @@
   <div class="page-content config-page">
     <div>
       <el-row style="line-height:36px;">
-        <el-col :span="6">
+        <el-col :span="3">
           <el-checkbox
             v-model="unRead"
             @change="seeUnRead"
           >
             只看未读
+          </el-checkbox>
+        </el-col>
+        <el-col :span="3">
+          <el-checkbox
+            v-model="unReply"
+            @change="seeUnReply"
+          >
+            只看待回复
           </el-checkbox>
         </el-col>
         <el-col :span="12">
@@ -59,6 +67,11 @@
               class="summary point"
               @click="goDetail(scope.row.id)"
             >{{ scope.row.content }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column width="150">
+          <template slot-scope="scope">
+            <span style="margin-right: 15px">{{ scope.row.has_reply == 1 ? '已回复' : '待回复' }}</span>
           </template>
         </el-table-column>
         <el-table-column width="150">
@@ -119,6 +132,7 @@ export default {
   data() {
     return {
       unRead: false,
+      unReply: false,
       date: [],
       searchKey: "",
       queryOption: {},
@@ -150,6 +164,7 @@ export default {
         limit: this.pageSize,
         keyword: "",
         is_read: "",
+        has_reply: 0, // 全部
         start_time: "",
         end_time: ""
       }
@@ -170,6 +185,11 @@ export default {
     },
     seeUnRead() {
       this.queryOption.is_read = this.unRead ? 1 : 0
+      this.queryOption.page = 1
+      this.getFeedbackList()
+    },
+    seeUnReply() {
+      this.queryOption.has_reply = this.unReply ? 1 : 0
       this.queryOption.page = 1
       this.getFeedbackList()
     },

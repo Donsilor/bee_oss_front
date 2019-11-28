@@ -103,6 +103,7 @@ export const CMDATA_API = {
 export const feedbackList = API_MASTER + 'feedback/list'
 export const feedbackUpdateStatus = API_MASTER + 'feedback/updateStatus'
 export const feedbackDetails = API_MASTER + 'feedback/details'
+export const feedbackReply = API_MASTER + 'feedback/reply'
 
 // userData
 export const analyzerRetain = API_MASTER + 'analyzer/retain'
