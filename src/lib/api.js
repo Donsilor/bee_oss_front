@@ -25,6 +25,8 @@ export const OPS_API = {
   editDirectdevice: API_MASTER + 'iotdirectdevice/edit', //编辑直连设备
   deleteDirectdevice: API_MASTER + 'iotdirectdevice/del', //删除直连设备
   importDirectdevice: API_MASTER + 'iotdirectdevice/import', //直连设备批量导入
+	bindedlists: API_MASTER + 'iotrouter/bindedlists',
+	routerUnbind: API_MASTER + 'iotrouter/unbind'
 }
 export const UPGRADE_API = {
   // getVersions: API_MASTER + 'version/list',  // 版本列表
@@ -104,6 +106,8 @@ export const feedbackList = API_MASTER + 'feedback/list'
 export const feedbackUpdateStatus = API_MASTER + 'feedback/updateStatus'
 export const feedbackDetails = API_MASTER + 'feedback/details'
 export const feedbackReply = API_MASTER + 'feedback/reply'
+
+
 
 // userData
 export const analyzerRetain = API_MASTER + 'analyzer/retain'

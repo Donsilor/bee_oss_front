@@ -542,11 +542,11 @@ export default {
       searchedFlag: true,
       searchKey: "",
       user_msg: [
-        { name: "昵称", value: "", prop: "F_nick" },
+        { name: "昵称", value: "", prop: "F_nickname" },
         { name: "性别", value: "", prop: "F_gender" },
         { name: "出生日期", value: "", prop: "F_birthday" },
-        { name: "手机号", value: "", prop: "F_phone_num" },
-        { name: "状态", value: "", prop: "F_state" },
+        { name: "手机号", value: "", prop: "F_phone" },
+        { name: "状态", value: "", prop: "F_status_name" },
         { name: "注册时间", value: "", prop: "F_created_at" },
         { name: "最近登录时间", value: "", prop: "F_last_login_time" },
         { name: "最近登录IP", value: "", prop: "F_last_login_ip" },
@@ -691,8 +691,8 @@ export default {
       terminalLists.tableData = dataObj.client_list
       if (dataObj.family_list && dataObj.family_list.length) {
         let familys = dataObj.family_list
-				// console.log('familys', familys)
-				this.allFamily = []
+        // console.log('familys', familys)
+        this.allFamily = []
         familys.forEach((item, index) => {
           this.allFamily.push({
             name: "家庭" + (index + 1),
@@ -701,8 +701,8 @@ export default {
             family_id: item.info.F_family_id
           })
         })
-				// console.log('this.allFamily', this.allFamily);
-				this.changeFamilyData(familys[0])
+        // console.log('this.allFamily', this.allFamily);
+        this.changeFamilyData(familys[0])
       }
       this.terminalList = terminalLists
     },
@@ -712,7 +712,7 @@ export default {
       let arr = []
       arr.push(dataObj.router_info)
       routerLists.tableData = arr
-			dataObj.info['F_device_id'] = dataObj['router_info']['F_device_id']
+      dataObj.info['F_device_id'] = dataObj['router_info']['F_device_id']
       this.setFamilyInfo(dataObj.info)
       this.memberList = memberLists
       this.deviceList = deviceLists

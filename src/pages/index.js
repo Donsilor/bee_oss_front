@@ -77,6 +77,9 @@ import CloudIndex from './cloudConnectDevice/index.vue'
 import CloudConnectDevice from './cloudConnectDevice/cloudConnectDevice.vue'
 import ImportCloud from './cloudConnectDevice/importCloud.vue'
 
+//绑定路由器
+import BindRouter from './bindRouter.vue'
+
 export {
   Login,
   Main,
@@ -143,5 +146,6 @@ export {
   CloudConnectDevice,
   ImportCloud,
 	remoteDeviceLogs,
-	remoteRouterLogs
+	remoteRouterLogs,
+	BindRouter
 }

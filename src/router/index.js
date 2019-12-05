@@ -66,6 +66,11 @@ const routes = [
           }
         ]
       },
+			{
+				path: 'bindRouter',
+				name: 'bindRouter',
+				component: Pages.BindRouter,
+			},
       {//云端直连设备
         path: 'cloudConnectDevice',
         name: 'cloudIndex',

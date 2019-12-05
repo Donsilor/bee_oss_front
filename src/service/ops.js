@@ -93,6 +93,16 @@ export default {
       .post(OPS_API.routerList, params)
       .then(response => response.data.result)
   },
+	cancelBindRouterList(params) {
+		return axios
+			.post(OPS_API.bindedlists, params)
+			.then(response => response.data.result)
+	},
+	cancelBind(params) {
+		return axios
+			.post(OPS_API.routerUnbind, params)
+			.then(response => response.data.result)
+	},
   addRouter(params) {
     return axios
       .post(OPS_API.addRouter, params)

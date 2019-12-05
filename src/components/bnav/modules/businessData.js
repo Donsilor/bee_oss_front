@@ -17,6 +17,11 @@ var businessData = {
       path: '/main/routerManager',
       icon: ''
     },
+		{
+			title: '已绑定路由器',
+			path: '/main/bindRouter',
+			icon: ''
+		},
     {
       title: '云端设备直连',
       path: '/main/cloudConnectDevice',
