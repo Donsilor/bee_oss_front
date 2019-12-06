@@ -181,16 +181,19 @@ export default {
     search() {
       this.queryOption.keyword = this.searchKey
       this.queryOption.page = 1
+      this.currentPage = 1
       this.getFeedbackList()
     },
     seeUnRead() {
       this.queryOption.is_read = this.unRead ? 1 : 0
       this.queryOption.page = 1
+      this.currentPage = 1
       this.getFeedbackList()
     },
     seeUnReply() {
       this.queryOption.has_reply = this.unReply ? 1 : 0
       this.queryOption.page = 1
+      this.currentPage = 1
       this.getFeedbackList()
     },
     changeDate(val) {
@@ -200,10 +203,12 @@ export default {
       this.queryOption.start_time = start
       this.queryOption.end_time = end
       this.queryOption.page = 1
+      this.currentPage = 1
       this.getFeedbackList()
     },
     handleCurrentChange(val) {
       this.queryOption.page = val
+      this.currentPage = val
       this.getFeedbackList()
     },
     getFeedbackList() {
