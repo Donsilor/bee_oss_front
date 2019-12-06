@@ -752,7 +752,7 @@ export default {
           text = thisVal === 0 ? "有效" : thisVal === 1 ? "禁用" : "删除"
           break
         case "F_gender":
-          text = thisVal === 0 ? "未配置" : thisVal === 1 ? "男" : "删除"
+          text = thisVal === 0 ? "未配置" : thisVal === 1 ? "男" : "女"
           break
         default:
           text = thisVal

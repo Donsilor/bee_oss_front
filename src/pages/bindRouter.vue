@@ -490,7 +490,7 @@ export default {
       this.clickObj = obj
     },
     okUnbind() {
-    	API.cancelBind({mac: this.clickObj.router_mac}).then(res => {
+    	API.cancelBind({router_uuid: this.clickObj.router_uuid}).then(res => {
         this.dialogVisible = false
         this.getRouterList()
       })
