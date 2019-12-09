@@ -110,7 +110,8 @@
       class="block"
       style="overflow: hidden"
     >
-      <span class="info gray">共{{ total }}条记录，其中{{ unReadTotal }}条未读</span>
+      <span class="info gray" v-if="!unReply">共{{ total }}条记录，其中{{ unReadTotal }}条未读</span>
+      <span class="info gray" v-if="unReply">共{{ total }}条记录，其中{{ unReadTotal }}条未读， {{unReplyTotal}}条待回复</span>
       <el-pagination
         :current-page="currentPage"
         :page-size="pageSize"
@@ -140,7 +141,8 @@ export default {
       pageSize: 20,
       total: null,
       currentPage: 1,
-      unReadTotal: null
+      unReadTotal: null,
+			unReplyTotal: null
     }
   },
   computed: {
@@ -218,6 +220,7 @@ export default {
         const result = res.data.result
         this.total = result.total
         this.unReadTotal = result.un_read_total || 0
+        this.unReplyTotal = result.un_reply_total || 0
         this.tableData = result.data
       })
     },

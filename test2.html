@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+
+<script>
+	function curry () {
+		var args = Array.prototype.slice.call(arguments)
+		function adder () {
+			args.push(...arguments)
+			if (arguments.length == 0) {
+				return args.reduce((prev, next) => {
+					return prev + next
+				})
+			} else {
+				return adder
+			}
+		}
+		return adder
+	}
+
+	console.log(curry(4)(6)());
+</script>
+</html>
