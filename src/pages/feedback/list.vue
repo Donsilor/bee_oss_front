@@ -110,8 +110,12 @@
       class="block"
       style="overflow: hidden"
     >
-      <span class="info gray" v-if="!unReply">共{{ total }}条记录，其中{{ unReadTotal }}条未读</span>
-      <span class="info gray" v-if="unReply">共{{ total }}条记录，其中{{ unReadTotal }}条未读， {{unReplyTotal}}条待回复</span>
+      <span
+        v-if="!unReply"
+        class="info gray">共{{ total }}条记录，其中{{ unReadTotal }}条未读</span>
+      <span
+        v-if="unReply"
+        class="info gray">共{{ total }}条记录，其中{{ unReadTotal }}条未读， {{ unReplyTotal }}条待回复</span>
       <el-pagination
         :current-page="currentPage"
         :page-size="pageSize"
@@ -142,7 +146,7 @@ export default {
       total: null,
       currentPage: 1,
       unReadTotal: null,
-			unReplyTotal: null
+      unReplyTotal: null
     }
   },
   computed: {
@@ -201,12 +205,28 @@ export default {
     changeDate(val) {
       // 后端需要的时间戳是秒 前端UI组件的是毫秒 除以1000处理
       const start = this.date && this.date[0] ? this.date[0].getTime() / 1000 : ""
-      const end = this.date && this.date[1] ? this.date[1].getTime() / 1000 : ""
+      const end = this.date && this.date[1] ? this.date[1].getTime() : ""
+			const newEnd = new Date(this.getDateTime(end) + ' ' + '23:59:59').getTime() / 1000
       this.queryOption.start_time = start
-      this.queryOption.end_time = end
+      this.queryOption.end_time = newEnd
       this.queryOption.page = 1
       this.currentPage = 1
       this.getFeedbackList()
+    },
+    getDateTime(date, type) {
+      if (!date) return
+      var d = new Date(+date)
+      var year = d.getFullYear()
+      var month = d.getMonth() + 1 < 10 ? '0' + (d.getMonth() + 1) : d.getMonth() + 1
+      var day = d.getDate() < 10 ? '0' + d.getDate() : d.getDate()
+      var hours = d.getHours() < 10 ? '0' + d.getHours() : d.getHours()
+      var minutes = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()
+      var seconds = d.getSeconds() < 10 ? '0' + d.getSeconds() : d.getSeconds()
+      if (type === 'fulltime') {
+        return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds
+      } else {
+        return year + '-' + month + '-' + day
+      }
     },
     handleCurrentChange(val) {
       this.queryOption.page = val
