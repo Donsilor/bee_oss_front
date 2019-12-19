@@ -234,7 +234,7 @@ export default {
 }
 .imgs img {
   float: left;
-  width: 18%;
+  width: 13%;
   margin: 0 2% 20px 0;
   cursor: pointer;
 }
