@@ -63,7 +63,7 @@
               <el-row>
                 <el-col
                   v-for="item in user_msg"
-                  :key="item.value"
+                  :key="Math.random()"
                   :span="7"
                 >
                   <el-form-item :label="item.name">
@@ -88,7 +88,7 @@
           >
             <el-table-column
               v-for="item in terminalList.tableColumn"
-              :key="item.prop"
+              :key="Math.random()"
               :prop="item.prop"
               :label="item.label"
               :width="'auto'"
@@ -150,7 +150,7 @@
             >
               <el-dropdown-item
                 v-for="item in allFamily"
-                :key="item.value"
+                :key="Math.random()"
                 :command="item.value"
               >
                 {{ item.name }}
@@ -199,7 +199,7 @@
                   <el-row>
                     <el-col
                       v-for="(item, index) in family_info"
-                      :key="index"
+                      :key="Math.random()"
                       :span="7"
                     >
                       <el-form-item :label="item.name">
@@ -221,7 +221,7 @@
               >
                 <el-table-column
                   v-for="item in memberList.tableColumn"
-                  :key="item.prop"
+                  :key="Math.random()"
                   :prop="item.prop"
                   :label="item.label"
                   :width="'auto'"
@@ -243,7 +243,7 @@
               >
                 <el-table-column
                   v-for="item in routerList.tableColumn"
-                  :key="item.prop"
+                  :key="Math.random()"
                   :prop="item.prop"
                   :label="item.label"
                   :width="'auto'"
@@ -268,7 +268,7 @@
                 >
                   <el-table-column
                     v-for="item in deviceList.tableColumn"
-                    :key="item.prop"
+                    :key="Math.random()"
                     :prop="item.prop"
                     :label="item.label"
                     :width="'auto'"
@@ -351,7 +351,7 @@
       >
         <el-collapse-item
           v-for="(item, index) in errLogList"
-          :key="item.value"
+          :key="Math.random()"
           :title="item.key"
           :name="index"
         >
@@ -387,7 +387,7 @@
         >
           <el-table-column
             v-for="item in logOutList.tableColumn"
-            :key="item.prop"
+            :key="Math.random()"
             :prop="item.prop"
             :label="item.label"
           >
@@ -438,7 +438,7 @@
         >
           <el-table-column
             v-for="item in operList.tableColumn"
-            :key="item.prop"
+            :key="Math.random()"
             :prop="item.prop"
             :label="item.label"
           >
