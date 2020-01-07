@@ -20,6 +20,8 @@ export default () => {
     return yfb_url
   } else if (/oss-uat.evergrande.cn/.test(curUrl)) {
     return 'http://upgrade-uat.evergrande.cn'
+  } else if (/oss-zk-uat.xl.cn/.test(curUrl)) {
+    return 'http://upgrade-zk-uat.xl.cn'
   } else {
     return bees_url
   }
