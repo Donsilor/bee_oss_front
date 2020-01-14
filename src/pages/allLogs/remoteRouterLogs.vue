@@ -1,76 +1,81 @@
 <template>
   <div>
-		<el-row>
-			<el-col :span="6">
-				<div class="block">
-					<el-date-picker
-						v-model="romoteRouterTime"
-						type="datetimerange"
-						range-separator="至"
-						start-placeholder="开始日期"
-						end-placeholder="结束日期">
-					</el-date-picker>
-				</div>
-			</el-col>
-			<el-col :span="5">
-				<el-input v-model="routerUuid" placeholder="请输入路由器uuid"></el-input>
-			</el-col>
-			<el-col :span="2" style="padding-left: 20px;">
-				<el-button type="primary" @click="getLogs">抓取</el-button>
-			</el-col>
-		</el-row>
-	</div>
+    <el-row>
+      <el-col :span="6">
+        <div class="block">
+          <el-date-picker
+            v-model="romoteRouterTime"
+            type="datetimerange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"/>
+        </div>
+      </el-col>
+      <el-col :span="5">
+        <el-input
+          v-model="routerUuid"
+          placeholder="请输入路由器uuid"/>
+      </el-col>
+      <el-col
+        :span="2"
+        style="padding-left: 20px;">
+        <el-button
+          type="primary"
+          @click="getLogs">抓取</el-button>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
-		import API from "../../service/index"
-		import axios from "~/lib/http"
-    export default {
-			data () {
-				return {
-					romoteRouterTime: [],
-					routerUuid: ''
-				}
-			},
-			methods: {
-				getLogs () {
-					let obj = {
-						start_time: this.romoteRouterTime.length && this.getDateTime(this.romoteRouterTime[0], 'fulltime') || '',
-						end_time: this.romoteRouterTime.length && this.getDateTime(this.romoteRouterTime[1], 'fulltime') || '',
-						type: 'router',
-						router_uuid: this.routerUuid
-					}
-					API.deviceLogs(obj).then(res => {
-						let info =
+import API from "../../service/index"
+import axios from "~/lib/http"
+export default {
+  data() {
+    return {
+      romoteRouterTime: [],
+      routerUuid: ''
+    }
+  },
+  methods: {
+    getLogs() {
+      let obj = {
+        start_time: this.romoteRouterTime.length && this.getDateTime(this.romoteRouterTime[0], 'fulltime') || '',
+        end_time: this.romoteRouterTime.length && this.getDateTime(this.romoteRouterTime[1], 'fulltime') || '',
+        type: 'router',
+        router_uuid: this.routerUuid
+      }
+      API.deviceLogs(obj).then(res => {
+        let info =
 							(localStorage.getItem('localData') &&
 								JSON.parse(localStorage.getItem('localData')).user &&
 								JSON.parse(localStorage.getItem('localData')).user.info) || {}
-						window.open('/api/index.php/monitor/download?token='+ info.token, '_self')
-					})
-				},
-				newWin(url){ //新窗口打开
-					var a = document.createElement('a')
-					a.setAttribute('href', url)
-					a.setAttribute('style', 'display:none')
-					a.setAttribute('target', '_blank')
-					document.body.appendChild(a)
-					a.click()
-					a.parentNode.removeChild(a)
-				},
-				getDateTime(date, type) {
-					// 时间格式获取
-					if (!date) return
-					let d = new Date(+date)
-					let year = d.getFullYear()
-					let month =
+        window.open('/api/index.php/monitor/download?token='+ info.token, '_self')
+      })
+    },
+    newWin(url){ //新窗口打开
+      var a = document.createElement('a')
+      a.setAttribute('href', url)
+      a.setAttribute('style', 'display:none')
+      a.setAttribute('target', '_blank')
+      document.body.appendChild(a)
+      a.click()
+      a.parentNode.removeChild(a)
+    },
+    getDateTime(date, type) {
+      // 时间格式获取
+      if (!date) return
+      let d = new Date(+date)
+      let year = d.getFullYear()
+      let month =
 						d.getMonth() + 1 < 10 ? '0' + (d.getMonth() + 1) : d.getMonth() + 1
-					let day = d.getDate() < 10 ? '0' + d.getDate() : d.getDate()
-					let hours = d.getHours() < 10 ? '0' + d.getHours() : d.getHours()
-					let minutes = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()
-					let seconds = d.getSeconds() < 10 ? '0' + d.getSeconds() : d.getSeconds()
-					if (type === 'fulltime') {
-						return (
-							year +
+      let day = d.getDate() < 10 ? '0' + d.getDate() : d.getDate()
+      let hours = d.getHours() < 10 ? '0' + d.getHours() : d.getHours()
+      let minutes = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()
+      let seconds = d.getSeconds() < 10 ? '0' + d.getSeconds() : d.getSeconds()
+      if (type === 'fulltime') {
+        return (
+          year +
 							'-' +
 							month +
 							'-' +
@@ -81,13 +86,13 @@
 							minutes +
 							':' +
 							seconds
-						)
-					} {
-						return year + '-' + month + '-' + day
-					}
-			}
+        )
+      } {
+        return year + '-' + month + '-' + day
+      }
     }
-    }
+  }
+}
 </script>
 
 <style scoped>

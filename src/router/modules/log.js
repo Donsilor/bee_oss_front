@@ -10,8 +10,8 @@
 import {
   RootLog,
   ErrLog,
-	remoteDeviceLogs,
-	remoteRouterLogs
+  remoteDeviceLogs,
+  remoteRouterLogs
 } from '../../pages/index.js'
 
 const log = [
@@ -25,16 +25,16 @@ const log = [
     name: 'errLog',
     component: ErrLog
   },
-	{
-		path: 'remoteRouterLog',
-		name: 'remoteRouterLog',
-		component: remoteRouterLogs
-	},
-	{
-		path: 'remoteDeviceLog',
-		name: 'remoteDeviceLog',
-		component: remoteDeviceLogs
-	}
+  {
+    path: 'remoteRouterLog',
+    name: 'remoteRouterLog',
+    component: remoteRouterLogs
+  },
+  {
+    path: 'remoteDeviceLog',
+    name: 'remoteDeviceLog',
+    component: remoteDeviceLogs
+  }
 ]
 
 export default log

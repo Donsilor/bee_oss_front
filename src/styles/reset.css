@@ -60,7 +60,7 @@ h6 {
 }
 q:before,
 q:after {
-	content: ”;
+	content:'';
 }
 abbr,
 acronym {

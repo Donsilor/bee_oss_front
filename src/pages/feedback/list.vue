@@ -154,7 +154,7 @@ export default {
   },
   watch: {
 
-	},
+  },
   created() {
     if (this.needQueryOptionStorage) {
       // 如果是从详情页跳回列表页的 needQueryOptionStorage是true 拿出存在store的筛选条件queryOptionStorage
@@ -208,7 +208,7 @@ export default {
       // 后端需要的时间戳是秒 前端UI组件的是毫秒 除以1000处理
       const start = this.date && this.date[0] ? this.date[0].getTime() / 1000 : ""
       const end = this.date && this.date[1] ? this.date[1].getTime() : ""
-			const newEnd = new Date(this.getDateTime(end) + ' ' + '23:59:59').getTime() / 1000
+      const newEnd = new Date(this.getDateTime(end) + ' ' + '23:59:59').getTime() / 1000
       this.queryOption.start_time = start
       this.queryOption.end_time = newEnd
       this.queryOption.page = 1

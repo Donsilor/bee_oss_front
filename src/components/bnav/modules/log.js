@@ -22,16 +22,16 @@ var log = {
       title: '错误日志',
       isSelected: false
     },
-		{
-			path: '/main/remoteRouterLog',
-			title: '远程路由器日志',
-			isSelected: false
-		},
-		{
-			path: '/main/remoteDeviceLog',
-			title: '远程设备日志',
-			isSelected: false
-		}
+    {
+      path: '/main/remoteRouterLog',
+      title: '远程路由器日志',
+      isSelected: false
+    },
+    {
+      path: '/main/remoteDeviceLog',
+      title: '远程设备日志',
+      isSelected: false
+    }
   ]
 }
 

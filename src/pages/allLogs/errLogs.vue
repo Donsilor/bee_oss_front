@@ -140,8 +140,8 @@
           </template>
         </el-table-column>
         <el-table-column
-          v-for="item in rootLogData.tableColumn"
-          :key="item.prop"
+          v-for="(item, index) in rootLogData.tableColumn"
+          :key="item.prop+ index"
           :prop="item.prop"
           :show-overflow-tooltip="true"
           :label="item.label"

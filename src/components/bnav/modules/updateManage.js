@@ -4,7 +4,7 @@
  * @summary short description for the file
  * @author songwh
  *
- * Created at     : 2019-05-08 16:59:55 
+ * Created at     : 2019-05-08 16:59:55
  * Last modified  : 2019-05-17 10:32:15
  */
 var updateManage = {
@@ -30,6 +30,11 @@ var updateManage = {
     {
       title: 'APP升级',
       path: '/main/appUpgrade',
+      icon: ''
+    },
+    {
+      title: '协议管理',
+      path: '/main/protocolManage',
       icon: ''
     }
   ]
