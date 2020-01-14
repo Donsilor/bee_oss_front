@@ -11,6 +11,8 @@ import "v-charts/lib/style.css"
 import axios from "axios"
 import preview from "vue-photo-preview"
 import "vue-photo-preview/dist/skin.css"
+import {format} from '@/assets/fillters.js'
+Vue.filter(format.name, format)
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
