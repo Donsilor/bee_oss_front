@@ -28,8 +28,11 @@ export const OPS_API = {
   bindedlists: API_MASTER + 'iotrouter/bindedlists',
   routerUnbind: API_MASTER + 'iotrouter/unbind'
 }
+
 export const UPGRADE_API = {
-  // getVersions: API_MASTER + 'version/list',  // 版本列表
+	 agreementList: API_MASTER + 'agreement/lists',  // 版本列表
+	 agreementSave: API_MASTER + 'agreement/save',  // 版本列表
+	 agreementdel: API_MASTER + 'agreement/del',  // 版本列表
   // selectVersion: API_MASTER + 'version/search',  // 版本匹配搜索
   // importSubmitAction: API_MASTER + 'version/input',  //版本录入
   // pushUpdateAction: API_MASTER + 'version/release',  //版本推送

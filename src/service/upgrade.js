@@ -4,6 +4,12 @@ import { UPGRADE_API } from '~/lib/api'
 const API_UPGRADE = '/api.php'
 
 export default {
+  agreementSave(params) {
+    return axios.post(UPGRADE_API.agreementSave, params).then(response => response.data)
+  },
+  agreementdel(params) {
+    return axios.post(UPGRADE_API.agreementdel, params).then(response => response.data)
+  },
   pubilcCorsAction(params) {
     return axios.post(API_UPGRADE, params).then(response => response.data)
   },
@@ -33,6 +39,11 @@ export default {
   getChoseList(params) {
     return axios.post(API_UPGRADE, params).then(response => response.data)
   },
+
+  getAgreementList(params) {
+    return axios.post(UPGRADE_API.agreementList, params).then(response => response.data)
+  },
+
   // 融合版APP 升级
   getAppList(params) {
     return axios.post(API_UPGRADE, {

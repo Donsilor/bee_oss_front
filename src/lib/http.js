@@ -13,7 +13,7 @@ const CODE = {
   SUCCEEELSE: 0,
   NO_LOGIN: 401
 }
-
+let isDEV = process.env.NODE_ENV === 'development'
 // Add a request interceptor
 axios.interceptors.request.use(
   function(config) {
@@ -39,9 +39,10 @@ axios.interceptors.request.use(
         if (!config.data) config.data = {}
         config.data['token'] = info.token || ''
       } else {
-        config.url = getCorsUrl() + config.url
+      	if (!isDEV) {
+          config.url = getCorsUrl() + config.url
+        }
       }
-
       NProgress.start()
       if (config.method === 'post' || config.method === 'put') {
         var params = {}

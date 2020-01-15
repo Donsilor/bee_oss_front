@@ -27,7 +27,7 @@
             slot-scope="scope">
             <slot
               :row="scope.row"
-              :name="item.prop ">我是c组件(儿子)---外部没传递，我才显示</slot>
+              :name="item.prop "/>
           </template>
         </el-table-column>
       </template>
