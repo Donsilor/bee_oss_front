@@ -43,7 +43,6 @@
 
 <script>
 import Api from '@/service/upgrade.js'
-import Bus from '@/assets/EventBus.js'
 export default {
   name: "AddNewProtocal",
   props: {
@@ -92,10 +91,11 @@ export default {
     },
     confirm() {
       Api.agreementSave(this.form).then(res=>{
-        Bus.$emit('refreshData')
+        this.$emit('refreshData')
         this.$message.success(`${this.type==='add'? '新增': '更新'}协议成功`)
+        this.close()
       })
-      this.close()
+
     }
   },
 }

@@ -23,12 +23,11 @@
       v-if="dialogFormVisible"
       :type="type"
       :info="info"
-      :dialog-form-visible.sync="dialogFormVisible"/>
+      :dialog-form-visible.sync="dialogFormVisible"
+      @refreshData ="getList"/>
   </div>
 </template>
-
 <script>
-import Bus from '@/assets/EventBus.js'
 import List from './component/List.vue'
 import addNewProtocal from './component/addNewProtocal.vue'
 import Api from '@/service/upgrade.js'
@@ -55,7 +54,6 @@ export default {
   },
   mounted(){
     this.getList()
-    Bus.$on('refreshData', this.getList)
   },
   methods:{
   	getList(){
