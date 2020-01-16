@@ -62,6 +62,15 @@ export default {
     }
   },
   data() {
+  	function validateUrl(rule, value, callback) {
+      // eslint-disable-next-line no-useless-escape
+      let reg = /(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%$#_]*)?/
+      if (!reg.test(value)){
+      	callback('请输入正确的url地址')
+      } else {
+        callback()
+      }
+  	}
     return {
       formLabelWidth: '120px',
       form: Object.assign( {
@@ -75,7 +84,8 @@ export default {
           {required: true, message: '请输入协议名称', trigger: 'blur'}
         ],
         url: [
-          {required: true, message: '请输入协议链接', trigger: 'blur'}
+          {required: true, message: '请输入协议链接', trigger: 'blur'},
+          { validator: validateUrl, trigger: 'blur' }
         ],
       }
     }
