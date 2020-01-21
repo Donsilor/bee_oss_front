@@ -92,8 +92,8 @@ module.exports = (options = {}) => ({
     open: true,
     proxy: {
       '/api/index.php/*': {
-        // target: 'http://beeossdev.egtest.cn:7777',
-        target: 'http://beeoss.egtest.cn:7777',
+        // target: 'http://beeossdev.egtest.cn:7777', //开发环境
+        target: 'http://beeoss.egtest.cn:7777', // 测试环境
         // target: 'http://beeoss.evergrande.com',
         changeOrigin: true
         /*pathRewrite: {
@@ -101,11 +101,15 @@ module.exports = (options = {}) => ({
 				  }*/
       },
       '/api.php': {
-        target: 'http://iot-dev-upgrade-center.egtest.cn:7777',
-        changeOrigin: true
-        /*pathRewrite: {
-				      '^/api': ''
-				    }*/
+        target: 'http://iot-dev-upgrade-center-tice.egtest.cn:9000',
+        changeOrigin: true,
+        onProxyReq:function(proxyReq, req, res) {
+          proxyReq.setHeader('Origin', 'http://beeoss.egtest.cn:7777')
+          proxyReq.setHeader('Content-Type', 'application/json;charset=UTF-8')
+        }
+        // pathRewrite: {
+        //     '': ''
+        //   }
       }
       // '/oss_file_upload': {
       //     target: 'http://iot-dev-upgrade-center.egtest.cn:7777',
