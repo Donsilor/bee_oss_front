@@ -1,0 +1,17 @@
+{
+  "main": {
+    "icon": "home",
+    "title": "首页",
+    "rank": 0
+  },
+  "user": {
+    "icon": "config",
+    "title": "用户",
+    "rank": 1
+  },
+  "eirc": {
+    "icon": "cmdb",
+    "title": "自定义",
+    "rank": 2
+  }
+}
