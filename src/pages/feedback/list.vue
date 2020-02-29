@@ -107,7 +107,7 @@
       </el-table>
     </div>
     <div
-      class="block"
+      class="block clearfix"
       style="overflow: hidden"
     >
       <span
