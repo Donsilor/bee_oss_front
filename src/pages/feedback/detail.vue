@@ -5,7 +5,9 @@
       class="item"
     >
       <el-breadcrumb-item>
-        <span @click="goList">用户反馈中心</span>
+        <span
+          style="cursor:pointer"
+          @click="goList">用户反馈中心</span>
       </el-breadcrumb-item>
       <el-breadcrumb-item>反馈详情</el-breadcrumb-item>
     </el-breadcrumb>
@@ -58,7 +60,7 @@
     </el-row>
     <div class="item content">
       <p style="line-height: 30px;">
-        反馈内容：<br> {{ detail.content }}
+        反馈内容：<br> <pre style="font-family: 微软雅黑">{{ detail.content }}</pre>
       </p>
     </div>
     <div class="item imgs">
@@ -73,7 +75,7 @@
     </div>
     <div v-if="has_reply">
       <p>已回复：</p>
-      <p>{{ contentReply }}</p>
+      <pre style="font-family: 微软雅黑">{{ contentReply }}</pre>
     </div>
     <!--回复按钮-->
     <div v-if="!has_reply">

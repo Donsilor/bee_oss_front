@@ -6,7 +6,7 @@ const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin')
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
 // 定义压缩文件类型
 const productionGzipExtensions = ['js', 'css']
-function resolve (dir) {
+function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
@@ -50,7 +50,7 @@ module.exports = {
       '/api.php': {
         target: 'http://iot-dev-upgrade-center-tice.egtest.cn:9000',
         changeOrigin: true,
-        onProxyReq: function (proxyReq, req, res) {
+        onProxyReq: function(proxyReq, req, res) {
           proxyReq.setHeader('Origin', 'http://beeoss.egtest.cn:7777')
           proxyReq.setHeader('Content-Type', 'application/json;charset=UTF-8')
         }
