@@ -46,6 +46,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 本地分页处理 -->
+    <el-pagination
+      :current-page="index"
+      :page-size="size"
+      :total="tableCopyTableList.length"
+      style="float: right"
+      layout="total, sizes, prev, pager, next, jumper"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"/>
+
   </div>
 </template>
 <script>
@@ -162,7 +172,11 @@ export default {
         2: "黑名单",
         3: "全量"
       },
-      activeName: "devices"
+      activeName: "devices",
+      // 本地分页处理
+      tableCopyTableList: {},
+      index: 1,
+      size: 10,
     }
   },
   ...mapActions([
@@ -197,6 +211,29 @@ export default {
     this.getVersionList(1)
   },
   methods: {
+    // 本地分页处理
+    // 页数改变事件
+    handleSizeChange(size) {
+      this.size = size
+      this.versionsFirst.tableData = this.paging(size, this.index)
+    },
+    // 页码改变事件
+    handleCurrentChange(current) {
+      this.index = current
+      this.versionsFirst.tableData = this.paging(this.size, current)
+    },
+    // 本地分页的方法
+    paging(size, current) {
+      const tableList = JSON.parse(JSON.stringify(this.tableCopyTableList))
+      const tablePush = []
+      tableList.forEach((item, index) => {
+        if (size * (current - 1) <= index && index <= size * current - 1) {
+          tablePush.push(item)
+        }
+      })
+      return tablePush
+    },
+
     formatTime(val) {
       if (!val) {
         return "------"
@@ -212,6 +249,11 @@ export default {
       // this.filterParams.token = this.token
       this.listParams.page = page
       this.versionsFirst = Object.assign({}, version_first_json)
+
+      // 本地分页处理
+      this.tableCopyTableList = JSON.parse(JSON.stringify(this.versionsFirst.tableData))
+      this.versionsFirst.tableData = this.paging(this.size, this.index)
+
       const obj = this
       API.getVersions(obj.listParams).then(result => {
         if (result.code === 0) {
@@ -256,6 +298,9 @@ export default {
           }
         }
       }
+      // 本地分页处理
+      this.tableCopyTableList = JSON.parse(JSON.stringify(this.versionsFirst.tableData))
+      this.versionsFirst.tableData = this.paging(this.size, this.index)
     },
     getTypeText(type, os_type) {
       let text = ""
