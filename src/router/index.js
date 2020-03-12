@@ -1,4 +1,5 @@
 import VueRouter from 'vue-router'
+import Vue from 'vue'
 import * as Pages from '../pages/index.js'
 
 import updateManage from './modules/updateManage.js'
@@ -11,7 +12,7 @@ import permissionSettings from './modules/permissionSettings.js'
 import warningManagement from './modules/warningManagement.js'
 import subData from './modules/subData.js'
 import semanticMange from './modules/semanticMange.js'
-
+Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
@@ -20,7 +21,6 @@ const routes = [
   },
   {
     path: '/main',
-    name: 'main',
     component: Pages.Main,
     children: [
       ...updateManage,
@@ -34,7 +34,7 @@ const routes = [
       ...subData,
       ...semanticMange,
       {
-        path: '',
+        path: '/',
         alias: 'home',
         name: 'home',
         component: Pages.Home
@@ -49,7 +49,7 @@ const routes = [
         name: 'cmdb',
         component: Pages.CMDB
       },
-      {//路由器管理
+      {// 路由器管理
         path: 'routerManager',
         name: 'routerIndex',
         component: Pages.RouterIndex,
@@ -69,9 +69,9 @@ const routes = [
       {
         path: 'bindRouter',
         name: 'bindRouter',
-        component: Pages.BindRouter,
+        component: Pages.BindRouter
       },
-      {//云端直连设备
+      {// 云端直连设备
         path: 'cloudConnectDevice',
         name: 'cloudIndex',
         component: Pages.CloudIndex,
@@ -88,7 +88,7 @@ const routes = [
           }
         ]
       },
-      {//用户反馈
+      {// 用户反馈
         path: 'feedback/list',
         name: 'feedbackList',
         component: Pages.FeedbackList

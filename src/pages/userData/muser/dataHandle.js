@@ -1,4 +1,4 @@
-import pagerConfig from "./config"
+import pagerConfig from './config'
 
 export const getConfig = result => {
   return {
@@ -20,7 +20,7 @@ export const getOnlyUserList = data => {
     }
     item.family_list.map(fa => {
       const family = {
-        isOnline: fa.router_online ? "在线" : "离线",
+        isOnline: fa.router_online ? '在线' : '离线',
         total: 0,
         name: item.user_name,
         phone: item.phone
@@ -48,7 +48,7 @@ export const getUserList = data => {
         id: item.user_id,
         name: item.user_name,
         phone: item.phone,
-        isOnline: "离线",
+        isOnline: '离线',
         total: 0
       })
     } else {
@@ -57,7 +57,7 @@ export const getUserList = data => {
           id: item.user_id,
           name: item.user_name,
           phone: item.phone,
-          isOnline: it.router_online ? "在线" : "离线",
+          isOnline: it.router_online ? '在线' : '离线',
           total: 0
         }
         if (it.device_list.length > 0) {
@@ -83,7 +83,7 @@ export const getTypes = data => {
     data.family_list.map(item => {
       if (item.device_list.length > 0) {
         item.device_list.map(it => {
-          if (!categories[it.category_id] && categories[it.category_id] !== "") {
+          if (!categories[it.category_id] && categories[it.category_id] !== '') {
             categories[it.category_id] = it.category_name
           }
         })
@@ -98,9 +98,9 @@ export const getTypes = data => {
     })
   })
   types.push({
-    id: "heji",
-    name: "total",
-    text: "合计"
+    id: 'heji',
+    name: 'total',
+    text: '合计'
   })
   return types
 }

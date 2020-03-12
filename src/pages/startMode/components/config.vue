@@ -48,10 +48,10 @@
   }
 </style>
 <script>
-import { PREFIX } from "../../../lib/util"
+import { PREFIX } from '../../../lib/util'
 export default {
   props: ['config'],
-  data() {
+  data () {
     return {
       rules: {
         mode_name: [
@@ -67,17 +67,17 @@ export default {
     }
   },
   watch: {
-    'config.show'(val){
+    'config.show' (val) {
       this.$nextTick(() => {
         this.$refs['ruleForm'].clearValidate()
       })
     }
   },
   methods: {
-    submit(type, formName) {
+    submit (type, formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if(type == 'add') {
+          if (type === 'add') {
             this.add()
           } else {
             this.modify()
@@ -87,7 +87,7 @@ export default {
         }
       })
     },
-    add() {
+    add () {
       this.$http
         .post(PREFIX + 'iotscenemode/save', {
           mode_id: 0,
@@ -99,7 +99,7 @@ export default {
           this.callSuccess()
         })
     },
-    modify() {
+    modify () {
       this.$http
         .post(PREFIX + 'iotscenemode/save', {
           mode_id: this.config.mode_id,
@@ -111,7 +111,7 @@ export default {
           this.callSuccess()
         })
     },
-    callSuccess() {
+    callSuccess () {
       this.config.show = false
       this.$message({
         type: 'success',

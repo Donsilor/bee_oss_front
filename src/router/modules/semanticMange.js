@@ -7,7 +7,7 @@
  * Created at     : 2019-09-03 10:37:03
  */
 import {
-  SemanticMange,
+  SemanticMange
 } from '../../pages/index'
 
 var semanticMange = [
@@ -15,7 +15,7 @@ var semanticMange = [
     path: 'semanticMange',
     name: 'semanticMange',
     component: SemanticMange
-  },
+  }
 ]
 
 export default semanticMange

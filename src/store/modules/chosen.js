@@ -13,37 +13,37 @@ export default {
   },
 
   getters: {
-    [namespace.APPIOS](state) {
+    [namespace.APPIOS] (state) {
       return state.appIos
     },
 
-    [namespace.APPANDROID](state) {
+    [namespace.APPANDROID] (state) {
       return state.appAndroid
     },
 
-    [namespace.ROUTER](state) {
+    [namespace.ROUTER] (state) {
       return state.router
     },
 
-    [namespace.SUBSET](state) {
+    [namespace.SUBSET] (state) {
       return state.subset
     },
 
-    [namespace.BRAND](state) {
+    [namespace.BRAND] (state) {
       return state.product.brand
     },
 
-    [namespace.TYPE](state) {
+    [namespace.TYPE] (state) {
       return state.product.type
     },
 
-    [namespace.PRODUCT](state) {
+    [namespace.PRODUCT] (state) {
       return state.product.product
     }
   },
 
   mutations: {
-    [namespace.GETAPPIOS](state, payload) {
+    [namespace.GETAPPIOS] (state, payload) {
       axios
         .post(API_UPGRADE, {
           token: payload.token,
@@ -68,7 +68,7 @@ export default {
         })
     },
 
-    [namespace.GETAPPANDROID](state, payload) {
+    [namespace.GETAPPANDROID] (state, payload) {
       axios
         .post(API_UPGRADE, {
           token: payload.token,
@@ -93,7 +93,7 @@ export default {
         })
     },
 
-    [namespace.GETROUTER](state, payload) {
+    [namespace.GETROUTER] (state, payload) {
       axios
         .post(API_UPGRADE, {
           token: payload.token,
@@ -121,7 +121,7 @@ export default {
         })
     },
 
-    [namespace.GETSUBSET](state, payload) {
+    [namespace.GETSUBSET] (state, payload) {
       axios
         .post(API_UPGRADE, {
           token: payload.token,
@@ -147,7 +147,7 @@ export default {
         })
     },
 
-    [namespace.GETPRODUCT](state, payload) {
+    [namespace.GETPRODUCT] (state, payload) {
       axios
         .post(PREFIX + 'version/product', {
           token: payload.token
@@ -164,14 +164,14 @@ export default {
   },
 
   actions: {
-    [namespace.GETAPPIOS]({ commit }, payload) {
+    [namespace.GETAPPIOS] ({ commit }, payload) {
       commit({
         type: namespace.GETAPPIOS,
         token: payload.token
       })
     },
 
-    [namespace.INITAPPIOS]({ commit, state }, payload) {
+    [namespace.INITAPPIOS] ({ commit, state }, payload) {
       if (!state.appIos.length) {
         commit({
           type: namespace.GETAPPIOS,
@@ -180,14 +180,14 @@ export default {
       }
     },
 
-    [namespace.GETAPPANDROID]({ commit }, payload) {
+    [namespace.GETAPPANDROID] ({ commit }, payload) {
       commit({
         type: namespace.GETAPPANDROID,
         token: payload.token
       })
     },
 
-    [namespace.INITAPPANDROID]({ commit, state }, payload) {
+    [namespace.INITAPPANDROID] ({ commit, state }, payload) {
       if (!state.appAndroid.length) {
         commit({
           type: namespace.GETAPPANDROID,
@@ -196,7 +196,7 @@ export default {
       }
     },
 
-    [namespace.GETROUTER]({ commit }, payload) {
+    [namespace.GETROUTER] ({ commit }, payload) {
       commit({
         type: namespace.GETROUTER,
         token: payload.token,
@@ -204,7 +204,7 @@ export default {
       })
     },
 
-    [namespace.INITROUTER]({ commit, state }, payload) {
+    [namespace.INITROUTER] ({ commit, state }, payload) {
       if (!state.router.length) {
         commit({
           type: namespace.GETROUTER,
@@ -213,7 +213,7 @@ export default {
       }
     },
 
-    [namespace.GETSUBSET]({ commit }, payload) {
+    [namespace.GETSUBSET] ({ commit }, payload) {
       commit({
         type: namespace.GETSUBSET,
         token: payload.token,
@@ -221,7 +221,7 @@ export default {
       })
     },
 
-    [namespace.INITSUBSET]({ commit, state }, payload) {
+    [namespace.INITSUBSET] ({ commit, state }, payload) {
       if (!state.subset.length) {
         commit({
           type: namespace.GETSUBSET,
@@ -231,14 +231,14 @@ export default {
       }
     },
 
-    [namespace.GETPRODUCT]({ commit }, payload) {
+    [namespace.GETPRODUCT] ({ commit }, payload) {
       commit({
         type: namespace.GETPRODUCT,
         token: payload.token
       })
     },
 
-    [namespace.INITPRODUCT]({ commit, state }, payload) {
+    [namespace.INITPRODUCT] ({ commit, state }, payload) {
       if (!state.product.length) {
         commit({
           type: namespace.GETPRODUCT,

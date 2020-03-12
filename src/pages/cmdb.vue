@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-popover="">
   <div class="page-content facility-page">
     <el-row>
       <el-col>
@@ -41,7 +41,7 @@
       placement="bottom-start"
     >
       <ul class="filterPopoverList">
-        <li v-for="item in filterOptions">
+        <li v-for="(item, index) in filterOptions" :key="index">
           <el-checkbox v-model="item.checked">
             {{ item.label }}
           </el-checkbox>
@@ -89,7 +89,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in list">
+        <tr v-for="(item, index) in list" :key="index">
           <td :class="{'cell': true, 'dn': !filterOptions[0].checked}">
             {{ item.ip }}
           </td>
@@ -215,7 +215,7 @@
             name="first"
           >
             <ul>
-              <li v-for="item in pathList.first">
+              <li v-for="(item, index) in pathList.first" :key="index">
                 <span>
                   <i class="el-icon-document" />
                   <input
@@ -246,7 +246,7 @@
             name="second"
           >
             <ul>
-              <li v-for="item in pathList.second">
+              <li v-for="(item, index)  in pathList.second" :key="index">
                 <span>
                   <i class="el-icon-document" />
                   <input
@@ -277,7 +277,7 @@
             name="third"
           >
             <ul>
-              <li v-for="item in pathList.third">
+              <li v-for="(item, index) in pathList.third" :key="index">
                 <span>
                   <i class="el-icon-document" />
                   <input
@@ -308,7 +308,7 @@
             name="fourth"
           >
             <ul>
-              <li v-for="item in pathList.fourth">
+              <li v-for="(item, index) in pathList.fourth" :key="index">
                 <span>
                   <i class="el-icon-document" />
                   <input
@@ -353,142 +353,142 @@
 <script>
 export default {
   components: {},
-  data() {
+  data () {
     return {
       list: [
         {
-          id: "",
-          ip: "127.0.0.1",
-          hostname: "access_svr_01",
-          cpu: "2C4G",
-          user: "张三",
-          expire: "2017-10-13",
-          createTime: "2017-10-13",
-          creater: "张三",
-          type: "到期"
+          id: '',
+          ip: '127.0.0.1',
+          hostname: 'access_svr_01',
+          cpu: '2C4G',
+          user: '张三',
+          expire: '2017-10-13',
+          createTime: '2017-10-13',
+          creater: '张三',
+          type: '到期'
         }
       ],
       filterOptions: [
         {
           checked: true,
-          label: "ip",
-          name: "ip"
+          label: 'ip',
+          name: 'ip'
         },
         {
           checked: true,
-          label: "hostname",
-          name: "hostname"
+          label: 'hostname',
+          name: 'hostname'
         },
         {
           checked: true,
-          label: "cpu/mem",
-          name: "cpu"
+          label: 'cpu/mem',
+          name: 'cpu'
         },
         {
           checked: true,
-          label: "使用人",
-          name: "user"
+          label: '使用人',
+          name: 'user'
         },
         {
           checked: true,
-          label: "到期时间",
-          name: "expire"
+          label: '到期时间',
+          name: 'expire'
         },
         {
           checked: true,
-          label: "创建时间",
-          name: "createTime"
+          label: '创建时间',
+          name: 'createTime'
         },
         {
           checked: true,
-          label: "创建人",
-          name: "creater"
+          label: '创建人',
+          name: 'creater'
         },
         {
           checked: true,
-          label: "类型",
-          name: "type"
+          label: '类型',
+          name: 'type'
         }
       ],
       importForm: {
-        ip: "",
-        hostname: "",
-        cpu: "",
-        user: "",
-        expire: ""
+        ip: '',
+        hostname: '',
+        cpu: '',
+        user: '',
+        expire: ''
       },
       fileList: [],
       pathList: {
         first: [
           {
             id: 1,
-            name: "rwetr",
+            name: 'rwetr',
             isEdit: false
           },
           {
             id: 2,
-            name: "adf",
+            name: 'adf',
             isEdit: false
           }
         ],
         second: [
           {
             id: 1,
-            name: "rwetwerqr",
+            name: 'rwetwerqr',
             isEdit: false
           },
           {
             id: 2,
-            name: "ad123f",
+            name: 'ad123f',
             isEdit: false
           }
         ],
         third: [
           {
             id: 1,
-            name: "rwe342tr",
+            name: 'rwe342tr',
             isEdit: false
           },
           {
             id: 2,
-            name: "143",
+            name: '143',
             isEdit: false
           }
         ],
         fourth: [
           {
             id: 1,
-            name: "rwet1341r",
+            name: 'rwet1341r',
             isEdit: false
           },
           {
             id: 2,
-            name: "14311432",
+            name: '14311432',
             isEdit: false
           }
         ]
       },
-      activedTab: "single", //single batch
-      pathTab: "first", //first, second, third, fourth
+      activedTab: 'single', // single batch
+      pathTab: 'first', // first, second, third, fourth
       importBoxFlag: false,
       backyardFlag: false,
       filterPopoverFlag: false,
-      service: "",
+      service: '',
       serviceOptions: [
         {
-          value: "1",
-          lable: "选项一"
+          value: '1',
+          lable: '选项一'
         }
       ],
-      searchKey: ""
+      searchKey: ''
     }
   },
-  mounted() { },
+  mounted () { },
   methods: {
-    handleRemove(file, fileList) {
+    handleRemove (file, fileList) {
       console.log(file, fileList)
     },
-    handlePreview(file) {
+    handlePreview (file) {
       console.log(file)
     }
   }

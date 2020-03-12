@@ -51,26 +51,24 @@
   </div>
 </template>
 
-
 <script>
-import { switchProductSearch } from "../../lib/api.js"
-import axios from "../../lib/http.js"
-import familys from "../../service/familys.js"
+import { switchProductSearch } from '../../lib/api.js'
+import axios from '../../lib/http.js'
 export default {
-  data() {
+  data () {
     return {
-      searchVal: "",
-      searchType: "sn",
+      searchVal: '',
+      searchType: 'sn',
       searchResult: []
     }
   },
   computed: {
-    placeholderText() {
+    placeholderText () {
       return `请输入${this.searchType}`
     }
   },
   methods: {
-    search() {
+    search () {
       if (!this.searchVal) {
         return
       }

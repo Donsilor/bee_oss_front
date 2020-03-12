@@ -16,8 +16,8 @@
           prop="F_picture"
           label="图片" >
           <template slot-scope="scope">
-            <img 
-              :src="scope.row.F_picture" 
+            <img
+              :src="scope.row.F_picture"
               class="f-img" >
           </template>
         </el-table-column>
@@ -68,13 +68,13 @@
 }
 </style>
 <script>
-import { PREFIX } from "../../../lib/util"
+import { PREFIX } from '../../../lib/util'
 import Config from './config.vue'
 export default {
   components: {
     Config
   },
-  data() {
+  data () {
     return {
       pages: {
         page: '10',
@@ -85,18 +85,18 @@ export default {
       config: {}
     }
   },
-  mounted() {
+  mounted () {
     this.getList()
   },
   methods: {
-    getList() {
+    getList () {
       this.$http
-        .post(PREFIX + "music_config/lists", {})
+        .post(PREFIX + 'music_config/lists', {})
         .then(res => {
           this.list = res.data.result.data
         })
     },
-    handeDeleteClick(F_id) {
+    handeDeleteClick (F_id) {
       this.$confirm(`您是否确定删除？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -105,9 +105,9 @@ export default {
         this.delStatus(F_id)
       })
     },
-    delStatus(F_id) {
+    delStatus (F_id) {
       this.$http
-        .post(PREFIX + "music_config/del", {
+        .post(PREFIX + 'music_config/del', {
           F_id: F_id
         })
         .then(res => {
@@ -118,15 +118,15 @@ export default {
           this.getList()
         })
     },
-    showConfig(type, item) {
+    showConfig (type, item) {
       console.log(type)
-      if (type == 'add') {
+      if (type === 'add') {
         this.$refs.configDialog.config = {
           type: type,
           show: true,
           F_picture: '',
           F_title: '',
-          F_stitle: '',
+          F_stitle: ''
         }
       } else {
         this.$refs.configDialog.config = {
@@ -136,7 +136,7 @@ export default {
         }
       }
     },
-    refresh(val) {
+    refresh (val) {
       if (val) this.getList()
     }
   }

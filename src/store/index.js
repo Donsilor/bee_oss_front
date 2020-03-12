@@ -1,5 +1,6 @@
 import Vuex from 'vuex'
 import user from './modules/user'
+import Vue from 'vue'
 // import website from './modules/website';
 import chosen from './modules/chosen'
 // import ops from './modules/ops';
@@ -7,10 +8,12 @@ import chosen from './modules/chosen'
 // import upgrade from './modules/upgrade';
 // import family from './modules/familys';
 import feedback from './modules/feedback'
+
+Vue.use(Vuex)
 // import cmdata from './modules/cmdata';
 
 export default new Vuex.Store({
-  state: {}, //state
+  state: {}, // state
   getters: {},
   mutations: {},
   actions: {},

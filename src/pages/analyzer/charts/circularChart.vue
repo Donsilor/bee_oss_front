@@ -27,7 +27,7 @@ export default {
     },
     result: {
       type: Object,
-      default() {
+      default () {
         return {}
       }
     },
@@ -44,7 +44,7 @@ export default {
       default: '300px'
     }
   },
-  data() {
+  data () {
     return {
       chart: null,
       xAxisData: [],
@@ -53,7 +53,7 @@ export default {
   },
   watch: {
     result: {
-      handler(newVal) {
+      handler (newVal) {
         this.xAxisData = []
         this.seriesData = []
         for (let key in newVal) {
@@ -68,10 +68,10 @@ export default {
       deep: true
     }
   },
-  mounted() {
+  mounted () {
     // console.log(this.result, 'result2')
   },
-  beforeDestroy() {
+  beforeDestroy () {
     if (!this.chart) {
       return
     }
@@ -79,7 +79,7 @@ export default {
     this.chart = null
   },
   methods: {
-    initChart() {
+    initChart () {
       this.chart = echarts.init(document.getElementById(this.id))
       this.chart.setOption({
         title: {
@@ -93,7 +93,7 @@ export default {
         },
         tooltip: {
           trigger: 'item',
-          formatter: "{a} <br/>{b} : {c} ({d}%)"
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
           // axisPointer: { // 坐标轴指示器，坐标轴触发有效
           //   type: 'line' // 默认为直线，可选为：'line' | 'shadow'
           // }

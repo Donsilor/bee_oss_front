@@ -59,42 +59,41 @@
   </div>
 </template>
 <script>
-import { PREFIX } from "../lib/util"
-import * as namespace from "../store/namespace"
-import { mapGetters } from "vuex"
+import { PREFIX } from '../lib/util'
+import * as namespace from '../store/namespace'
+import { mapGetters } from 'vuex'
 // import cache from '../../store/cache.js';
-const md5 = require('js-md5')
 export default {
-  data() {
+  data () {
     const checkName = (rule, value, callback) => {
       if (/^1\d{10}$/.test(value) || /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value)) {
         callback()
       } else {
-        callback(new Error("请输入正确的手机号码或邮箱"))
+        callback(new Error('请输入正确的手机号码或邮箱'))
       }
     }
     return {
       loginForm: {
-        username: "",
-        password: ""
+        username: '',
+        password: ''
       },
       rules: {
         username: [
           {
             required: true,
-            message: "请输入手机或邮箱",
-            trigger: "change"
+            message: '请输入手机或邮箱',
+            trigger: 'change'
           },
           {
             validator: checkName,
-            trigger: "change"
+            trigger: 'change'
           }
         ],
         password: [
           {
             required: true,
-            message: "请输入密码",
-            trigger: "change"
+            message: '请输入密码',
+            trigger: 'change'
           }
         ]
       }
@@ -105,35 +104,35 @@ export default {
       token: namespace.TOKEN
     })
   },
-  mounted() {
-    if (localStorage.getItem("localData")) {
-      this.$router.push("main")
+  mounted () {
+    if (localStorage.getItem('localData')) {
+      this.$router.push('main')
     }
   },
   methods: {
-    login() {
+    login () {
       this.$http
         // .post(PREFIX + "auth/login", {
         //   username: this.loginForm.username,
         //   password: md5(this.loginForm.password)
         // })
-        .post(PREFIX + "auth/login", this.loginForm)
+        .post(PREFIX + 'auth/login', this.loginForm)
         .then(res => {
           const json = res.data
-          this.$message.success("登录成功")
+          this.$message.success('登录成功')
           let userObj = {
             user: {
               info: json.result
             }
           }
-          localStorage.setItem("localData", JSON.stringify(userObj))
+          localStorage.setItem('localData', JSON.stringify(userObj))
           this.$store
             .dispatch({
               type: namespace.SETUSER,
               info: json.result
             })
             .then(() => {
-              this.$router.push("main")
+              this.$router.push('main')
             })
         })
     }

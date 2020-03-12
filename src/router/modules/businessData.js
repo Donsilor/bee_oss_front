@@ -28,7 +28,6 @@ var businessData = [
   },
   {
     path: 'ops/:id',
-    name: 'ops',
     component: OPS
   },
   {
@@ -45,7 +44,7 @@ var businessData = [
     path: 'familyList',
     name: 'familyList',
     component: FamilyList
-  },
+  }
 ]
 
 export default businessData

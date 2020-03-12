@@ -114,21 +114,21 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex"
-import rootLogJson from "../../json/warnList.json"
-import "../../lib/util"
-import API from "../../service/index"
+import { mapActions } from 'vuex'
+import rootLogJson from '../../json/warnList.json'
+import '../../lib/util'
+import API from '../../service/index'
 export default {
   components: {},
-  data() {
+  data () {
     let startTime = new Date().setHours(0, 0, 0)
     return {
       rootLogForm: {
-        log_type: "",
-        host_name: "",
+        log_type: '',
+        host_name: '',
         select_date: new Date(),
-        svr_id: "",
-        monitor_name: "",
+        svr_id: '',
+        monitor_name: '',
         limit: 15,
         start_end_time: [new Date(startTime), new Date()]
       },
@@ -139,27 +139,27 @@ export default {
   },
   computed: {},
   watch: {},
-  mounted() {
+  mounted () {
     this.getRootLogs(1)
   },
   methods: {
-    getDetail(dataObj) {
+    getDetail (dataObj) {
       this.detailFlag = true
       let obj = this.logDetail
       for (let attr in obj) {
         obj[attr] = dataObj[attr]
       }
     },
-    getRootLogs(page) {
+    getRootLogs (page) {
       let obj = this
       let param = {}
       let currentForm = obj.rootLogForm
       currentForm.page = page
       for (let attr in currentForm) {
-        if (attr === "start_end_time") {
-          if (currentForm["start_end_time"].length) {
-            param.start_time = currentForm["start_end_time"][0].Format("hh:mm:ss")
-            param.end_time = currentForm["start_end_time"][1].Format("hh:mm:ss")
+        if (attr === 'start_end_time') {
+          if (currentForm['start_end_time'].length) {
+            param.start_time = currentForm['start_end_time'][0].Format('hh:mm:ss')
+            param.end_time = currentForm['start_end_time'][1].Format('hh:mm:ss')
           }
         } else {
           param[attr] = currentForm[attr]
@@ -172,11 +172,11 @@ export default {
         this.totalItem = result.data.result.total
       })
     },
-    pageChange() {
+    pageChange () {
       this.getRootLogs(this.currentPage)
     }
   },
-  ...mapActions(["getwarnDataList"])
+  ...mapActions(['getwarnDataList'])
 }
 </script>
 <style lang="less">

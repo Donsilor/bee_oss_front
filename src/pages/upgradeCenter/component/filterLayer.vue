@@ -126,35 +126,33 @@
   </div>
 </template>
 <script>
-import * as namespace from "../../../store/namespace"
-import { mapGetters, mapActions } from "vuex"
-import API from "../../../service/index"
+import API from '../../../service/index'
 export default {
-  props: ["brandIDOptions", "typeIDOptions", "type", "productIDOptions", "appIos", "router", "inputType", "product"],
-  data() {
+  props: ['brandIDOptions', 'typeIDOptions', 'type', 'productIDOptions', 'appIos', 'router', 'inputType', 'product'],
+  data () {
     return {
       brandIDOptionsChild: this.brandIDOptions,
       typeIDOptionsChild: this.typeIDOptions,
       productIDOptionsChild: this.productIDOptions,
       subsetProducts: [],
       filterForm: {
-        method: "list_versions",
-        brand_id: "",
-        product_id: "",
-        type_id: "",
+        method: 'list_versions',
+        brand_id: '',
+        product_id: '',
+        type_id: '',
         page: 1,
         rules: [],
         limit: 10,
         level: 2,
-        type: ""
+        type: ''
       }
     }
   },
   computed: {},
   watch: {
-    "filterForm.brand_id"(curVal, oldVal) {
-      this.filterForm.type_id = ""
-      this.filterForm.product_id = ""
+    'filterForm.brand_id' (curVal, oldVal) {
+      this.filterForm.type_id = ''
+      this.filterForm.product_id = ''
       this.filterForm.rules = []
       this.typeIDOptionsChild = this.type.filter(x => x.brand_ids.indexOf(curVal * 1) >= 0).map(x => {
         return {
@@ -163,8 +161,8 @@ export default {
         }
       })
     },
-    "filterForm.type_id"(curVal, oldVal) {
-      this.filterForm.product_id = ""
+    'filterForm.type_id' (curVal, oldVal) {
+      this.filterForm.product_id = ''
       this.filterForm.rules = []
       const brandKey = this.filterForm.brand_id * 1
       const typeKey = curVal * 1
@@ -178,49 +176,49 @@ export default {
         })
     }
   },
-  mounted() {},
+  mounted () {},
   methods: {
-    resetFilterForm() {
+    resetFilterForm () {
       let currentForm = this.filterForm
       for (let attr in currentForm) {
         switch (attr) {
-        case "method":
-          currentForm[attr] = "list_versions"
-          break
-        case "page":
-          currentForm[attr] = 1
-          break
-        case "limit":
-          currentForm[attr] = 10
-          break
-        case "rules":
-          currentForm[attr] = []
-          break
-        case "level":
-          currentForm[attr] = 2
-          break
-        default:
-          currentForm[attr] = ""
-          break
+          case 'method':
+            currentForm[attr] = 'list_versions'
+            break
+          case 'page':
+            currentForm[attr] = 1
+            break
+          case 'limit':
+            currentForm[attr] = 10
+            break
+          case 'rules':
+            currentForm[attr] = []
+            break
+          case 'level':
+            currentForm[attr] = 2
+            break
+          default:
+            currentForm[attr] = ''
+            break
         }
       }
     },
-    ruleChange(val) {
+    ruleChange (val) {
       if (val) {
-        this.rulesImport.productsList = [{ required: true, message: "请选择支持版本" }]
-        this.rulesImport.routersList = [{ required: true, message: "请选择支持版本" }]
+        this.rulesImport.productsList = [{ required: true, message: '请选择支持版本' }]
+        this.rulesImport.routersList = [{ required: true, message: '请选择支持版本' }]
       } else {
         this.rulesImport.productsList = [{ required: false }]
         this.rulesImport.routersList = [{ required: false }]
       }
     },
-    closeParentFlow() {
-      this.$emit("closeFilterBox")
+    closeParentFlow () {
+      this.$emit('closeFilterBox')
     },
-    productChange(val) {
+    productChange (val) {
       let obj = this
       API.pubilcCorsAction({
-        method: "released_versions",
+        method: 'released_versions',
         type: 3,
         product_id: val
       }).then(res => {
@@ -241,12 +239,12 @@ export default {
         }
       })
     },
-    submitFilter() {
+    submitFilter () {
       if (this.inputType !== 2 && this.inputType !== 5 && !this.filterForm.rules.length) {
-        this.$message.error("请选择路由版本")
+        this.$message.error('请选择路由版本')
         return
       } else if ((this.inputType === 2 || this.inputType === 5) && !this.filterForm.rules.length) {
-        this.$message.error("请选择子设备版本")
+        this.$message.error('请选择子设备版本')
         return
       }
       const obj = this
@@ -257,12 +255,12 @@ export default {
         delete currentParam.product_id
       } else {
         currentParam.rules = currentParam.rules.map(item => {
-          return item.split("-")[0]
+          return item.split('-')[0]
         })
       }
       delete currentParam.brand_id
       delete currentParam.type_id
-      obj.$emit("filterVersionsParent", currentParam)
+      obj.$emit('filterVersionsParent', currentParam)
     }
   }
 }

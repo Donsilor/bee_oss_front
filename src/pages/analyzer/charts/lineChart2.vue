@@ -23,7 +23,7 @@ export default {
     },
     result: {
       type: Object,
-      default() {
+      default () {
         return {}
       }
     },
@@ -52,15 +52,15 @@ export default {
       default: null
     }
   },
-  data() {
+  data () {
     return {
       chart: null,
       legendData: [],
       seriesData: []
     }
   },
-  mounted() { },
-  beforeDestroy() {
+  mounted () { },
+  beforeDestroy () {
     if (!this.chart) {
       return
     }
@@ -68,7 +68,7 @@ export default {
     this.chart = null
   },
   methods: {
-    initChart() {
+    initChart () {
       let option = {
         title: {
           text: this.title,

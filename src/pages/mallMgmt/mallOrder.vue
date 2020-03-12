@@ -109,9 +109,9 @@
 </style>
 
 <script>
-import { PREFIX } from "../../lib/util"
+import { PREFIX } from '../../lib/util'
 export default {
-  data() {
+  data () {
     return {
       pages: {
         page: '1',
@@ -127,14 +127,14 @@ export default {
       tableData: []
     }
   },
-  mounted() {
+  mounted () {
     this.getList()
   },
   methods: {
-    getList() {
+    getList () {
       let param = this.getParam()
       this.$http
-        .post(PREFIX + "mall_record/lists", param)
+        .post(PREFIX + 'mall_record/lists', param)
         .then(res => {
           const json = res.data
           if (json.code === 200) {
@@ -152,7 +152,7 @@ export default {
           }
         })
     },
-    getParam() {
+    getParam () {
       let param = {
         page: this.pages.page,
         limit: this.pages.limit
@@ -172,19 +172,19 @@ export default {
       }
       return param
     },
-    doSearch() {
+    doSearch () {
       this.pages = {
         page: '1',
-        limit: '10',
+        limit: '10'
       }
       this.getList()
     },
-    handPageChange(val) {
+    handPageChange (val) {
       this.pages.page = val
       this.getList()
     },
-    exportExel() {
-      let token = JSON.parse(localStorage.getItem("localData")).user.info.token
+    exportExel () {
+      let token = JSON.parse(localStorage.getItem('localData')).user.info.token
       let param = {
         token: token,
         page: '1',
@@ -203,10 +203,10 @@ export default {
       if (this.search.phone) {
         param.tel = this.search.phone
       }
-      var query = ""
+      var query = ''
       for (var o in param) {
-        if (param[o] != -1) {
-          query += o + "=" + param[o] + "&"
+        if (param[o] !== -1) {
+          query += o + '=' + param[o] + '&'
         }
       }
       query = query.substring(0, query.length - 1)

@@ -153,96 +153,95 @@
 </template>
 
 <script>
-import CityPicker from "../../components/cityPicker.vue"
-import API from "../../service/index.js"
-import axios from "axios"
-import * as URL from "~/lib/api"
+import CityPicker from '../../components/cityPicker.vue'
+import axios from 'axios'
+import * as URL from '~/lib/api'
 
 const padZero = num => {
-  num = num + ""
-  return num.length == 1 ? "0" + num : num
+  num = num + ''
+  return num.length === 1 ? '0' + num : num
 }
 
 const formatDate = d => {
-  return d.getFullYear() + "-" + padZero(d.getMonth() + 1) + "-" + padZero(d.getDate())
+  return d.getFullYear() + '-' + padZero(d.getMonth() + 1) + '-' + padZero(d.getDate())
 }
 
 export default {
   components: {
     CityPicker
   },
-  data() {
+  data () {
     return {
-      area: "",
+      area: '',
       formdata: {
-        date: "",
-        platform: "",
-        province: "",
-        city: ""
+        date: '',
+        platform: '',
+        province: '',
+        city: ''
       },
       pickerOptions: {
         shortcuts: [
           {
-            text: "最近一周",
-            onClick(picker) {
+            text: '最近一周',
+            onClick (picker) {
               const end = new Date()
               const start = new Date()
               end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit("pick", [start, end])
+              picker.$emit('pick', [start, end])
             }
           },
           {
-            text: "最近一个月",
-            onClick(picker) {
+            text: '最近一个月',
+            onClick (picker) {
               const end = new Date()
               const start = new Date()
               end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 31)
-              picker.$emit("pick", [start, end])
+              picker.$emit('pick', [start, end])
             }
           },
           {
-            text: "最近三个月",
-            onClick(picker) {
+            text: '最近三个月',
+            onClick (picker) {
               const end = new Date()
               const start = new Date()
               end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 93)
-              picker.$emit("pick", [start, end])
+              picker.$emit('pick', [start, end])
             }
           }
         ]
       },
       operFamilyCategoryCharData: {
-        columns: ["category_title", "family_num"],
+        columns: ['category_title', 'family_num'],
         rows: []
       },
       operFamilyCategoryRateCharData: {
-        columns: ["category_title", "family_rate"],
+        columns: ['category_title', 'family_rate'],
         rows: []
       },
       operStatCharData: {
-        columns: ["category_title", "oper_num"],
+        columns: ['category_title', 'oper_num'],
         rows: []
       },
       chartSettings1: {
-        type: "histogram",
+        type: 'histogram',
         labelMap: {
-          family_num: "户数"
+          family_num: '户数'
         }
       },
       chartSettings2: {
-        yAxisType: ["percent"],
-        type: "histogram",
+        yAxisType: ['percent'],
+        type: 'histogram',
         labelMap: {
-          family_rate: "比重"
+          family_rate: '比重'
         }
       },
       chartSettings3: {
-        type: "histogram",
+        type: 'histogram',
         labelMap: {
-          oper_num: "次数"
+          oper_num: '次数'
         }
       },
       chartExtend1: {
@@ -251,7 +250,7 @@ export default {
           barWidth: 40,
           itemStyle: {
             normal: {
-              label: { show: true, position: "top" }
+              label: { show: true, position: 'top' }
             }
           }
         }
@@ -263,18 +262,18 @@ export default {
             normal: {
               label: {
                 show: true,
-                position: "top",
-                formatter(a) {
+                position: 'top',
+                formatter (a) {
                   // echarts配置文档中
                   // line value是数组
                   // histogram value是number
-                  let value = ""
-                  if (a.componentSubType === "line") {
+                  let value = ''
+                  if (a.componentSubType === 'line') {
                     value = a.value[1]
                   } else {
                     value = a.value
                   }
-                  return value * 100 + "%"
+                  return value * 100 + '%'
                 }
               }
             }
@@ -286,7 +285,7 @@ export default {
           barWidth: 40,
           itemStyle: {
             normal: {
-              label: { show: true, position: "top" }
+              label: { show: true, position: 'top' }
             }
           }
         }
@@ -296,7 +295,7 @@ export default {
       showStatEmpty: false
     }
   },
-  mounted() {
+  mounted () {
     const end = new Date()
     const start = new Date()
     end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
@@ -305,26 +304,26 @@ export default {
     this.getDeviceAnalyzeData({
       start_date: formatDate(start),
       end_date: formatDate(end),
-      city: ""
+      city: ''
     })
   },
   methods: {
-    onCitySelect(val) {
+    onCitySelect (val) {
       this.formdata.province = val[0]
       this.formdata.city = val[1]
     },
-    search() {
+    search () {
       const { date, platform, province, city } = this.formdata
       this.getDeviceAnalyzeData({
         start_date: formatDate(date[0]),
         end_date: formatDate(date[1]),
         province,
         city,
-        os_type: platform || "",
-        app_version: ""
+        os_type: platform || '',
+        app_version: ''
       })
     },
-    getDeviceAnalyzeData(params) {
+    getDeviceAnalyzeData (params) {
       // console.log(params);
       axios.all([this.getOperFamilyCategoryData(params), this.getOperStatData(params)]).then(
         axios.spread((operFamilyCategoryData, operStatData) => {
@@ -337,14 +336,14 @@ export default {
         })
       )
     },
-    getOperFamilyCategoryData(params) {
+    getOperFamilyCategoryData (params) {
       return axios.post(URL.operFamilyCategory, params)
     },
-    getOperStatData(params) {
+    getOperStatData (params) {
       return axios.post(URL.operStat, params)
     },
     // 点击图标转换图标类型
-    changeCharType(key, type) {
+    changeCharType (key, type) {
       this[key].type = type
     }
   }

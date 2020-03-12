@@ -2,19 +2,19 @@
   <pagination :config="config" />
 </template>
 <script>
-import { mapGetters } from "vuex"
-import pagination from "./pagination.vue"
+import { mapGetters } from 'vuex'
+import pagination from './pagination.vue'
 export default {
-  name: "Pager",
+  name: 'Pager',
   components: {
     pagination
   },
   props: [
-    "data", // 源数据
-    "displayData", // 显示的数组
-    "keyword" // 关键字
+    'data', // 源数据
+    'displayData', // 显示的数组
+    'keyword' // 关键字
   ],
-  data() {
+  data () {
     return {
       config: {
         currentPage: 1,
@@ -25,37 +25,37 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["pageSize"])
+    ...mapGetters(['pageSize'])
   },
   watch: {
-    "config.currentPage": function(newValue, oldValue) {
+    'config.currentPage': function (newValue, oldValue) {
       // console.log('config.currentPage', newValue)
       this.filterData()
     },
-    "config.pageSize": function(newValue, oldValue) {
+    'config.pageSize': function (newValue, oldValue) {
       // console.log('config.pageSize', newValue)
       this.filterData()
     },
-    keyword(newValue, oldValue) {
+    keyword (newValue, oldValue) {
       this.config.currentPage = 1
       this.filterData()
     },
-    data(newValue, oldValue) {
+    data (newValue, oldValue) {
       this.filterData()
     }
   },
-  mounted() {
+  mounted () {
     this.filterData()
   },
   methods: {
     // 排序函数(升序排列)
-    handleSortFun(sortSource, aim) {
+    handleSortFun (sortSource, aim) {
       let by = name => {
         return (o, p) => {
           let a, b
-          if (typeof o === "object" && typeof p === "object" && o && p) {
-            a = o[name].toString().replace(",", "")
-            b = p[name].toString().replace(",", "")
+          if (typeof o === 'object' && typeof p === 'object' && o && p) {
+            a = o[name].toString().replace(',', '')
+            b = p[name].toString().replace(',', '')
             if (a === b) {
               return 0
             }
@@ -64,13 +64,13 @@ export default {
             }
             return typeof a < typeof b ? -1 : 1
           } else {
-            throw new Error("error")
+            throw new Error('error')
           }
         }
       }
       sortSource.sort(by(aim))
     },
-    filterData(column, aim, order) {
+    filterData (column, aim, order) {
       let obj = this
       if (order) {
         obj.paixu = order
@@ -79,14 +79,14 @@ export default {
         obj.paixu = false
       }
       let source = []
-      if (obj.keyword !== undefined && obj.keyword.trim() !== "") {
+      if (obj.keyword !== undefined && obj.keyword.trim() !== '') {
         let keyword = obj.keyword.trim()
         source = obj.data.filter(v => {
           let keys = Object.keys(v)
           let exist = false
           keys.forEach(subV => {
-            if (typeof v[subV] !== "function") {
-              if (typeof v[subV] === "object") {
+            if (typeof v[subV] !== 'function') {
+              if (typeof v[subV] === 'object') {
                 console.log('to do')
               } else {
                 if (
@@ -96,7 +96,6 @@ export default {
                     .indexOf(keyword.toLowerCase()) > -1
                 ) {
                   exist = true
-                  return
                 }
               }
             }
@@ -111,9 +110,9 @@ export default {
       // 根据order选择排序的顺序
       if (obj.paixu) {
         obj.handleSortFun(sortSource, obj.aimName)
-        if (obj.paixu === "ascending") {
+        if (obj.paixu === 'ascending') {
           source = sortSource
-        } else if (obj.paixu === "descending") {
+        } else if (obj.paixu === 'descending') {
           source = sortSource.reverse()
         }
       }
@@ -128,6 +127,6 @@ export default {
       })
       obj.config.total = source.length
     }
-  },
+  }
 }
 </script>

@@ -21,11 +21,11 @@
   </section>
 </template>
 <script>
-import * as namespace from "../store/namespace"
-import { PREFIX } from "../lib/util"
-import { mapGetters } from "vuex"
+import * as namespace from '../store/namespace'
+import { PREFIX } from '../lib/util'
+import { mapGetters } from 'vuex'
 export default {
-  data() {
+  data () {
     return {}
   },
   computed: {
@@ -34,20 +34,19 @@ export default {
       user: namespace.USER
     })
   },
-  mounted() { },
+  mounted () { },
   methods: {
-    logout() {
+    logout () {
       this.$http
-        .post(PREFIX + "auth/logout", {
+        .post(PREFIX + 'auth/logout', {
           token: this.token
         })
         .then(res => {
-          const json = res.data
           this.$store.dispatch({
             type: namespace.DELUSER
           })
-          this.$router.push("/")
-          this.$message.success("登出成功")
+          this.$router.push('/')
+          this.$message.success('登出成功')
         })
     }
   }

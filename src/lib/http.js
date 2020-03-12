@@ -16,8 +16,7 @@ const CODE = {
 let isDEV = process.env.NODE_ENV === 'development'
 // Add a request interceptor
 axios.interceptors.request.use(
-  function(config) {
-
+  function (config) {
     instenceLoading = Loading.service({
       lock: true,
       text: '加载中...',
@@ -26,27 +25,26 @@ axios.interceptors.request.use(
     })
 
     if (config.url.indexOf('noToken') > -1) {
-      //大文件分片上传接口不加token验证，通过noToken参数来判断是否需要token验证，存在这个参数说明不需要进行Token验证
+      // 大文件分片上传接口不加token验证，通过noToken参数来判断是否需要token验证，存在这个参数说明不需要进行Token验证
       return config
     } else {
       let info =
-				(localStorage.getItem('localData') &&
-					JSON.parse(localStorage.getItem('localData')).user &&
-					JSON.parse(localStorage.getItem('localData')).user.info) || {}
+        (localStorage.getItem('localData') &&
+          JSON.parse(localStorage.getItem('localData')).user &&
+          JSON.parse(localStorage.getItem('localData')).user.info) || {}
       config.withCredentials = true
       // config.headers['Content-Type'] = 'application/json'
       if (!/\/api.php/.test(config.url)) {
         if (!config.data) config.data = {}
         config.data['token'] = info.token || ''
       } else {
-      	if (!isDEV) {
+        if (!isDEV) {
           config.url = getCorsUrl() + config.url
         }
       }
       NProgress.start()
       if (config.method === 'post' || config.method === 'put') {
         var params = {}
-        var str = []
         for (var k in config.data) {
           if (typeof config.data[k] !== 'function') {
             params[k] = config.data[k]
@@ -62,7 +60,7 @@ axios.interceptors.request.use(
       return config
     }
   },
-  function(error) {
+  function (error) {
     // Do something with request error
     NProgress.done()
     return Promise.reject(error)
@@ -71,7 +69,7 @@ axios.interceptors.request.use(
 
 // Add a response interceptor
 axios.interceptors.response.use(
-  function(response) {
+  function (response) {
     instenceLoading.close()
     // Do something with response data
     if (response.status === 200) {
@@ -95,8 +93,8 @@ axios.interceptors.response.use(
         }
       } else if (
         response.config.method === 'post' ||
-				response.config.method === 'put' ||
-				response.config.method === 'delete'
+        response.config.method === 'put' ||
+        response.config.method === 'delete'
       ) {
         // Message({
         //   message: response.data.msg,
@@ -107,7 +105,7 @@ axios.interceptors.response.use(
     NProgress.done()
     return response
   },
-  function(error) {
+  function (error) {
     instenceLoading.close()
     // Do something with response error
     // miniToastr.error('服务器出错', 'ERROR')

@@ -124,19 +124,19 @@
 <script>
 import MixBarChart from './charts/mixBarChart.vue'
 import SimpleChart from './charts/simpleChart.vue'
-import axios from "axios"
-import * as URL from "~/lib/api"
+import axios from 'axios'
+import * as URL from '~/lib/api'
 export default {
   components: {
     SimpleChart,
     MixBarChart
   },
-  data() {
+  data () {
     return {
       pickerOptions: {
         shortcuts: [{
           text: '昨天',
-          onClick(picker) {
+          onClick (picker) {
             const end = new Date()
             const start = new Date()
             start.setTime(start.getTime() - 3600 * 1000 * 24)
@@ -144,7 +144,7 @@ export default {
           }
         }, {
           text: '最近7天',
-          onClick(picker) {
+          onClick (picker) {
             const end = new Date()
             const start = new Date()
             start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
@@ -152,7 +152,7 @@ export default {
           }
         }, {
           text: '最近30天',
-          onClick(picker) {
+          onClick (picker) {
             const end = new Date()
             const start = new Date()
             start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
@@ -190,7 +190,7 @@ export default {
     }
   },
   watch: {
-    dateRange(val) {
+    dateRange (val) {
       console.log(8989, val)
       const param = {
         'new_cat:start_time': val[0].Format('yyyy-MM-dd'),
@@ -199,7 +199,7 @@ export default {
       this.getAccessStatistics(param)
     }
   },
-  mounted() {
+  mounted () {
     let end = new Date()
     let start = new Date()
     end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
@@ -212,7 +212,7 @@ export default {
   },
   methods: {
     // 获取数据
-    getAccessStatistics(param) {
+    getAccessStatistics (param) {
       axios.post(URL.AccessStatisticsURL, param).then(res => {
         if (res.data.code === 200) {
           // this.roomOptions = res.data.result.data.all_room
@@ -229,10 +229,10 @@ export default {
       })
     },
     // 格式化时间
-    formatDate(d) {
+    formatDate (d) {
       let padZero = num => {
         num = num + ''
-        return num.length == 1 ? '0' + num : num
+        return num.length === 1 ? '0' + num : num
       }
       return d ? d.getFullYear() + '-' + padZero(d.getMonth() + 1) + '-' + padZero(d.getDate()) : ''
     }

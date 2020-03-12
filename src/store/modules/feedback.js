@@ -5,26 +5,26 @@ export default {
     needQueryOptionStorage: false
   },
   getters: {
-    queryOptionStorage(state) {
+    queryOptionStorage (state) {
       return state.queryOptionStorage
     },
-    needQueryOptionStorage(state) {
+    needQueryOptionStorage (state) {
       return state.needQueryOptionStorage
     }
   },
   mutations: {
-    setQueryOptionStorage(state, payload) {
+    setQueryOptionStorage (state, payload) {
       state.queryOptionStorage = payload
     },
-    setNeedQueryOptionStorage(state, payload) {
+    setNeedQueryOptionStorage (state, payload) {
       state.needQueryOptionStorage = payload
     }
   },
   actions: {
-    setQueryOptionStorage({ commit, state }, queryOption) {
+    setQueryOptionStorage ({ commit, state }, queryOption) {
       commit('setQueryOptionStorage', queryOption)
     },
-    setNeedQueryOptionStorage({ commit, state }, param) {
+    setNeedQueryOptionStorage ({ commit, state }, param) {
       commit('setNeedQueryOptionStorage', param)
     }
   }

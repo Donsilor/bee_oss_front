@@ -27,7 +27,7 @@ export default {
     },
     result: {
       type: Object,
-      default() {
+      default () {
         return {}
       }
     },
@@ -44,7 +44,7 @@ export default {
       default: '300px'
     }
   },
-  data() {
+  data () {
     return {
       chart: null,
       legendData: [],
@@ -55,7 +55,7 @@ export default {
   },
   watch: {
     result: {
-      handler(newVal) {
+      handler (newVal) {
         this.legendData = []
         this.seriesData = []
         for (let key in newVal) {
@@ -70,10 +70,10 @@ export default {
       deep: true
     }
   },
-  mounted() {
+  mounted () {
     // console.log(this.result, 'result')
   },
-  beforeDestroy() {
+  beforeDestroy () {
     if (!this.chart) {
       return
     }
@@ -81,7 +81,7 @@ export default {
     this.chart = null
   },
   methods: {
-    initChart() {
+    initChart () {
       this.chart = echarts.init(document.getElementById(this.id))
       this.chart.setOption({
         title: {
@@ -95,7 +95,7 @@ export default {
         },
         tooltip: {
           trigger: 'item',
-          formatter: "{a} <br/>{b} : {c} ({d}%)"
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
         legend: {
           // orient: 'vertical',

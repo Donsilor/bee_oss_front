@@ -12,8 +12,8 @@
           autocomplete="off"/>
       </el-form-item>
       <el-form-item label="情景icon">
-        <Upload 
-          :image-file="imageFile" 
+        <Upload
+          :image-file="imageFile"
           @emitImageData="emitImageData" />
       </el-form-item>
       <el-form-item label="状态">
@@ -35,24 +35,24 @@
 </template>
 
 <script>
-import { PREFIX } from "../../../lib/util"
-import getCorsUrl from "../../../lib/corsconfig"
-import Upload from "../../../components/upload.vue"
+// import { PREFIX } from '../../../lib/util'
+// import getCorsUrl from '../../../lib/corsconfig'
+import Upload from '../../../components/upload.vue'
 export default {
   components: {
     Upload
   },
   props: ['config'],
-  data() {
+  data () {
     return {
       imageFile: '', // download_url
-      image_url: '', // image object
+      image_url: '' // image object
     }
   },
   methods: {
-    emitImageData(data) {
+    emitImageData (data) {
       this.image_url = data.object
-      this.imageFile = data.download_url 
+      this.imageFile = data.download_url
     }
   }
 }

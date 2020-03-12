@@ -205,44 +205,44 @@
   </div>
 </template>
 <script>
-import * as namespace from "../../../store/namespace"
-import { mapGetters, mapActions } from "vuex"
+import * as namespace from '../../../store/namespace'
+import { mapGetters } from 'vuex'
 export default {
-  props: ["ruleFormDetail"],
-  data() {
+  props: ['ruleFormDetail'],
+  data () {
     return {
       uploadObj: {
-        token: JSON.parse(localStorage.getItem("localData")).user.info.token
+        token: JSON.parse(localStorage.getItem('localData')).user.info.token
       },
       importForm: {
-        title: "",
-        version: "",
-        release_tm: "",
+        title: '',
+        version: '',
+        release_tm: '',
         routersList: [],
         productsList: [],
-        download_url_object: "",
-        img_url_object: "",
-        download_file_md5: "",
-        file_size: "",
+        download_url_object: '',
+        img_url_object: '',
+        download_file_md5: '',
+        file_size: '',
         force: 0,
-        brand_id: "",
-        type_id: "",
-        product_id: "",
-        description: "",
-        note: ""
+        brand_id: '',
+        type_id: '',
+        product_id: '',
+        description: '',
+        note: ''
       },
       rulesImport: {
-        version: [{ required: true, message: "请输入版本号" }],
-        title: [{ required: true, message: "请输入版本标题" }],
-        description: [{ required: true, message: "请输入概要描述" }],
-        note: [{ required: true, message: "请输入详细事项" }],
-        product_id: [{ required: false, message: "请输入子设备" }],
-        release_tm: [{ required: true, message: "请选择发布时间" }],
-        routersList: [{ required: false, message: "请选择支持版本" }],
-        productsList: [{ required: false, message: "请选择支持版本" }],
-        download_url_object: [{ required: true, message: "请上传固件包" }],
-        img_url_object: [{ required: true, message: "请上传img图片" }],
-        force: [{ required: true, message: "请选择是否强制升级" }]
+        version: [{ required: true, message: '请输入版本号' }],
+        title: [{ required: true, message: '请输入版本标题' }],
+        description: [{ required: true, message: '请输入概要描述' }],
+        note: [{ required: true, message: '请输入详细事项' }],
+        product_id: [{ required: false, message: '请输入子设备' }],
+        release_tm: [{ required: true, message: '请选择发布时间' }],
+        routersList: [{ required: false, message: '请选择支持版本' }],
+        productsList: [{ required: false, message: '请选择支持版本' }],
+        download_url_object: [{ required: true, message: '请上传固件包' }],
+        img_url_object: [{ required: true, message: '请上传img图片' }],
+        force: [{ required: true, message: '请选择是否强制升级' }]
       }
     }
   },
@@ -251,27 +251,27 @@ export default {
       subset: namespace.SUBSET
     })
   },
-  mounted() { },
+  mounted () { },
   methods: {
-    resetImportForm() {
+    resetImportForm () {
       let form = this.importForm
       for (let attr in form) {
         switch (attr) {
-        case "routersList":
-        case "productsList":
-          form[attr] = []
-          break
-        case "force":
-          form[attr] = 0
-          break
-        default:
-          form[attr] = ""
-          break
+          case 'routersList':
+          case 'productsList':
+            form[attr] = []
+            break
+          case 'force':
+            form[attr] = 0
+            break
+          default:
+            form[attr] = ''
+            break
         }
       }
     },
-    closeParentFlow() {
-      this.$emit("closeImportBox")
+    closeParentFlow () {
+      this.$emit('closeImportBox')
     }
   }
 }

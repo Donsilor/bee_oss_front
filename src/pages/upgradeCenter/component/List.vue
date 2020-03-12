@@ -67,7 +67,7 @@ export default {
     },
     tableData: {
       type: Array,
-      default: function() {
+      default: function () {
         return []
       }
     },
@@ -77,7 +77,7 @@ export default {
     },
     tableItems: {
       type: Array,
-      default: function() {
+      default: function () {
         return []
       }
     },
@@ -96,7 +96,7 @@ export default {
       default: '300px'
     }
   },
-  data() {
+  data () {
     return {
       localForm: this.formData,
       currentPage: 1,
@@ -106,20 +106,20 @@ export default {
     }
   },
   watch: {
-    tableData(value) {
+    tableData (value) {
       this.localTableData = value
     },
-    total(value) {
+    total (value) {
       this.localTotal = value
     }
   },
-  mounted() {
+  mounted () {
     if (this.tableData.length > 0 && this.requestFunc) {
       this.requestData(1)
     }
   },
   methods: {
-    requestData(currentPage) {
+    requestData (currentPage) {
       let page = currentPage || this.currentPage
       this.currentPage = page
       let param = {
@@ -132,7 +132,7 @@ export default {
         this.localTableData = this.pickRows(res.data)
       })
     },
-    pickRows(data) {
+    pickRows (data) {
       if (data.rows && data.rows instanceof Array) return data.rows
       let tableData = []
       for (let key in data) {
@@ -143,12 +143,12 @@ export default {
       }
       return tableData
     },
-    handleSizeChange(value) {
+    handleSizeChange (value) {
       this.currentPage = 1
       this.pageSize = value
       this.requestData()
     },
-    handleCurrentChange(value) {
+    handleCurrentChange (value) {
       this.currentPage = value
       this.requestData()
     }
@@ -157,14 +157,14 @@ export default {
 </script>
 
 <style scoped>
-	.table-list-view {
-		margin-top: 10px;
-	}
+  .table-list-view {
+    margin-top: 10px;
+  }
 
-	.el-pagination {
-		display: flex;
-		justify-content: center;
-		margin-left: 0;
-		margin-top: 20px;
-	}
+  .el-pagination {
+    display: flex;
+    justify-content: center;
+    margin-left: 0;
+    margin-top: 20px;
+  }
 </style>

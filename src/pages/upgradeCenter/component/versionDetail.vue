@@ -189,51 +189,51 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from "vuex"
-import API from "../../../service/index"
+import { mapGetters } from 'vuex'
+import API from '../../../service/index'
 export default {
-  props: ["ruleFormDetail", "deviceObj"],
-  data() {
+  props: ['ruleFormDetail', 'deviceObj'],
+  data () {
     return {
       versionDeviceList: {
         tableColumn: [
-          { prop: "id", label: "id" },
-          { prop: "uuid", label: "设备标识uuid" },
-          { prop: "created_at", label: "创建时间" }
+          { prop: 'id', label: 'id' },
+          { prop: 'uuid', label: '设备标识uuid' },
+          { prop: 'created_at', label: '创建时间' }
         ],
         tableData: []
       },
       totalItem: 0,
       currentPage: 1,
       os_type_text: {
-        1: "android_app",
-        4: "ios_app",
-        6: "android_pad",
-        11: "route_app",
-        12: "video_app",
-        13: "lua_app",
+        1: 'android_app',
+        4: 'ios_app',
+        6: 'android_pad',
+        11: 'route_app',
+        12: 'video_app',
+        13: 'lua_app'
       }
     }
   },
   computed: {
     ...mapGetters({})
   },
-  mounted() { },
+  mounted () { },
   methods: {
-    getRules(rules) {
+    getRules (rules) {
       if (rules) {
-        return rules.map(item => item.rule).join(",")
+        return rules.map(item => item.rule).join(',')
       } else {
-        return ""
+        return ''
       }
     },
-    resetList() {
+    resetList () {
       this.getVersionDeviceList(1)
     },
-    pageChange() {
+    pageChange () {
       this.getVersionDeviceList(this.currentPage)
     },
-    getVersionDeviceList(page) {
+    getVersionDeviceList (page) {
       let obj = this
       let dataObj = this.deviceObj
       let param_1 = {
@@ -241,10 +241,10 @@ export default {
         page: page,
         limit: 5,
         version: dataObj.version,
-        os_type: obj.os_type_text[dataObj.os_type] || "",
-        product_id: dataObj.product_id || "",
-        router_pid: dataObj.router_pid || "",
-        method: "get_uuids"
+        os_type: obj.os_type_text[dataObj.os_type] || '',
+        product_id: dataObj.product_id || '',
+        router_pid: dataObj.router_pid || '',
+        method: 'get_uuids'
       }
       API.pubilcCorsAction(param_1).then(result => {
         obj.versionDeviceList.tableData = result.result ? result.result.items : []

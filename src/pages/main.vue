@@ -9,8 +9,8 @@
         <bnav />
       </el-aside>
 
-      <el-main 
-        id="page" 
+      <el-main
+        id="page"
         class="page">
         <router-view />
       </el-main>
@@ -18,18 +18,18 @@
   </el-container>
 </template>
 <script>
-import Bheader from "../components/bheader.vue"
-import Bnav from "../components/bnav/bnav.vue"
+import Bheader from '../components/bheader.vue'
+import Bnav from '../components/bnav/bnav.vue'
 export default {
   components: {
     Bheader,
     Bnav
   },
-  data() {
+  data () {
     return {}
   },
-  mounted() { },
-  methods: {},
+  mounted () { },
+  methods: {}
 }
 </script>
 <style lang="less">

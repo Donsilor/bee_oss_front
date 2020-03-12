@@ -5,9 +5,9 @@
       class="item"
     >
       <el-breadcrumb-item>
-        <span
-          style="cursor:pointer"
-          @click="goList">用户反馈中心</span>
+       <span
+         style="cursor:pointer"
+         @click="goList">用户反馈中心</span>
       </el-breadcrumb-item>
       <el-breadcrumb-item>反馈详情</el-breadcrumb-item>
     </el-breadcrumb>
@@ -60,7 +60,7 @@
     </el-row>
     <div class="item content">
       <p style="line-height: 30px;">
-        反馈内容：<br> <pre style="font-family: 微软雅黑">{{ detail.content }}</pre>
+        反馈内容：<br> {{ detail.content }}
       </p>
     </div>
     <div class="item imgs">
@@ -75,7 +75,7 @@
     </div>
     <div v-if="has_reply">
       <p>已回复：</p>
-      <pre style="font-family: 微软雅黑">{{ contentReply }}</pre>
+      <p>{{ contentReply }}</p>
     </div>
     <!--回复按钮-->
     <div v-if="!has_reply">
@@ -110,12 +110,12 @@
 </template>
 
 <script>
-import axios from "~/lib/http"
-import * as URL from "~/lib/api"
-import { mapGetters } from "vuex"
+import axios from '~/lib/http'
+import * as URL from '~/lib/api'
+import { mapGetters } from 'vuex'
 export default {
   components: {},
-  data() {
+  data () {
     return {
       detail: {},
       prevDisabled: false,
@@ -127,27 +127,27 @@ export default {
     }
   },
   computed: {
-    ...mapGetters("feedback", ["queryOptionStorage", "needQueryOptionStorage"])
+    ...mapGetters('feedback', ['queryOptionStorage', 'needQueryOptionStorage'])
   },
   watch: {
-    dialogVisible(val) {
+    dialogVisible (val) {
       if (!val) {
         this.replyText = ''
       }
     }
   },
-  mounted() {
+  mounted () {
     // 点击列表页某条反馈进来
     this.getFeedbackDetails(this.$route.params.id, 0)
   },
   methods: {
-    goList() {
+    goList () {
       // needQueryOptionStorage为true
-      this.$store.dispatch("feedback/setNeedQueryOptionStorage", true).then(() => {
-        this.$router.push({ name: "feedbackList" })
+      this.$store.dispatch('feedback/setNeedQueryOptionStorage', true).then(() => {
+        this.$router.push({ name: 'feedbackList' })
       })
     },
-    getFeedbackDetails(detailId, is_forward) {
+    getFeedbackDetails (detailId, is_forward) {
       let params = null
       if (is_forward === 0) {
         // 点击列表某条反馈进来
@@ -170,30 +170,29 @@ export default {
         const result = res.data.result
         this.prevDisabled = false
         this.nextDisabled = false
-        this.has_reply = result.has_reply === 0 ? false : true
+        this.has_reply = result.has_reply !== 0
         this.contentReply = result.reply_content
         if (result) {
           this.detail = result
-          this.detail.img_list = result.img_list ? result.img_list.split(",") : []
+          this.detail.img_list = result.img_list ? result.img_list.split(',') : []
           this.$previewRefresh()
         } else {
           // 如果没有返回数据 所以是最前或者最后一条 不更新界面 只disable按钮
           if (is_forward === 1) {
             this.prevDisabled = true
-            this.$message("已经是最前面一条")
+            this.$message('已经是最前面一条')
           } else if (is_forward === 2) {
             this.nextDisabled = true
-            this.$message("已经是最后面一条")
+            this.$message('已经是最后面一条')
           }
         }
       })
     },
-    reply() {
-    	if (!this.replyText) {
-    		this.$message.warning("请输入内容")
+    reply () {
+      if (!this.replyText) {
+        this.$message.warning('请输入内容')
         return
-      }
-    	let obj = {
+      }let obj = {
         reply_content: this.replyText,
         id: this.$route.params.id
       }
@@ -205,11 +204,11 @@ export default {
       })
     },
     // 上一条
-    detailPrev() {
+    detailPrev () {
       this.getFeedbackDetails(this.detail.id, 1)
     },
     // 下一条
-    detailNext() {
+    detailNext () {
       this.getFeedbackDetails(this.detail.id, 2)
     }
   }
@@ -241,4 +240,3 @@ export default {
   cursor: pointer;
 }
 </style>
-

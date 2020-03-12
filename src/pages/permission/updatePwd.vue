@@ -56,15 +56,15 @@
 </template>
 
 <script>
-import API from "../../service/index.js"
+import API from '../../service/index.js'
 
 export default {
-  data() {
+  data () {
     var validatePass2 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请再次输入密码"))
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
       } else if (value !== this.formdata.password) {
-        callback(new Error("两次输入密码不一致!"))
+        callback(new Error('两次输入密码不一致!'))
       } else {
         callback()
       }
@@ -72,25 +72,25 @@ export default {
 
     return {
       formdata: {
-        mobile: "",
-        password: "",
-        old_password: "",
-        password2: ""
+        mobile: '',
+        password: '',
+        old_password: '',
+        password2: ''
       },
       rules: {
-        mobile: [{ required: true, message: "请输入手机号码", trigger: "blur" }],
-        old_password: [{ required: true, message: "请输入旧密码", trigger: "blur" }],
-        password: [{ required: true, message: "请输入新密码", trigger: "blur" }],
-        password2: [{ required: true, validator: validatePass2, trigger: "blur" }]
+        mobile: [{ required: true, message: '请输入手机号码', trigger: 'blur' }],
+        old_password: [{ required: true, message: '请输入旧密码', trigger: 'blur' }],
+        password: [{ required: true, message: '请输入新密码', trigger: 'blur' }],
+        password2: [{ required: true, validator: validatePass2, trigger: 'blur' }]
       }
     }
   },
   methods: {
-    onSubmit() {
+    onSubmit () {
       this.$refs.form.validate(valid => {
         if (valid) {
           API.updatePwd(this.formdata).then(res => {
-            this.$message("密码修改成功")
+            this.$message('密码修改成功')
           })
         }
       })

@@ -20,8 +20,7 @@
         class="btn-right"
         type="text"
         @click="goBack"
-      >
-        <<&nbsp;返回
+      >返回
       </el-button>
     </div>
     <el-row :gutter="24">
@@ -33,30 +32,30 @@
   </div>
 </template>
 <script>
-import echarts from "echarts/lib/echarts"
-import "echarts/lib/chart/line"
-import "echarts/lib/component/tooltip"
-import "echarts/lib/component/title"
-import { mapActions } from "vuex"
-import "../../lib/util"
-import API from "../../service/index"
+import echarts from 'echarts/lib/echarts'
+import 'echarts/lib/chart/line'
+import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/title'
+import { mapActions } from 'vuex'
+import '../../lib/util'
+import API from '../../service/index'
 export default {
   components: {},
-  data() {
+  data () {
     return {
-      svr_id: "Access_All",
+      svr_id: 'Access_All',
       select_date: new Date()
     }
   },
-  mounted() {
+  mounted () {
     this.initEchart()
     this.changeSelectDate()
   },
   methods: {
-    typeChange() {
+    typeChange () {
       this.changeSelectDate()
     },
-    changeSelectDate() {
+    changeSelectDate () {
       let obj = this
       API.qpsDatas({ select_date: obj.select_date, svr_id: obj.svr_id }).then(result => {
         if (result.data && result.data.result.data) {
@@ -64,21 +63,21 @@ export default {
           let Xarrs = []
           let dataArrs = []
           datas.forEach(item => {
-            Xarrs.push(item["start_stat_time"])
-            dataArrs.push(item["access_msg_num"])
+            Xarrs.push(item['start_stat_time'])
+            dataArrs.push(item['access_msg_num'])
           })
           obj.renderEchart(Xarrs, dataArrs)
         }
       })
     },
-    initEchart() {
-      this.alertChart = echarts.init(document.getElementById("charts-con"))
+    initEchart () {
+      this.alertChart = echarts.init(document.getElementById('charts-con'))
     },
-    renderEchart(Xarrs, dataArrs) {
+    renderEchart (Xarrs, dataArrs) {
       this.alertChart.setOption({
         tooltip: {
           position: [10, 10],
-          trigger: "axis",
+          trigger: 'axis',
           //                    formatter: function (params) {
           //                        params = params[0];
           //                        var date = new Date(params.name);
@@ -92,28 +91,28 @@ export default {
           show: true,
           feature: {
             dataZoom: {
-              yAxisIndex: "none"
+              yAxisIndex: 'none'
             },
             dataView: { readOnly: false },
-            magicType: { type: ["line", "bar"] },
+            magicType: { type: ['line', 'bar'] },
             restore: {},
             saveAsImage: {}
           }
         },
         legend: {
           show: true,
-          data: ["OPS数量"]
+          data: ['OPS数量']
         },
         xAxis: {
-          type: "category",
+          type: 'category',
           data: Xarrs
           //                    splitLine: {
           //                        show: false
           //                    }
         },
         yAxis: {
-          name: "数量",
-          type: "value",
+          name: '数量',
+          type: 'value',
           // boundaryGap: [0, '100%'],
           splitLine: {
             show: true
@@ -121,29 +120,29 @@ export default {
         },
         series: [
           {
-            name: "OPS数量",
-            type: "line",
+            name: 'OPS数量',
+            type: 'line',
             data: dataArrs,
             itemStyle: {
               normal: {
-                color: "#81c0c0"
+                color: '#81c0c0'
               }
             },
             markPoint: {
-              data: [{ type: "max", name: "最大值" }, { type: "min", name: "最小值" }]
+              data: [{ type: 'max', name: '最大值' }, { type: 'min', name: '最小值' }]
             },
             markLine: {
-              data: [{ type: "average", name: "平均值" }]
+              data: [{ type: 'average', name: '平均值' }]
             }
           }
         ]
       })
     },
-    goBack() {
+    goBack () {
       history.go(-1)
     }
   },
-  ...mapActions(["qpsDatas"])
+  ...mapActions(['qpsDatas'])
 }
 </script>
 <style lang="less">

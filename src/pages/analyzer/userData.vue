@@ -259,21 +259,21 @@
 </template>
 
 <script>
-import CityPicker from "../../components/cityPicker.vue"
-import API from "../../service/index.js"
-import axios from "axios"
-import * as URL from "~/lib/api"
+import CityPicker from '../../components/cityPicker.vue'
+import API from '../../service/index.js'
+import axios from 'axios'
+import * as URL from '~/lib/api'
 
 const padZero = num => {
-  num = num + ""
-  return num.length == 1 ? "0" + num : num
+  num = num + ''
+  return num.length === 1 ? '0' + num : num
 }
 
 export default {
   components: {
     CityPicker
   },
-  data() {
+  data () {
     this.chartSettings = {
       // stack: { '用户': ['访问用户', '下单用户'] },
       // area: true
@@ -289,43 +289,43 @@ export default {
       showRetainNum: true,
       colunmName: [],
       tableData: [],
-      area: "",
+      area: '',
       form: {
-        date: "",
-        platform: "",
-        province: "",
-        city: ""
+        date: '',
+        platform: '',
+        province: '',
+        city: ''
       },
       pickerOptions: {
         shortcuts: [
           {
-            text: "最近一周",
-            onClick(picker) {
+            text: '最近一周',
+            onClick (picker) {
               const end = new Date()
               const start = new Date()
               end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit("pick", [start, end])
+              picker.$emit('pick', [start, end])
             }
           },
           {
-            text: "最近一个月",
-            onClick(picker) {
+            text: '最近一个月',
+            onClick (picker) {
               const end = new Date()
               const start = new Date()
               end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 31)
-              picker.$emit("pick", [start, end])
+              picker.$emit('pick', [start, end])
             }
           },
           {
-            text: "最近三个月",
-            onClick(picker) {
+            text: '最近三个月',
+            onClick (picker) {
               const end = new Date()
               const start = new Date()
               end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 93)
-              picker.$emit("pick", [start, end])
+              picker.$emit('pick', [start, end])
             }
           }
         ]
@@ -333,46 +333,46 @@ export default {
       onlineUserAnalyzer: {
         totalCount: 0,
         lastDate: null,
-        text: "实时在线用户数"
+        text: '实时在线用户数'
       },
       activeUserAnalyzer: {
         totalCount: 0,
         lastDate: null,
         lastDateNum: 0,
-        text: "活跃用户数"
+        text: '活跃用户数'
       },
       registerUserAnalyzer: {
         totalCount: 0,
         lastDate: null,
-        text: "累计注册用户数"
+        text: '累计注册用户数'
       },
       loginUserAnalyzer: {
         totalCount: 0,
         lastDate: null,
         lastDateNum: 0,
-        text: "登录用户数"
+        text: '登录用户数'
       },
       onlineUserChartData: {
-        columns: ["日期", "实时在线用户数"],
+        columns: ['日期', '实时在线用户数'],
         rows: []
       },
       activeUserChartData: {
-        columns: ["日期", "活跃用户数"],
+        columns: ['日期', '活跃用户数'],
         rows: []
       },
       registerUserChartData: {
-        columns: ["日期", "累计注册用户数"],
+        columns: ['日期', '累计注册用户数'],
         rows: []
       },
       loginUserChartData: {
-        columns: ["日期", "登录用户数"],
+        columns: ['日期', '登录用户数'],
         rows: []
       },
       chartData: {},
-      currentCard: "registerUser"
+      currentCard: 'registerUser'
     }
   },
-  mounted() {
+  mounted () {
     const end = new Date()
     const start = new Date()
     end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
@@ -381,45 +381,44 @@ export default {
     this.getUserAnalyzeData({
       start_date: this.formatDate(start),
       end_date: this.formatDate(end),
-      province: "",
-      city: ""
+      province: '',
+      city: ''
     })
     this.getAnalyzerRetainDate({
       start_date: this.formatDate(start),
       end_date: this.formatDate(end),
-      province: "",
-      city: ""
+      province: '',
+      city: ''
     })
   },
   methods: {
-    onCitySelect(val) {
+    onCitySelect (val) {
       this.form.province = val[0]
       this.form.city = val[1]
     },
-    setChartData(type) {
+    setChartData (type) {
       let data
       switch (type) {
-      case "registerUser":
-        data = this.registerUserChartData
-        break
-      case "loginUser":
-        data = this.loginUserChartData
-        break
-      case "activeUser":
-        data = this.activeUserChartData
-        break
+        case 'registerUser':
+          data = this.registerUserChartData
+          break
+        case 'loginUser':
+          data = this.loginUserChartData
+          break
+        case 'activeUser':
+          data = this.activeUserChartData
+          break
       }
       this.currentCard = type
       this.showEmpty = !data || !data.rows.length
       this.chartData = data
     },
-    bindChart(list, name) {
-      const result = {}
+    bindChart (list, name) {
       const text = this[name].columns[1]
       const key = {
-        loginUserChartData: "login_user_num",
-        registerUserChartData: "reg_user_num",
-        activeUserChartData: "active_user_num"
+        loginUserChartData: 'login_user_num',
+        registerUserChartData: 'reg_user_num',
+        activeUserChartData: 'active_user_num'
       }[name]
       const temp = list.map(item => {
         return {
@@ -432,18 +431,18 @@ export default {
       })
     },
     // 点击查询按钮
-    search() {
+    search () {
       const { date, platform, province, city } = this.form
       if (this.checkIsSameDate(date)) {
-        return this.$message({ message: "日期不能选择同一天", type: "warning", showClose: true })
+        return this.$message({ message: '日期不能选择同一天', type: 'warning', showClose: true })
       }
       this.getUserAnalyzeData({
         start_date: this.formatDate(date[0]),
         end_date: this.formatDate(date[1]),
         province,
         city,
-        os_type: platform || "",
-        app_version: ""
+        os_type: platform || '',
+        app_version: ''
       })
       // 留存展示重置为按日
       this.showRetainUnit = 0
@@ -452,20 +451,20 @@ export default {
         end_date: this.formatDate(date[1]),
         province,
         city,
-        os_type: platform || "",
-        app_version: "",
+        os_type: platform || '',
+        app_version: '',
         show_type: this.showRetainUnit
       })
     },
     // 注册登录活跃用户数
-    getUserAnalyzeData(params) {
+    getUserAnalyzeData (params) {
       API.getUserAnalyzeData(params).then(
         axios.spread((onlineUserData, registerUserData, activeUserData, loginUserData, activePercentData) => {
           Object.assign(this.registerUserAnalyzer, {
             totalCount: registerUserData.data.result.total_register_num,
             lastDate: this.formatDate(this.form.date[1])
           })
-          this.bindChart(registerUserData.data.result.list || [], "registerUserChartData")
+          this.bindChart(registerUserData.data.result.list || [], 'registerUserChartData')
 
           Object.assign(this.activeUserAnalyzer, {
             totalCount: activeUserData.data.result,
@@ -475,7 +474,7 @@ export default {
                 .active_user_num
               : 0
           })
-          this.bindChart(activeUserData.data.result.list || [], "activeUserChartData")
+          this.bindChart(activeUserData.data.result.list || [], 'activeUserChartData')
 
           Object.assign(this.loginUserAnalyzer, {
             totalCount: loginUserData.data.result.total_login_user_num,
@@ -484,14 +483,14 @@ export default {
               ? loginUserData.data.result.list[loginUserData.data.result.list.length - 1].login_user_num
               : 0
           })
-          this.bindChart(loginUserData.data.result.list || [], "loginUserChartData")
+          this.bindChart(loginUserData.data.result.list || [], 'loginUserChartData')
 
-          this.setChartData("registerUser")
+          this.setChartData('registerUser')
         })
       )
     },
     // 用户留存统计
-    getAnalyzerRetainDate(params) {
+    getAnalyzerRetainDate (params) {
       axios.post(URL.analyzerRetain, params).then(res => {
         const result = res.data.result.list
         this.tableData = result
@@ -505,39 +504,39 @@ export default {
       })
     },
     // 用户留存点击日周月
-    searchRetainByUnit(unit) {
+    searchRetainByUnit (unit) {
       const { date, platform, city } = this.form
       if (this.checkIsSameDate(date)) {
-        return this.$message({ message: "日期不能选择同一天", type: "warning", showClose: true })
+        return this.$message({ message: '日期不能选择同一天', type: 'warning', showClose: true })
       }
       this.showRetainUnit = unit
       this.getAnalyzerRetainDate({
         start_date: this.formatDate(date[0]),
         end_date: this.formatDate(date[1]),
         city,
-        os_type: platform || "",
-        app_version: "",
+        os_type: platform || '',
+        app_version: '',
         show_type: this.showRetainUnit
       })
     },
     // 选择开始结束日后 决定是否显示留存筛选的周月
-    changeDate(date) {
-      const start = date ? date[0].getTime() : ""
-      const end = date ? date[1].getTime() : ""
+    changeDate (date) {
+      const start = date ? date[0].getTime() : ''
+      const end = date ? date[1].getTime() : ''
       const diff = end - start
       // 至少2个月才显示月 至少2周才显示周
       this.isShowUnitMon = diff > 1000 * 3600 * 24 * 30 + 1000 * 3600 * 24 * 31
       this.isShowUnitWeek = diff > 1000 * 3600 * 24 * 7 * 2
     },
     // 是否选择了同一天
-    checkIsSameDate(date) {
-      const start = date ? date[0].getTime() : ""
-      const end = date ? date[1].getTime() : ""
+    checkIsSameDate (date) {
+      const start = date ? date[0].getTime() : ''
+      const end = date ? date[1].getTime() : ''
       const diff = end - start
       return !diff
     },
-    formatDate(d) {
-      return d ? d.getFullYear() + "-" + padZero(d.getMonth() + 1) + "-" + padZero(d.getDate()) : ""
+    formatDate (d) {
+      return d ? d.getFullYear() + '-' + padZero(d.getMonth() + 1) + '-' + padZero(d.getDate()) : ''
     }
   }
 }

@@ -129,7 +129,7 @@
 import API from '../../service/index'
 import { formatValue } from './util.js'
 export default {
-  data() {
+  data () {
     return {
       list: [],
       total: 0,
@@ -151,18 +151,18 @@ export default {
       dialogVisible: false
     }
   },
-  mounted() {
+  mounted () {
     this.getList()
   },
   methods: {
-    getOSTypeText(row, column, value, index) {
+    getOSTypeText (row, column, value, index) {
       return {
         '1': 'android',
         '2': 'ios',
         '3': 'ipad'
       }[value]
     },
-    getList() {
+    getList () {
       API.getAppList({
         page: this.currentPage,
         limit: this.limit
@@ -172,7 +172,7 @@ export default {
         this.list = res.data.result.data
       })
     },
-    addApp() {
+    addApp () {
       this.isEdit = false
       this.dialogVisible = true
       this.form = {
@@ -180,11 +180,11 @@ export default {
         os_type: 1
       }
     },
-    onPageChange(page) {
+    onPageChange (page) {
       this.currentPage = page
       this.getList()
     },
-    saveApp() {
+    saveApp () {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
           API.saveApp(this.form).then(res => {
@@ -195,18 +195,18 @@ export default {
         }
       })
     },
-    view(row) {
+    view (row) {
       this.$router.push({
         path: `appUpgrade/${row.id}`
       })
       localStorage.setItem('CurrentAppVerInfo', JSON.stringify(row))
     },
-    edit(row) {
+    edit (row) {
       this.isEdit = true
       this.dialogVisible = true
       this.form = Object.assign({}, row)
     },
-    del(row) {
+    del (row) {
       this.$confirm('确定删除？').then(() => {
         API.delApp({ id: row.id }).then(() => {
           this.$message.success('删除成功')
@@ -214,11 +214,10 @@ export default {
         })
       })
     },
-    onClose() {
+    onClose () {
       this.$refs.ruleForm.clearValidate()
     },
     formatValue
   }
 }
 </script>
-

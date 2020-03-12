@@ -197,7 +197,7 @@
           v-if="info.result!=1"
           style="color:red"
         > {{ info.msg }}</span>
-        <span v-if="info.result==1"> {{ info.msg }}</span>
+        <span v-if="info.result===1"> {{ info.msg }}</span>
       </div>
       <!-- <el-button @click="inputModel = false">取 消</el-button> -->
       <!--  <el-button type="primary" @click="inputModel = false" >确 定</el-button> -->
@@ -206,25 +206,22 @@
   </div>
 </template>
 <script>
-import * as namespace from "../store/namespace"
-import { mapGetters, mapActions } from "vuex"
-import "../lib/util.js"
-import { Message } from "element-ui"
-import Sortable from "sortablejs"
-import { CMDATA_API } from "~/lib/api"
-import getCorsUrl from "../lib/corsconfig"
-import API from "../service/index.js"
+import { mapGetters } from 'vuex'
+import '../lib/util.js'
+import { Message } from 'element-ui'
+import { CMDATA_API } from '~/lib/api'
+import API from '../service/index.js'
 
 export default {
-  data() {
+  data () {
     return {
       addEditLayer: false,
       uploadData: [],
       inputModel: false,
-      transUrl: CMDATA_API.input + "?token=" + JSON.parse(localStorage.getItem("localData")).user.info.token,
+      transUrl: CMDATA_API.input + '?token=' + JSON.parse(localStorage.getItem('localData')).user.info.token,
       totalItem: 0,
       uploadObj: {
-        token: JSON.parse(localStorage.getItem("localData")).user.info.token
+        token: JSON.parse(localStorage.getItem('localData')).user.info.token
       },
       currentPage: 1,
       moduleList: [],
@@ -233,93 +230,91 @@ export default {
       },
       imgList: {
         tableColumn: [
-          { prop: "F_id", label: "id" },
-          { prop: "F_module_name", label: "模块名称" },
-          { prop: "F_key", label: "键" },
-          { prop: "F_value", label: "值" },
-          { prop: "F_create_time", label: "创建时间" }
+          { prop: 'F_id', label: 'id' },
+          { prop: 'F_module_name', label: '模块名称' },
+          { prop: 'F_key', label: '键' },
+          { prop: 'F_value', label: '值' },
+          { prop: 'F_create_time', label: '创建时间' }
         ],
         tableData: []
       },
       addEditFlag: true,
       AddEditForm: {
-        F_id: "",
-        F_module_name: "",
-        F_key: "",
-        F_value: ""
+        F_id: '',
+        F_module_name: '',
+        F_key: '',
+        F_value: ''
       },
-      F_module_name: "",
-      F_key: "",
+      F_module_name: '',
+      F_key: '',
       rulesAddEdit: {},
       sortArr: [],
-      output: CMDATA_API.output + "?token=" + JSON.parse(localStorage.getItem("localData")).user.info.token,
-      down_ulr: ""
+      output: CMDATA_API.output + '?token=' + JSON.parse(localStorage.getItem('localData')).user.info.token,
+      down_ulr: ''
     }
   },
   computed: {
     ...mapGetters({})
   },
   watch: {
-    F_key() {
+    F_key () {
       this.output =
         CMDATA_API.output +
-        "?token=" +
-        JSON.parse(localStorage.getItem("localData")).user.info.token +
-        "&F_key=" +
+        '?token=' +
+        JSON.parse(localStorage.getItem('localData')).user.info.token +
+        '&F_key=' +
         this.F_key +
-        "&F_module_name=" +
+        '&F_module_name=' +
         this.F_module_name
     },
-    F_module_name() {
+    F_module_name () {
       this.output =
         CMDATA_API.output +
-        "?token=" +
-        JSON.parse(localStorage.getItem("localData")).user.info.token +
-        "&F_key=" +
+        '?token=' +
+        JSON.parse(localStorage.getItem('localData')).user.info.token +
+        '&F_key=' +
         this.F_key +
-        "&F_module_name=" +
+        '&F_module_name=' +
         this.F_module_name
     }
   },
-  mounted() {
+  mounted () {
     this.getImgList(1)
     this.getModuleList()
-    let table = document.querySelectorAll(".el-table__body-wrapper > table > tbody")[0]
-    let obj = this
   },
   methods: {
-    search() {
+    search () {
       this.getImgList()
     },
-    getdata() {
-      console.log("移动中.....")
+    getdata () {
+      console.log('移动中.....')
     },
-    openAddEditLayer() {
+    openAddEditLayer () {
       this.addEditFlag = true
       this.addEditLayer = true
       this.$nextTick(() => {
         let currentForm = this.AddEditForm
         for (let attr in currentForm) {
-          currentForm[attr] = ""
+          currentForm[attr] = ''
         }
       })
     },
-    pageChange() {
+    pageChange () {
       this.getImgList(this.currentPage)
     },
-    deleteImg(dataObj) {
+    deleteImg (dataObj) {
       const obj = this
-      this.$confirm("确定删除吗?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+      this.$confirm('确定删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
           API.CmDataDel({ F_id: dataObj.F_id }).then(result => {
             if (result.code === 200) {
               obj.$message({
-                type: "success",
-                message: "删除成功!"
+                type: 'success',
+                message: '删除成功!'
               })
               obj.getImgList(obj.currentPage)
             }
@@ -327,7 +322,7 @@ export default {
         })
         .catch(() => { })
     },
-    openEditLayer(dataObj) {
+    openEditLayer (dataObj) {
       this.addEditFlag = false
       this.addEditLayer = true
       this.$nextTick(() => {
@@ -337,7 +332,7 @@ export default {
         }
       })
     },
-    addEditConfirm(formName) {
+    addEditConfirm (formName) {
       let obj = this
       obj.$refs[formName].validate(valid => {
         if (valid) {
@@ -350,8 +345,8 @@ export default {
             API.CmDataEdit(currentParam).then(result => {
               if (result && result.code === 200) {
                 Message({
-                  message: "编辑成功",
-                  type: "success"
+                  message: '编辑成功',
+                  type: 'success'
                 })
                 obj.addEditLayer = false
                 obj.getImgList(obj.currentPage)
@@ -361,15 +356,15 @@ export default {
             API.CmDataAdd(currentParam).then(result => {
               if (result && result.code === 200) {
                 Message({
-                  message: "新增成功",
-                  type: "success"
+                  message: '新增成功',
+                  type: 'success'
                 })
                 obj.addEditLayer = false
                 obj.getImgList(obj.currentPage)
               } else {
                 Message({
                   message: result.list[0].detail,
-                  type: "error"
+                  type: 'error'
                 })
               }
             })
@@ -379,7 +374,7 @@ export default {
         }
       })
     },
-    getImgList(page) {
+    getImgList (page) {
       this.listParams.page = page
       this.listParams.limit = 10
       this.listParams.F_key = this.F_key
@@ -399,20 +394,20 @@ export default {
         }
       })
     },
-    getModuleList(page) {
+    getModuleList (page) {
       const obj = this
       let params = {}
-      params.config_key = "cm_data_module_name"
+      params.config_key = 'cm_data_module_name'
       params.only_val = 1
       API.ModuleList(params).then(result => {
         obj.moduleList = result.result
         console.log(obj.moduleList)
       })
     },
-    getUploadData(data) {
+    getUploadData (data) {
       console.log(data)
       const obj = this
-      if (data.code != 200) {
+      if (data.code !== 200) {
         obj.$message.error(data.msg)
         obj.$refs.upload.clearFiles()
       } else {
@@ -420,7 +415,7 @@ export default {
         this.inputModel = true
       }
     },
-    handleClose() {
+    handleClose () {
       this.inputModel = false
       this.getImgList()
       this.$refs.upload.clearFiles()

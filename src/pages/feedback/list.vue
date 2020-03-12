@@ -1,5 +1,5 @@
 <template>
-  <div class="page-content config-page">
+  <div class="page-content config-page" style="height: 600px">
     <div>
       <el-row style="line-height:36px;">
         <el-col :span="3">
@@ -54,7 +54,7 @@
             >
             <img
               v-else
-              src="../../images/device.png"
+              src="@/assets/images/device.png"
               alt=""
               class="avatar"
             >
@@ -71,7 +71,7 @@
         </el-table-column>
         <el-table-column width="150">
           <template slot-scope="scope">
-            <span style="margin-right: 15px">{{ scope.row.has_reply == 1 ? '已回复' : '待回复' }}</span>
+            <span style="margin-right: 15px">{{ scope.row.has_reply === 1 ? '已回复' : '待回复' }}</span>
           </template>
         </el-table-column>
         <el-table-column width="150">
@@ -106,10 +106,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <div
-      class="block clearfix"
-      style="overflow: hidden"
-    >
+    <div class="page-container">
       <span
         v-if="!unReply"
         class="info gray">共{{ total }}条记录，其中{{ unReadTotal }}条未读</span>
@@ -120,7 +117,6 @@
         :current-page="currentPage"
         :page-size="pageSize"
         :total="total"
-        class="pull-right"
         layout="prev, pager, next, jumper"
         @current-change="handleCurrentChange"
       />
@@ -129,17 +125,17 @@
 </template>
 
 <script>
-import axios from "~/lib/http"
-import * as URL from "~/lib/api"
-import { mapGetters } from "vuex"
+import axios from '~/lib/http'
+import * as URL from '~/lib/api'
+import { mapGetters } from 'vuex'
 export default {
   components: {},
-  data() {
+  data () {
     return {
       unRead: false,
       unReply: false,
       date: [],
-      searchKey: "",
+      searchKey: '',
       queryOption: {},
       tableData: [],
       pageSize: 20,
@@ -150,64 +146,64 @@ export default {
     }
   },
   computed: {
-    ...mapGetters("feedback", ["queryOptionStorage", "needQueryOptionStorage"])
+    ...mapGetters('feedback', ['queryOptionStorage', 'needQueryOptionStorage'])
   },
   watch: {
 
   },
-  created() {
+  created () {
     if (this.needQueryOptionStorage) {
       // 如果是从详情页跳回列表页的 needQueryOptionStorage是true 拿出存在store的筛选条件queryOptionStorage
       this.queryOption = this.queryOptionStorage
       this.currentPage = this.queryOption.page
       this.searchKey = this.queryOption.keyword
       this.unRead = Boolean(this.queryOption.is_read)
-      this.date[0] = this.queryOption.start_time ? new Date(this.queryOption.start_time * 1000) : ""
-      this.date[1] = this.queryOption.end_time ? new Date(this.queryOption.end_time * 1000) : ""
-      this.$store.dispatch("feedback/setNeedQueryOptionStorage", false)
+      this.date[0] = this.queryOption.start_time ? new Date(this.queryOption.start_time * 1000) : ''
+      this.date[1] = this.queryOption.end_time ? new Date(this.queryOption.end_time * 1000) : ''
+      this.$store.dispatch('feedback/setNeedQueryOptionStorage', false)
     } else {
       // 点击侧栏导航进来的
       this.queryOption = {
         page: this.currentPage,
         limit: this.pageSize,
-        keyword: "",
-        is_read: "",
+        keyword: '',
+        is_read: '',
         has_reply: 0, // 全部
-        start_time: "",
-        end_time: ""
+        start_time: '',
+        end_time: ''
       }
     }
     this.getFeedbackList()
   },
   methods: {
-    goDetail(id) {
+    goDetail (id) {
       // 去详情页 store存入筛选条件queryOptionStorage
-      this.$store.dispatch("feedback/setQueryOptionStorage", this.queryOption).then(() => {
-        this.$router.push({ name: "feedbackDetail", params: { id: id } })
+      this.$store.dispatch('feedback/setQueryOptionStorage', this.queryOption).then(() => {
+        this.$router.push({ name: 'feedbackDetail', params: { id: id } })
       })
     },
-    search() {
+    search () {
       this.queryOption.keyword = this.searchKey
       this.queryOption.page = 1
       this.currentPage = 1
       this.getFeedbackList()
     },
-    seeUnRead() {
+    seeUnRead () {
       this.queryOption.is_read = this.unRead ? 1 : 0
       this.queryOption.page = 1
       this.currentPage = 1
       this.getFeedbackList()
     },
-    seeUnReply() {
+    seeUnReply () {
       this.queryOption.has_reply = this.unReply ? 1 : 0
       this.queryOption.page = 1
       this.currentPage = 1
       this.getFeedbackList()
     },
-    changeDate(val) {
+    changeDate (val) {
       // 后端需要的时间戳是秒 前端UI组件的是毫秒 除以1000处理
-      const start = this.date && this.date[0] ? this.date[0].getTime() / 1000 : ""
-      const end = this.date && this.date[1] ? this.date[1].getTime() : ""
+      const start = this.date && this.date[0] ? this.date[0].getTime() / 1000 : ''
+      const end = this.date && this.date[1] ? this.date[1].getTime() : ''
       const newEnd = new Date(this.getDateTime(end) + ' ' + '23:59:59').getTime() / 1000
       this.queryOption.start_time = start
       this.queryOption.end_time = newEnd
@@ -215,7 +211,7 @@ export default {
       this.currentPage = 1
       this.getFeedbackList()
     },
-    getDateTime(date, type) {
+    getDateTime (date, type) {
       if (!date) return
       var d = new Date(+date)
       var year = d.getFullYear()
@@ -230,12 +226,12 @@ export default {
         return year + '-' + month + '-' + day
       }
     },
-    handleCurrentChange(val) {
+    handleCurrentChange (val) {
       this.queryOption.page = val
       this.currentPage = val
       this.getFeedbackList()
     },
-    getFeedbackList() {
+    getFeedbackList () {
       // console.log(this.queryOption);
       // this.queryOption全页面共享这个筛选条件
       axios.post(URL.feedbackList, this.queryOption).then(res => {
@@ -246,7 +242,7 @@ export default {
         this.tableData = result.data
       })
     },
-    updateStatus(id) {
+    updateStatus (id) {
       return axios.post(URL.feedbackUpdateStatus, { id: id })
     }
   }
@@ -267,7 +263,6 @@ export default {
   margin: 8px 0 0 0;
 }
 .info {
-  float: left;
   height: 32px;
   line-height: 32px;
   font-size: 14px;
@@ -275,5 +270,10 @@ export default {
 .unRead {
   font-weight: bold;
 }
-</style>
 
+.page-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+</style>

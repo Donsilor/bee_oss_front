@@ -30,28 +30,28 @@
 </template>
 
 <script>
-import getCorsUrl from "../lib/corsconfig.js"
+import getCorsUrl from '../lib/corsconfig.js'
 export default {
-  props: ['imageFile','type', 'valid', 'path'],
-  data() {
+  props: ['imageFile', 'type', 'valid', 'path'],
+  data () {
     let uploadObj = {
-      token: JSON.parse(localStorage.getItem("localData")).user.info.token
+      token: JSON.parse(localStorage.getItem('localData')).user.info.token
     }
     if (this.path) {
       uploadObj.path = this.path
     }
     return {
-      corsUrls: getCorsUrl() + "/oss_file_upload",
+      corsUrls: getCorsUrl() + '/oss_file_upload',
       uploadObj: uploadObj
     }
   },
   methods: {
-    handleAvatarSuccess(val) {
+    handleAvatarSuccess (val) {
       this.$emit('emitImageData', val.result)
     },
-    beforeAvatarUpload(file) {
+    beforeAvatarUpload (file) {
       const isType = (file.type === 'image/jpeg') || (file.type === 'image/png')
-      if(this.valid.type == '1'){
+      if (this.valid.type === '1') {
         const isLt2M = file.size / 1024 < 500
         if (!isType) {
           this.$message.error('只能上传jpg或者png格式!')
@@ -60,30 +60,30 @@ export default {
           this.$message.error('大小不能超过 500kb!')
         }
         return isType && isLt2M
-      } else if(this.valid.type == '2'){
-        const isSize = new Promise((resolve, reject) =>{
+      } else if (this.valid.type === '2') {
+        const isSize = new Promise((resolve, reject) => {
           let width = this.valid.width // 限制图片尺寸为654X270
           let height = this.valid.height
           let _URL = window.URL || window.webkitURL
           let img = new Image()
-          img.onload = function() {
-            let valid = (img.width === width[0]?width[0]:'' || img.width === width[1]?width[1]:'' || img.width === width[2]?width[2]:'') && (img.height === height[0]?height[0]:'' || img.height === height[1]?height[1]:'' || img.height === height[2]?height[2]:'')
-            valid ? resolve() : reject()
+          img.onload = function () {
+            let valid = (img.width === width[0] ? width[0] : '' || img.width === width[1] ? width[1] : '' || img.width === width[2] ? width[2] : '') && (img.height === height[0] ? height[0] : '' || img.height === height[1] ? height[1] : '' || img.height === height[2] ? height[2] : '')
+            valid ? resolve() : reject(new Error('错误'))
           }
           img.src = _URL.createObjectURL(file)
         }).then(() => {
           return file
         }, () => {
-          this.$message.error(`图片尺寸限制为${this.valid.width[0]?this.valid.width[0]+' x ':''}${this.valid.height[0]?this.valid.height[0]:''}${this.valid.width[1]?'，'+this.valid.width[1]+' x ':''}${this.valid.height[1]?this.valid.height[1]:''}${this.valid.width[2]?'，'+this.valid.width[2]+' x ':''}${this.valid.height[2]?this.valid.height[2]:''}`)
-          return Promise.reject()
+          this.$message.error(`图片尺寸限制为${this.valid.width[0] ? this.valid.width[0] + ' x ' : ''}${this.valid.height[0] ? this.valid.height[0] : ''}${this.valid.width[1] ? '，' + this.valid.width[1] + ' x ' : ''}${this.valid.height[1] ? this.valid.height[1] : ''}${this.valid.width[2] ? '，' + this.valid.width[2] + ' x ' : ''}${this.valid.height[2] ? this.valid.height[2] : ''}`)
+          return Promise.reject(new Error('错误'))
         })
         return isType && isSize
       } else {
         return true
       }
     },
-    clearImg() {
-      if(this.$props.type === 'look') {
+    clearImg () {
+      if (this.$props.type === 'look') {
         return false
       } else {
         this.$emit('emitImageData', {})
@@ -135,4 +135,3 @@ export default {
     cursor: not-allowed;
   }
 </style>
-

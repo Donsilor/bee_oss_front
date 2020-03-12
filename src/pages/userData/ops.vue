@@ -49,7 +49,7 @@
           <el-col :span="3">
             <div class="first-img">
               <img
-                src="../../images/u2978.png"
+                src="@/assets/images/u2978.png"
                 width="95"
                 height="130"
               >
@@ -189,7 +189,7 @@
               class="user_msg_con"
             >
               <el-col :span="2">
-                <img src="../../images/u2978.png">
+                <img src="@/assets/images/u2978.png">
               </el-col>
               <el-col :span="22">
                 <el-form
@@ -198,7 +198,7 @@
                 >
                   <el-row>
                     <el-col
-                      v-for="(item, index) in family_info"
+                      v-for="(item) in family_info"
                       :key="Math.random()"
                       :span="7"
                     >
@@ -488,23 +488,21 @@
   </div>
 </template>
 <script>
-import { PREFIX } from "../../lib/util"
-import * as namespace from "../../store/namespace"
-import { mapActions } from "vuex"
-import terminalLists from "../../json/terminalList.json"
-import deviceLists from "../../json/devices.json"
-import logOutLists from "../../json/logOut.json"
-import memberLists from "../../json/members.json"
-import routerLists from "../../json/routers.json"
-import operLists from "../../json/operList.json"
-import "../../lib/util"
-import pager from "../../components/pagination/livePagination.vue"
-import API from "../../service/index"
+import { mapActions } from 'vuex'
+import terminalLists from '../../json/terminalList.json'
+import deviceLists from '../../json/devices.json'
+import logOutLists from '../../json/logOut.json'
+import memberLists from '../../json/members.json'
+import routerLists from '../../json/routers.json'
+import operLists from '../../json/operList.json'
+
+import pager from '../../components/pagination/livePagination.vue'
+import API from '../../service/index'
 export default {
   components: {
     pager
   },
-  data() {
+  data () {
     return {
       hasAllMsg: false,
       operListLayer: false,
@@ -512,60 +510,60 @@ export default {
       errActiveName: [0],
       errLogList: [
         {
-          key: "safdasfdsafd",
+          key: 'safdasfdsafd',
           value:
-                        "大分类的发上来开发家乐福大发的卡机福利发的卡老师附近溜达房" +
-                        "价大力发动机奥拉夫大家了看法懒得卡附近溜达咖啡啊"
+                        '大分类的发上来开发家乐福大发的卡机福利发的卡老师附近溜达房' +
+                        '价大力发动机奥拉夫大家了看法懒得卡附近溜达咖啡啊'
         },
         {
-          key: "safdasfdsafd",
+          key: 'safdasfdsafd',
           value:
-                        "大分类的发上来开发家乐福大发的卡机福利发的卡老师附近溜达房" +
-                        "价大力发动机奥拉夫大家了看法懒得卡附近溜达咖啡啊"
+                        '大分类的发上来开发家乐福大发的卡机福利发的卡老师附近溜达房' +
+                        '价大力发动机奥拉夫大家了看法懒得卡附近溜达咖啡啊'
         },
         {
-          key: "safdasfdsafd",
+          key: 'safdasfdsafd',
           value:
-                        "大分类的发上来开发家乐福大发的卡机福利发的卡老师附近溜达房" +
-                        "价大力发动机奥拉夫大家了看法懒得卡附近溜达咖啡啊"
+                        '大分类的发上来开发家乐福大发的卡机福利发的卡老师附近溜达房' +
+                        '价大力发动机奥拉夫大家了看法懒得卡附近溜达咖啡啊'
         }
       ],
       today: [new Date(), new Date()],
       errLogForm: {
-        inner: "",
-        uid: "",
-        type: "uuid",
-        date: ""
+        inner: '',
+        uid: '',
+        type: 'uuid',
+        date: ''
       },
       errLogLayer: false,
-      activeName: "first",
+      activeName: 'first',
       searchedFlag: true,
-      searchKey: "",
+      searchKey: '',
       user_msg: [
-        { name: "昵称", value: "", prop: "F_nickname" },
-        { name: "性别", value: "", prop: "F_gender" },
-        { name: "出生日期", value: "", prop: "F_birthday" },
-        { name: "手机号", value: "", prop: "F_phone" },
-        { name: "状态", value: "", prop: "F_status_name" },
-        { name: "注册时间", value: "", prop: "F_created_at" },
-        { name: "最近登录时间", value: "", prop: "F_last_login_time" },
-        { name: "最近登录IP", value: "", prop: "F_last_login_ip" },
-        { name: "最后一次访问的家庭id", value: "", prop: "F_last_family_id" },
-        { name: "在线状态", value: "", prop: "F_status_name" }
+        { name: '昵称', value: '', prop: 'F_nickname' },
+        { name: '性别', value: '', prop: 'F_gender' },
+        { name: '出生日期', value: '', prop: 'F_birthday' },
+        { name: '手机号', value: '', prop: 'F_phone' },
+        { name: '状态', value: '', prop: 'F_status_name' },
+        { name: '注册时间', value: '', prop: 'F_created_at' },
+        { name: '最近登录时间', value: '', prop: 'F_last_login_time' },
+        { name: '最近登录IP', value: '', prop: 'F_last_login_ip' },
+        { name: '最后一次访问的家庭id', value: '', prop: 'F_last_family_id' },
+        { name: '在线状态', value: '', prop: 'F_status_name' }
       ],
       family_info: [
-        { name: "内部ID", value: "", prop: "F_owner_id" },
-        { name: "家庭名称", value: "", prop: "F_name" },
-        { name: "户主ID", value: "", prop: "F_owner_id" },
-        { name: "路由器uuid", value: "", prop: "F_device_id" },
-        { name: "省份", value: "", prop: "F_provice" },
-        { name: "城市", value: "", prop: "F_city" },
-        { name: "小区", value: "", prop: "F_district" },
-        { name: "地址", value: "", prop: "F_addr" },
-        { name: "栋", value: "", prop: "F_building_no" },
-        { name: "房号", value: "", prop: "F_room_no" },
-        { name: "创建时间", value: "", prop: "F_created_at" },
-        { name: "更新时间", value: "", prop: "F_updated_at" }
+        { name: '内部ID', value: '', prop: 'F_owner_id' },
+        { name: '家庭名称', value: '', prop: 'F_name' },
+        { name: '户主ID', value: '', prop: 'F_owner_id' },
+        { name: '路由器uuid', value: '', prop: 'F_device_id' },
+        { name: '省份', value: '', prop: 'F_provice' },
+        { name: '城市', value: '', prop: 'F_city' },
+        { name: '小区', value: '', prop: 'F_district' },
+        { name: '地址', value: '', prop: 'F_addr' },
+        { name: '栋', value: '', prop: 'F_building_no' },
+        { name: '房号', value: '', prop: 'F_room_no' },
+        { name: '创建时间', value: '', prop: 'F_created_at' },
+        { name: '更新时间', value: '', prop: 'F_updated_at' }
       ],
       terminalList: {},
       memberList: {},
@@ -575,12 +573,12 @@ export default {
       operList: {},
       allFamily: [],
       allFamilyIndex: 0,
-      user_id: "",
+      user_id: '',
       logOutForm: {
         date: new Date(),
-        client_id: "",
-        uuid: "",
-        userId: ""
+        client_id: '',
+        uuid: '',
+        userId: ''
       },
       operListForm: {
         date: new Date()
@@ -598,37 +596,37 @@ export default {
   },
   computed: {},
   watch: {},
-  mounted() {
+  mounted () {
     if (this.$route.params.id) {
       this.searchKey = this.$route.params.id
       this.getUserData(this.searchKey)
     }
-    //element的auto complete不支持分页加载，在这里hack添加支持
-    this.$suggestionMoreBtn = document.createElement("div")
-    this.$suggestionMoreBtn.className = "loadmore"
-    this.$suggestionMoreBtn.innerHTML = "加载更多"
+    // element的auto complete不支持分页加载，在这里hack添加支持
+    this.$suggestionMoreBtn = document.createElement('div')
+    this.$suggestionMoreBtn.className = 'loadmore'
+    this.$suggestionMoreBtn.innerHTML = '加载更多'
     this.$suggestionMoreBtn.addEventListener(
-      "click",
+      'click',
       () => {
         const next = this.suggestionBegin + Math.min(this.suggestionMore, this.suggestionSize)
         this.loadSuggestions(next)
       },
       false
     )
-    this.$refs.input.$el.querySelector(".el-autocomplete-suggestion").appendChild(this.$suggestionMoreBtn)
+    this.$refs.input.$el.querySelector('.el-autocomplete-suggestion').appendChild(this.$suggestionMoreBtn)
   },
   methods: {
-    searchErrLog() {
-      this.$message.error("123123")
+    searchErrLog () {
+      this.$message.error('123123')
     },
-    search() {
+    search () {
       if (!this.searchKey) {
-        this.$message.error("请输入手机号码")
+        this.$message.error('请输入手机号码')
         return
       }
       this.getUserData(this.searchKey)
     },
-    updateSuggestions(result, cb) {
+    updateSuggestions (result, cb) {
       this.$refs.input.loading = false
       this.suggestionMore = result.more
       this.suggestionBegin = result.begin
@@ -642,10 +640,10 @@ export default {
       this.$refs.input.suggestions = this.suggestionData
       this.toggleMoreBtn(result.more)
     },
-    toggleMoreBtn(show) {
-      this.$suggestionMoreBtn.style.display = show ? "" : "none"
+    toggleMoreBtn (show) {
+      this.$suggestionMoreBtn.style.display = show ? '' : 'none'
     },
-    loadSuggestions(begin) {
+    loadSuggestions (begin) {
       API.searchUserList(this.searchKey, begin, this.suggestionSize).then(res => {
         if (res.data.result.list.length) {
           this.updateSuggestions({
@@ -662,8 +660,8 @@ export default {
         }
       })
     },
-    querySearch(queryString, cb) {
-      var phoneLen = this.searchKey.replace(/\*/g, "").length
+    querySearch (queryString, cb) {
+      var phoneLen = this.searchKey.replace(/\*/g, '').length
       if (phoneLen >= 5) {
         this.loadSuggestions(0)
       } else {
@@ -674,11 +672,11 @@ export default {
         })
       }
     },
-    handleSelect(item) {
+    handleSelect (item) {
       this.getUserData(item.phone)
     },
     // 拉取数据
-    getUserData(key) {
+    getUserData (key) {
       let obj = this
       API.searchUserMsg({ phone_num: key }).then(result => {
         obj.user_id = result.info.F_uid
@@ -687,7 +685,7 @@ export default {
         obj.setAllData(result)
       })
     },
-    setAllData(dataObj) {
+    setAllData (dataObj) {
       terminalLists.tableData = dataObj.client_list
       if (dataObj.family_list && dataObj.family_list.length) {
         let familys = dataObj.family_list
@@ -695,7 +693,7 @@ export default {
         this.allFamily = []
         familys.forEach((item, index) => {
           this.allFamily.push({
-            name: "家庭" + (index + 1),
+            name: '家庭' + (index + 1),
             value: index + 1,
             list: item,
             family_id: item.info.F_family_id
@@ -706,7 +704,7 @@ export default {
       }
       this.terminalList = terminalLists
     },
-    changeFamilyData(dataObj) {
+    changeFamilyData (dataObj) {
       memberLists.tableData = dataObj.member_list
       deviceLists.tableData = dataObj.device_list
       let arr = []
@@ -718,50 +716,50 @@ export default {
       this.deviceList = deviceLists
       this.routerList = routerLists
     },
-    setFamilyInfo(data) {
+    setFamilyInfo (data) {
       this.family_info.forEach(item => {
         let thisProp = item.prop
         let thisVal = data[thisProp]
-        let text = ""
+        let text = ''
         switch (thisProp) {
-        case "F_state":
-          text = thisVal === 0 ? "有效" : thisVal === 1 ? "禁用" : "删除"
-          break
-        default:
-          text = thisVal
-          break
+          case 'F_state':
+            text = thisVal === 0 ? '有效' : thisVal === 1 ? '禁用' : '删除'
+            break
+          default:
+            text = thisVal
+            break
         }
-        item.value = text || "------"
+        item.value = text || '------'
       })
     },
-    tabClick() {
+    tabClick () {
       // console.log('输出tab')
     },
-    handleCommand(command) {
+    handleCommand (command) {
       this.allFamilyIndex = command - 1
       this.changeFamilyData(this.allFamily[command - 1].list)
       // this.$message('click on item ' + command);
     },
-    setUsermsg(data) {
+    setUsermsg (data) {
       this.user_msg.forEach(item => {
         let thisProp = item.prop
         let thisVal = data[thisProp]
-        let text = ""
+        let text = ''
         switch (thisProp) {
-        case "F_state":
-          text = thisVal === 0 ? "有效" : thisVal === 1 ? "禁用" : "删除"
-          break
-        case "F_gender":
-          text = thisVal === 0 ? "未配置" : thisVal === 1 ? "男" : "女"
-          break
-        default:
-          text = thisVal
-          break
+          case 'F_state':
+            text = thisVal === 0 ? '有效' : thisVal === 1 ? '禁用' : '删除'
+            break
+          case 'F_gender':
+            text = thisVal === 0 ? '未配置' : thisVal === 1 ? '男' : '女'
+            break
+          default:
+            text = thisVal
+            break
         }
-        item.value = text || "------"
+        item.value = text || '------'
       })
     },
-    openLogOutLayer(data) {
+    openLogOutLayer (data) {
       this.logOutLayer = true
       let form = this.logOutForm
       form.date = new Date()
@@ -770,15 +768,15 @@ export default {
       form.user_id = this.user_id
       this.changeLogOut(1)
     },
-    changeSelectLogOutDate() {
+    changeSelectLogOutDate () {
       this.changeLogOut(1)
     },
-    changeLogOut(page) {
+    changeLogOut (page) {
       // let date = this.logOutForm.date.Format('yyyy-MM-dd')
       let obj = this
       let form = this.logOutForm
       let param = {
-        select_date: form.date.Format("yyyy-MM-dd"),
+        select_date: form.date.Format('yyyy-MM-dd'),
         client_id: form.client_id,
         uuid: form.uuid,
         user_id: obj.user_id,
@@ -791,52 +789,52 @@ export default {
         obj.totalItem = result.total
       })
     },
-    pageChange() {
+    pageChange () {
       this.changeLogOut(this.currentPage)
     },
-    pageOperChange() {
+    pageOperChange () {
       this.getOperaList(this.currentOperPage)
     },
-    toRootLog() {
-      this.$router.push({ path: "/main/rootLog/" + this.searchKey })
+    toRootLog () {
+      this.$router.push({ path: '/main/rootLog/' + this.searchKey })
     },
-    getStatusText(type) {
-      let text = ""
+    getStatusText (type) {
+      let text = ''
       switch (type) {
-      case 1:
-        text = "有效"
-        break
-      case 0:
-        text = "无效"
-        break
-      default:
-        text = "未知"
-        break
+        case 1:
+          text = '有效'
+          break
+        case 0:
+          text = '无效'
+          break
+        default:
+          text = '未知'
+          break
       }
       return text
     },
-    getRouterStatusText(type) {
-      let text = ""
+    getRouterStatusText (type) {
+      let text = ''
       switch (type) {
-      case 1:
-        text = "工厂测试"
-        break
-      case 2:
-        text = "库存"
-        break
-      case 3:
-        text = "销售出"
-        break
-      case 5:
-        text = "返修"
-        break
-      default:
-        text = "失效"
-        break
+        case 1:
+          text = '工厂测试'
+          break
+        case 2:
+          text = '库存'
+          break
+        case 3:
+          text = '销售出'
+          break
+        case 5:
+          text = '返修'
+          break
+        default:
+          text = '失效'
+          break
       }
       return text
     },
-    getOperaList(page) {
+    getOperaList (page) {
       let obj = this
       let param = {
         select_date: this.operListForm.date,
@@ -855,15 +853,15 @@ export default {
         obj.operList = operLists
       })
     },
-    openOperListLayer() {
+    openOperListLayer () {
       this.operListLayer = true
       this.getOperaList(1)
     },
-    changeSelectOperList() {
+    changeSelectOperList () {
       this.getOperaList(1)
     }
   },
-  ...mapActions(["searchUserMsg", "searchLogOut", "operaList"])
+  ...mapActions(['searchUserMsg', 'searchLogOut', 'operaList'])
 }
 </script>
 <style lang="less" scope>

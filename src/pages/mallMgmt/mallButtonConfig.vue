@@ -40,9 +40,9 @@
         </el-form-item>
         <el-form-item label="按钮图标">
           <!-- Upload -->
-          <Upload 
+          <Upload
             :image-file="imageFile"
-            :valid="valid" 
+            :valid="valid"
             @emitImageData="emitImageData" />
         </el-form-item>
       </div>
@@ -73,14 +73,13 @@
 </style>
 
 <script>
-import { PREFIX } from "../../lib/util"
-import getCorsUrl from "../../lib/corsconfig"
-import Upload from "../../components/upload.vue"
+import { PREFIX } from '../../lib/util'
+import Upload from '../../components/upload.vue'
 export default {
   components: {
     Upload
   },
-  data() {
+  data () {
     return {
       valid: {
         type: 1, // 验证图片大小
@@ -88,10 +87,10 @@ export default {
       },
       imageFile: '',
       config: {
-        content: "",
-        image_url: "",
+        content: '',
+        image_url: '',
         status: 1,
-        url: "www.baidu.com"
+        url: 'www.baidu.com'
       },
       rules: {
         status: [
@@ -108,11 +107,11 @@ export default {
       }
     }
   },
-  mounted() {
+  mounted () {
     this.getConfigInfo()
   },
   methods: {
-    submitForm() {
+    submitForm () {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.saveConfig()
@@ -122,9 +121,9 @@ export default {
         }
       })
     },
-    getConfigInfo() {
+    getConfigInfo () {
       return this.$http
-        .post(PREFIX + "mall_record/info_config", {})
+        .post(PREFIX + 'mall_record/info_config', {})
         .then(res => {
           const json = res.data
           if (json.code === 200) {
@@ -145,10 +144,10 @@ export default {
           }
         })
     },
-    saveConfig() {
+    saveConfig () {
       console.log(this.config)
       this.$http
-        .post(PREFIX + "mall_record/save_config", this.config)
+        .post(PREFIX + 'mall_record/save_config', this.config)
         .then(res => {
           const json = res.data
           if (json.code === 200) {
@@ -166,7 +165,7 @@ export default {
           }
         })
     },
-    emitImageData(data) {
+    emitImageData (data) {
       this.config.image_url = data.object
       this.imageFile = data.download_url
     }

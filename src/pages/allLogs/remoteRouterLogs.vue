@@ -28,17 +28,16 @@
 </template>
 
 <script>
-import API from "../../service/index"
-import axios from "~/lib/http"
+import API from '../../service/index'
 export default {
-  data() {
+  data () {
     return {
       romoteRouterTime: [],
       routerUuid: ''
     }
   },
   methods: {
-    getLogs() {
+    getLogs () {
       let obj = {
         start_time: this.romoteRouterTime.length && this.getDateTime(this.romoteRouterTime[0], 'fulltime') || '',
         end_time: this.romoteRouterTime.length && this.getDateTime(this.romoteRouterTime[1], 'fulltime') || '',
@@ -50,10 +49,10 @@ export default {
 							(localStorage.getItem('localData') &&
 								JSON.parse(localStorage.getItem('localData')).user &&
 								JSON.parse(localStorage.getItem('localData')).user.info) || {}
-        window.open('/api/index.php/monitor/download?token='+ info.token, '_self')
+        window.open('/api/index.php/monitor/download?token=' + info.token, '_self')
       })
     },
-    newWin(url){ //新窗口打开
+    newWin (url) { // 新窗口打开
       var a = document.createElement('a')
       a.setAttribute('href', url)
       a.setAttribute('style', 'display:none')
@@ -62,7 +61,7 @@ export default {
       a.click()
       a.parentNode.removeChild(a)
     },
-    getDateTime(date, type) {
+    getDateTime (date, type) {
       // 时间格式获取
       if (!date) return
       let d = new Date(+date)

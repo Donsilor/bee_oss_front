@@ -11,7 +11,7 @@
         type="text"
         @click="goBack"
       >
-        <<&nbsp;返回
+        返回
       </el-button>
     </div>
     <el-row
@@ -25,25 +25,25 @@
   </div>
 </template>
 <script>
-import echarts from "echarts"
-import { mapActions } from "vuex"
-import "../../lib/util"
-import API from "../../service/index"
+import echarts from 'echarts'
+import { mapActions } from 'vuex'
+import '../../lib/util'
+import API from '../../service/index'
 export default {
   components: {},
-  data() {
+  data () {
     return {
-      activeName: "1",
+      activeName: '1',
       select_date: new Date(),
       alertChart: null
     }
   },
-  mounted() {
+  mounted () {
     this.initEchart()
     this.changeSelectDate()
   },
   methods: {
-    changeSelectDate() {
+    changeSelectDate () {
       let obj = this
       API.onlineLogs({ select_date: obj.select_date }).then(result => {
         if (result.data && result.data.result.data) {
@@ -52,26 +52,26 @@ export default {
           let Apparrs = []
           let Routerarrs = []
           datas.forEach(item => {
-            let currentTime = new Date(item["start_stat_time"])
-            Xarrs.push(currentTime.Format("hh:mm:ss"))
-            Routerarrs.push(item["router_num"])
-            Apparrs.push(item["app_num"])
+            let currentTime = new Date(item['start_stat_time'])
+            Xarrs.push(currentTime.Format('hh:mm:ss'))
+            Routerarrs.push(item['router_num'])
+            Apparrs.push(item['app_num'])
           })
           obj.renderEchart(Xarrs, Apparrs, Routerarrs)
         }
       })
     },
-    initEchart() {
-      this.alertChart = echarts.init(document.getElementById("charts-con"))
+    initEchart () {
+      this.alertChart = echarts.init(document.getElementById('charts-con'))
     },
-    renderEchart(Xarrs, Apparrs, Routerarrs) {
+    renderEchart (Xarrs, Apparrs, Routerarrs) {
       this.alertChart.setOption({
         title: {
-          text: "",
-          subtext: ""
+          text: '',
+          subtext: ''
         },
         tooltip: {
-          trigger: "axis"
+          trigger: 'axis'
           //                    formatter: function (params) {
           //                        params = params[0];
           //                        var date = new Date(params.name);
@@ -85,20 +85,20 @@ export default {
           show: true,
           feature: {
             dataZoom: {
-              yAxisIndex: "none"
+              yAxisIndex: 'none'
             },
             dataView: { readOnly: false },
-            magicType: { type: ["line", "bar"] },
+            magicType: { type: ['line', 'bar'] },
             restore: {},
             saveAsImage: {}
           }
         },
         legend: {
           show: true,
-          data: ["APP在线数", "路由在线数"]
+          data: ['APP在线数', '路由在线数']
         },
         xAxis: {
-          type: "category",
+          type: 'category',
           data: Xarrs,
           splitLine: {
             show: false
@@ -108,8 +108,8 @@ export default {
           top: 80
         },
         yAxis: {
-          name: "数量",
-          type: "value",
+          name: '数量',
+          type: 'value',
           // boundaryGap: [0, '100%'],
           splitLine: {
             show: true
@@ -117,45 +117,45 @@ export default {
         },
         series: [
           {
-            name: "APP在线数",
-            type: "line",
+            name: 'APP在线数',
+            type: 'line',
             data: Apparrs,
             itemStyle: {
               normal: {
-                color: "#81c0c0"
+                color: '#81c0c0'
               }
             },
             markPoint: {
-              data: [{ type: "max", name: "最大值" }, { type: "min", name: "最小值" }]
+              data: [{ type: 'max', name: '最大值' }, { type: 'min', name: '最小值' }]
             },
             markLine: {
-              data: [{ type: "average", name: "平均值" }]
+              data: [{ type: 'average', name: '平均值' }]
             }
           },
           {
-            name: "路由在线数",
-            type: "line",
+            name: '路由在线数',
+            type: 'line',
             data: Routerarrs,
             itemStyle: {
               normal: {
-                color: "#666"
+                color: '#666'
               }
             },
             markPoint: {
-              data: [{ type: "max", name: "最大值" }, { type: "min", name: "最小值" }]
+              data: [{ type: 'max', name: '最大值' }, { type: 'min', name: '最小值' }]
             },
             markLine: {
-              data: [{ type: "average", name: "平均值" }]
+              data: [{ type: 'average', name: '平均值' }]
             }
           }
         ]
       })
     },
-    goBack() {
+    goBack () {
       history.go(-1)
     }
   },
-  ...mapActions(["deviceTotals", "onlineLogs"])
+  ...mapActions(['deviceTotals', 'onlineLogs'])
 }
 </script>
 <style lang="less">

@@ -49,33 +49,33 @@
 </template>
 
 <script>
-import muserList from "./muserList.vue"
-import muserAdd from "./muserAdd.vue"
+import muserList from './muserList.vue'
+import muserAdd from './muserAdd.vue'
 
 export default {
   components: {
     muserList,
     muserAdd
   },
-  data() {
+  data () {
     return {
-      searchMobile: "",
+      searchMobile: '',
       addMuser: false,
       dataChanged: 0
     }
   },
   methods: {
-    search() {
+    search () {
       if (!this.searchMobile) {
-        this.$message.error("请输入手机号码")
+        this.$message.error('请输入手机号码')
         return
       }
       this.dataChanged++
     },
-    closeDialog() {
+    closeDialog () {
       this.addMuser = false
     },
-    changeData() {
+    changeData () {
       this.dataChanged++
     }
   }

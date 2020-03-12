@@ -74,13 +74,13 @@
 }
 </style>
 <script>
-import { PREFIX } from "../../lib/util"
+import { PREFIX } from '../../lib/util'
 import Config from './components/config.vue'
 export default {
   components: {
     Config
   },
-  data() {
+  data () {
     return {
       pages: {
         page: '10',
@@ -91,27 +91,27 @@ export default {
       config: {}
     }
   },
-  mounted() {
+  mounted () {
     this.getList()
   },
   methods: {
     // 根据order排序
-    compare(property){
-      return function(a,b){
+    compare (property) {
+      return function (a, b) {
         var value1 = a[property]
         var value2 = b[property]
         return value1 - value2
       }
     },
-    getList() {
+    getList () {
       this.$http
-        .post(PREFIX + "iotscenemode/lists", {})
+        .post(PREFIX + 'iotscenemode/lists', {})
         .then(res => {
           this.list = res.data.result.list
           this.list = this.list.sort(this.compare('order'))
         })
     },
-    handeStateClick(state) {
+    handeStateClick (state) {
       let enable = state.enable
       let type = '启用'
       if (enable) {
@@ -123,7 +123,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http
-          .post(PREFIX + "iotscenemode/save", {
+          .post(PREFIX + 'iotscenemode/save', {
             mode_id: state.mode_id,
             mode_name: state.mode_name,
             order: state.order,
@@ -138,7 +138,7 @@ export default {
           })
       })
     },
-    handeDeleteClick(enable) {
+    handeDeleteClick (enable) {
       this.$confirm(`您是否确定删除该模式？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -147,9 +147,9 @@ export default {
         this.delStatus(enable)
       })
     },
-    delStatus(enable) {
+    delStatus (enable) {
       this.$http
-        .post(PREFIX + "iotscenemode/del", {
+        .post(PREFIX + 'iotscenemode/del', {
           mode_id: enable
         })
         .then(res => {
@@ -160,15 +160,15 @@ export default {
           this.getList()
         })
     },
-    handPageChange(val) {
+    handPageChange (val) {
       this.pages.page = val
       this.getList()
     },
-    indexMethod(index) {
+    indexMethod (index) {
       return index + 1
     },
-    showConfig(type, item) {
-      if (type == 'add') {
+    showConfig (type, item) {
+      if (type === 'add') {
         this.config = {
           type: type,
           show: true,
@@ -183,7 +183,7 @@ export default {
         }
       }
     },
-    refresh(val) {
+    refresh (val) {
       if (val) this.getList()
     }
   }

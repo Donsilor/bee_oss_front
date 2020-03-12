@@ -132,16 +132,14 @@
 </template>
 
 <script>
-import CityPicker from "../../components/cityPicker.vue"
 import LineChart2 from './charts/lineChart2.vue'
-import axios from "axios"
-import * as URL from "~/lib/api"
+import axios from 'axios'
+import * as URL from '~/lib/api'
 export default {
   components: {
-    CityPicker,
     LineChart2
   },
-  data() {
+  data () {
     return {
       formdata: {
         date: '',
@@ -151,7 +149,7 @@ export default {
       pickerOptions: {
         shortcuts: [{
           text: '昨天',
-          onClick(picker) {
+          onClick (picker) {
             const end = new Date()
             const start = new Date()
             start.setTime(start.getTime() - 3600 * 1000 * 24)
@@ -159,7 +157,7 @@ export default {
           }
         }, {
           text: '最近7天',
-          onClick(picker) {
+          onClick (picker) {
             const end = new Date()
             const start = new Date()
             start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
@@ -167,7 +165,7 @@ export default {
           }
         }, {
           text: '最近30天',
-          onClick(picker) {
+          onClick (picker) {
             const end = new Date()
             const start = new Date()
             start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
@@ -203,14 +201,14 @@ export default {
       dateRange: ''
     }
   },
-  mounted() {
+  mounted () {
     this.getControlAnalysis()
   },
   methods: {
     // 获取数据
-    getControlAnalysis(params) {
+    getControlAnalysis (params) {
       axios.post(URL.RouterAnalysisURL, params).then(res => {
-        if (res.data.code == 200) {
+        if (res.data.code === 200) {
           const data = res.data.result.data
           this.summary = data.summary
           this.fitterEchartData(data.detail_data)
@@ -224,20 +222,20 @@ export default {
       console.log(1)
     },
     // 选择开始结束日后 决定是否显示留存筛选的周月
-    changeDate(date) {
-      const start = date ? date[0].getTime() : ""
-      const end = date ? date[1].getTime() : ""
+    changeDate (date) {
+      const start = date ? date[0].getTime() : ''
+      const end = date ? date[1].getTime() : ''
       const diff = end - start
       // 至少2个月才显示月 至少2周才显示周
       this.isShowUnitMon = diff > 1000 * 3600 * 24 * 30 + 1000 * 3600 * 24 * 31
       this.isShowUnitWeek = diff > 1000 * 3600 * 24 * 7 * 2
     },
-    onCitySelect(val) {
+    onCitySelect (val) {
       this.formdata.province = val[0]
       this.formdata.city = val[1]
     },
     // 过滤echart图表需要的数据
-    fitterEchartData(val) {
+    fitterEchartData (val) {
       for (let item in val) {
         this.xAxisData.push(item)
         this.chartData1.push(val[item][0].F_wakeup_cnt)
@@ -246,7 +244,7 @@ export default {
         console.log(89989, val[item][0].F_voice_interact)
       }
     },
-    search() {
+    search () {
       this.reset()
       const param = {
         start_time: this.dateRange[0].Format('yyyy-MM-dd'),
@@ -255,7 +253,7 @@ export default {
       this.getControlAnalysis(param)
       console.log(111, this.dateRange[0].Format('yyyy-MM-dd'))
     },
-    reset() {
+    reset () {
       this.xAxisData = []
       this.chartData1 = []
       this.chartData2 = []

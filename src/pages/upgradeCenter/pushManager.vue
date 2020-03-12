@@ -14,16 +14,16 @@
           :width="'auto'"
         >
           <template slot-scope="scope">
-            <div v-if="item.prop == 'type'">
+            <div v-if="item.prop === 'type'">
               {{ getTypeText(scope.row.type) }}
             </div>
-            <div v-else-if="item.prop == 'is_black'">
+            <div v-else-if="item.prop === 'is_black'">
               {{ scope.row.is_black ? '黑名单' : '白名单' }}
             </div>
-            <div v-else-if="item.prop == 'total_nums'">
+            <div v-else-if="item.prop === 'total_nums'">
               {{ scope.row.total_nums + '/' + scope.row.success_nums }}
             </div>
-            <div v-else-if="item.prop == 'status'">
+            <div v-else-if="item.prop === 'status'">
               {{ getStatusTextPush(scope.row.status) }}
             </div>
             <div v-else>
@@ -82,7 +82,7 @@
             :width="'auto'"
           >
             <template slot-scope="scope">
-              <div v-if="item.prop == 'status'">
+              <div v-if="item.prop === 'status'">
                 {{ getStatusTextPush(scope.row.status) }}
               </div>
               <div v-else>
@@ -136,30 +136,25 @@
   </div>
 </template>
 <script>
-import * as namespace from "../../store/namespace"
-import { mapGetters, mapActions } from "vuex"
-import "../../lib/util.js"
-import push_history_json from "../../json/pushHistory.json"
-import version_input from "./component/versionInputLayer.vue"
-import push_update from "./component/pushUpdateLayer.vue"
-import API from "../../service/index"
+import { mapGetters, mapActions } from 'vuex'
+import '../../lib/util.js'
+import push_history_json from '../../json/pushHistory.json'
+import API from '../../service/index'
 export default {
   components: {
-    "version-input": version_input,
-    "push-update": push_update
   },
-  data() {
+  data () {
     return {
       pushDetailFlag: false,
       pushNameListFlag: false,
       info: {},
       pushDetail: {
-        id: "",
-        version: "",
-        type: "",
-        uuid: "",
-        created_at: "",
-        status: ""
+        id: '',
+        version: '',
+        type: '',
+        uuid: '',
+        created_at: '',
+        status: ''
       },
       infoBoxFlag: false,
       totalItem: 0,
@@ -170,112 +165,112 @@ export default {
       rulesDetail: {},
       pushDetailList: {
         tableColumn: [
-          { prop: "uuid", label: "设备标识uuid" },
-          { prop: "updated_at", label: "更新时间" },
-          { prop: "version", label: "版本" }
+          { prop: 'uuid', label: '设备标识uuid' },
+          { prop: 'updated_at', label: '更新时间' },
+          { prop: 'version', label: '版本' }
         ],
         tableData: []
       },
       pushNameList: {
         tableColumn: [
-          { prop: "id", label: "id" },
-          { prop: "uuid", label: "设备标识uuid" },
-          { prop: "created_at", label: "创建时间" }
+          { prop: 'id', label: 'id' },
+          { prop: 'uuid', label: '设备标识uuid' },
+          { prop: 'created_at', label: '创建时间' }
         ],
         tableData: []
       }
     }
   },
-  ...mapActions(["pubilcCorsAction"]),
+  ...mapActions(['pubilcCorsAction']),
   computed: {
     ...mapGetters({})
   },
-  mounted() {
+  mounted () {
     this.getPushList(1)
   },
   methods: {
-    pageChange() {
+    pageChange () {
       this.getPushList(this.currentPage)
     },
-    formatTime(val) {
+    formatTime (val) {
       if (!val) {
-        return "------"
+        return '------'
       } else {
         let date = new Date(val * 1000)
-        return date.Format("yyyy-MM-dd hh:mm:ss")
+        return date.Format('yyyy-MM-dd hh:mm:ss')
       }
     },
-    getTypeText(type) {
-      let text = ""
+    getTypeText (type) {
+      let text = ''
       switch (type) {
-      case 1:
-        text = "app"
-        break
-      case 2:
-        text = "路由器"
-        break
-      case 3:
-        text = "子设备"
-        break
-      case 4:
-        text = "IOS APP"
-        break
-      case 5:
-        text = "H5"
-        break
-      default:
-        text = "Android_Pad"
-        break
+        case 1:
+          text = 'app'
+          break
+        case 2:
+          text = '路由器'
+          break
+        case 3:
+          text = '子设备'
+          break
+        case 4:
+          text = 'IOS APP'
+          break
+        case 5:
+          text = 'H5'
+          break
+        default:
+          text = 'Android_Pad'
+          break
       }
       return text
     },
-    getStatusTextPush(type) {
-      let text = ""
+    getStatusTextPush (type) {
+      let text = ''
       switch (type) {
-      case 1:
-        text = "成功"
-        break
-      case 0:
-        text = "失败"
-        break
-      default:
-        break
+        case 1:
+          text = '成功'
+          break
+        case 0:
+          text = '失败'
+          break
+        default:
+          break
       }
       return text
     },
-    getStatusText(type) {
-      let text = ""
+    getStatusText (type) {
+      let text = ''
       switch (type) {
-      case 1:
-        text = "有效"
-        break
-      case 0:
-        text = "无效"
-        break
-      default:
-        break
+        case 1:
+          text = '有效'
+          break
+        case 0:
+          text = '无效'
+          break
+        default:
+          break
       }
       return text
     },
-    getForceText(type) {
-      let text = ""
+    getForceText (type) {
+      let text = ''
       switch (type) {
-      case 1:
-        text = "强制升级"
-        break
-      case 0:
-        text = "不强制"
-        break
-      default:
-        break
+        case 1:
+          text = '强制升级'
+          break
+        case 0:
+          text = '不强制'
+          break
+        default:
+          break
       }
       return text
     },
-    getPushList(page) {
+    getPushList (page) {
       this.pushHistoryList = push_history_json
       let obj = this
       let param = {
-        method: "history_push_logs",
+        method: 'history_push_logs',
         limit: 10,
         page: page
       }
@@ -285,7 +280,7 @@ export default {
         obj.totalItem = result.result ? result.result.page.total : 0
       })
     },
-    getPushDetail(dataObj) {
+    getPushDetail (dataObj) {
       this.pushDetailFlag = true
       let obj = this
       let param = {
@@ -293,14 +288,14 @@ export default {
         type: dataObj.type,
         version: dataObj.version,
         product_id: dataObj.product_id,
-        method: "push_detail"
+        method: 'push_detail'
       }
       API.pubilcCorsAction(param).then(result => {
         obj.pushDetailList.tableData = result.result ? result.result.items : []
         // 翻页效果
       })
     },
-    getPushNameList(dataObj) {
+    getPushNameList (dataObj) {
       this.currentPushData = dataObj
       this.pushNameListFlag = true
       let obj = this
@@ -308,7 +303,7 @@ export default {
         push_log_id: dataObj.id,
         type: dataObj.type,
         version: dataObj.version,
-        method: "push_list"
+        method: 'push_list'
       }
       API.pubilcCorsAction(param).then(result => {
         obj.pushNameList.tableData = result.result ? result.result.items : []

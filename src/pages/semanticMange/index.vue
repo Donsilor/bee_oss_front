@@ -37,12 +37,12 @@
           :span="3"
           style="padding-right: 0; "
         >
-          <el-select 
+          <el-select
             v-model="form.platform"
             placeholder="请选择状态"
           >
-            <el-option 
-              v-for="(item,key) in platformList" 
+            <el-option
+              v-for="(item,key) in platformList"
               :key="key"
               :label="item.label"
               :value="item.value"
@@ -53,12 +53,12 @@
           :span="3"
           style="padding-right: 0; "
         >
-          <el-select 
+          <el-select
             v-model="form.platform"
             placeholder="请选择状态"
           >
-            <el-option 
-              v-for="(item,key) in platformList" 
+            <el-option
+              v-for="(item,key) in platformList"
               :key="key"
               :label="item.label"
               :value="item.value"
@@ -69,12 +69,12 @@
           :span="3"
           style="padding-right: 0; "
         >
-          <el-select 
+          <el-select
             v-model="form.platform"
             placeholder="请选择状态"
           >
-            <el-option 
-              v-for="(item,key) in platformList" 
+            <el-option
+              v-for="(item,key) in platformList"
               :key="key"
               :label="item.label"
               :value="item.value"
@@ -85,12 +85,12 @@
           :span="3"
           style="padding-right: 0; "
         >
-          <el-select 
+          <el-select
             v-model="form.platform"
             placeholder="请选择状态"
           >
-            <el-option 
-              v-for="(item,key) in platformList" 
+            <el-option
+              v-for="(item,key) in platformList"
               :key="key"
               :label="item.label"
               :value="item.value"
@@ -101,12 +101,12 @@
           :span="3"
           style="padding-right: 0; "
         >
-          <el-select 
+          <el-select
             v-model="form.platform"
             placeholder="请选择状态"
           >
-            <el-option 
-              v-for="(item,key) in platformList" 
+            <el-option
+              v-for="(item,key) in platformList"
               :key="key"
               :label="item.label"
               :value="item.value"
@@ -115,7 +115,7 @@
         </el-col>
       </el-row>
       <el-row class="row2">
-        
+
         <el-col
           :span="2"
           style="padding-right: 0; "
@@ -139,7 +139,7 @@
           </el-button>
         </el-col>
         <!-- </el-iform> -->
-      </el-form></el-row>
+      </el-row>
     <!-- <div style="position: absolute; top:0; right: 0">
         <el-button-group>
           <el-button @click="openLayer">
@@ -328,48 +328,47 @@
   </div>
 </template>
 <script>
-import * as namespace from "../../store/namespace"
-import { mapGetters, mapActions } from "vuex"
-import "../../lib/util.js"
-import router_list_json from "../../json/routerList.json"
-import { Message } from "element-ui"
-import API from "../../service/index"
+import { mapGetters, mapActions } from 'vuex'
+import '../../lib/util.js'
+import router_list_json from '../../json/routerList.json'
+import { Message } from 'element-ui'
+import API from '../../service/index'
 export default {
   components: {},
   filters: {
-    typeToString(x) {
+    typeToString (x) {
       if (x * 1 === 1) {
-        return "APP"
+        return 'APP'
       } else if (x * 1 === 2) {
-        return "路由器"
+        return '路由器'
       } else if (x * 1 === 3) {
-        return "子设备"
+        return '子设备'
       } else {
-        return "未知"
+        return '未知'
       }
     },
-    forceToString(x) {
-      return x ? "是" : "否"
+    forceToString (x) {
+      return x ? '是' : '否'
     },
-    statusToString(x) {
-      return x ? "启用" : "停用"
+    statusToString (x) {
+      return x ? '启用' : '停用'
     }
   },
-  data() {
+  data () {
     return {
-      pickerOptions:'',
-      form:{
-        data:"",
-        platform:""
+      pickerOptions: '',
+      form: {
+        data: '',
+        platform: ''
       },
-      platformList:[
+      platformList: [
         {
-          label:'Android',
-          value:'Android'
+          label: 'Android',
+          value: 'Android'
         },
         {
-          label:'IOS',
-          value:'IOS'
+          label: 'IOS',
+          value: 'IOS'
         }
       ],
       addEditFlag: true,
@@ -379,54 +378,54 @@ export default {
       listParams: {
         page: 1,
         limit: 10,
-        router_id: "",
-        device_uuid: ""
+        router_id: '',
+        device_uuid: ''
       },
       routerList: {},
       AddEditForm: {
-        device_name: "",
-        device_uuid: "",
-        device_auth_key: "",
-        device_sn: "",
-        device_mac: "",
-        device_state: "",
-        device_params: "",
-        router_id: ""
+        device_name: '',
+        device_uuid: '',
+        device_auth_key: '',
+        device_sn: '',
+        device_mac: '',
+        device_state: '',
+        device_params: '',
+        router_id: ''
       },
       rulesAddEdit: {
-        device_name: [{ required: true, message: "请输入设备名称" }],
-        device_uuid: [{ required: true, message: "请输入UUID" }],
-        device_auth_key: [{ required: true, message: "请输入设备验证KEY" }],
-        device_sn: [{ required: true, message: "请输入设备编号" }],
-        device_mac: [{ required: true, message: "请输入设备MAC" }],
-        device_state: [{ required: true, message: "请选择设备状态" }]
+        device_name: [{ required: true, message: '请输入设备名称' }],
+        device_uuid: [{ required: true, message: '请输入UUID' }],
+        device_auth_key: [{ required: true, message: '请输入设备验证KEY' }],
+        device_sn: [{ required: true, message: '请输入设备编号' }],
+        device_mac: [{ required: true, message: '请输入设备MAC' }],
+        device_state: [{ required: true, message: '请选择设备状态' }]
       }
     }
   },
-  ...mapActions(["routerList", "addRouter", "deleteRouter", "importRouter"]),
+  ...mapActions(['routerList', 'addRouter', 'deleteRouter', 'importRouter']),
   computed: {
     ...mapGetters({})
   },
   watch: {},
-  mounted() {
+  mounted () {
     this.getRouterList(1)
   },
   methods: {
-    changeDate(){
+    changeDate () {
 
     },
-    openEditLayer(dataObj) {
+    openEditLayer (dataObj) {
       this.addEditFlag = false
       this.addEditLayer = true
       this.$nextTick(() => {
         this.rulesAddEdit.device_auth_key = [{ required: false }]
         let currentData = this.AddEditForm
         for (let attr in currentData) {
-          currentData[attr] = dataObj[attr] || ""
+          currentData[attr] = dataObj[attr] || ''
         }
       })
     },
-    delRouter(dataObj) {
+    delRouter (dataObj) {
       const obj = this
       let currentParam = {
         router_list: [
@@ -436,17 +435,17 @@ export default {
           }
         ]
       }
-      this.$confirm("确定删除吗?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+      this.$confirm('确定删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
           API.deleteRouter(currentParam).then(result => {
             if (result.code === 0) {
               obj.$message({
-                type: "success",
-                message: "删除成功!"
+                type: 'success',
+                message: '删除成功!'
               })
               obj.getRouterList(1)
             }
@@ -454,29 +453,29 @@ export default {
         })
         .catch(() => { })
     },
-    goToImport() {
-      this.$router.push({ path: "/main/routerManager/import" })
+    goToImport () {
+      this.$router.push({ path: '/main/routerManager/import' })
     },
-    formatTime(val) {
+    formatTime (val) {
       if (!val) {
-        return "------"
+        return '------'
       } else {
         let date = new Date(val * 1000)
-        return date.Format("yyyy-MM-dd hh:mm:ss")
+        return date.Format('yyyy-MM-dd hh:mm:ss')
       }
     },
-    openLayer() {
+    openLayer () {
       this.addEditFlag = true
       this.addEditLayer = true
       this.$nextTick(() => {
-        this.$refs["AddEditForm"].resetFields()
+        this.$refs['AddEditForm'].resetFields()
       })
     },
-    pageChange() {
+    pageChange () {
       this.getRouterList(this.currentPage)
     },
     // 获取路由列表
-    getRouterList(page) {
+    getRouterList (page) {
       this.routerList = router_list_json
       this.listParams.page = page
       const obj = this
@@ -487,36 +486,36 @@ export default {
         }
       })
     },
-    getStatusText(type) {
-      let text = ""
+    getStatusText (type) {
+      let text = ''
       switch (type) {
-      case 1:
-        text = "工厂测试"
-        break
-      case 2:
-        text = "库存"
-        break
-      case 3:
-        text = "销售出"
-        break
-      case 5:
-        text = "返修"
-        break
-      case 6:
-        text = "失效"
-        break
-      default:
-        text = "未知"
-        break
+        case 1:
+          text = '工厂测试'
+          break
+        case 2:
+          text = '库存'
+          break
+        case 3:
+          text = '销售出'
+          break
+        case 5:
+          text = '返修'
+          break
+        case 6:
+          text = '失效'
+          break
+        default:
+          text = '未知'
+          break
       }
       return text
     },
     // 新增/编辑路由
-    addEditConfirm(formName) {
+    addEditConfirm (formName) {
       let obj = this
       obj.$refs[formName].validate(valid => {
         if (valid) {
-          let currentAction = obj.addEditFlag ? "addRouter" : "editRouter"
+          let currentAction = obj.addEditFlag ? 'addRouter' : 'editRouter'
           let currentParam = JSON.parse(JSON.stringify(obj.AddEditForm))
           if (obj.addEditFlag) {
             delete currentParam.router_id
@@ -525,8 +524,8 @@ export default {
             if (!obj.addEditFlag) {
               if (result && result.code === 0) {
                 Message({
-                  message: "编辑成功",
-                  type: "success"
+                  message: '编辑成功',
+                  type: 'success'
                 })
                 obj.addEditLayer = false
                 obj.getRouterList(1)
@@ -534,15 +533,15 @@ export default {
             } else {
               if (result && result.list && result.list[0].code === 0) {
                 Message({
-                  message: "新增成功",
-                  type: "success"
+                  message: '新增成功',
+                  type: 'success'
                 })
                 obj.addEditLayer = false
                 obj.getRouterList(1)
               } else {
                 Message({
                   message: result.list[0].detail,
-                  type: "error"
+                  type: 'error'
                 })
               }
             }

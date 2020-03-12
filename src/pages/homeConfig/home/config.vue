@@ -73,14 +73,14 @@
 }
 </style>
 <script>
-import { PREFIX, deepClone } from "../../../lib/util"
-import getCorsUrl from "../../../lib/corsconfig"
-import Upload from "../../../components/upload.vue"
+import { PREFIX } from '../../../lib/util'
+// import getCorsUrl from '../../../lib/corsconfig'
+import Upload from '../../../components/upload.vue'
 export default {
   components: {
     Upload
   },
-  data() {
+  data () {
     return {
       validList: {
         type: '', // 不做验证
@@ -95,10 +95,10 @@ export default {
       },
       rules: {
         F_title: [
-          { required: true, message: '请输入主标题', trigger: 'blur' },
+          { required: true, message: '请输入主标题', trigger: 'blur' }
         ],
         F_stitle: [
-          { required: true, message: '请输入副标题', trigger: 'blur' },
+          { required: true, message: '请输入副标题', trigger: 'blur' }
         ],
         F_picture: [
           { required: true, message: '请选择图片', trigger: 'change' }
@@ -107,51 +107,53 @@ export default {
     }
   },
   computed: {
-    title() {
+    title () {
       let title = ''
       switch (this.config.type) {
-      case 'add':
-        title = '添加场景'
-        break
-      case 'modify':
-        title = '编辑场景'
-        break
-      case 'look':
-        title = '查看场景'
-        break
-      default:
-        title = '查看场景'
+        case 'add':
+          title = '添加场景'
+          break
+        case 'modify':
+          title = '编辑场景'
+          break
+        case 'look':
+          title = '查看场景'
+          break
+        default:
+          title = '查看场景'
       }
       return title
     }
   },
   watch: {
-    'config.show'(val) {
+    'config.show' (val) {
       this.$nextTick(() => {
         this.$refs['ruleForm'].clearValidate()
       })
     }
   },
-  mounted() {
+  mounted () {
     console.log(this.config)
   },
   methods: {
     // 子组件传过来的 列表图片信息
-    emitListData(data) {
+    emitListData (data) {
       this.config.F_picture = data.download_url
       this.config.F_picture_object = data.object
     },
-    cancel() {
+    cancel () {
       this.config.show = false
     },
     // 点击确定按钮
-    submit() {
-      if (this.config.type === 'look') return this.config.show = false
-
+    submit () {
+      if (this.config.type === 'look') {
+        this.config.show = false
+        return
+      }
       this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
           console.log(this.config.type)
-          if(this.config.type == 'add'){
+          if (this.config.type === 'add') {
             this.add()
           } else {
             this.edit()
@@ -161,11 +163,11 @@ export default {
         }
       })
     },
-    add() {
+    add () {
       let param = {
         F_title: this.config.F_title.trim(),
         F_stitle: this.config.F_stitle.trim(),
-        F_picture: this.config.F_picture_object,
+        F_picture: this.config.F_picture_object
       }
       this.$http
         .post(PREFIX + 'music_config/add', param)
@@ -174,12 +176,12 @@ export default {
           this.config.show = false
         })
     },
-    edit() {
+    edit () {
       let param = {
         F_id: this.config.F_id,
         F_title: this.config.F_title,
         F_stitle: this.config.F_stitle,
-        F_picture: this.config.F_picture_object,
+        F_picture: this.config.F_picture_object
       }
       this.$http
         .post(PREFIX + 'music_config/edit', param)
@@ -188,6 +190,6 @@ export default {
           this.config.show = false
         })
     }
-  },
+  }
 }
 </script>

@@ -22,7 +22,7 @@ var warningManagement = [
     path: 'warnDataSearch',
     name: 'warnDataSearch',
     component: WarnDataSearch
-  },
+  }
 ]
 
 export default warningManagement

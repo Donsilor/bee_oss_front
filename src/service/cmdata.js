@@ -2,27 +2,27 @@ import axios from '../lib/http'
 import { CMDATA_API } from '~/lib/api'
 
 export default {
-  CmDataList(params) {
+  CmDataList (params) {
     return axios
       .post(CMDATA_API.CmDataList, params)
       .then(response => response.data)
   },
-  CmDataAdd(params) {
+  CmDataAdd (params) {
     return axios
       .post(CMDATA_API.CmDataAdd, params)
       .then(response => response.data)
   },
-  CmDataEdit(params) {
+  CmDataEdit (params) {
     return axios
       .post(CMDATA_API.CmDataEdit, params)
       .then(response => response.data)
   },
-  CmDataDel(params) {
+  CmDataDel (params) {
     return axios
       .post(CMDATA_API.CmDataDel, params)
       .then(response => response.data)
   },
-  ModuleList(params) {
+  ModuleList (params) {
     return axios
       .post(CMDATA_API.ModuleList, params)
       .then(response => response.data)
@@ -39,7 +39,7 @@ export default {
   //             });
   //     });
   // },
-  input(params) {
+  input (params) {
     return axios.post(CMDATA_API.input, params).then(response => response.data)
   }
 }

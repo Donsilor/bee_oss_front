@@ -87,16 +87,15 @@
   </div>
 </template>
 
-
 <script>
 import {
   switchProductHistory,
   switchProductHistoryExport
-} from "../../lib/api.js"
-import axios from "../../lib/http.js"
+} from '../../lib/api.js'
+import axios from '../../lib/http.js'
 
 export default {
-  data() {
+  data () {
     const end = new Date()
     const start = new Date()
     start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
@@ -108,14 +107,14 @@ export default {
       pageSize: 20,
       page: 1,
       exportUrl: switchProductHistoryExport,
-      userToken: JSON.parse(localStorage.getItem("localData")).user.info.token
+      userToken: JSON.parse(localStorage.getItem('localData')).user.info.token
     }
   },
-  mounted() {
+  mounted () {
     this.search()
   },
   methods: {
-    getHistoryList() {
+    getHistoryList () {
       axios
         .post(switchProductHistory, {
           ...this.getParams(),
@@ -127,7 +126,7 @@ export default {
           this.total = res.data.result.total || 0
         })
     },
-    exportData() {
+    exportData () {
       const form = this.$refs.exportForm
       const params = this.getParams()
       form.querySelector('[name="start_time"]').value = params.start_time
@@ -142,23 +141,23 @@ export default {
       //         });
       //     });
     },
-    search() {
+    search () {
       this.page = 1
       this.getHistoryList()
     },
-    onPageChange(page) {
+    onPageChange (page) {
       this.getHistoryList()
     },
     // 2018-09-21 09:50
-    formatTime(time, end) {
+    formatTime (time, end) {
       let y = time.getFullYear()
       let m = time.getMonth() + 1
       let d = time.getDate()
-      m = m < 10 ? "0" + m : m
-      d = d < 10 ? "0" + d : d
-      return `${y}-${m}-${d} ${end ? "23:59" : "00:00"}`
+      m = m < 10 ? '0' + m : m
+      d = d < 10 ? '0' + d : d
+      return `${y}-${m}-${d} ${end ? '23:59' : '00:00'}`
     },
-    getParams() {
+    getParams () {
       return {
         start_time: this.formatTime(this.dateRange[0]),
         end_time: this.formatTime(this.dateRange[1], true)

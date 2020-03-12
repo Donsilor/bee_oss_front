@@ -129,43 +129,43 @@
   </div>
 </template>
 <script>
-import API from "../../service/index.js"
+import API from '../../service/index.js'
 
 export default {
-  data() {
+  data () {
     return {
-      tableColumn: [{ prop: "role_id", label: "id" }, { prop: "role_name", label: "角色名" }],
+      tableColumn: [{ prop: 'role_id', label: 'id' }, { prop: 'role_name', label: '角色名' }],
       isEdit: false,
       dialogVisible: false,
       roleList: [],
       menuList: [],
       formdata: {},
       rules: {
-        name: [{ required: true, message: "请输入角色名", trigger: "blur" }],
-        display_name: [{ required: true, message: "请输入显示名称", trigger: "blur" }],
-        description: [{ required: true, message: "请输入备注", trigger: "blur" }],
-        checkList: [{ required: true, message: "请选择权限", trigger: "blur" }]
+        name: [{ required: true, message: '请输入角色名', trigger: 'blur' }],
+        display_name: [{ required: true, message: '请输入显示名称', trigger: 'blur' }],
+        description: [{ required: true, message: '请输入备注', trigger: 'blur' }],
+        checkList: [{ required: true, message: '请选择权限', trigger: 'blur' }]
       }
     }
   },
   computed: {
-    dialogTitle() {
-      return this.isEdit ? "编辑角色" : "添加角色"
+    dialogTitle () {
+      return this.isEdit ? '编辑角色' : '添加角色'
     }
   },
-  mounted() {
+  mounted () {
     this.getRoleList()
     this.getMenuList()
   },
   methods: {
-    handleAdd() {
+    handleAdd () {
       this.isEdit = false
       this.dialogVisible = true
       this.formdata = {
         checkList: []
       }
     },
-    handleEdit(row) {
+    handleEdit (row) {
       this.isEdit = true
 
       API.getRole(row.role_id).then(res => {
@@ -179,34 +179,34 @@ export default {
         this.dialogVisible = true
       })
     },
-    handleDelete(row) {
-      this.$confirm("确认删除？", "提示").then(() => {
+    handleDelete (row) {
+      this.$confirm('确认删除？', '提示').then(() => {
         API.deleteRole(row.role_id).then(() => {
-          this.$message("删除成功")
+          this.$message('删除成功')
           this.getRoleList()
         })
       })
     },
-    formSubmit() {
+    formSubmit () {
       this.formdata.permission_list = JSON.stringify(this.formdata.checkList)
 
-      API[this.isEdit ? "editRole" : "addRole"](this.formdata).then(res => {
-        this.$message(this.isEdit ? "修改成功" : "添加成功")
+      API[this.isEdit ? 'editRole' : 'addRole'](this.formdata).then(res => {
+        this.$message(this.isEdit ? '修改成功' : '添加成功')
         this.dialogVisible = false
         this.getRoleList()
       })
     },
-    getRoleList() {
+    getRoleList () {
       API.roleList().then(res => {
         this.roleList = res.data.result
       })
     },
-    getMenuList() {
+    getMenuList () {
       API.menuList().then(res => {
         this.menuList = res.data.result
       })
     },
-    getCheckList(menu) {
+    getCheckList (menu) {
       let result = []
       const getChild = list => {
         list.forEach(item => {
@@ -219,7 +219,7 @@ export default {
       getChild(menu)
       return result.filter(item => item.isCheck).map(item => item.permission_name)
     }
-  },
+  }
 }
 </script>
 
@@ -240,4 +240,3 @@ export default {
   font-size: 14px;
 }
 </style>
-

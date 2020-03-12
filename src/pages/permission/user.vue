@@ -174,17 +174,17 @@
   </div>
 </template>
 <script>
-import API from "../../service/index.js"
+import API from '../../service/index.js'
 
 export default {
-  data() {
+  data () {
     return {
       tableColumn: [
-        { prop: "id", label: "id" },
-        { prop: "name", label: "用户名" },
-        { prop: "role_name", label: "角色" },
-        { prop: "mobile", label: "手机号" },
-        { prop: "created_at", label: "创建时间" }
+        { prop: 'id', label: 'id' },
+        { prop: 'name', label: '用户名' },
+        { prop: 'role_name', label: '角色' },
+        { prop: 'mobile', label: '手机号' },
+        { prop: 'created_at', label: '创建时间' }
       ],
       totalItem: 0,
       currentPage: 1,
@@ -198,74 +198,74 @@ export default {
       total: 0,
       pageSize: 20,
       page: 1,
-      keyword: "",
+      keyword: '',
       rules: {
-        name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
-        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
-        mobile: [{ required: true, message: "请输入手机号码", trigger: "blur" }],
-        email: [{ required: true, message: "请输入邮箱", trigger: "blur" }],
-        role_id: [{ required: true, message: "请选择角色", trigger: "blur" }]
+        name: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+        mobile: [{ required: true, message: '请输入手机号码', trigger: 'blur' }],
+        email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
+        role_id: [{ required: true, message: '请选择角色', trigger: 'blur' }]
       }
     }
   },
   computed: {
-    dialogTitle() {
-      return this.isEdit ? "编辑" : "添加"
+    dialogTitle () {
+      return this.isEdit ? '编辑' : '添加'
     }
   },
-  mounted() {
+  mounted () {
     this.getUserList()
     this.getRoleList()
     this.getMenuList()
   },
   methods: {
-    handleAdd() {
+    handleAdd () {
       this.isEdit = false
       this.dialogVisible = true
       this.formdata = {}
     },
-    handleEdit(row) {
+    handleEdit (row) {
       this.isEdit = true
       this.dialogVisible = true
       this.formdata = Object.assign({}, row)
       this.formdata.user_id = row.id
     },
-    handleDelete(row) {
+    handleDelete (row) {
       if (!row.id && this.selectedIds.length === 0) {
-        this.$message("请最少选择一项")
+        this.$message('请最少选择一项')
         return
       }
       let ids = row.id ? [row.id] : this.selectedIds.map(item => item.id)
-      this.$confirm("确认删除？", "提示").then(() => {
+      this.$confirm('确认删除？', '提示').then(() => {
         API.deleteUser(JSON.stringify(ids)).then(res => {
-          this.$message("删除成功")
+          this.$message('删除成功')
           this.getUserList()
         })
       })
     },
-    handleExport() { },
-    handleSelectionChange(val) {
+    handleExport () { },
+    handleSelectionChange (val) {
       this.selectedIds = val
     },
-    onSelectable(row, index) {
-      if (row.name == "admin") return false
+    onSelectable (row, index) {
+      if (row.name === 'admin') return false
       return true
     },
-    onPageChange(page) {
+    onPageChange (page) {
       this.getUserList()
     },
-    formSubmit() {
-      API[this.isEdit ? "editUser" : "addUser"](this.formdata).then(res => {
-        this.$message(this.isEdit ? "修改成功" : "添加成功")
+    formSubmit () {
+      API[this.isEdit ? 'editUser' : 'addUser'](this.formdata).then(res => {
+        this.$message(this.isEdit ? '修改成功' : '添加成功')
         this.dialogVisible = false
         this.getUserList()
       })
     },
-    handleSearch() {
+    handleSearch () {
       this.page = 1
       this.getUserList()
     },
-    getUserList() {
+    getUserList () {
       API.userList({
         keyword: this.keyword,
         page: this.page,
@@ -275,17 +275,17 @@ export default {
         this.total = res.data.result.total
       })
     },
-    getRoleList() {
+    getRoleList () {
       API.roleList().then(res => {
         this.roleList = res.data.result
       })
     },
-    getMenuList() {
+    getMenuList () {
       API.menuList().then(res => {
         this.menuList = res.data.result
       })
     },
-    getUserDetail(id) {
+    getUserDetail (id) {
       API.getUser(id).then(res => {
         this.formdata = res.data.result
       })

@@ -13,7 +13,8 @@
     >
       <span class="label-name">适配路由器版本:</span>
       <span
-        v-for="item in currenData.router"
+        v-for="(item, index) in currenData.router"
+        :key="index"
         class="version-list"
       >{{ item }}</span>
     </div>
@@ -24,21 +25,24 @@
       <div>
         <span class="label-name">android app版本：</span>
         <span
-          v-for="item in currenData.android"
+          v-for="(item, index) in currenData.android"
+          :key="index"
           class="version-list"
         >{{ item }}</span>
       </div>
       <div>
         <span class="label-name">ios app版本：</span>
         <span
-          v-for="item in currenData.ios"
+          v-for="(item, index) in currenData.ios"
+          :key="index"
           class="version-list"
         >{{ item }}</span>
       </div>
       <div>
         <span class="label-name">android pad版本：</span>
         <span
-          v-for="item in currenData.android_pad"
+          v-for="(item, index) in currenData.android_pad"
+          :key="index"
           class="version-list"
         >{{ item }}</span>
       </div>
@@ -48,7 +52,8 @@
     <!--2222222-->
     <div v-if="inputType === 1 || inputType === 2 || inputType === 4 || inputType === 6">
       <div
-        v-for="item in currenData.device"
+        v-for="(item, index) in currenData.device"
+        :key="index"
         class="m-b-20"
       >
         <div class="title">
@@ -61,7 +66,8 @@
         <div class="version-list-line">
           <span class="label-name">适配H5版本号: </span>
           <span
-            v-for="inner in item.h5"
+            v-for="(inner, index) in item.h5"
+            :key="index"
             class="version-list"
           >{{ inner }}</span>
         </div>
@@ -72,28 +78,31 @@
         <div>
           <span class="label-name">适配路由：</span>
         </div>
-        <div v-for="item in currenData.router">
+        <div v-for="(item, index) in currenData.router" :key="index">
           <div class="version-list-line">
             <span class="label-name">适配路由器版本号: </span>{{ item.version }}
           </div>
           <div class="version-list-line">
             <span class="label-name">android app: </span>
             <span
-              v-for="inner in item.andorid"
+              v-for="(inner, index) in item.andorid"
+              :key="index"
               class="version-list"
             >{{ inner }}</span>
           </div>
           <div class="version-list-line">
             <span class="label-name">android pad: </span>
             <span
-              v-for="inner in item.andorid_pad"
+              v-for="(inner, index) in item.andorid_pad"
+              :key="index"
               class="version-list"
             >{{ inner }}</span>
           </div>
           <div class="version-list-line">
             <span class="label-name">ios app: </span>
             <span
-              v-for="inner in item.ios"
+              v-for="(inner, index) in item.ios"
+              :key="index"
               class="version-list"
             >{{ inner }}</span>
           </div>
@@ -102,13 +111,14 @@
       <div class="version-list-line">
         <span class="label-name">适配H5版本号: </span>
         <span
-          v-for="inner in currenData.h5"
+          v-for="(inner, index) in currenData.h5"
+          :key="index"
           class="version-list"
         >{{ inner }}</span>
       </div>
     </div>
     <div v-if="inputType === 5">
-      <div v-for="item in currenData.device">
+      <div v-for="(item, index) in currenData.device" :key="index">
         <div class="title">
           <span class="label-name">版本</span>{{ item.version }}
         </div>
@@ -118,21 +128,24 @@
         <div class="version-list-line">
           <span class="label-name">android app: </span>
           <span
-            v-for="inner in item.router.andorid"
+            v-for="(inner, index) in item.router.andorid"
+            :key="index"
             class="version-list"
           >{{ inner }}</span>
         </div>
         <div class="version-list-line">
           <span class="label-name">android pad: </span>
           <span
-            v-for="inner in item.router.andorid_pad"
+            v-for="(inner,index) in item.router.andorid_pad"
+            :key="index"
             class="version-list"
           >{{ inner }}</span>
         </div>
         <div class="version-list-line">
           <span class="label-name">ios app: </span>
           <span
-            v-for="inner in item.router.ios"
+            v-for="(inner, index) in item.router.ios"
+            :key="index"
             class="version-list"
           >{{ inner }}</span>
         </div>
@@ -141,16 +154,15 @@
   </div>
 </template>
 <script>
-import * as namespace from "../../../store/namespace"
-import { mapActions } from "vuex"
-import API from "../../../service/index"
+import { mapActions } from 'vuex'
+import API from '../../../service/index'
 export default {
-  props: ["inputType"],
-  data() {
+  props: ['inputType'],
+  data () {
     return {
       routersTableData: [],
       productsTableData: {
-        tableColumn: [{ prop: "product_id", label: "产品id" }, { prop: "version", label: "版本号" }],
+        tableColumn: [{ prop: 'product_id', label: '产品id' }, { prop: 'version', label: '版本号' }],
         tableData: []
       },
       currentDataObj: {},
@@ -158,65 +170,65 @@ export default {
     }
   },
   watch: {},
-  mounted() { },
+  mounted () { },
   methods: {
-    renderData(dataObj) {
+    renderData (dataObj) {
       this.currentDataObj = dataObj
       let obj = this
       let param = {
         version: dataObj.version
       }
       switch (this.inputType) {
-      case 1:
-      case 4:
-      case 6:
-        param.type = dataObj.type
-        param.method = "app_mapping"
-        break
-      case 2:
-        param.method = "router_mapping"
-        break
-      case 3:
-        param.method = "device_mapping"
-        param.product_id = dataObj.product_id
-        break
-      case 5:
-        param.method = "h5_mapping"
-        param.product_id = dataObj.product_id
-        break
-      default:
-        break
+        case 1:
+        case 4:
+        case 6:
+          param.type = dataObj.type
+          param.method = 'app_mapping'
+          break
+        case 2:
+          param.method = 'router_mapping'
+          break
+        case 3:
+          param.method = 'device_mapping'
+          param.product_id = dataObj.product_id
+          break
+        case 5:
+          param.method = 'h5_mapping'
+          param.product_id = dataObj.product_id
+          break
+        default:
+          break
       }
       API.pubilcCorsAction(param).then(result => {
         obj.currenData = result.result
       })
     },
-    getTypeName(type) {
-      let text = ""
+    getTypeName (type) {
+      let text = ''
       switch (type) {
-      case 1:
-        text = "Android app"
-        break
-      case 6:
-        text = "Android PAD"
-        break
-      case 2:
-        text = "路由器"
-        break
-      case 3:
-        text = "子设备"
-        break
-      case 4:
-        text = "IOS APP"
-        break
-      default:
-        text = "H5"
-        break
+        case 1:
+          text = 'Android app'
+          break
+        case 6:
+          text = 'Android PAD'
+          break
+        case 2:
+          text = '路由器'
+          break
+        case 3:
+          text = '子设备'
+          break
+        case 4:
+          text = 'IOS APP'
+          break
+        default:
+          text = 'H5'
+          break
       }
       return text
     }
   },
-  ...mapActions(["pubilcCorsAction"])
+  ...mapActions(['pubilcCorsAction'])
 }
 </script>
 <style lang="less">

@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-popover="">
   <div class="page-content ops-page">
     <el-popover
       ref="filterPopover"
@@ -435,161 +435,158 @@
   </div>
 </template>
 <script>
-import echarts from "echarts/lib/echarts"
-import "echarts/lib/chart/bar"
-import "echarts/lib/component/tooltip"
-import "echarts/lib/component/title"
-import { PREFIX } from "../lib/util"
-import * as namespace from "../store/namespace"
-import { mapGetters } from "vuex"
+import echarts from 'echarts/lib/echarts'
+import 'echarts/lib/chart/bar'
+import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/title'
 export default {
   components: {},
-  data() {
+  data () {
     return {
       list: [
         {
-          facility: "路由器",
-          type: "主动推送",
-          time: "2017-12-18 12:00:00",
-          version: "1.9.2",
-          batch: "124",
+          facility: '路由器',
+          type: '主动推送',
+          time: '2017-12-18 12:00:00',
+          version: '1.9.2',
+          batch: '124',
           success: false,
-          rate: "100%"
+          rate: '100%'
         }
       ],
       person: {
-        image: "",
-        name: "张大民",
-        sex: "男",
-        birth: "1982-02-13",
-        mobile: "13800000000",
-        city: "广州",
-        address: "恒大山水郡",
-        unit: "6栋602",
+        image: '',
+        name: '张大民',
+        sex: '男',
+        birth: '1982-02-13',
+        mobile: '13800000000',
+        city: '广州',
+        address: '恒大山水郡',
+        unit: '6栋602',
         facilitys: [
           {
-            name: "海尔-SDF334",
-            brand: "美的",
-            category: "灯",
-            type: "SDFSDF3245656",
-            UUID: "2412342345",
-            status: "unusual",
-            guarantee: "在保"
+            name: '海尔-SDF334',
+            brand: '美的',
+            category: '灯',
+            type: 'SDFSDF3245656',
+            UUID: '2412342345',
+            status: 'unusual',
+            guarantee: '在保'
           },
           {
-            name: "海尔-SDF334",
-            brand: "海尔",
-            category: "洗衣机",
-            type: "SDFSDF3245656",
-            UUID: "2412342345",
-            status: "unusual",
-            guarantee: "在保"
+            name: '海尔-SDF334',
+            brand: '海尔',
+            category: '洗衣机',
+            type: 'SDFSDF3245656',
+            UUID: '2412342345',
+            status: 'unusual',
+            guarantee: '在保'
           },
           {
-            name: "海尔-SDF334",
-            brand: "SONY",
-            category: "灯",
-            type: "SDFSDF3245656",
-            UUID: "2412342345",
-            status: "normal",
-            guarantee: "在保"
+            name: '海尔-SDF334',
+            brand: 'SONY',
+            category: '灯',
+            type: 'SDFSDF3245656',
+            UUID: '2412342345',
+            status: 'normal',
+            guarantee: '在保'
           },
           {
-            name: "海尔-SDF334",
-            brand: "格力",
-            category: "空调",
-            type: "SDFSDF3245656",
-            UUID: "2412342345",
-            status: "normal",
-            guarantee: "在保"
+            name: '海尔-SDF334',
+            brand: '格力',
+            category: '空调',
+            type: 'SDFSDF3245656',
+            UUID: '2412342345',
+            status: 'normal',
+            guarantee: '在保'
           },
           {
-            name: "海尔-SDF334",
-            brand: "飞利浦",
-            category: "空调",
-            type: "SDFSDF3245656",
-            UUID: "2412342345",
-            status: "normal",
-            guarantee: "在保"
+            name: '海尔-SDF334',
+            brand: '飞利浦',
+            category: '空调',
+            type: 'SDFSDF3245656',
+            UUID: '2412342345',
+            status: 'normal',
+            guarantee: '在保'
           }
         ]
       },
-      searchKey: "",
+      searchKey: '',
       pushBoxFlag: false,
       filterPopoverFlag: false,
       searchedFlag: false,
       rateTableFlag: false,
       statisticsFlag: false,
-      activedTab: "router", //router, app, child
+      activedTab: 'router', // router, app, child
       pushForm: {
-        terminal: "",
-        os: "",
-        version: "",
-        number: "",
-        time: ""
+        terminal: '',
+        os: '',
+        version: '',
+        number: '',
+        time: ''
       },
       filterForm: {
-        facility: "",
-        firm: "",
-        type: "",
-        child: ""
+        facility: '',
+        firm: '',
+        type: '',
+        child: ''
       },
       statisticsFilter: {
-        category: "",
-        brand: ""
+        category: '',
+        brand: ''
       },
       categoryOptions: [
         {
-          value: "1",
-          lable: "选项一"
+          value: '1',
+          lable: '选项一'
         }
       ],
       brandOptions: [
         {
-          value: "1",
-          lable: "选项一"
+          value: '1',
+          lable: '选项一'
         }
       ],
       terminalOptions: [
         {
-          value: "1",
-          lable: "选项一"
+          value: '1',
+          lable: '选项一'
         }
       ],
       osOptions: [
         {
-          value: "1",
-          lable: "选项一"
+          value: '1',
+          lable: '选项一'
         }
       ],
       versionOptions: [
         {
-          value: "1",
-          lable: "选项一"
+          value: '1',
+          lable: '选项一'
         }
       ],
       facilityOptions: [
         {
-          value: "1",
-          lable: "选项一"
+          value: '1',
+          lable: '选项一'
         }
       ],
       firmOptions: [
         {
-          value: "1",
-          lable: "选项一"
+          value: '1',
+          lable: '选项一'
         }
       ],
       childOptions: [
         {
-          value: "1",
-          lable: "选项一"
+          value: '1',
+          lable: '选项一'
         }
       ],
       typeOptions: [
         {
-          value: "1",
-          lable: "选项一"
+          value: '1',
+          lable: '选项一'
         }
       ],
       routerEchart: null,
@@ -598,74 +595,74 @@ export default {
     }
   },
   computed: {
-    facilitysTotal() {
+    facilitysTotal () {
       return this.person.facilitys.length
     },
-    unusualfacilitysTotal() {
-      return this.person.facilitys.filter(item => item.status === "unusual").length
+    unusualfacilitysTotal () {
+      return this.person.facilitys.filter(item => item.status === 'unusual').length
     }
   },
   watch: {
-    statisticsFlag(curVal, oldVal) {
+    statisticsFlag (curVal, oldVal) {
       if (curVal) {
         this.renderStatisticsEchart(this.activedTab)
       }
     }
   },
-  mounted() {
-    //this.initStatisticsEchart();
+  mounted () {
+    // this.initStatisticsEchart();
   },
   methods: {
-    changeString(row, columen, value) {
+    changeString (row, columen, value) {
       if (value) {
-        return "成功"
+        return '成功'
       } else {
-        return "失败"
+        return '失败'
       }
     },
-    rowChoosed(row, event) {
+    rowChoosed (row, event) {
       this.rateTableFlag = true
       setTimeout(() => {
         this.renderRateEchart()
       }, 100)
 
-      //console.log(row);
+      // console.log(row);
     },
 
-    changeTab(tab, event) {
+    changeTab (tab, event) {
       this.renderStatisticsEchart(tab.name)
     },
 
-    initStatisticsEchart() {
-      this.routerEchart = echarts.init(document.getElementById("routerEchart-area"))
-      this.appEchart = echarts.init(document.getElementById("appEchart-area"))
-      this.childEchart = echarts.init(document.getElementById("childEchart-area"))
+    initStatisticsEchart () {
+      this.routerEchart = echarts.init(document.getElementById('routerEchart-area'))
+      this.appEchart = echarts.init(document.getElementById('appEchart-area'))
+      this.childEchart = echarts.init(document.getElementById('childEchart-area'))
     },
 
-    renderStatisticsEchart(chartName) {
+    renderStatisticsEchart (chartName) {
       setTimeout(() => {
         if (!this[`${chartName}Echart`]) {
           this[`${chartName}Echart`] = echarts.init(document.getElementById(`${chartName}Echart-area`))
         }
         this[`${chartName}Echart`].setOption({
-          color: ["#3398DB"],
+          color: ['#3398DB'],
           xAxis: {
-            data: ["2.0", "1.8", "1.6", "1.5", "1.3", "1.2", "1.1", "1.0"]
+            data: ['2.0', '1.8', '1.6', '1.5', '1.3', '1.2', '1.1', '1.0']
           },
           yAxis: {
-            type: "value",
+            type: 'value',
             interval: 5000
           },
           series: [
             {
-              name: "users",
-              type: "bar",
-              barWidth: "40%",
+              name: 'users',
+              type: 'bar',
+              barWidth: '40%',
               label: {
                 normal: {
                   show: true,
-                  position: "top",
-                  color: "#333"
+                  position: 'top',
+                  color: '#333'
                 }
               },
               data: [15087, 18344, 16444, 17789, 0, 0, 0, 20]
@@ -675,46 +672,46 @@ export default {
       }, 500)
     },
 
-    renderRateEchart() {
-      const alertChart = echarts.init(document.getElementById("rateEchart-area"))
+    renderRateEchart () {
+      const alertChart = echarts.init(document.getElementById('rateEchart-area'))
       alertChart.setOption({
-        color: ["#3398DB"],
+        color: ['#3398DB'],
         xAxis: {
-          data: ["推送通知", "升级成功率", "升级失败率", "取消升级率"]
+          data: ['推送通知', '升级成功率', '升级失败率', '取消升级率']
         },
         yAxis: {
-          type: "value",
+          type: 'value',
           interval: 20,
           max: 100,
           min: 0
         },
         series: [
           {
-            name: "比率",
-            type: "bar",
-            barWidth: "40%",
+            name: '比率',
+            type: 'bar',
+            barWidth: '40%',
             label: {
               normal: {
                 show: true,
-                position: "top",
-                color: "#333"
+                position: 'top',
+                color: '#333'
               }
             },
             data: [
               {
-                name: "67.23%",
+                name: '67.23%',
                 value: 67.23
               },
               {
-                name: "56.24%",
+                name: '56.24%',
                 value: 56.24
               },
               {
-                name: "38.42%",
+                name: '38.42%',
                 value: 38.42
               },
               {
-                name: "7.25%",
+                name: '7.25%',
                 value: 7.25
               }
             ]

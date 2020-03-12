@@ -133,115 +133,114 @@
 </template>
 <script>
 /* eslint-disable no-useless-escape */
-import * as namespace from "../../../store/namespace"
-import getCorsUrl from "../../../lib/corsconfig"
+import getCorsUrl from '../../../lib/corsconfig'
 export default {
-  props: ["type", "inputType", "pushDataObj"],
-  data() {
+  props: ['type', 'inputType', 'pushDataObj'],
+  data () {
     return {
       uploadObj: {
-        token: JSON.parse(localStorage.getItem("localData")).user.info.token
+        token: JSON.parse(localStorage.getItem('localData')).user.info.token
       },
       pushForm: {
-        method: "push_version",
+        method: 'push_version',
         push_type: 0,
-        type: "",
-        is_black: "",
-        product_id: "",
-        uuid_list: "",
-        uuid_csv: "",
+        type: '',
+        is_black: '',
+        product_id: '',
+        uuid_list: '',
+        uuid_csv: '',
         terminal_type: 1
       },
       rules: {
-        is_black: [{ required: false, message: "请选择类型" }],
-        product_id: [{ required: false, message: "请选择产品类型" }],
-        uuid_csv: [{ required: true, message: "请输入uuid_csv" }],
+        is_black: [{ required: false, message: '请选择类型' }],
+        product_id: [{ required: false, message: '请选择产品类型' }],
+        uuid_csv: [{ required: true, message: '请输入uuid_csv' }],
         uuid_list: [
-          { required: false, message: "请输入uuid" },
+          { required: false, message: '请输入uuid' },
           {
             validator: (rule, value, callback) => {
               let reg = /[\;|\"|\。]+/
               if (reg.test(value)) {
-                callback(new Error("uuid规则不符"))
+                callback(new Error('uuid规则不符'))
               } else {
                 callback()
               }
             },
-            trigger: "blur"
+            trigger: 'blur'
           }
         ]
       },
-      corsUrls: getCorsUrl() + "/uuid_upload",
+      corsUrls: getCorsUrl() + '/uuid_upload',
       os_type_text: {
-        1: "android_app",
-        4: "ios_app",
-        6: "android_pad",
-        13: "lua_app",
+        1: 'android_app',
+        4: 'ios_app',
+        6: 'android_pad',
+        13: 'lua_app'
       }
     }
   },
   computed: {},
   watch: {},
-  mounted() { },
+  mounted () { },
   methods: {
-    pushTypeChangeEvent(val) {
+    pushTypeChangeEvent (val) {
       if (val === 1) {
-        this.rules.is_black = [{ required: true, message: "请选择类型" }]
+        this.rules.is_black = [{ required: true, message: '请选择类型' }]
         this.rules.uuid_list = [
-          { required: true, message: "请输入uuid" },
+          { required: true, message: '请输入uuid' },
           {
             validator: (rule, value, callback) => {
               let reg = /[\;|\"|\。]+/
               if (reg.test(value)) {
-                callback(new Error("uuid规则不符"))
+                callback(new Error('uuid规则不符'))
               } else {
                 callback()
               }
             },
-            trigger: "blur"
+            trigger: 'blur'
           }
         ]
       } else {
         this.rules.uuid_list = [
-          { required: false, message: "请输入uuid" },
+          { required: false, message: '请输入uuid' },
           {
             validator: (rule, value, callback) => {
               let reg = /[\;|\"|\。]+/
               if (reg.test(value)) {
-                callback(new Error("uuid规则不符"))
+                callback(new Error('uuid规则不符'))
               } else {
                 callback()
               }
             },
-            trigger: "blur"
+            trigger: 'blur'
           }
         ]
       }
     },
-    resetPushForm() {
+    resetPushForm () {
       let form = this.pushForm
-      this.$refs["pushForm"].resetFields()
+      this.$refs['pushForm'].resetFields()
       for (let attr in form) {
         switch (attr) {
-        case "terminal_type":
-          form[attr] = 1
-          break
-        case "method":
-          form[attr] = "push_version"
-          break
-        case "push_type":
-          form[attr] = 0
-          break
-        default:
-          form[attr] = ""
-          break
+          case 'terminal_type':
+            form[attr] = 1
+            break
+          case 'method':
+            form[attr] = 'push_version'
+            break
+          case 'push_type':
+            form[attr] = 0
+            break
+          default:
+            form[attr] = ''
+            break
         }
       }
     },
-    closeParentFlow() {
-      this.$emit("closePushBox")
+    closeParentFlow () {
+      this.$emit('closePushBox')
     },
-    pushUpdateForm(formName) {
+    pushUpdateForm (formName) {
       const obj = this
       obj.$refs[formName].validate(valid => {
         if (valid) {
@@ -249,14 +248,14 @@ export default {
           if (!params.terminal_type) {
             params.uuid_list = params.uuid_csv || []
           } else {
-            params.uuid_list = params.uuid_list.split(",") || []
+            params.uuid_list = params.uuid_list.split(',') || []
           }
           params.version = this.pushDataObj.version
           params.product_id = this.pushDataObj.product_id
           params.type = this.inputType
           params.user_id = this.pushDataObj.user_id
-          params.os_type = this.os_type_text[this.pushDataObj.os_type] || ""
-          params.router_pid = this.pushDataObj.router_pid || ""
+          params.os_type = this.os_type_text[this.pushDataObj.os_type] || ''
+          params.router_pid = this.pushDataObj.router_pid || ''
 
           if (params.push_type === 0) {
             delete params.is_black
@@ -267,19 +266,19 @@ export default {
           }
           delete params.uuid_csv
           delete params.terminal_type
-          obj.$emit("pushUpdateParent", params)
+          obj.$emit('pushUpdateParent', params)
         } else {
           return false
         }
       })
     },
-    getUploadData(val) {
+    getUploadData (val) {
       this.pushForm.uuid_csv = val.result
-      this.$refs["pushForm"].validate(valid => { })
+      this.$refs['pushForm'].validate(valid => { })
     },
-    beforeAvatarUpload(file) {
+    beforeAvatarUpload (file) {
       // const isRight = (file.type === 'application/zip' || file.type === 'application/rar');
-      //const isLt2M = file.size / 1024 / 1024 < 100;
+      // const isLt2M = file.size / 1024 / 1024 < 100;
       //            if (!isRight) {
       //                this.$message.error('上传只能是 zip|rar 格式!');
       //            }

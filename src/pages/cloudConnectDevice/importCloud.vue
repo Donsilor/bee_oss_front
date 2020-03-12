@@ -49,19 +49,18 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from "vuex"
-import { Message } from "element-ui"
+import { Message } from 'element-ui'
 export default {
-  data() {
+  data () {
     return {
       uploadObj: {
-        token: JSON.parse(localStorage.getItem("localData")).user.info.token
+        token: JSON.parse(localStorage.getItem('localData')).user.info.token
       },
       importList: {
         tableColumn: [
-          { prop: "router_id", label: "路由ID" },
-          { prop: "code", label: "错误详细" },
-          { prop: "detail", label: "错误描述" }
+          { prop: 'router_id', label: '路由ID' },
+          { prop: 'code', label: '错误详细' },
+          { prop: 'detail', label: '错误描述' }
         ],
         tableData: []
       }
@@ -69,21 +68,21 @@ export default {
   },
   computed: {},
   watch: {},
-  mounted() {},
+  mounted () {},
   methods: {
-    goBack() {
+    goBack () {
       history.go(-1)
     },
-    getUploadData(val) {
+    getUploadData (val) {
       if (val.code === 0 || val.code === 200) {
         Message({
-          message: "导入成功",
-          type: "success"
+          message: '导入成功',
+          type: 'success'
         })
       } else {
         Message({
-          message: "导入失败",
-          type: "error"
+          message: '导入失败',
+          type: 'error'
         })
         if (val.result && val.result.list && val.result.list.length) {
           this.hasList = true
@@ -91,7 +90,7 @@ export default {
         }
       }
     },
-    beforeAvatarUpload(file) {
+    beforeAvatarUpload (file) {
       // const isRight = (file.type === 'application/zip' || file.type === 'application/rar');
       const isLt100M = file.size / 1024 / 1024 < 100
 
@@ -99,7 +98,7 @@ export default {
       //                this.$message.error('上传只能是 zip|rar 格式!');
       //            }
       if (!isLt100M) {
-        this.$message.error("上传文件大小不能超过 100MB!")
+        this.$message.error('上传文件大小不能超过 100MB!')
       }
       return isLt100M
     }

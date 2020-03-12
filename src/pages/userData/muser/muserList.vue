@@ -93,14 +93,14 @@
 </template>
 
 <script>
-import API from "../../../service/index.js"
-import { getTypes, getConfig, getOnlyUserList } from "./dataHandle.js"
+import API from '../../../service/index.js'
+import { getTypes, getConfig, getOnlyUserList } from './dataHandle.js'
 // import { muserListMock } from '../../../mockData/muserList.js'
 
 export default {
-  name: "MuserList",
-  props: ["dataChanged", "searchMobile"],
-  data() {
+  name: 'MuserList',
+  props: ['dataChanged', 'searchMobile'],
+  data () {
     return {
       muserList: [],
       types: [],
@@ -108,18 +108,17 @@ export default {
     }
   },
   watch: {
-    dataChanged(newValue, oldValue) {
+    dataChanged (newValue, oldValue) {
       if (newValue !== oldValue) {
         this.getMUserList(this.searchMobile)
       }
     }
   },
-  mounted() {
+  mounted () {
     this.getMUserList()
   },
   methods: {
-    getMUserList() {
-      let obj = this
+    getMUserList () {
       API.getMUserList({
         mobile: this.searchMobile.length === 11 ? this.searchMobile : null,
         page: this.config.page,
@@ -134,19 +133,19 @@ export default {
         this.config = getConfig(result)
       })
     },
-    onPageChange(page) {
+    onPageChange (page) {
       this.getMUserList()
     },
-    handleDelete(id) {
-      this.$confirm("确定删除吗?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    handleDelete (id) {
+      this.$confirm('确定删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
           const ids = [id]
           API.deleteMUser(JSON.stringify(ids)).then(res => {
-            this.$message("删除成功!")
+            this.$message('删除成功!')
             this.getMUserList()
           })
         })

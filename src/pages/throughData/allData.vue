@@ -115,13 +115,13 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex"
-import API from "../../service/index"
+import { mapActions } from 'vuex'
+import API from '../../service/index'
 export default {
   components: {},
-  data() {
+  data () {
     return {
-      activeName: "1",
+      activeName: '1',
       select_date: new Date(),
       numAll: {
         app_num: 0,
@@ -135,12 +135,12 @@ export default {
       }
     }
   },
-  mounted() {
+  mounted () {
     this.changeSelectDate()
   },
   methods: {
-    handleClick() {},
-    getFirstDatas() {
+    handleClick () {},
+    getFirstDatas () {
       let obj = this
       API.throughDatas({ select_date: obj.select_date }).then(result => {
         if (result) {
@@ -152,16 +152,16 @@ export default {
         }
       })
     },
-    changeSelectDate() {
+    changeSelectDate () {
       this.getFirstDatas()
     },
-    goRouter(val) {
-      if (val !== "0") {
-        this.$router.push({ path: "/main/throughData/" + val })
+    goRouter (val) {
+      if (val !== '0') {
+        this.$router.push({ path: '/main/throughData/' + val })
       }
     }
   },
-  ...mapActions(["throughDatas"])
+  ...mapActions(['throughDatas'])
 }
 </script>
 <style lang="less">

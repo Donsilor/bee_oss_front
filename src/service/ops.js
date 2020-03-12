@@ -1,79 +1,80 @@
 // import * as namespace from '../namespace';
 // import {
-// 	PREFIXPREFIX
+// PREFIXPREFIX
 // } from '../../lib/util';
 import axios from '../lib/http'
 import { OPS_API, THROUGH_API } from '~/lib/api'
 
 export default {
-  searchUserList(phone_num, begin = 0, size = 10) {
+  // eslint-disable-next-line camelcase
+  searchUserList (phone_num, begin = 0, size = 10) {
     return axios.post(OPS_API.userList, {
       phone_num,
       begin,
       size
     })
   },
-  searchUserMsg(params) {
+  searchUserMsg (params) {
     return axios
       .post(OPS_API.searchUserMsg, params)
       .then(response => response.data.result)
   },
-  searchLogOut(params) {
+  searchLogOut (params) {
     return axios
       .post(OPS_API.searchLogOut, params)
       .then(response => response.data.result)
   },
-  operaList(params) {
+  operaList (params) {
     return axios
       .post(OPS_API.operaList, params)
       .then(response => response.data.result)
   },
-  rootLogs(params) {
+  rootLogs (params) {
     return axios
       .post(OPS_API.rootLogs, params)
       .then(response => response.data.result)
   },
-  errLogs(params) {
+  errLogs (params) {
     return axios
       .post(OPS_API.errLogs, params)
       .then(response => response.data.result)
   },
-  deviceLogs(params) {
+  deviceLogs (params) {
     return axios
       .post(OPS_API.deviceLogs, params)
       .then(response => response.data.result)
   },
-  throughDatas(params) {
+  throughDatas (params) {
     return axios
       .post(THROUGH_API.throughDatas, params)
       .then(response => response.data.result)
   },
-  deviceTotals(params) {
+  deviceTotals (params) {
     return axios
       .post(THROUGH_API.deviceTotal, params)
       .then(response => response.data.result)
   },
-  onlineLogs(params) {
+  onlineLogs (params) {
     return axios
       .post(THROUGH_API.onlineLog, params)
       .then(response => response.data.result)
   },
-  logRegDatas(params) {
+  logRegDatas (params) {
     return axios
       .post(THROUGH_API.logRegData, params)
       .then(response => response.data.result)
   },
-  qpsDatas(params) {
+  qpsDatas (params) {
     return axios
       .post(THROUGH_API.qpsData, params)
       .then(response => response.data.result)
   },
-  getwarnDatas(params) {
+  getwarnDatas (params) {
     return axios
       .post(THROUGH_API.warnData, params)
       .then(response => response.data.result)
   },
-  getwarnDataList(params) {
+  getwarnDataList (params) {
     return axios
       .post(THROUGH_API.warnDataSearch, params)
       .then(response => response.data.result)
@@ -88,70 +89,70 @@ export default {
   //     })
   // },
   // 路由管理
-  routerList(params) {
+  routerList (params) {
     return axios
       .post(OPS_API.routerList, params)
       .then(response => response.data.result)
   },
-  cancelBindRouterList(params) {
+  cancelBindRouterList (params) {
     return axios
       .post(OPS_API.bindedlists, params)
       .then(response => response.data.result)
   },
-  cancelBind(params) {
+  cancelBind (params) {
     return axios
       .post(OPS_API.routerUnbind, params)
       .then(response => response.data.result)
   },
-  addRouter(params) {
+  addRouter (params) {
     return axios
       .post(OPS_API.addRouter, params)
       .then(response => response.data.result)
   },
-  editRouter(params) {
+  editRouter (params) {
     return axios
       .post(OPS_API.editRouter, params)
       .then(response => response.data)
   },
-  deleteRouter(params) {
+  deleteRouter (params) {
     return axios
       .post(OPS_API.deleteRouter, params)
       .then(response => response.data)
   },
-  importRouter(params) {
+  importRouter (params) {
     return axios
       .post(OPS_API.importRouter, params)
       .then(response => response.data.result)
   },
-  getFamilyList(params) {
+  getFamilyList (params) {
     return axios
       .post(OPS_API.familyList, params)
       .then(response => response.data)
   },
   // 云端设备直连
-  directdeviceList(params) {
+  directdeviceList (params) {
     return axios
       .post(OPS_API.directdeviceList, params)
       .then(response => response.data.result)
   },
-  addDirectdevice(params) {
+  addDirectdevice (params) {
     return axios
       .post(OPS_API.addDirectdevice, params)
       .then(response => response.data.result)
   },
-  editDirectdevice(params) {
+  editDirectdevice (params) {
     return axios
       .post(OPS_API.editDirectdevice, params)
       .then(response => response.data)
   },
-  deleteDirectdevice(params) {
+  deleteDirectdevice (params) {
     return axios
       .post(OPS_API.deleteDirectdevice, params)
       .then(response => response.data)
   },
-  importDirectdevice(params) {
+  importDirectdevice (params) {
     return axios
       .post(OPS_API.importDirectdevice, params)
       .then(response => response.data.result)
-  },
+  }
 }

@@ -307,49 +307,49 @@ os_type:
 新增force类型：
 3，不弹窗升级（当前共有：0：非强制，1：强制，3：不弹窗升级）2已被占用
 */
-import * as namespace from "../../store/namespace"
-import { mapGetters, mapActions } from "vuex"
-import "../../lib/util.js"
-import versions_children_json from "../../json/versionsChildren.json"
-import operation_log_json from "../../json/operateLogList.json"
-import version_input from "./component/versionInputLayer.vue"
-import push_update from "./component/pushUpdateLayer.vue"
+import * as namespace from '../../store/namespace'
+import { mapGetters, mapActions } from 'vuex'
+import '../../lib/util.js'
+import versions_children_json from '../../json/versionsChildren.json'
+import operation_log_json from '../../json/operateLogList.json'
+import version_input from './component/versionInputLayer.vue'
+import push_update from './component/pushUpdateLayer.vue'
 // import version_edit from "./component/versionEdit.vue";
-import version_detail from "./component/versionDetail.vue"
-import operate_log from "./component/operateLogs.vue"
-import filter_form from "./component/filterLayer.vue"
-import version_mapping from "./component/versionMapping.vue"
-import API from "../../service/index"
+import version_detail from './component/versionDetail.vue'
+import operate_log from './component/operateLogs.vue'
+import filter_form from './component/filterLayer.vue'
+import version_mapping from './component/versionMapping.vue'
+import API from '../../service/index'
 export default {
   components: {
-    "version-input": version_input,
-    "push-update": push_update,
+    'version-input': version_input,
+    'push-update': push_update,
     // version_edit: version_edit,
     version_detail: version_detail,
     operate_log: operate_log,
-    "filter-form": filter_form,
-    "version-mapping": version_mapping
+    'filter-form': filter_form,
+    'version-mapping': version_mapping
   },
   filters: {
-    typeToString(x) {
+    typeToString (x) {
       if (x * 1 === 1) {
-        return "APP"
+        return 'APP'
       } else if (x * 1 === 2) {
-        return "路由器"
+        return '路由器'
       } else if (x * 1 === 3) {
-        return "子设备"
+        return '子设备'
       } else {
-        return "未知"
+        return '未知'
       }
     },
-    forceToString(x) {
-      return x ? "是" : "否"
+    forceToString (x) {
+      return x ? '是' : '否'
     },
-    statusToString(x) {
-      return x ? "启用" : "停用"
+    statusToString (x) {
+      return x ? '启用' : '停用'
     }
   },
-  data() {
+  data () {
     return {
       supportLayer: false,
       firstTableShow: true,
@@ -365,115 +365,115 @@ export default {
       filterTypeOptions: [
         {
           value: 2,
-          label: "路由器"
+          label: '路由器'
         },
         {
           value: 3,
-          label: "子设备"
+          label: '子设备'
         }
       ],
       brandIDOptions: [],
       typeIDOptions: [],
       productIDOptions: [],
       listParams: {
-        method: "list_versions",
+        method: 'list_versions',
         page: 1,
         limit: 10,
         level: 1
       },
       terminalOptions: [
         {
-          value: "1",
-          lable: "选项一"
+          value: '1',
+          lable: '选项一'
         }
       ],
       versionOptions: [
         {
-          value: "1",
-          lable: "选项一"
+          value: '1',
+          lable: '选项一'
         }
       ],
       osOptions: [
         {
-          value: "1",
-          lable: "选项一"
+          value: '1',
+          lable: '选项一'
         }
       ],
       osVersionList: [],
       versionsFirst: {},
       versionList: {},
-      inputType: "",
+      inputType: '',
       ruleFormDetail: {
-        title: "",
-        description: "",
-        version: "",
-        type: "",
-        force: "",
-        size: "",
-        note: "",
-        status: "",
-        download_file_md5: "",
-        download_url_object: "",
-        img_url_object: "",
-        created_at: "",
-        updated_at: "",
-        release_time: ""
+        title: '',
+        description: '',
+        version: '',
+        type: '',
+        force: '',
+        size: '',
+        note: '',
+        status: '',
+        download_file_md5: '',
+        download_url_object: '',
+        img_url_object: '',
+        created_at: '',
+        updated_at: '',
+        release_time: ''
       },
       rulesDetail: {},
       suportDevice: [],
       pushHistoryList: {},
       pushDataObj: {},
-      secondTitle: "",
+      secondTitle: '',
       currentDataObj: {},
       currentDetailObj: {},
       operateLogLayer: false,
       operateLogList: {},
       addEditFlag: true,
       editDataObj: {},
-      releasedFlag: false, //已发布/未发布标识 || 版本编辑，已发布版本只能编辑几个字段
-      mappingData: {}, //各设备对应映射关系
+      releasedFlag: false, // 已发布/未发布标识 || 版本编辑，已发布版本只能编辑几个字段
+      mappingData: {}, // 各设备对应映射关系
       router: [],
-      os_type: "",
+      os_type: '',
       routerPidList: [],
       os_type_text: {
-        1: "android_app",
-        4: "ios_app",
-        6: "android_pad",
-        11: "route_app",
-        12: "video_app",
-        13: "lua_app",
+        1: 'android_app',
+        4: 'ios_app',
+        6: 'android_pad',
+        11: 'route_app',
+        12: 'video_app',
+        13: 'lua_app'
       },
       device_type_text: {
-        2: "路由器",
-        3: "子设备",
-        5: "H5",
-        7: "Android system"
+        2: '路由器',
+        3: '子设备',
+        5: 'H5',
+        7: 'Android system'
       },
       getGrayStatus: {
-        0: "无",
-        1: "白名单",
-        2: "黑名单",
-        3: "全量"
+        0: '无',
+        1: '白名单',
+        2: '黑名单',
+        3: '全量'
       },
-      activeName: "devices",
+      activeName: 'devices',
       router_pid: '',
       flag: false
     }
   },
   ...mapActions([
-    "getVersions",
-    "selectVersion",
-    "importSubmitAction",
-    "pushUpdateAction",
-    "getVersionDetailAction",
-    "pubilcCorsAction"
+    'getVersions',
+    'selectVersion',
+    'importSubmitAction',
+    'pushUpdateAction',
+    'getVersionDetailAction',
+    'pubilcCorsAction'
   ]),
   computed: {
     ...mapGetters({
       brand: namespace.BRAND,
       type: namespace.TYPE,
       product: namespace.PRODUCT
-    }),
+    })
     // currentName() {
     //   let name = this.getTypeText(this.currentDataObj.type, this.currentDataObj.os_type) + " "
     //   if (this.currentDataObj.product_id) {
@@ -486,7 +486,7 @@ export default {
     // }
   },
   watch: {
-    filterPopoverFlag(curVal, oldVal) {
+    filterPopoverFlag (curVal, oldVal) {
       if (curVal) {
         if (!this.brandIDOptions.length) {
           this.brandIDOptions = this.brand.map(x => {
@@ -500,7 +500,7 @@ export default {
       }
     }
   },
-  mounted() {
+  mounted () {
     this.$store.dispatch({
       type: namespace.INITPRODUCT
     })
@@ -517,10 +517,10 @@ export default {
     this.getOsVersionList()
   },
   methods: {
-    getOsVersionList() {
+    getOsVersionList () {
       API.pubilcCorsAction({
-        "method": "released_versions",
-        "type": 7
+        'method': 'released_versions',
+        'type': 7
       }).then(res => {
         this.osVersionList = res.result.map(item => {
           return {
@@ -531,7 +531,7 @@ export default {
       })
     },
     // 获取所有版本列表
-    getVersionList() {
+    getVersionList () {
       const obj = this
       API.getVersions(obj.listParams).then(result => {
         if (result.code === 0) {
@@ -543,9 +543,9 @@ export default {
       })
     },
     // 渲染首列数据
-    setFirstVersionList(dataObj) {
+    setFirstVersionList (dataObj) {
       for (let attr in dataObj) {
-        if (attr === "router") {
+        if (attr === 'router') {
           this.routerPidList = []
           for (let routerAttr in dataObj[attr]) {
             this.routerPidList.push({
@@ -556,111 +556,111 @@ export default {
         }
       }
     },
-    openSupportLayer(dataObj) {
+    openSupportLayer (dataObj) {
       this.supportLayer = true
       this.$nextTick(() => {
-        this.$refs["supportLayer"].renderData(dataObj)
+        this.$refs['supportLayer'].renderData(dataObj)
       })
     },
-    openFilterFormLayer() {
+    openFilterFormLayer () {
       this.filterPopoverFlag = true
       this.$nextTick(() => {
-        this.$refs["filterForms"].resetFilterForm()
+        this.$refs['filterForms'].resetFilterForm()
       })
     },
-    formatTime(val) {
+    formatTime (val) {
       if (!val) {
-        return "------"
+        return '------'
       } else {
         return val
         //                let date = new Date(val*1000)
         //                return date.Format('yyyy-MM-dd hh:mm:ss')
       }
     },
-    openVersionEdit(dataObj) {
+    openVersionEdit (dataObj) {
       this.initBrandIDOptions()
       this.filterPopoverFlag = false
-      let cur_os_type = ""
+      let cur_os_type = ''
       if (dataObj.os_type) {
         switch (dataObj.os_type) {
-        case 1:
-          cur_os_type = "android_app"
-          break
-        case 4:
-          cur_os_type = "ios_app"
-          break
-        case 6:
-          cur_os_type = "android_pad"
-          break
-        case 11:
-          cur_os_type = "route_app"
-          break
-        case 12:
-          cur_os_type = "video_app"
-          break
-        case 13:
-          cur_os_type = "lua_app"
-          break
-        default:
-          cur_os_type = dataObj.os_type
-          break
+          case 1:
+            cur_os_type = 'android_app'
+            break
+          case 4:
+            cur_os_type = 'ios_app'
+            break
+          case 6:
+            cur_os_type = 'android_pad'
+            break
+          case 11:
+            cur_os_type = 'route_app'
+            break
+          case 12:
+            cur_os_type = 'video_app'
+            break
+          case 13:
+            cur_os_type = 'lua_app'
+            break
+          default:
+            cur_os_type = dataObj.os_type
+            break
         }
       }
 
       let param = {
-        method: "version_detail",
+        method: 'version_detail',
         type: dataObj.type,
         version: dataObj.version,
-        product_id: dataObj.product_id || "",
+        product_id: dataObj.product_id || '',
         os_type: cur_os_type,
-        router_pid: dataObj.router_pid || ""
+        router_pid: dataObj.router_pid || ''
       }
       let obj = this
       API.pubilcCorsAction(param).then(result => {
         let currentData = result.result
-        obj.releasedFlag = currentData.status === 1 ? true : false
+        obj.releasedFlag = currentData.status === 1
         obj.addEditFlag = false
         obj.editDataObj = currentData
         obj.importBoxFlag = true
         obj.$nextTick(() => {
-          obj.$refs["versionInputs"].resetImportForm()
-          obj.$refs["versionInputs"].renderEditData()
+          obj.$refs['versionInputs'].resetImportForm()
+          obj.$refs['versionInputs'].renderEditData()
         })
       })
     },
-    //禁用、启用
-    startStopVerion(dataObj) {
+    // 禁用、启用
+    startStopVerion (dataObj) {
       let obj = this
       obj
-        .$confirm("确定此操作吗?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
+        .$confirm('确定此操作吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         })
         .then(() => {
           let param = {
             type: dataObj.type,
             version: dataObj.version,
-            os_type: obj.os_type_text[dataObj.os_type] || "",
+            os_type: obj.os_type_text[dataObj.os_type] || '',
             user_id: dataObj.user_id,
             product_id: dataObj.product_id,
             router_pid: dataObj.router_pid,
-            method: dataObj["status"] ? "disable" : "enable"
+            method: dataObj['status'] ? 'disable' : 'enable'
           }
 
           API.pubilcCorsAction(param).then(result => {
             if (result.code === 0) {
               obj.$message({
-                type: "success",
-                message: "操作成功!"
+                type: 'success',
+                message: '操作成功!'
               })
               obj.getVersionHistory(obj.currentDataObj, 1)
             }
           })
         })
     },
-    //操作日志
-    getOperateLog(dataObj) {
+    // 操作日志
+    getOperateLog (dataObj) {
       this.operateLogLayer = true
       this.operateLogList = operation_log_json
       let obj = this
@@ -668,7 +668,7 @@ export default {
         type: dataObj.type,
         version: dataObj.version,
         product_id: dataObj.product_id,
-        method: "history_operation_logs"
+        method: 'history_operation_logs'
       }
       API.pubilcCorsAction(param).then(result => {
         if (result.code === 0) {
@@ -676,45 +676,45 @@ export default {
         }
       })
     },
-    //删除
-    deleteVersion(dataObj) {
+    // 删除
+    deleteVersion (dataObj) {
       let obj = this
       obj
-        .$confirm("确定此操作吗?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
+        .$confirm('确定此操作吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         })
         .then(() => {
           let param = {
             type: dataObj.type,
             version: dataObj.version,
             user_id: dataObj.user_id,
-            product_id: dataObj.product_id || "",
-            os_type: obj.os_type_text[dataObj.os_type] || "",
-            router_pid: dataObj.router_pid || "",
-            method: "del_version"
+            product_id: dataObj.product_id || '',
+            os_type: obj.os_type_text[dataObj.os_type] || '',
+            router_pid: dataObj.router_pid || '',
+            method: 'del_version'
           }
 
           API.pubilcCorsAction(param).then(result => {
             if (result.code === 0) {
               obj.$message({
-                type: "success",
-                message: "删除成功!"
+                type: 'success',
+                message: '删除成功!'
               })
               obj.getVersionHistory(obj.currentDataObj, 1)
             }
           })
         })
     },
-    //回滚
-    rollBackVersion(dataObj) {
+    // 回滚
+    rollBackVersion (dataObj) {
       let obj = this
       obj
-        .$confirm("确定此操作吗?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
+        .$confirm('确定此操作吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         })
         .then(() => {
           let param = {
@@ -722,26 +722,26 @@ export default {
             version: dataObj.version,
             user_id: dataObj.user_id,
             product_id: dataObj.product_id,
-            method: "rollback",
-            os_type: obj.os_type_text[dataObj.os_type] || ""
+            method: 'rollback',
+            os_type: obj.os_type_text[dataObj.os_type] || ''
           }
 
           API.pubilcCorsAction(param).then(result => {
             if (result.code === 0) {
               obj.$message({
-                type: "success",
-                message: "回滚成功!"
+                type: 'success',
+                message: '回滚成功!'
               })
               obj.getVersionHistory(obj.currentDataObj, 1)
             }
           })
         })
     },
-    deleteUUID(row) {
-      this.$confirm("确定此操作吗?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    deleteUUID (row) {
+      this.$confirm('确定此操作吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
           const param = {
@@ -749,32 +749,32 @@ export default {
             version: row.version,
             user_id: row.user_id,
             product_id: row.product_id,
-            os_type: this.os_type_text[row.os_type] || "",
+            os_type: this.os_type_text[row.os_type] || '',
             router_pid: row.router_pid,
-            method: "uuid_del"
+            method: 'uuid_del'
           }
 
           API.pubilcCorsAction(param).then(result => {
             if (result.code === 0) {
               this.$message({
-                type: "success",
-                message: "清空UUID成功!"
+                type: 'success',
+                message: '清空UUID成功!'
               })
             }
           })
         })
     },
     // 获取详情
-    getVersionDetail(dataObj) {
+    getVersionDetail (dataObj) {
       this.infoBoxFlag = true
       this.currentDetailObj = dataObj
       let param = {
-        method: "version_detail",
+        method: 'version_detail',
         type: dataObj.type,
         version: dataObj.version,
-        product_id: dataObj.product_id || "",
-        os_type: this.os_type_text[dataObj.os_type] || "",
-        router_pid: dataObj.router_pid || ""
+        product_id: dataObj.product_id || '',
+        os_type: this.os_type_text[dataObj.os_type] || '',
+        router_pid: dataObj.router_pid || ''
       }
       let obj = this
       API.pubilcCorsAction(param).then(result => {
@@ -786,19 +786,19 @@ export default {
         // }
       })
       obj.$nextTick(() => {
-        obj.$refs["versionDetails"].resetList()
+        obj.$refs['versionDetails'].resetList()
       })
     },
-    filterClearAll() {
-      //			for (let name in this.filterForm) {
-      //				this.filterForm[name] = '';
-      //			}
+    filterClearAll () {
+      // for (let name in this.filterForm) {
+      // this.filterForm[name] = '';
+      // }
     },
-    rowChosed(scope) {
+    rowChosed (scope) {
       this.infoBoxFlag = true
       this.info = scope.row
     },
-    initBrandIDOptions() {
+    initBrandIDOptions () {
       try {
         if (!this.brandIDOptions.length) {
           this.brandIDOptions = this.brand.map(x => {
@@ -812,36 +812,36 @@ export default {
         console.log(error)
       }
     },
-    openImportLayer() {
+    openImportLayer () {
       this.addEditFlag = true
       this.releasedFlag = false
       this.initBrandIDOptions()
       this.importBoxFlag = true
       this.filterPopoverFlag = false
       this.$nextTick(() => {
-        this.$refs["versionInputs"].resetImportForm()
+        this.$refs['versionInputs'].resetImportForm()
       })
     },
-    openPushLayer(dataObj) {
+    openPushLayer (dataObj) {
       this.pushDataObj = dataObj
       this.initBrandIDOptions()
       this.pushBoxFlag = true
       this.$nextTick(() => {
-        this.$refs["pushUpdates"].resetPushForm()
+        this.$refs['pushUpdates'].resetPushForm()
       })
     },
     // 版本录入
-    importSubmit(params) {
+    importSubmit (params) {
       API.pubilcCorsAction(params)
         .then(result => {
           if (result.code === 0) {
-            this.$message.success(this.addEditFlag ? "录入成功" : "编辑成功")
+            this.$message.success(this.addEditFlag ? '录入成功' : '编辑成功')
             this.importBoxFlag = false
             this.pageChange_two(1)
           }
         })
         .catch(result => {
-          if(result.message == '该版本信息已存在') {
+          if (result.message === '该版本信息已存在') {
             this.flag = true
           }
         })
@@ -850,23 +850,23 @@ export default {
         })
     },
     // 推送升级
-    pushUpdate(params) {
+    pushUpdate (params) {
       API.pubilcCorsAction(params).then(result => {
         if (result.code === 0) {
-          this.$message.success("推送成功")
+          this.$message.success('推送成功')
           this.pushBoxFlag = false
           this.pageChange_two(1)
         }
       })
     },
-    pageChange_two(page) {
+    pageChange_two (page) {
       if (page) {
         this.currentPage_two = page
       }
       this.getVersionHistory(this.currentDataObj, this.currentPage_two)
     },
     // 版本匹配搜索
-    filterVersions(params) {
+    filterVersions (params) {
       let obj = this
       API.pubilcCorsAction(params).then(result => {
         if (result.code === 0) {
@@ -879,8 +879,8 @@ export default {
         }
       })
     },
-    getTypeText(type, os_type) {
-      let text = ""
+    getTypeText (type, os_type) {
+      let text = ''
       if (type === 1) {
         text = os_type
       } else {
@@ -888,76 +888,76 @@ export default {
       }
       return text
     },
-    getStatusTextPush(type) {
-      let text = ""
+    getStatusTextPush (type) {
+      let text = ''
       switch (type) {
-      case 1:
-        text = "成功"
-        break
-      case 0:
-        text = "失败"
-        break
-      default:
-        break
+        case 1:
+          text = '成功'
+          break
+        case 0:
+          text = '失败'
+          break
+        default:
+          break
       }
       return text
     },
-    getStatusText(type) {
-      let text = ""
+    getStatusText (type) {
+      let text = ''
       switch (type) {
-      case 1:
-        text = "有效"
-        break
-      case 0:
-        text = "无效"
-        break
-      default:
-        break
+        case 1:
+          text = '有效'
+          break
+        case 0:
+          text = '无效'
+          break
+        default:
+          break
       }
       return text
     },
-    getForceText(type) {
-      let text = ""
+    getForceText (type) {
+      let text = ''
       switch (type) {
-      case 3:
-        text = "不弹窗升级"
-        break
-      case 1:
-        text = "强制升级"
-        break
-      case 0:
-        text = "不强制"
-        break
-      default:
-        break
+        case 3:
+          text = '不弹窗升级'
+          break
+        case 1:
+          text = '强制升级'
+          break
+        case 0:
+          text = '不强制'
+          break
+        default:
+          break
       }
       return text
     },
-    getPreReleaseText(type) {
-      let text = ""
+    getPreReleaseText (type) {
+      let text = ''
       switch (type) {
-      case 1:
-        text = "灰度版本"
-        break
-      case 0:
-        text = "正式版本"
-        break
-      default:
-        break
+        case 1:
+          text = '灰度版本'
+          break
+        case 0:
+          text = '正式版本'
+          break
+        default:
+          break
       }
       return text
     },
     // 历史版本
-    getVersionHistoryList(page, dataObj) {
+    getVersionHistoryList (page, dataObj) {
       // this.listParams.page = page
       let param = {
         page: page,
         limit: 10,
         level: 2,
-        os_type: dataObj.os_type || "",
-        router_pid: dataObj.router_pid || "",
+        os_type: dataObj.os_type || '',
+        router_pid: dataObj.router_pid || '',
         type: dataObj.type,
-        product_id: dataObj.product_id || ""
+        product_id: dataObj.product_id || ''
       }
       const obj = this
       API.getVersions(param).then(result => {
@@ -984,49 +984,49 @@ export default {
         }
       })
     },
-    getVersionHistory(dataObj, page) {
-      this.currentDataObj = dataObj //此操作是为了进入列表，进行各种操作时需要重新刷新列表
+    getVersionHistory (dataObj, page) {
+      this.currentDataObj = dataObj // 此操作是为了进入列表，进行各种操作时需要重新刷新列表
       this.inputType = dataObj.type
-      this.os_type = dataObj.os_type || ""
+      this.os_type = dataObj.os_type || ''
       this.secondTitle = this.getVersionTitle(dataObj)
       this.getVersionHistoryList(page, dataObj)
     },
-    getVersionTitle(dataObj) {
-      let title = ""
+    getVersionTitle (dataObj) {
+      let title = ''
       if (dataObj.name) {
-        title = dataObj.name + "-版本历史"
+        title = dataObj.name + '-版本历史'
       } else {
         if (dataObj.type === 3) {
-          title = "子设备-" + dataObj.product_id + "-版本历史"
+          title = '子设备-' + dataObj.product_id + '-版本历史'
         } else if (dataObj.type === 5) {
-          title = "H5-" + dataObj.product_id + "-版本历史"
+          title = 'H5-' + dataObj.product_id + '-版本历史'
         }
       }
       return title
     },
-    backToList() {
+    backToList () {
       this.$router.go(-1)
     },
-    getPidName(dataObj) {
+    getPidName (dataObj) {
       if (dataObj.type === 3 || dataObj.type === 8 || dataObj.type === 5) {
         if (dataObj.product_id) {
-          return "--" + dataObj.product_id
+          return '--' + dataObj.product_id
         } else {
-          return ""
+          return ''
         }
       } else if (dataObj.type === 2) {
         if (dataObj.router_pid) {
-          return "--" + dataObj.router_pid
+          return '--' + dataObj.router_pid
         } else {
-          return ""
+          return ''
         }
       } else {
-        return ""
+        return ''
       }
     },
-    //子设备/子路由切换
-    deviceRouterChange() {
-      this.currentDataObj.type = this.activeName === "devices" ? 3 : 8
+    // 子设备/子路由切换
+    deviceRouterChange () {
+      this.currentDataObj.type = this.activeName === 'devices' ? 3 : 8
       this.getVersionHistory(this.currentDataObj, 1)
     }
   }

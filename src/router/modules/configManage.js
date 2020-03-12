@@ -16,7 +16,6 @@ import {
   MallButtonConfig,
   MallOrder,
   SceneAdmin,
-  SightManage,
   StartMode,
   AppHomeConfig,
   HomeConfig,
@@ -24,27 +23,27 @@ import {
 } from '../../pages/index.js'
 
 var configManage = [
-  {//家庭背景图
+  {// 家庭背景图
     path: 'familyImgList',
     name: 'familyImgList',
     component: FamilyImgList
   },
-  {//策略组
+  {// 策略组
     path: 'Strategy',
     name: 'Strategy',
     component: Strategy
   },
-  {//策略组用户
+  {// 策略组用户
     path: 'StrategyUuid',
     name: 'StrategyUuid',
     component: StrategyUuid
   },
-  {//策略组配置
+  {// 策略组配置
     path: 'StrategyConfig',
     name: 'StrategyConfig',
     component: StrategyConfig
   },
-  {//文案配置
+  {// 文案配置
     path: 'CmData',
     name: 'CmData',
     component: CmData
@@ -54,7 +53,7 @@ var configManage = [
   //   name: 'appHomeConfig',
   //   component: AppHomeConfig
   // },
-  { //家居组件
+  { // 家居组件
     path: 'appHomeConfig',
     name: 'appHomeConfig',
     component: AppHomeConfig,
@@ -72,8 +71,7 @@ var configManage = [
     ]
   },
 
-
-  //家居销售按钮
+  // 家居销售按钮
   {//
     path: 'mallButtonConfig',
     component: MallButtonConfig

@@ -108,13 +108,13 @@
           label-width="80px"
         >
           <el-form-item
-            v-if="addEditFlag == true"
+            v-if="addEditFlag === true"
             label="用户uuid"
           >
             <el-input v-model="AddEditForm.F_uuid" />
           </el-form-item>
           <el-form-item
-            v-if="addEditFlag == false"
+            v-if="addEditFlag === false"
             label="用户uuid"
           >
             <el-input
@@ -154,89 +154,84 @@
   </div>
 </template>
 <script>
-import * as namespace from "../../store/namespace"
-import { mapGetters, mapActions } from "vuex"
-import "../../lib/util.js"
-import { Message } from "element-ui"
-import Sortable from "sortablejs"
-import getCorsUrl from "../../lib/corsconfig"
-import API from "../../service/index"
+import { mapGetters, mapActions } from 'vuex'
+import '../../lib/util.js'
+import { Message } from 'element-ui'
+import API from '../../service/index'
 export default {
-  data() {
+  data () {
     return {
       addEditLayer: false,
       is_edit: true,
       strategyId: [],
       totalItem: 0,
       currentPage: 1,
-      searchKey: "",
+      searchKey: '',
       listParams: {
         page: 1
       },
       imgList: {
         tableColumn: [
-          { prop: "F_uuid", label: "uuid" },
-          { prop: "F_strategy_id", label: "策略组id" },
-          { prop: "F_create_time", label: "创建时间" }
+          { prop: 'F_uuid', label: 'uuid' },
+          { prop: 'F_strategy_id', label: '策略组id' },
+          { prop: 'F_create_time', label: '创建时间' }
         ],
         tableData: []
       },
       addEditFlag: true,
       AddEditForm: {
-        F_strategy_id: "",
-        F_uuid: ""
+        F_strategy_id: '',
+        F_uuid: ''
       },
       rulesAddEdit: {},
       sortArr: []
     }
   },
-  ...mapActions(["StrategyUuidList"]),
+  ...mapActions(['StrategyUuidList']),
   computed: {
     ...mapGetters({})
   },
-  mounted() {
+  mounted () {
     this.getImgList(1)
     this.getStrategyId()
-    let table = document.querySelectorAll(".el-table__body-wrapper > table > tbody")[0]
-    let obj = this
   },
   methods: {
-    search() {
+    search () {
       if (!this.searchKey) {
-        this.$message.error("请输入策略组id")
+        this.$message.error('请输入策略组id')
         return
       }
       this.getImgList()
     },
-    getdata() {
-      console.log("移动中.....")
+    getdata () {
+      console.log('移动中.....')
     },
-    openAddEditLayer() {
+    openAddEditLayer () {
       this.addEditFlag = true
       this.addEditLayer = true
       this.$nextTick(() => {
         let currentForm = this.AddEditForm
         for (let attr in currentForm) {
-          currentForm[attr] = ""
+          currentForm[attr] = ''
         }
       })
     },
-    pageChange() {
+    pageChange () {
       this.getImgList(this.currentPage)
     },
-    deleteImg(dataObj) {
+    deleteImg (dataObj) {
       const obj = this
-      this.$confirm("确定删除吗?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+      this.$confirm('确定删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
           API.StrategyUuidDel({ F_uuid: dataObj.F_uuid }).then(result => {
             if (result.code === 200) {
               obj.$message({
-                type: "success",
-                message: "删除成功!"
+                type: 'success',
+                message: '删除成功!'
               })
               obj.getImgList(obj.currentPage)
             }
@@ -244,7 +239,7 @@ export default {
         })
         .catch(() => { })
     },
-    openEditLayer(dataObj) {
+    openEditLayer (dataObj) {
       this.addEditFlag = false
       this.addEditLayer = true
       this.$nextTick(() => {
@@ -252,10 +247,10 @@ export default {
         for (let attr in currentData) {
           currentData[attr] = dataObj[attr]
         }
-        this.fileListObj = [{ name: dataObj["image_url_object"], url: dataObj["image_url_object"] }]
+        this.fileListObj = [{ name: dataObj['image_url_object'], url: dataObj['image_url_object'] }]
       })
     },
-    addEditConfirm(formName) {
+    addEditConfirm (formName) {
       let obj = this
       obj.$refs[formName].validate(valid => {
         if (valid) {
@@ -268,8 +263,8 @@ export default {
             API.StrategyUuidEdit(currentParam).then(result => {
               if (result && result.code === 200) {
                 Message({
-                  message: "编辑成功",
-                  type: "success"
+                  message: '编辑成功',
+                  type: 'success'
                 })
                 obj.addEditLayer = false
                 obj.getImgList(obj.currentPage)
@@ -279,15 +274,15 @@ export default {
             API.StrategyUuidAdd(currentParam).then(result => {
               if (result && result.code === 200) {
                 Message({
-                  message: "新增成功",
-                  type: "success"
+                  message: '新增成功',
+                  type: 'success'
                 })
                 obj.addEditLayer = false
                 obj.getImgList(obj.currentPage)
               } else {
                 Message({
                   message: result.list[0].detail,
-                  type: "error"
+                  type: 'error'
                 })
               }
             })
@@ -297,7 +292,7 @@ export default {
         }
       })
     },
-    getImgList(page) {
+    getImgList (page) {
       this.listParams.page = page
       this.listParams.limit = 10
       this.listParams.F_strategy_id = this.searchKey > 0 ? this.searchKey : 1
@@ -316,7 +311,7 @@ export default {
         }
       })
     },
-    getStrategyId() {
+    getStrategyId () {
       const obj = this
       var params = {}
       // params.page = 1

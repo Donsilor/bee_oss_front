@@ -1,86 +1,84 @@
-import Login from './login.vue'
-import Main from './main.vue'
-import Home from './home.vue'
-import Facility from './facility.vue'
-import Cloud from './cloud.vue'
-import CMDB from './cmdb.vue'
-import upgrade from './upgradeCenter.vue'
-import VersionManager from './upgradeCenter/versionManager.vue'
-import VersionManagerDetail from './upgradeCenter/versionManagerDetail.vue'
-import PushManager from './upgradeCenter/pushManager.vue'
-import OPS from './userData/ops.vue'
-import MUSER from './userData/muser/index.vue'
-import ThroughData from './throughData/index.vue'
-import AllThroughData from './throughData/allData.vue'
-import AppRouterData from './throughData/appRouterData.vue'
-import DevicesData from './throughData/devicesData.vue'
-import LogRegData from './throughData/logRegData.vue'
-import QpsData from './throughData/qpsData.vue'
-import WarnManage from './warnManager/warnManage.vue'
-import WarnDataSearch from './warnManager/warnDataSearch.vue'
-import RootLog from './allLogs/rootLogs.vue'
-import ErrLog from './allLogs/errLogs.vue'
-import remoteDeviceLogs from './allLogs/remoteDeviceLogs.vue'
-import remoteRouterLogs from './allLogs/remoteRouterLogs.vue'
-import RouterIndex from './routerManager/index.vue'
-import RouterManager from './routerManager/routerManager.vue'
-import ImportRouter from './routerManager/importRouter.vue'
-import FamilyList from './familyList.vue'
-import FamilyImgList from './familyImg/index.vue'
-import User from './permission/user.vue'
-import Role from './permission/role.vue'
-import ResetPwd from './permission/resetPwd.vue'
-import UpdatePwd from './permission/updatePwd.vue'
-import Error from './error.vue'
+const Login = () => import('./login.vue')
+const Main = () => import('./main.vue')
+const Home = () => import('./home.vue')
+const Facility = () => import('./facility.vue')
+const Cloud = () => import('./cloud.vue')
+const CMDB = () => import('./cmdb.vue')
+const upgrade = () => import('./upgradeCenter.vue')
+const VersionManager = () => import('./upgradeCenter/versionManager.vue')
+const VersionManagerDetail = () => import('./upgradeCenter/versionManagerDetail.vue')
+const PushManager = () => import('./upgradeCenter/pushManager.vue')
+const OPS = () => import('./userData/ops.vue')
+const MUSER = () => import('./userData/muser/index.vue')
+const ThroughData = () => import('./throughData/index.vue')
+const AllThroughData = () => import('./throughData/allData.vue')
+const AppRouterData = () => import('./throughData/appRouterData.vue')
+const DevicesData = () => import('./throughData/devicesData.vue')
+const LogRegData = () => import('./throughData/logRegData.vue')
+const QpsData = () => import('./throughData/qpsData.vue')
+const WarnManage = () => import('./warnManager/warnManage.vue')
+const WarnDataSearch = () => import('./warnManager/warnDataSearch.vue')
+const RootLog = () => import('./allLogs/rootLogs.vue')
+const ErrLog = () => import('./allLogs/errLogs.vue')
+const remoteDeviceLogs = () => import('./allLogs/remoteDeviceLogs.vue')
+const remoteRouterLogs = () => import('./allLogs/remoteRouterLogs.vue')
+const RouterIndex = () => import('./routerManager/index.vue')
+const RouterManager = () => import('./routerManager/routerManager.vue')
+const ImportRouter = () => import('./routerManager/importRouter.vue')
+const FamilyList = () => import('./familyList.vue')
+const FamilyImgList = () => import('./familyImg/index.vue')
+const User = () => import('./permission/user.vue')
+const Role = () => import('./permission/role.vue')
+const ResetPwd = () => import('./permission/resetPwd.vue')
+const UpdatePwd = () => import('./permission/updatePwd.vue')
+const Error = () => import('./error.vue')
 
-import UserData from './analyzer/userData.vue'
-import DeviceData from './analyzer/deviceData.vue'
+const UserData = () => import('./analyzer/userData.vue')
+const DeviceData = () => import('./analyzer/deviceData.vue')
 // 新加的页面
-import AccessStatistics from './analyzer/accessStatistics.vue'
-import ControlAnalysis from './analyzer/controlAnalysis.vue'
-import ActiveAnalysis from './analyzer/activeAnalysis.vue'
-import RoutingAnalysis from './analyzer/routingAnalysis.vue'
-import DailyData from './analyzer/dailyData.vue'
+const AccessStatistics = () => import('./analyzer/accessStatistics.vue')
+const ControlAnalysis = () => import('./analyzer/controlAnalysis.vue')
+const ActiveAnalysis = () => import('./analyzer/activeAnalysis.vue')
+const RoutingAnalysis = () => import('./analyzer/routingAnalysis.vue')
+const DailyData = () => import('./analyzer/dailyData.vue')
 
-import FeedbackList from './feedback/list.vue'
-import FeedbackDetail from './feedback/detail.vue'
-import Strategy from './strategy/strategy.vue'
-import StrategyUuid from './strategy/strategyUuid.vue'
-import StrategyConfig from './strategy/strategyConfig.vue'
-import CmData from './CmData.vue'
+const FeedbackList = () => import('./feedback/list.vue')
+const FeedbackDetail = () => import('./feedback/detail.vue')
+const Strategy = () => import('./strategy/strategy.vue')
+const StrategyUuid = () => import('./strategy/strategyUuid.vue')
+const StrategyConfig = () => import('./strategy/strategyConfig.vue')
+const CmData = () => import('./CmData.vue')
 
-import VersionManagerForSC from './upgradeCenter/versionManagerForSC.vue'
-import SwitchProductHistory from './switchproduct/history.vue'
-import SwitchProductImport from './switchproduct/import.vue'
-import SwitchProductSearch from './switchproduct/search.vue'
-import AppUpgrade from './upgradeCenter/appUpgrade.vue'
-import AppUpgradeDetail from './upgradeCenter/appUpgradeDetail.vue'
-import ProtocolManage from './upgradeCenter/protocolManage.vue'
+const VersionManagerForSC = () => import('./upgradeCenter/versionManagerForSC.vue')
+const SwitchProductHistory = () => import('./switchproduct/history.vue')
+const SwitchProductImport = () => import('./switchproduct/import.vue')
+const SwitchProductSearch = () => import('./switchproduct/search.vue')
+const AppUpgrade = () => import('./upgradeCenter/appUpgrade.vue')
+const AppUpgradeDetail = () => import('./upgradeCenter/appUpgradeDetail.vue')
+const ProtocolManage = () => import('./upgradeCenter/protocolManage.vue')
 
+const MallButtonConfig = () => import('./mallMgmt/mallButtonConfig.vue')
+const MallOrder = () => import('./mallMgmt/mallOrder.vue')
 
-import MallButtonConfig from './mallMgmt/mallButtonConfig.vue'
-import MallOrder from './mallMgmt/mallOrder.vue'
+const SceneAdmin = () => import('./sceneAdmin/sceneAdmin.vue')
+const SightManage = () => import('./sightManage/sightManage.vue')
+const StartMode = () => import('./startMode/startMode.vue')
+const MallReservation = () => import('./mallMgmt/mallReservation.vue')
 
-import SceneAdmin from './sceneAdmin/sceneAdmin.vue'
-import SightManage from './sightManage/sightManage.vue'
-import StartMode from './startMode/startMode.vue'
-import MallReservation from './mallMgmt/mallReservation.vue'
-
-import SemanticMange from './semanticMange/index.vue'
-
+const SemanticMange = () => import('./semanticMange/index.vue')
 
 // 家居组件
-import AppHomeConfig from './homeConfig/index.vue'
-import HomeConfig from './homeConfig/home/home.vue'
-import MusicConfig from './homeConfig/music/music.vue'
+const AppHomeConfig = () => import('./homeConfig/index.vue')
+const HomeConfig = () => import('./homeConfig/home/home.vue')
+const MusicConfig = () => import('./homeConfig/music/music.vue')
 
 // 云端直连设备
-import CloudIndex from './cloudConnectDevice/index.vue'
-import CloudConnectDevice from './cloudConnectDevice/cloudConnectDevice.vue'
-import ImportCloud from './cloudConnectDevice/importCloud.vue'
+const CloudIndex = () => import('./cloudConnectDevice/index.vue')
+const CloudConnectDevice = () => import('./cloudConnectDevice/cloudConnectDevice.vue')
+const ImportCloud = () => import('./cloudConnectDevice/importCloud.vue')
 
-//绑定路由器
-import BindRouter from './bindRouter.vue'
+// 绑定路由器
+const BindRouter = () => import('./bindRouter.vue')
 
 export {
   Login,

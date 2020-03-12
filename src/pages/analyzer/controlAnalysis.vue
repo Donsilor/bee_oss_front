@@ -173,22 +173,18 @@
 </template>
 
 <script>
-import CityPicker from "../../components/cityPicker.vue"
 import PieChart from './charts/pieChart.vue'
-import CircularChart from './charts/circularChart.vue'
 import SimpleChart from './charts/simpleChart.vue'
 import LineChart from './charts/lineChart.vue'
-import axios from "axios"
-import * as URL from "~/lib/api"
+import axios from 'axios'
+import * as URL from '~/lib/api'
 export default {
   components: {
-    CityPicker,
     PieChart,
-    CircularChart,
     SimpleChart,
     LineChart
   },
-  data() {
+  data () {
     return {
       formdata: {
         date: '',
@@ -199,7 +195,7 @@ export default {
       pickerOptions: {
         shortcuts: [{
           text: '昨天',
-          onClick(picker) {
+          onClick (picker) {
             const end = new Date()
             const start = new Date()
             start.setTime(start.getTime() - 3600 * 1000 * 24)
@@ -207,7 +203,7 @@ export default {
           }
         }, {
           text: '最近7天',
-          onClick(picker) {
+          onClick (picker) {
             const end = new Date()
             const start = new Date()
             start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
@@ -215,7 +211,7 @@ export default {
           }
         }, {
           text: '最近30天',
-          onClick(picker) {
+          onClick (picker) {
             const end = new Date()
             const start = new Date()
             start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
@@ -257,7 +253,7 @@ export default {
       dataRange: ''
     }
   },
-  mounted() {
+  mounted () {
     this.getControlAnalysis()
     let end = new Date()
     end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
@@ -267,7 +263,7 @@ export default {
   },
   methods: {
     // 获取数据
-    getControlAnalysis(param) {
+    getControlAnalysis (param) {
       axios.post(URL.ControlAnalysisURL, param).then(res => {
         if (res.data.code === 200) {
           let result = res.data.result.data
@@ -292,19 +288,19 @@ export default {
       })
     },
     // 选择开始结束日后 决定是否显示留存筛选的周月
-    changeDate(date) {
-      const start = date ? date[0].getTime() : ""
-      const end = date ? date[1].getTime() : ""
+    changeDate (date) {
+      const start = date ? date[0].getTime() : ''
+      const end = date ? date[1].getTime() : ''
       const diff = end - start
       // 至少2个月才显示月 至少2周才显示周
       this.isShowUnitMon = diff > 1000 * 3600 * 24 * 30 + 1000 * 3600 * 24 * 31
       this.isShowUnitWeek = diff > 1000 * 3600 * 24 * 7 * 2
     },
-    onCitySelect(val) {
+    onCitySelect (val) {
       this.formdata.province = val[0]
       this.formdata.city = val[1]
     },
-    search() {
+    search () {
       const param = {
         start_time: this.dateRange[0].Format('yyyy-MM-dd'),
         end_time: this.dateRange[1].Format('yyyy-MM-dd')
@@ -315,10 +311,10 @@ export default {
       this.getControlAnalysis(param)
     },
     // 格式化时间
-    formatDate(d) {
+    formatDate (d) {
       let padZero = num => {
         num = num + ''
-        return num.length == 1 ? '0' + num : num
+        return num.length === 1 ? '0' + num : num
       }
       return d ? d.getFullYear() + '-' + padZero(d.getMonth() + 1) + '-' + padZero(d.getDate()) : ''
     }

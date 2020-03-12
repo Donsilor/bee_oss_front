@@ -11,7 +11,7 @@
         type="text"
         @click="goBack"
       >
-        <<&nbsp;返回
+        返回
       </el-button>
     </div>
     <el-row :gutter="24">
@@ -23,41 +23,41 @@
   </div>
 </template>
 <script>
-import echarts from "echarts"
-import { mapActions } from "vuex"
-import "../../lib/util"
-import API from "../../service/index"
+import echarts from 'echarts'
+import { mapActions } from 'vuex'
+import '../../lib/util'
+import API from '../../service/index'
 export default {
   components: {},
-  data() {
+  data () {
     return {
-      activeName: "1",
+      activeName: '1',
       select_date: new Date(),
       alertChart: null,
       allTypes: {
-        1: "空调",
-        2: "窗帘",
-        3: "电视",
-        4: "电饭煲",
-        5: "灯",
-        6: "电子秤",
-        7: "摄像头",
-        8: "智能开关",
-        9: "空气质量检测仪",
-        10: "温湿度计",
-        11: "路由器",
-        12: "门窗传感器",
-        13: "红外传感器",
-        14: "可视对讲"
+        1: '空调',
+        2: '窗帘',
+        3: '电视',
+        4: '电饭煲',
+        5: '灯',
+        6: '电子秤',
+        7: '摄像头',
+        8: '智能开关',
+        9: '空气质量检测仪',
+        10: '温湿度计',
+        11: '路由器',
+        12: '门窗传感器',
+        13: '红外传感器',
+        14: '可视对讲'
       }
     }
   },
-  mounted() {
+  mounted () {
     this.initEchart()
     this.changeSelectDate()
   },
   methods: {
-    changeSelectDate() {
+    changeSelectDate () {
       let obj = this
       API.deviceTotals({ select_date: obj.select_date }).then(result => {
         if (result.data && result.data.length) {
@@ -65,21 +65,21 @@ export default {
           let Xarrs = []
           let dataArrs = []
           datas.forEach(item => {
-            Xarrs.push(obj.filterType(item["F_category_id"]))
-            dataArrs.push(item["count"])
+            Xarrs.push(obj.filterType(item['F_category_id']))
+            dataArrs.push(item['count'])
           })
           obj.renderEchart(Xarrs, dataArrs)
         }
       })
     },
-    initEchart() {
-      this.alertChart = echarts.init(document.getElementById("charts-con"))
+    initEchart () {
+      this.alertChart = echarts.init(document.getElementById('charts-con'))
     },
-    renderEchart(Xarrs, dataArrs) {
+    renderEchart (Xarrs, dataArrs) {
       this.alertChart.setOption({
         tooltip: {
           position: [10, 10],
-          trigger: "axis",
+          trigger: 'axis',
           //                    formatter: function (params) {
           //                        params = params[0];
           //                        var date = new Date(params.name);
@@ -94,30 +94,30 @@ export default {
         },
         legend: {
           show: true,
-          data: ["子设备按分类统计"]
+          data: ['子设备按分类统计']
         },
         toolbox: {
           show: true,
           feature: {
             dataZoom: {
-              yAxisIndex: "none"
+              yAxisIndex: 'none'
             },
             dataView: { readOnly: false },
-            magicType: { type: ["line", "bar"] },
+            magicType: { type: ['line', 'bar'] },
             restore: {},
             saveAsImage: {}
           }
         },
         xAxis: {
-          type: "category",
+          type: 'category',
           data: Xarrs
           //                    splitLine: {
           //                        show: false
           //                    }
         },
         yAxis: {
-          name: "数量",
-          type: "value",
+          name: '数量',
+          type: 'value',
           // boundaryGap: [0, '100%'],
           splitLine: {
             show: true
@@ -125,32 +125,32 @@ export default {
         },
         series: [
           {
-            name: "子设备按分类统计",
-            type: "bar",
+            name: '子设备按分类统计',
+            type: 'bar',
             data: dataArrs,
             itemStyle: {
               normal: {
-                color: "#81c0c0"
+                color: '#81c0c0'
               }
             },
             markPoint: {
-              data: [{ type: "max", name: "最大值" }, { type: "min", name: "最小值" }]
+              data: [{ type: 'max', name: '最大值' }, { type: 'min', name: '最小值' }]
             },
             markLine: {
-              data: [{ type: "average", name: "平均值" }]
+              data: [{ type: 'average', name: '平均值' }]
             }
           }
         ]
       })
     },
-    goBack() {
+    goBack () {
       history.go(-1)
     },
-    filterType(val) {
+    filterType (val) {
       return this.allTypes[val]
     }
   },
-  ...mapActions(["deviceTotals"])
+  ...mapActions(['deviceTotals'])
 }
 </script>
 <style lang="less">

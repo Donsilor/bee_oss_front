@@ -22,7 +22,7 @@ export default {
     },
     result: {
       type: Object,
-      default() {
+      default () {
         return {}
       }
     },
@@ -39,7 +39,7 @@ export default {
       default: '300px'
     }
   },
-  data() {
+  data () {
     return {
       chart: null,
       legendData: [],
@@ -48,7 +48,7 @@ export default {
     }
   },
   watch: {
-    result() {
+    result () {
       this.xAxisData = []
       this.legendData = []
       this.seriesData = []
@@ -76,10 +76,10 @@ export default {
       console.log(this.result, 'this.result4444')
     }
   },
-  mounted() {
+  mounted () {
     //
   },
-  beforeDestroy() {
+  beforeDestroy () {
     if (!this.chart) {
       return
     }
@@ -87,7 +87,7 @@ export default {
     this.chart = null
   },
   methods: {
-    initChart() {
+    initChart () {
       this.chart = echarts.init(document.getElementById(this.id))
       this.chart.setOption({
         title: {

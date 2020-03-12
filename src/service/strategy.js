@@ -4,62 +4,62 @@ import { STRATEGY_API } from '~/lib/api'
 // const API_UPGRADE = '/api.php';
 
 export default {
-  strategyList(params) {
+  strategyList (params) {
     return axios
       .post(STRATEGY_API.strategyList, params)
       .then(response => response.data)
   },
-  StrategyAdd(params) {
+  StrategyAdd (params) {
     return axios
       .post(STRATEGY_API.StrategyAdd, params)
       .then(response => response.data)
   },
-  StrategyEdit(params) {
+  StrategyEdit (params) {
     return axios
       .post(STRATEGY_API.StrategyEdit, params)
       .then(response => response.data)
   },
-  StrategyDel(params) {
+  StrategyDel (params) {
     return axios
       .post(STRATEGY_API.StrategyDel, params)
       .then(response => response.data)
   },
-  StrategyUuidList(params) {
+  StrategyUuidList (params) {
     return axios
       .post(STRATEGY_API.StrategyUuidList, params)
       .then(response => response.data)
   },
-  StrategyUuidAdd(params) {
+  StrategyUuidAdd (params) {
     return axios
       .post(STRATEGY_API.StrategyUuidAdd, params)
       .then(response => response.data)
   },
-  StrategyUuidEdit(params) {
+  StrategyUuidEdit (params) {
     return axios
       .post(STRATEGY_API.StrategyUuidEdit, params)
       .then(response => response.data)
   },
-  StrategyUuidDel(params) {
+  StrategyUuidDel (params) {
     return axios
       .post(STRATEGY_API.StrategyUuidDel, params)
       .then(response => response.data)
   },
-  StrategyConfiglists(params) {
+  StrategyConfiglists (params) {
     return axios
       .post(STRATEGY_API.StrategyConfiglists, params)
       .then(response => response.data)
   },
-  StrategyConfigAdd(params) {
+  StrategyConfigAdd (params) {
     return axios
       .post(STRATEGY_API.StrategyConfigAdd, params)
       .then(response => response.data)
   },
-  StrategyConfigEdit(params) {
+  StrategyConfigEdit (params) {
     return axios
       .post(STRATEGY_API.StrategyConfigEdit, params)
       .then(response => response.data)
   },
-  StrategyConfigDel(params) {
+  StrategyConfigDel (params) {
     return axios
       .post(STRATEGY_API.StrategyConfigDel, params)
       .then(response => response.data)

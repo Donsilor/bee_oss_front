@@ -67,7 +67,7 @@ export default {
       default: null
     }
   },
-  data() {
+  data () {
     return {
       defaultActive: '',
       menuData: [
@@ -99,7 +99,7 @@ export default {
       ]
     }
   },
-  mounted() {
+  mounted () {
     console.log('menuData====', this.menuData)
     const obj = this
     if (obj.default) {
@@ -116,121 +116,121 @@ export default {
 }
 </script>
 <style lang="less">
-	.href-a {
-		font-size: 14px;
-		padding-left: 45px;
-		height: 50px;
-		line-height: 50px;
-		color: #95959b;
-		display: block;
-		width: 100%;
-	}
+  .href-a {
+    font-size: 14px;
+    padding-left: 45px;
+    height: 50px;
+    line-height: 50px;
+    color: #95959b;
+    display: block;
+    width: 100%;
+  }
 
-	.href-a:hover {
-		background: #3b3b53;
-	}
+  .href-a:hover {
+    background: #3b3b53;
+  }
 
-	.iconStyle(@width: 16px, @height: 16px) {
-		width: @width;
-		height: @height;
-		background-size: @width @height;
-	}
+  .iconStyle(@width: 16px, @height: 16px) {
+    width: @width;
+    height: @height;
+    background-size: @width @height;
+  }
 
-	.left-menu {
-		height: 100%;
-		background: #2b2b37;
+  .left-menu {
+    height: 100%;
+    background: #2b2b37;
 
-		.el-menu {
-			border-radius: 0;
-		}
-	}
+    .el-menu {
+      border-radius: 0;
+    }
+  }
 
-	.menu-list {
-		.el-submenu__title {
-			font-size: 16px;
-			color: #95959b;
-			padding-left: 33px !important;
-		}
+  .menu-list {
+    .el-submenu__title {
+      font-size: 16px;
+      color: #95959b;
+      padding-left: 33px !important;
+    }
 
-		.el-submenu__title:hover {
-			background: #3b3b53;
-		}
+    .el-submenu__title:hover {
+      background: #3b3b53;
+    }
 
-		.el-submenu .el-menu {
-			background: none;
-		}
+    .el-submenu .el-menu {
+      background: none;
+    }
 
-		.el-submenu .el-menu-item {
-			font-size: 14px;
-			min-width: auto;
-			padding-left: 45px !important;
-		}
+    .el-submenu .el-menu-item {
+      font-size: 14px;
+      min-width: auto;
+      padding-left: 45px !important;
+    }
 
-		.el-menu-item {
-			font-size: 16px;
-			padding-left: 33px !important;
-			color: #95959b;
-		}
+    .el-menu-item {
+      font-size: 16px;
+      padding-left: 33px !important;
+      color: #95959b;
+    }
 
-		.el-menu-item:hover {
-			background: #3b3b53;
-		}
+    .el-menu-item:hover {
+      background: #3b3b53;
+    }
 
-		.is-active {
-			color: #fff;
-			background: #3b3b53;
-		}
+    .is-active {
+      color: #fff;
+      background: #3b3b53;
+    }
 
-		// min-height: 100vh;
-		background: #2b2b37;
+    // min-height: 100vh;
+    background: #2b2b37;
 
-		li {
-			.icon-pp:before {
-				content: "";
-				display: inline-block;
-				position: relative;
-				left: -8px;
-			}
+    li {
+      .icon-pp:before {
+        content: "";
+        display: inline-block;
+        position: relative;
+        left: -8px;
+      }
 
-			.home:before {
-				background-image: url("../../images/home.png");
-				.iconStyle(20px, 20px);
-			}
+      .home:before {
+        background-image: url("../../images/home.png");
+        .iconStyle(20px, 20px);
+      }
 
-			.config:before {
-				background-image: url("../../images/upgrade.png");
-				.iconStyle(20px, 20px);
-			}
+      .config:before {
+        background-image: url("../../images/upgrade.png");
+        .iconStyle(20px, 20px);
+      }
 
-			.ops:before {
-				background-image: url("../../images/dev.png");
-				.iconStyle(20px, 20px);
-			}
+      .ops:before {
+        background-image: url("../../images/dev.png");
+        .iconStyle(20px, 20px);
+      }
 
-			.facility:before {
-				background-image: url("../../images/through.png");
-				.iconStyle(20px, 20px);
-			}
+      .facility:before {
+        background-image: url("../../images/through.png");
+        .iconStyle(20px, 20px);
+      }
 
-			.cloud:before {
-				background-image: url("../../images/log.png");
-				.iconStyle(20px, 20px);
-			}
+      .cloud:before {
+        background-image: url("../../images/log.png");
+        .iconStyle(20px, 20px);
+      }
 
-			.warn:before {
-				background-image: url("../../images/warn.png");
-				.iconStyle(20px, 20px);
-			}
+      .warn:before {
+        background-image: url("../../images/warn.png");
+        .iconStyle(20px, 20px);
+      }
 
-			.cmdb:before {
-				background-image: url("../../images/u59.png");
-				.iconStyle(20px, 20px);
-			}
+      .cmdb:before {
+        background-image: url("../../images/u59.png");
+        .iconStyle(20px, 20px);
+      }
 
-			.family:before {
-				background-image: url("../../images/family.png");
-				.iconStyle(20px, 20px);
-			}
-		}
-	}
+      .family:before {
+        background-image: url("../../images/family.png");
+        .iconStyle(20px, 20px);
+      }
+    }
+  }
 </style>

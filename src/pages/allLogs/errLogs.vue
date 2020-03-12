@@ -205,27 +205,27 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex"
-import errLogJson from "../../json/errLogs.json"
-import "../../lib/util"
-import API from "../../service/index"
+import { mapActions } from 'vuex'
+import errLogJson from '../../json/errLogs.json'
+import '../../lib/util'
+import API from '../../service/index'
 export default {
   components: {},
-  data() {
+  data () {
     let startTime = new Date().setHours(0, 0, 0)
     return {
       detailFlag: false,
       rootLogForm: {
-        inner: "",
-        uuid: "",
+        inner: '',
+        uuid: '',
         select_date: new Date(),
-        user_id: "",
-        device_id: "",
-        router_id: "",
-        msg_tag: "",
-        code: "",
-        method: "",
-        session_id: "",
+        user_id: '',
+        device_id: '',
+        router_id: '',
+        msg_tag: '',
+        code: '',
+        method: '',
+        session_id: '',
         limit: 15,
         start_end_time: [new Date(startTime), new Date()]
       },
@@ -233,54 +233,54 @@ export default {
       currentPage: 1,
       rootLogData: {},
       logDetail: {
-        _id: "",
-        log_type: "",
-        file_num: "",
-        channel: "",
-        method: "",
-        level: "",
-        msg_tag: "",
-        session_id: "",
-        module: "",
-        host_name: "",
-        client_info: "",
-        svr_id: "",
-        dst_id: "",
-        uuid: "",
-        user_id: "",
-        family_id: "",
-        room_id: "",
-        router_id: "",
-        device_id: "",
-        msg: "",
-        req_time: "",
-        process_time: "",
-        rsp_time: "",
-        queue_cost_time: "",
-        process_cost_time: "",
-        net_cost_time: "",
-        code: "",
-        cost_time: "",
-        created_time: "",
-        req_id: "",
-        req: ""
+        _id: '',
+        log_type: '',
+        file_num: '',
+        channel: '',
+        method: '',
+        level: '',
+        msg_tag: '',
+        session_id: '',
+        module: '',
+        host_name: '',
+        client_info: '',
+        svr_id: '',
+        dst_id: '',
+        uuid: '',
+        user_id: '',
+        family_id: '',
+        room_id: '',
+        router_id: '',
+        device_id: '',
+        msg: '',
+        req_time: '',
+        process_time: '',
+        rsp_time: '',
+        queue_cost_time: '',
+        process_cost_time: '',
+        net_cost_time: '',
+        code: '',
+        cost_time: '',
+        created_time: '',
+        req_id: '',
+        req: ''
       }
     }
   },
   computed: {},
   watch: {},
-  mounted() {
+  mounted () {
     this.getRootLogs(1)
   },
   methods: {
-    getDetail(dataObj) {
+    getDetail (dataObj) {
       this.detailFlag = true
       let obj = this.logDetail
       for (let attr in obj) {
         obj[attr] = dataObj[attr]
       }
     },
-    getRootLogs(page) {
+    getRootLogs (page) {
       let obj = this
       let param = {}
       let currentForm = {}
@@ -295,10 +295,10 @@ export default {
 
       currentForm.page = page
       for (let attr in currentForm) {
-        if (attr === "start_end_time") {
-          if (currentForm["start_end_time"].length) {
-            param.start_time = currentForm["start_end_time"][0].Format("hh:mm:ss")
-            param.end_time = currentForm["start_end_time"][1].Format("hh:mm:ss")
+        if (attr === 'start_end_time') {
+          if (currentForm['start_end_time'].length) {
+            param.start_time = currentForm['start_end_time'][0].Format('hh:mm:ss')
+            param.end_time = currentForm['start_end_time'][1].Format('hh:mm:ss')
           }
         } else {
           param[attr] = currentForm[attr]
@@ -311,37 +311,37 @@ export default {
         this.totalItem = result.total
       })
     },
-    pageChange() {
+    pageChange () {
       this.getRootLogs(this.currentPage)
     },
-    getWidth(prop) {
+    getWidth (prop) {
       let val = 0
       switch (prop) {
-      case "method":
-        val = 100
-        break
-      case "user_id":
-      case "msg_tag":
-        val = 100
-        break
-      case "router_id":
-      case "cost_time":
-        val = 110
-        break
-      case "host_name":
-        val = 120
-        break
-      case "created_time":
-        val = 130
-        break
-      default:
-        val = "auto"
-        break
+        case 'method':
+          val = 100
+          break
+        case 'user_id':
+        case 'msg_tag':
+          val = 100
+          break
+        case 'router_id':
+        case 'cost_time':
+          val = 110
+          break
+        case 'host_name':
+          val = 120
+          break
+        case 'created_time':
+          val = 130
+          break
+        default:
+          val = 'auto'
+          break
       }
       return val
     }
   },
-  ...mapActions(["errLogs"])
+  ...mapActions(['errLogs'])
 }
 </script>
 <style lang="less">

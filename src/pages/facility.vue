@@ -110,39 +110,39 @@
 <script>
 export default {
   components: {},
-  data() {
+  data () {
     return {
       list: [
         {
-          id: "",
-          mac: "320.210.234.234",
-          sn: "134137889798",
-          uuid: "1234123",
-          status: "库存中"
+          id: '',
+          mac: '320.210.234.234',
+          sn: '134137889798',
+          uuid: '1234123',
+          status: '库存中'
         }
       ],
       historyList: [
         {
-          time: "2017-12-12 12:32",
-          version: "1.2.1",
-          flag: "成功"
+          time: '2017-12-12 12:32',
+          version: '1.2.1',
+          flag: '成功'
         }
       ],
       fileList: [],
-      searchKey: "",
+      searchKey: '',
       importBoxFlag: false,
       historyBoxFlag: false
     }
   },
-  mounted() {},
+  mounted () {},
   methods: {
-    rowChoosed(row, event) {
+    rowChoosed (row, event) {
       this.historyBoxFlag = true
     },
-    handleRemove(file, fileList) {
+    handleRemove (file, fileList) {
       console.log(file, fileList)
     },
-    handlePreview(file) {
+    handlePreview (file) {
       console.log(file)
     }
   }

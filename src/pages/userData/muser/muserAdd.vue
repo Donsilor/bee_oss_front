@@ -29,41 +29,41 @@
 </template>
 
 <script>
-import API from "../../../service/index.js"
+import API from '../../../service/index.js'
 export default {
-  props: ["dialogVisible", "dataChanged"],
-  data() {
+  props: ['dialogVisible', 'dataChanged'],
+  data () {
     return {
       formdata: {
-        name: "",
-        tel: ""
+        name: '',
+        tel: ''
       },
       rules: {
-        tel: [{ required: true, message: "请输入电话", trigger: "blur" }]
+        tel: [{ required: true, message: '请输入电话', trigger: 'blur' }]
       },
-      dialogTitle: "新增重点用户",
+      dialogTitle: '新增重点用户',
       showDialog: this.dialogVisible
     }
   },
   watch: {
-    dialogVisible(status) {
+    dialogVisible (status) {
       this.showDialog = status
     }
   },
   methods: {
-    formSubmit() {
+    formSubmit () {
       const userData = this.formdata
       API.addMUser({
         phone_num: userData.tel
       }).then(res => {
-        this.$message("添加成功")
-        this.$emit("setDataChanged")
+        this.$message('添加成功')
+        this.$emit('setDataChanged')
         this.closeDialog()
       })
     },
-    closeDialog() {
+    closeDialog () {
       this.showDialog = false
-      this.$emit("setDialog", false)
+      this.$emit('setDialog', false)
     }
   }
 }

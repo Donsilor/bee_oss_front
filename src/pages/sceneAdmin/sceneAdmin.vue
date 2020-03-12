@@ -90,22 +90,22 @@
 }
 </style>
 <script>
-import { PREFIX, deepClone } from "../../lib/util"
+import { PREFIX, deepClone } from '../../lib/util'
 import Config from './components/config.vue'
 export default {
   components: {
     Config
   },
-  data() {
+  data () {
     return {
       list: []
     }
   },
-  mounted() {
+  mounted () {
     this.getList()
   },
   methods: {
-    getList() {
+    getList () {
       this.$http
         .post(PREFIX + 'iotscene/lists', {})
         .then(res => {
@@ -119,7 +119,7 @@ export default {
           }
         })
     },
-    submitEdit(param) {
+    submitEdit (param) {
       this.$http
         .post(PREFIX + 'iotscene/save', param)
         .then(res => {
@@ -134,9 +134,8 @@ export default {
           }
           this.getList()
         })
-
     },
-    delete(cId) {
+    delete (cId) {
       this.$http
         .post(PREFIX + 'iotscene/del', {
           scene_id: cId
@@ -153,7 +152,7 @@ export default {
           }
         })
     },
-    dealUpdateParam(index, enable) {
+    dealUpdateParam (index, enable) {
       let param = deepClone(this.list[index])
       param.enable = +!+enable
       param.list_pic.normal = param.list_pic.normal_object
@@ -162,9 +161,9 @@ export default {
       delete param['detail_pic_object']
       return param
     },
-    handeEnableClick(index,enable) {
+    handeEnableClick (index, enable) {
       let type = '禁用'
-      if(!enable){
+      if (!enable) {
         type = '启用'
       }
       this.$confirm(`您是否确定${type}该场景？`, '提示', {
@@ -178,7 +177,7 @@ export default {
         this.$message.info('已取消')
       })
     },
-    handeDeleteClick(cId) {
+    handeDeleteClick (cId) {
       this.$confirm(`您是否确定删除该场景？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -189,14 +188,14 @@ export default {
         this.$message.info('已取消')
       })
     },
-    handPageChange(val) {
+    handPageChange (val) {
       this.pages.page = val
       this.getList()
     },
-    indexMethod(index) {
+    indexMethod (index) {
       return index + 1
     },
-    showConfig(type, item) {
+    showConfig (type, item) {
       let defaultConfig = {
         type: type,
         show: true,
@@ -211,7 +210,7 @@ export default {
           list: []
         }
       }
-      if(type == 'add'){
+      if (type === 'add') {
         console.log(type)
         console.log(defaultConfig)
         this.$refs.configDialog.config = defaultConfig
@@ -222,8 +221,8 @@ export default {
       this.$refs.configDialog.dealList()
     },
     // 子组件传过来的 列表图片信息
-    refresh(val) {
-      if(val) this.getList()
+    refresh (val) {
+      if (val) this.getList()
     }
   }
 }

@@ -32,7 +32,7 @@ export default {
     },
     result: {
       type: Array,
-      default() {
+      default () {
         return []
       }
     },
@@ -49,7 +49,7 @@ export default {
       default: '300px'
     }
   },
-  data() {
+  data () {
     return {
       chart: null,
       xAxisData: [],
@@ -57,7 +57,7 @@ export default {
     }
   },
   watch: {
-    result() {
+    result () {
       this.xAxisData = []
       this.seriesData = []
       for (let index = 0; index < this.result.length; index++) {
@@ -67,10 +67,10 @@ export default {
       this.initChart()
     }
   },
-  mounted() {
+  mounted () {
     // console.log(this.result, 'kkkkkk')
   },
-  beforeDestroy() {
+  beforeDestroy () {
     if (!this.chart) {
       return
     }
@@ -78,7 +78,7 @@ export default {
     this.chart = null
   },
   methods: {
-    initChart() {
+    initChart () {
       this.chart = echarts.init(document.getElementById(this.id))
       this.chart.setOption({
         title: {

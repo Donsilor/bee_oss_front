@@ -60,57 +60,71 @@
 </template>
 <script>
 /*
-设备类型：
-1、android_app，2、router，3、子设备，4、ios，5、H5，6、android_pad，7、android_system，8、device_android_system，9、community_app，10、community_app_plugin
+  设备类型：
+  1、android_app，2、router，3、子设备，4、ios，5、H5，6、android_pad，7、android_system，8、device_android_system，9、community_app，10、community_app_plugin
 
-os_type:
-1、android_app, 4、ios, 6、android_pad
+  os_type:
+  1、android_app, 4、ios, 6、android_pad
 
-新增force类型：
-3，不弹窗升级（当前共有：0：非强制，1：强制，3：不弹窗升级）2已被占用
-*/
-import * as namespace from "../../store/namespace"
-import { mapGetters, mapActions } from "vuex"
-import "../../lib/util.js"
-import version_first_json from "../../json/versions.json"
-import version_input from "./component/versionInputLayer.vue"
-import push_update from "./component/pushUpdateLayer.vue"
+  新增force类型：
+  3，不弹窗升级（当前共有：0：非强制，1：强制，3：不弹窗升级）2已被占用
+  */
+import * as namespace from '../../store/namespace'
+import { mapGetters, mapActions } from 'vuex'
+import '../../lib/util.js'
+// eslint-disable-next-line camelcase
+import version_first_json from '../../json/versions.json'
+// eslint-disable-next-line camelcase
+import version_input from './component/versionInputLayer.vue'
+// eslint-disable-next-line camelcase
+import push_update from './component/pushUpdateLayer.vue'
 // import version_edit from "./component/versionEdit.vue";
-import version_detail from "./component/versionDetail.vue"
-import operate_log from "./component/operateLogs.vue"
-import filter_form from "./component/filterLayer.vue"
-import version_mapping from "./component/versionMapping.vue"
-import API from "../../service/index"
+// eslint-disable-next-line camelcase
+import version_detail from './component/versionDetail.vue'
+// eslint-disable-next-line camelcase
+import operate_log from './component/operateLogs.vue'
+// eslint-disable-next-line camelcase
+import filter_form from './component/filterLayer.vue'
+// eslint-disable-next-line camelcase
+import version_mapping from './component/versionMapping.vue'
+import API from '../../service/index'
+
 export default {
   components: {
-    "version-input": version_input,
-    "push-update": push_update,
+    // eslint-disable-next-line vue/no-unused-components
+    'version-input': version_input,
+    // eslint-disable-next-line vue/no-unused-components
+    'push-update': push_update,
     // version_edit: version_edit,
+    // eslint-disable-next-line vue/no-unused-components
     version_detail: version_detail,
+    // eslint-disable-next-line vue/no-unused-components
     operate_log: operate_log,
-    "filter-form": filter_form,
-    "version-mapping": version_mapping
+    // eslint-disable-next-line vue/no-unused-components
+    'filter-form': filter_form,
+    // eslint-disable-next-line vue/no-unused-components
+    'version-mapping': version_mapping
   },
   filters: {
-    typeToString(x) {
+    typeToString (x) {
       if (x * 1 === 1) {
-        return "APP"
+        return 'APP'
       } else if (x * 1 === 2) {
-        return "路由器"
+        return '路由器'
       } else if (x * 1 === 3) {
-        return "子设备"
+        return '子设备'
       } else {
-        return "未知"
+        return '未知'
       }
     },
-    forceToString(x) {
-      return x ? "是" : "否"
+    forceToString (x) {
+      return x ? '是' : '否'
     },
-    statusToString(x) {
-      return x ? "启用" : "停用"
+    statusToString (x) {
+      return x ? '启用' : '停用'
     }
   },
-  data() {
+  data () {
     return {
       firstTableShow: true,
       info: {},
@@ -119,80 +133,80 @@ export default {
       filterTypeOptions: [
         {
           value: 2,
-          label: "路由器"
+          label: '路由器'
         },
         {
           value: 3,
-          label: "子设备"
+          label: '子设备'
         }
       ],
       listParams: {
-        method: "list_versions",
+        method: 'list_versions',
         page: 1,
         limit: 10,
         level: 1
       },
       versionsFirst: {},
       versionList: {},
-      inputType: "",
+      inputType: '',
       rulesDetail: {},
       suportDevice: [],
       pushHistoryList: {},
       pushDataObj: {},
-      secondTitle: "",
+      secondTitle: '',
       currentDataObj: {},
       currentDetailObj: {},
       operateLogLayer: false,
       operateLogList: {},
       addEditFlag: true,
       editDataObj: {},
-      releasedFlag: false, //已发布/未发布标识 || 版本编辑，已发布版本只能编辑几个字段
-      mappingData: {}, //各设备对应映射关系
+      releasedFlag: false, // 已发布/未发布标识 || 版本编辑，已发布版本只能编辑几个字段
+      mappingData: {}, // 各设备对应映射关系
       router: [],
-      os_type: "",
+      os_type: '',
       routerPidList: [],
       os_type_text: {
-        1: "android_app",
-        4: "ios_app",
-        6: "android_pad",
-        13: "lua_app"
+        1: 'android_app',
+        4: 'ios_app',
+        6: 'android_pad',
+        13: 'lua_app'
       },
       device_type_text: {
-        2: "路由器",
-        3: "子设备",
-        5: "H5",
-        7: "android_system",
-        11: "route_app",
-        12: "video_app",
-        13: "旗舰版音箱",
+        2: '路由器',
+        3: '子设备',
+        5: 'H5',
+        7: 'android_system',
+        11: 'route_app',
+        12: 'video_app',
+        13: '旗舰版音箱'
       },
       getGrayStatus: {
-        0: "无",
-        1: "白名单",
-        2: "黑名单",
-        3: "全量"
+        0: '无',
+        1: '白名单',
+        2: '黑名单',
+        3: '全量'
       },
-      activeName: "devices",
+      activeName: 'devices',
       // 本地分页处理
       tableCopyTableList: {},
       index: 1,
-      size: 10,
+      size: 10
     }
   },
   ...mapActions([
-    "getVersions",
-    "selectVersion",
-    "importSubmitAction",
-    "pushUpdateAction",
-    "getVersionDetailAction",
-    "pubilcCorsAction"
+    'getVersions',
+    'selectVersion',
+    'importSubmitAction',
+    'pushUpdateAction',
+    'getVersionDetailAction',
+    'pubilcCorsAction'
   ]),
   computed: {
     ...mapGetters({
       brand: namespace.BRAND,
       type: namespace.TYPE,
       product: namespace.PRODUCT
-    }),
+    })
     // currentName() {
     //   let name = this.getTypeText(this.currentDataObj.type, this.currentDataObj.os_type) + " "
     //   if (this.currentDataObj.product_id) {
@@ -204,7 +218,7 @@ export default {
     //   return name
     // }
   },
-  mounted() {
+  mounted () {
     this.$store.dispatch({
       type: namespace.INITPRODUCT
     })
@@ -213,17 +227,17 @@ export default {
   methods: {
     // 本地分页处理
     // 页数改变事件
-    handleSizeChange(size) {
+    handleSizeChange (size) {
       this.size = size
       this.versionsFirst.tableData = this.paging(size, this.index)
     },
     // 页码改变事件
-    handleCurrentChange(current) {
+    handleCurrentChange (current) {
       this.index = current
       this.versionsFirst.tableData = this.paging(this.size, current)
     },
     // 本地分页的方法
-    paging(size, current) {
+    paging (size, current) {
       const tableList = JSON.parse(JSON.stringify(this.tableCopyTableList))
       const tablePush = []
       tableList.forEach((item, index) => {
@@ -234,18 +248,18 @@ export default {
       return tablePush
     },
 
-    formatTime(val) {
+    formatTime (val) {
       if (!val) {
-        return "------"
+        return '------'
       } else {
         return val
       }
     },
-    pageChange() {
+    pageChange () {
       this.getVersionList(this.currentPage)
     },
     // 获取所有版本列表
-    getVersionList(page) {
+    getVersionList (page) {
       // this.filterParams.token = this.token
       this.listParams.page = page
       this.versionsFirst = Object.assign({}, version_first_json)
@@ -268,7 +282,7 @@ export default {
       })
     },
     // 渲染首列数据
-    setFirstVersionList(dataObj) {
+    setFirstVersionList (dataObj) {
       this.versionsFirst.tableData = []
       let deviceType = {
         router: 2,
@@ -276,17 +290,17 @@ export default {
         device: 3
       }
       for (let attr in dataObj) {
-        if (attr === "android" || attr === "android_pad" || attr === "ios" || attr === 'video_app' || attr === 'route_app' || attr === 'lua_app') {
+        if (attr === 'android' || attr === 'android_pad' || attr === 'ios' || attr === 'video_app' || attr === 'route_app' || attr === 'lua_app') {
           this.versionsFirst.tableData.push(dataObj[attr])
         } else {
-          if (JSON.stringify(dataObj[attr]) === "{}") {
+          if (JSON.stringify(dataObj[attr]) === '{}') {
             this.versionsFirst.tableData.push({ type: deviceType[attr] })
           } else {
             for (let innerAttr in dataObj[attr]) {
               this.versionsFirst.tableData.push(dataObj[attr][innerAttr])
             }
-            //路由pid列表
-            if (attr === "router") {
+            // 路由pid列表
+            if (attr === 'router') {
               this.routerPidList = []
               for (let routerAttr in dataObj[attr]) {
                 this.routerPidList.push({
@@ -302,8 +316,8 @@ export default {
       this.tableCopyTableList = JSON.parse(JSON.stringify(this.versionsFirst.tableData))
       this.versionsFirst.tableData = this.paging(this.size, this.index)
     },
-    getTypeText(type, os_type) {
-      let text = ""
+    getTypeText (type, os_type) {
+      let text = ''
       if (type === 1) {
         text = os_type
       } else {
@@ -311,145 +325,156 @@ export default {
       }
       return text
     },
-    getStatusTextPush(type) {
-      let text = ""
+    getStatusTextPush (type) {
+      let text = ''
       switch (type) {
-      case 1:
-        text = "成功"
-        break
-      case 0:
-        text = "失败"
-        break
-      default:
-        break
+        case 1:
+          text = '成功'
+          break
+        case 0:
+          text = '失败'
+          break
+        default:
+          break
       }
       return text
     },
-    getStatusText(type) {
-      let text = ""
+    getStatusText (type) {
+      let text = ''
       switch (type) {
-      case 1:
-        text = "有效"
-        break
-      case 0:
-        text = "无效"
-        break
-      default:
-        break
+        case 1:
+          text = '有效'
+          break
+        case 0:
+          text = '无效'
+          break
+        default:
+          break
       }
       return text
     },
-    getForceText(type) {
-      let text = ""
+    getForceText (type) {
+      let text = ''
       switch (type) {
-      case 3:
-        text = "不弹窗升级"
-        break
-      case 1:
-        text = "强制升级"
-        break
-      case 0:
-        text = "不强制"
-        break
-      default:
-        break
+        case 3:
+          text = '不弹窗升级'
+          break
+        case 1:
+          text = '强制升级'
+          break
+        case 0:
+          text = '不强制'
+          break
+        default:
+          break
       }
       return text
     },
-    getPreReleaseText(type) {
-      let text = ""
+    getPreReleaseText (type) {
+      let text = ''
       switch (type) {
-      case 1:
-        text = "灰度版本"
-        break
-      case 0:
-        text = "正式版本"
-        break
-      default:
-        break
+        case 1:
+          text = '灰度版本'
+          break
+        case 0:
+          text = '正式版本'
+          break
+        default:
+          break
       }
       return text
     },
-    gotoHistoryList(dataObj, page) {
+    gotoHistoryList (dataObj, page) {
       sessionStorage.setItem('CurrentAppInfo', JSON.stringify(dataObj))
       this.$router.push({ path: `/main/versionManager/${dataObj.id}` })
     },
-    getPidName(dataObj) {
-      console.log(dataObj.type)
-      if (dataObj.type === 3 || dataObj.type === 8 || dataObj.type === 5 ) {
+    getPidName (dataObj) {
+      if (dataObj.type === 3 || dataObj.type === 8 || dataObj.type === 5) {
         if (dataObj.product_id) {
-          return "--" + dataObj.product_id
+          return '--' + dataObj.product_id
         } else {
-          return ""
+          return ''
         }
       } else if (dataObj.type === 2 || dataObj.type === 7) {
         if (dataObj.router_pid) {
-          return "--" + dataObj.router_pid
+          return '--' + dataObj.router_pid
         } else {
-          return ""
+          return ''
         }
-      } else if(dataObj.type === 13) {
-        return "--lua_app"
-      }else {
-        return ""
+      } else if (dataObj.type === 13) {
+        return '--lua_app'
+      } else {
+        return ''
       }
-    },
+    }
   }
 }
 </script>
 <style lang="less">
-.cp-filterFormBox {
-  padding: 20px;
-  label {
-    line-height: 36px;
-  }
-  .cpf-line {
-    margin-bottom: 20px;
-  }
-}
-.config-page {
-  .el-tabs__active-bar {
-    height: 2px;
-  }
-  .h3_pp {
-    height: 30px;
-    line-height: 30px;
-    margin: 30px 0 15px;
-  }
-  .cpsr-line {
-    margin-bottom: 80px;
-  }
-  .infoBox {
-    font-size: 1rem;
-    > div {
-      margin-bottom: 18px;
+  .cp-filterFormBox {
+    padding: 20px;
+
+    label {
+      line-height: 36px;
+    }
+
+    .cpf-line {
+      margin-bottom: 20px;
     }
   }
 
-  .p-r {
-    position: relative;
-  }
-  .btn-back {
-    position: absolute;
-    right: 10px;
-    z-index: 999;
-    top: 10px;
-  }
-  .support-routers {
-    border: 1px solid #d8d8d8;
-    li {
-      line-height: 35px;
-      padding-left: 30px;
-      height: 35px;
-      list-style: none;
-      border-bottom: 1px solid #d8d8d8;
+  .config-page {
+    .el-tabs__active-bar {
+      height: 2px;
     }
-    li:last-of-type {
-      border-bottom: 0;
+
+    .h3_pp {
+      height: 30px;
+      line-height: 30px;
+      margin: 30px 0 15px;
+    }
+
+    .cpsr-line {
+      margin-bottom: 80px;
+    }
+
+    .infoBox {
+      font-size: 1rem;
+
+      > div {
+        margin-bottom: 18px;
+      }
+    }
+
+    .p-r {
+      position: relative;
+    }
+
+    .btn-back {
+      position: absolute;
+      right: 10px;
+      z-index: 999;
+      top: 10px;
+    }
+
+    .support-routers {
+      border: 1px solid #d8d8d8;
+
+      li {
+        line-height: 35px;
+        padding-left: 30px;
+        height: 35px;
+        list-style: none;
+        border-bottom: 1px solid #d8d8d8;
+      }
+
+      li:last-of-type {
+        border-bottom: 0;
+      }
+    }
+
+    .el-tabs__nav-wrap::after {
+      height: 1px;
     }
   }
-  .el-tabs__nav-wrap::after {
-    height: 1px;
-  }
-}
 </style>

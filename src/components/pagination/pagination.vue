@@ -16,14 +16,14 @@
 </template>
 <script>
 export default {
-  name: "Pagination",
-  props: ["config"],
+  name: 'Pagination',
+  props: ['config'],
   methods: {
-    handleSizeChange(val) {
+    handleSizeChange (val) {
       this.config.currentPage = 1
       this.config.pageSize = val
     },
-    handleCurrentChange(val) {
+    handleCurrentChange (val) {
       this.config.currentPage = val
     }
   }

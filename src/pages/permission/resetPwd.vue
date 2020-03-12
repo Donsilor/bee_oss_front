@@ -36,27 +36,27 @@
 </template>
 
 <script>
-import API from "../../service/index.js"
+import API from '../../service/index.js'
 
 export default {
-  data() {
+  data () {
     return {
       formdata: {
-        mobile: "",
-        password: ""
+        mobile: '',
+        password: ''
       },
       rules: {
-        mobile: [{ required: true, message: "请输入手机号码", trigger: "blur" }],
-        password: [{ required: true, message: "请输入新密码", trigger: "blur" }]
+        mobile: [{ required: true, message: '请输入手机号码', trigger: 'blur' }],
+        password: [{ required: true, message: '请输入新密码', trigger: 'blur' }]
       }
     }
   },
   methods: {
-    onSubmit() {
+    onSubmit () {
       this.$refs.form.validate(valid => {
         if (valid) {
           API.resetPwd(this.formdata).then(res => {
-            this.$message("密码重置成功")
+            this.$message('密码重置成功')
           })
         }
       })

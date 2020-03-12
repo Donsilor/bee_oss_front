@@ -2,49 +2,49 @@ import axios from '../lib/http'
 import { PERMISSION_API } from '~/lib/api'
 
 const api = {
-  //用户权限
-  searchUserList(params) {
+  // 用户权限
+  searchUserList (params) {
     return axios.post(PERMISSION_API.searchUserList, params)
   },
-  userList(params) {
+  userList (params) {
     return axios.post(PERMISSION_API.userList, params)
   },
-  getUser(params) {
+  getUser (params) {
     return axios.post(PERMISSION_API.getUser, params)
   },
-  addUser(params) {
+  addUser (params) {
     return axios.post(PERMISSION_API.addUser, params)
   },
-  editUser(params) {
+  editUser (params) {
     return axios.post(PERMISSION_API.editUser, params)
   },
-  deleteUser(user_ids) {
+  deleteUser (user_ids) {
     return axios.post(PERMISSION_API.deleteUser, { user_ids })
   },
-  updatePwd(params) {
+  updatePwd (params) {
     return axios.post(PERMISSION_API.updatePwd, params)
   },
-  resetPwd(params) {
+  resetPwd (params) {
     return axios.post(PERMISSION_API.resetPwd, params)
   },
-  //角色管理
-  roleList(params) {
+  // 角色管理
+  roleList (params) {
     return axios.post(PERMISSION_API.roleList, params)
   },
-  getRole(role_id) {
+  getRole (role_id) {
     return axios.post(PERMISSION_API.getRole, { role_id })
   },
-  addRole(params) {
+  addRole (params) {
     return axios.post(PERMISSION_API.addRole, params)
   },
-  editRole(params) {
+  editRole (params) {
     return axios.post(PERMISSION_API.editRole, params)
   },
-  deleteRole(role_id) {
+  deleteRole (role_id) {
     return axios.post(PERMISSION_API.deleteRole, { role_id })
   },
-  //菜单管理
-  menuList() {
+  // 菜单管理
+  menuList () {
     return axios.post(PERMISSION_API.menuList)
   }
 }

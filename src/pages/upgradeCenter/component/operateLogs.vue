@@ -33,20 +33,20 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from "vuex"
+import { mapGetters } from 'vuex'
 export default {
-  props: ["operateLogList"],
-  data() {
+  props: ['operateLogList'],
+  data () {
     return {
-      date: ""
+      date: ''
     }
   },
   computed: {
     ...mapGetters({})
   },
-  mounted() { },
+  mounted () { },
   methods: {
-    changeSelectLogOutDate() { }
+    changeSelectLogOutDate () { }
   }
 }
 </script>

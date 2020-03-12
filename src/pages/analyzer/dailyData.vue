@@ -78,10 +78,10 @@
 </template>
 
 <script>
-import axios from "axios"
-import * as URL from "~/lib/api"
+import axios from 'axios'
+import * as URL from '~/lib/api'
 export default {
-  data() {
+  data () {
     return {
       tableData1: [],
       fromDate: {
@@ -91,18 +91,18 @@ export default {
       position: 0
     }
   },
-  mounted() {
+  mounted () {
     let preDate = new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
     this.fromDate.select_time = preDate
     this.getdailyData()
   },
   methods: {
     // 查询数据
-    searchdDilyData() {
+    searchdDilyData () {
       this.getdailyData({ select_time: this.fromDate.select_time })
     },
     // 获取数据
-    getdailyData(params) {
+    getdailyData (params) {
       if (params && params.select_time) {
         params.select_time = params.select_time.Format('yyyy-MM-dd')
       }
@@ -117,11 +117,11 @@ export default {
       })
     },
     // 导出数据
-    exportData() {
-      let token = JSON.parse(localStorage.getItem("localData")).user.info.token
+    exportData () {
+      let token = JSON.parse(localStorage.getItem('localData')).user.info.token
       let select_time = (this.fromDate.select_time).Format('yyyy-MM-dd')
       window.open(URL.ExportURL + `?token=${token}&&select_time=${select_time}`)
-    },
+    }
     // rowspan() {
     //   this.tableData1.forEach((item,index) => {
     //     if( index === 0){
@@ -136,7 +136,6 @@ export default {
     //     }
     //   })
     // },
-
 
     // objectSpanMethod({ row, column, rowIndex, columnIndex }) {
     //   if(columnIndex === 0){

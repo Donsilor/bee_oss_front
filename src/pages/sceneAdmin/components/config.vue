@@ -54,12 +54,13 @@
           v-model="config.mode_id"
           clearable
           placeholder="请选择">
-          <el-option
-            v-for="it in startModeList"
-            v-if="+it.enable === 1"
-            :key="it.mode_id"
-            :label="it.mode_name"
-            :value="it.mode_id" />
+          <template v-for="it in startModeList">
+            <el-option
+              v-if="+it.enable === 1"
+              :key="it.mode_id"
+              :label="it.mode_name"
+              :value="it.mode_id" />
+          </template>
         </el-select>
       </el-form-item>
 
@@ -72,6 +73,7 @@
           @change="handleCheckedChange">
           <div
             v-for="(it, index) in categoryList"
+            :key="index"
             class="item">
 
             <el-checkbox
@@ -102,7 +104,7 @@
           </div>
         </el-checkbox-group>
         <div
-          v-show="judgeData == 'off'"
+          v-show="judgeData === 'off'"
           class="tis">勾选的设备状态必填</div>
       </el-form-item>
 
@@ -157,15 +159,15 @@
 }
 </style>
 <script>
-import { PREFIX, deepClone } from "../../../lib/util"
-import getCorsUrl from "../../../lib/corsconfig"
-import Upload from "../../../components/upload.vue"
-import { Message } from 'element-ui'
+import { PREFIX, deepClone } from '../../../lib/util'
+// import getCorsUrl from '../../../lib/corsconfig'
+import Upload from '../../../components/upload.vue'
+// import { Message } from 'element-ui'
 export default {
   components: {
     Upload
   },
-  data() {
+  data () {
     return {
       validList: {
         type: 2, // 验证图片尺寸
@@ -188,7 +190,7 @@ export default {
 
       categoryList: [],
       startModeList: [],
-      judgeData: '', //判断勾选的设备的状态是否有选择
+      judgeData: '', // 判断勾选的设备的状态是否有选择
       // 配置内容
       config: {
         checkList: [],
@@ -202,7 +204,7 @@ export default {
       },
       rules: {
         scene_name: [
-          { required: true, message: '请输入场景名称', trigger: 'blur' },
+          { required: true, message: '请输入场景名称', trigger: 'blur' }
         ],
         'list_pic.normal': [
           { required: true, message: '请选择列表配图', trigger: 'change' }
@@ -217,80 +219,80 @@ export default {
           { required: true, message: '请选择状态', trigger: 'change' }
         ],
         checkList: [
-          { type:'array', required: true, message: '至少选择一个设备', trigger: 'change' }
+          { type: 'array', required: true, message: '至少选择一个设备', trigger: 'change' }
         ]
       }
     }
   },
   computed: {
-    title() {
+    title () {
       let title = ''
       switch (this.config.type) {
-      case 'add':
-        title = '添加场景'
-        break
-      case 'modify':
-        title = '编辑场景'
-        break
-      case 'look':
-        title = '查看场景'
-        break
-      default:
-        title = '查看场景'
+        case 'add':
+          title = '添加场景'
+          break
+        case 'modify':
+          title = '编辑场景'
+          break
+        case 'look':
+          title = '查看场景'
+          break
+        default:
+          title = '查看场景'
       }
       return title
     }
   },
   watch: {
-    'config.show'(val) {
+    'config.show' (val) {
       this.$nextTick(() => {
         this.$refs['form'].clearValidate()
       })
     }
   },
-  mounted() {
+  mounted () {
     this.getCategoryList()
     this.getStartModeList()
   },
   methods: {
-    reg(it, index) {
+    reg (it, index) {
       let val = it.purchace_link.trim()
       this.categoryList[index].purchace_link = val
     },
     // 根据order排序
-    compare(property){
-      return function(a,b){
+    compare (property) {
+      return function (a, b) {
         var value1 = a[property]
         var value2 = b[property]
         return value1 - value2
       }
     },
     // 子组件传过来的 列表图片信息
-    emitListData(data) {
+    emitListData (data) {
       this.config.list_pic.normal = data.download_url
       this.config.list_pic.normal_object = data.object
     },
     // 子组件传过来的 详情图片信息
-    emitDetailData(data) {
+    emitDetailData (data) {
       this.config.detail_pic = data.download_url
       this.config.detail_pic_object = data.object
     },
     // 获取启动模式列表
-    getStartModeList() {
+    getStartModeList () {
       this.$http
         .post(PREFIX + 'iotscenemode/lists', {})
         .then(res => {
           let orderList = res.data.result.list.sort(this.compare('order'))
           this.startModeList = []
-          orderList.forEach(el =>{
-            if(+el.enable === 1){
+          orderList.forEach(el => {
+            if (+el.enable === 1) {
               this.startModeList.push(el)
             }
           })
         })
     },
     // 获取设备分类列表
-    getCategoryList() {
+    getCategoryList () {
       this.$http
         .post(PREFIX + 'iotscene/catelists', {})
         .then(res => {
@@ -298,7 +300,7 @@ export default {
         })
     },
     // 处理分类设备选中状态
-    dealList() {
+    dealList () {
       let allList = deepClone(this.allList)
       if (this.config.type === 'add') {
         this.categoryList = allList
@@ -310,11 +312,11 @@ export default {
       let arr = allList
       let selectArr = this.config.content.list
       arr.forEach(el => {
-        const result = selectArr.findIndex(ol => { return el.category_id == ol.category_id })
+        const result = selectArr.findIndex(ol => { return el.category_id === ol.category_id })
         if (result === -1) { // 新的
           newArr.push(el)
         } else { // 已存在
-          el.category_status = selectArr[result].status == '-1' ? '' : selectArr[result].status + ''
+          el.category_status = selectArr[result].status === '-1' ? '' : selectArr[result].status + ''
           el.purchace_link = selectArr[result].purchace_link
           newArr.push(el)
         }
@@ -325,18 +327,21 @@ export default {
         this.config.checkList.push(el.category_id)
       })
     },
-    cancel() {
+    cancel () {
       this.config.show = false
       this.judgeData = ''
     },
     // 点击确定按钮
-    submit() {
-      if (this.config.type === 'look') return this.config.show = false
+    submit () {
+      if (this.config.type === 'look') {
+        this.config.show = false
+        return
+      }
 
       this.$refs['form'].validate((valid) => {
         if (valid) {
           let param = this.getParam()
-          if (this.judgeData == '') {
+          if (this.judgeData === '') {
             this.$http
               .post(PREFIX + 'iotscene/save', param)
               .then(res => {
@@ -350,7 +355,7 @@ export default {
       })
     },
     // 获取保存到后台的参数
-    getParam() {
+    getParam () {
       let param = deepClone(this.config)
       delete param['type']
       delete param['show']
@@ -366,7 +371,7 @@ export default {
           if (val.category_id === el) {
             let copyeEl = deepClone(val)
 
-            if(!copyeEl['category_status'] && copyeEl['category_status'] !== 0){
+            if (!copyeEl['category_status'] && copyeEl['category_status'] !== 0) {
               copyeEl['status'] = -1
             } else {
               copyeEl['status'] = +copyeEl['category_status']
@@ -382,32 +387,31 @@ export default {
       return param
     },
     // 选择和取消设备
-    handleCheckedChange() {
+    handleCheckedChange () {
       // 对象属性改变，才会更新dom， 需创建新对象重新赋值
       this.config = Object.assign({}, this.config)
       this.judgmentMethod()
     },
-    //勾选设备的状态下拉框的回调
-    handleSelectChange() {
+    // 勾选设备的状态下拉框的回调
+    handleSelectChange () {
       this.judgmentMethod()
     },
-    //设备验证的判断
-    judgmentMethod() {
+    // 设备验证的判断
+    judgmentMethod () {
       let param = this.getParam()
       let jud = ''
-      //遍历勾选的设备是否有状态没选的
+      // 遍历勾选的设备是否有状态没选的
       param.content.list.map(val => {
-        if(val.status == '-1') {
+        if (val.status === '-1') {
           jud = 'off'
         }
       })
-      if(jud == 'off') {
+      if (jud === 'off') {
         this.judgeData = 'off'
         return
       }
       this.judgeData = ''
-      return
     }
-  },
+  }
 }
 </script>

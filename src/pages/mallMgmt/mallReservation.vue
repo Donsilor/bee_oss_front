@@ -119,9 +119,9 @@
 }
 </style>
 <script>
-import { PREFIX } from "../../lib/util"
+import { PREFIX } from '../../lib/util'
 export default {
-  data() {
+  data () {
     return {
       pages: {
         page: '1',
@@ -137,14 +137,14 @@ export default {
       list: []
     }
   },
-  mounted() {
+  mounted () {
     this.getList()
   },
   methods: {
-    getList() {
+    getList () {
       let param = this.getParam()
       return this.$http
-        .post(PREFIX + "mall_record/lists", param)
+        .post(PREFIX + 'mall_record/lists', param)
         .then(res => {
           const json = res.data
           if (json.code === 200) {
@@ -162,7 +162,7 @@ export default {
           }
         })
     },
-    getParam() {
+    getParam () {
       let param = {
         page: this.pages.page,
         limit: this.pages.limit
@@ -182,15 +182,15 @@ export default {
       }
       return param
     },
-    doSearch() {
+    doSearch () {
       this.pages = {
         page: '1',
-        limit: '10',
+        limit: '10'
       }
       this.getList()
     },
-    exportExel() {
-      let token = JSON.parse(localStorage.getItem("localData")).user.info.token
+    exportExel () {
+      let token = JSON.parse(localStorage.getItem('localData')).user.info.token
       let param = {
         token: token,
         page: '1',
@@ -209,19 +209,19 @@ export default {
       if (this.search.phone) {
         param.tel = this.search.phone
       }
-      var query = ""
+      var query = ''
       for (var o in param) {
-        if (param[o] != -1) {
-          query += o + "=" + param[o] + "&"
+        if (param[o] !== -1) {
+          query += o + '=' + param[o] + '&'
         }
       }
       query = query.substring(0, query.length - 1)
       console.log(query)
       window.open(`${PREFIX}mall_record/export?${query}`)
     },
-    handestatusClick(index,status,id) {
+    handestatusClick (index, status, id) {
       console.log(status)
-      if(status ==0 ) {
+      if (status === 0) {
         const h = this.$createElement
         this.$msgbox({
           title: '处理',
@@ -242,13 +242,13 @@ export default {
         })
       }
     },
-    changeStatus(status, selectId){
+    changeStatus (status, selectId) {
       let param = {
         id: selectId,
         status: status
       }
       this.$http
-        .post(PREFIX + "mall_record/save_status", param)
+        .post(PREFIX + 'mall_record/save_status', param)
         .then(res => {
           if (res.data.code === 200) {
             this.getList()
@@ -268,11 +268,11 @@ export default {
           }
         })
     },
-    handPageChange(val) {
+    handPageChange (val) {
       this.pages.page = val
       this.getList()
     },
-    indexMethod(index) {
+    indexMethod (index) {
       return (this.pages.page - 1) * this.pages.limit + index + 1
     }
   }

@@ -192,12 +192,12 @@
   </div>
 </template>
 <script>
-import Upload from "../../../components/upload.vue"
+import Upload from '../../../components/upload.vue'
 export default {
   components: {
     Upload
   },
-  data() {
+  data () {
     return {
       isEdit: false,
       validList: {
@@ -210,13 +210,13 @@ export default {
     }
   },
   methods: {
-    save(){
+    save () {
       this.isEdit = false
     },
-    emitListData(){
+    emitListData () {
 
     }
-  },
+  }
 }
 </script>
 <style lang="less">
@@ -229,4 +229,3 @@ export default {
 }
 
 </style>
-

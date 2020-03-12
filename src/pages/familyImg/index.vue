@@ -30,7 +30,7 @@
           :width="'auto'"
         >
           <template slot-scope="scope">
-            <div v-if="item.prop == 'image_url'">
+            <div v-if="item.prop === 'image_url'">
               <img
                 :src="scope.row['image_url']"
                 width="20"
@@ -136,23 +136,21 @@
   </div>
 </template>
 <script>
-import * as namespace from "../../store/namespace"
-import { mapGetters, mapActions } from "vuex"
-import "../../lib/util.js"
-import { Message } from "element-ui"
-import Sortable from "sortablejs"
-import getCorsUrl from "../../lib/corsconfig"
-import API from "../../service/index"
+import { mapGetters, mapActions } from 'vuex'
+import '../../lib/util.js'
+import { Message } from 'element-ui'
+import Sortable from 'sortablejs'
+import getCorsUrl from '../../lib/corsconfig'
+import API from '../../service/index'
 
 export default {
   components: {
-    Sortable
   },
-  data() {
+  data () {
     return {
       fileListObj: [],
       uploadObj: {
-        token: JSON.parse(localStorage.getItem("localData")).user.info.token
+        token: JSON.parse(localStorage.getItem('localData')).user.info.token
       },
       addEditLayer: false,
       totalItem: 0,
@@ -162,23 +160,23 @@ export default {
       },
       imgList: {
         tableColumn: [
-          { prop: "id", label: "id" },
-          { prop: "image_url", label: "缩略图" },
-          { prop: "created_at", label: "创建时间" }
+          { prop: 'id', label: 'id' },
+          { prop: 'image_url', label: '缩略图' },
+          { prop: 'created_at', label: '创建时间' }
         ],
         tableData: []
       },
       addEditFlag: true,
       AddEditForm: {
-        image_url: "",
-        id: "",
-        image_url_object: ""
+        image_url: '',
+        id: '',
+        image_url_object: ''
       },
       rulesAddEdit: {
-        image_url: [{ required: true, message: "请上传图片" }]
+        image_url: [{ required: true, message: '请上传图片' }]
       },
       sortArr: [],
-      corsUrls: getCorsUrl() + "/oss_file_upload"
+      corsUrls: getCorsUrl() + '/oss_file_upload'
     }
   },
   ...mapActions([
@@ -190,13 +188,13 @@ export default {
   computed: {
     ...mapGetters({})
   },
-  mounted() {
+  mounted () {
     this.getImgList(1)
 
-    let table = document.querySelectorAll(".el-table__body-wrapper > table > tbody")[0]
+    let table = document.querySelectorAll('.el-table__body-wrapper > table > tbody')[0]
     let obj = this
     Sortable.create(table, {
-      onEnd({ newIndex, oldIndex }) {
+      onEnd ({ newIndex, oldIndex }) {
         //                const targetRow = self.imgList.tableData.splice(oldIndex, 1)[0]
         //                self.imgList.tableData.splice(newIndex, 0, targetRow)
         let temp_new = obj.sortArr[newIndex]
@@ -208,36 +206,36 @@ export default {
     })
   },
   methods: {
-    getdata() {
-      console.log("移动中.....")
+    getdata () {
+      console.log('移动中.....')
     },
-    openAddEditLayer() {
+    openAddEditLayer () {
       this.addEditFlag = true
       this.addEditLayer = true
       this.$nextTick(() => {
-        this.$refs["uploadFile"].clearFiles()
+        this.$refs['uploadFile'].clearFiles()
         let currentForm = this.AddEditForm
         for (let attr in currentForm) {
-          currentForm[attr] = ""
+          currentForm[attr] = ''
         }
       })
     },
-    pageChange() {
+    pageChange () {
       this.getImgList(this.currentPage)
     },
-    deleteImg(dataObj) {
+    deleteImg (dataObj) {
       const obj = this
-      this.$confirm("确定删除吗?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+      this.$confirm('确定删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
           API.deleteImgs({ id: dataObj.id }).then(result => {
             if (result.code === 200) {
               obj.$message({
-                type: "success",
-                message: "删除成功!"
+                type: 'success',
+                message: '删除成功!'
               })
               obj.getImgList(obj.currentPage)
             }
@@ -245,7 +243,7 @@ export default {
         })
         .catch(() => { })
     },
-    openEditLayer(dataObj) {
+    openEditLayer (dataObj) {
       this.addEditFlag = false
       this.addEditLayer = true
       this.$nextTick(() => {
@@ -253,14 +251,14 @@ export default {
         for (let attr in currentData) {
           currentData[attr] = dataObj[attr]
         }
-        this.fileListObj = [{ name: dataObj["image_url_object"], url: dataObj["image_url_object"] }]
+        this.fileListObj = [{ name: dataObj['image_url_object'], url: dataObj['image_url_object'] }]
       })
     },
-    addEditConfirm(formName) {
+    addEditConfirm (formName) {
       let obj = this
       obj.$refs[formName].validate(valid => {
         if (valid) {
-          let currentAction = obj.addEditFlag ? "addImgs" : "editImgs"
+          let currentAction = obj.addEditFlag ? 'addImgs' : 'editImgs'
           let currentParam = JSON.parse(JSON.stringify(obj.AddEditForm))
           delete currentParam.image_url
           if (obj.addEditFlag) {
@@ -270,8 +268,8 @@ export default {
             if (!obj.addEditFlag) {
               if (result && result.code === 200) {
                 Message({
-                  message: "编辑成功",
-                  type: "success"
+                  message: '编辑成功',
+                  type: 'success'
                 })
                 obj.addEditLayer = false
                 obj.getImgList(obj.currentPage)
@@ -279,15 +277,15 @@ export default {
             } else {
               if (result && result.code === 200) {
                 Message({
-                  message: "新增成功",
-                  type: "success"
+                  message: '新增成功',
+                  type: 'success'
                 })
                 obj.addEditLayer = false
                 obj.getImgList(obj.currentPage)
               } else {
                 Message({
                   message: result.list[0].detail,
-                  type: "error"
+                  type: 'error'
                 })
               }
             }
@@ -297,7 +295,7 @@ export default {
         }
       })
     },
-    getImgList(page) {
+    getImgList (page) {
       this.listParams.page = page
       const obj = this
       API.imgList(obj.listParams).then(result => {
@@ -312,13 +310,13 @@ export default {
         }
       })
     },
-    getUploadData(val) {
+    getUploadData (val) {
       let data = val.result
       this.AddEditForm.image_url = data.download_url
       this.AddEditForm.image_url_object = data.object
-      this.$refs["AddEditForm"].validate(valid => { })
+      this.$refs['AddEditForm'].validate(valid => { })
     },
-    beforeAvatarUpload(file) {
+    beforeAvatarUpload (file) {
       // const isRight = (file.type === 'application/zip' || file.type === 'application/rar');
       const isLt2M = file.size / 1024 / 1024 < 100
 
@@ -326,15 +324,15 @@ export default {
       //                this.$message.error('上传只能是 zip|rar 格式!');
       //            }
       if (!isLt2M) {
-        this.$message.error("上传文件大小不能超过 100MB!")
+        this.$message.error('上传文件大小不能超过 100MB!')
       }
       return isLt2M
     },
-    handleRemoveImg(file, fileList) {
+    handleRemoveImg (file, fileList) {
       let currentForm = this.AddEditForm
       for (let attr in currentForm) {
-        if (attr !== "id") {
-          currentForm[attr] = ""
+        if (attr !== 'id') {
+          currentForm[attr] = ''
         }
       }
     }

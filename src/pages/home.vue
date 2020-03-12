@@ -134,19 +134,18 @@
   </div>
 </template>
 <script>
-import echarts from "echarts/lib/echarts"
-import * as namespace from "../store/namespace"
-import { mapGetters, mapActions } from "vuex"
-import { PREFIX } from "../lib/util.js"
-import "echarts/lib/chart/line"
-import "echarts/lib/component/tooltip"
-import "echarts/lib/component/title"
-import API from "../service/index"
+import echarts from 'echarts/lib/echarts'
+import * as namespace from '../store/namespace'
+import { mapGetters, mapActions } from 'vuex'
+import 'echarts/lib/chart/line'
+import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/title'
+import API from '../service/index'
 
 export default {
-  data() {
+  data () {
     return {
-      //TODO just for test echart
+      // TODO just for test echart
       now: new Date(2007, 10, 24),
       temMinute: 10 * 60 * 1000,
       fakeValue: 50,
@@ -154,47 +153,47 @@ export default {
 
       alertChart: null,
       homeData: {},
-      range: "",
+      range: '',
       pickerOption: {
         shortcuts: [
           {
-            text: "最近一周",
-            onClick(picker) {
+            text: '最近一周',
+            onClick (picker) {
               const end = new Date()
               const start = new Date()
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit("pick", [start, end])
+              picker.$emit('pick', [start, end])
             }
           },
           {
-            text: "最近一个月",
-            onClick(picker) {
+            text: '最近一个月',
+            onClick (picker) {
               const end = new Date()
               const start = new Date()
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit("pick", [start, end])
+              picker.$emit('pick', [start, end])
             }
           },
           {
-            text: "最近三个月",
-            onClick(picker) {
+            text: '最近三个月',
+            onClick (picker) {
               const end = new Date()
               const start = new Date()
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit("pick", [start, end])
+              picker.$emit('pick', [start, end])
             }
           }
         ]
       }
     }
   },
-  ...mapActions(["throughDatas", "getwarnDatas"]),
+  ...mapActions(['throughDatas', 'getwarnDatas']),
   computed: {
     ...mapGetters({
       token: namespace.TOKEN
     })
   },
-  mounted() {
+  mounted () {
     this.initEchart()
     this.getHomeData()
     for (let i = 0; i < 144; i += 1) {
@@ -212,43 +211,43 @@ export default {
     }
   },
   methods: {
-    randomData() {
+    randomData () {
       this.now = new Date(this.now.getTime() + this.temMinute)
       this.fakeValue = this.fakeValue + Math.random() * 21 - 10
 
       return {
         name: this.now.toString(),
-        value: [this.now.Format("yyyy/MM/dd hh:mm"), Math.round(this.fakeValue)]
+        value: [this.now.Format('yyyy/MM/dd hh:mm'), Math.round(this.fakeValue)]
       }
     },
-    getHomeData() {
+    getHomeData () {
       API.throughDatas({}).then(result => {
         if (result) {
           this.homeData = result
         }
       })
     },
-    randomColor(num) {
+    randomColor (num) {
       let colors = [
-        "#336666",
-        "#642100",
-        "#930000",
-        "#0000E3",
-        "#0066CC",
-        "#333",
-        "#81C0C0",
-        "#20A0FF",
-        "#d9006c",
-        "#00CC33",
-        "#467500",
-        "#616130",
-        "#424200",
-        "#f00"
+        '#336666',
+        '#642100',
+        '#930000',
+        '#0000E3',
+        '#0066CC',
+        '#333',
+        '#81C0C0',
+        '#20A0FF',
+        '#d9006c',
+        '#00CC33',
+        '#467500',
+        '#616130',
+        '#424200',
+        '#f00'
       ]
       // let index = Math.floor((Math.random()*colors.length))
       return colors[num]
     },
-    getAlarmst() {
+    getAlarmst () {
       //			const handleData =  x => {
       //				const curDate = new Date(x.statistics_time);
       //				return {
@@ -278,7 +277,7 @@ export default {
       let obj = this
       let param = {
         select_date: new Date(),
-        group_by: ""
+        group_by: ''
       }
       API.getwarnDatas(param).then(result => {
         if (result.data) {
@@ -301,10 +300,10 @@ export default {
         }
       })
     },
-    initEchart() {
-      this.alertChart = echarts.init(document.getElementById("charts-con"))
+    initEchart () {
+      this.alertChart = echarts.init(document.getElementById('charts-con'))
     },
-    renderEchart(xObj, datasObj) {
+    renderEchart (xObj, datasObj) {
       let curSeries = []
       let legendArr = []
       let num = 0
@@ -313,13 +312,13 @@ export default {
           legendArr.push(attr)
           curSeries.push({
             name: attr,
-            type: "line",
+            type: 'line',
             data: datasObj[attr],
             markPoint: {
-              data: [{ type: "max", name: "最大值" }, { type: "min", name: "最小值" }]
+              data: [{ type: 'max', name: '最大值' }, { type: 'min', name: '最小值' }]
             },
             markLine: {
-              data: [{ type: "average", name: "平均值" }]
+              data: [{ type: 'average', name: '平均值' }]
             },
             itemStyle: {
               normal: {
@@ -331,11 +330,11 @@ export default {
       }
       this.alertChart.setOption({
         title: {
-          text: "",
-          subtext: ""
+          text: '',
+          subtext: ''
         },
         tooltip: {
-          trigger: "axis"
+          trigger: 'axis'
         },
         grid: {
           top: 100,
@@ -346,10 +345,10 @@ export default {
           top: 0,
           feature: {
             dataZoom: {
-              yAxisIndex: "none"
+              yAxisIndex: 'none'
             },
             dataView: { readOnly: false },
-            magicType: { type: ["line", "bar"] },
+            magicType: { type: ['line', 'bar'] },
             restore: {},
             saveAsImage: {}
           }
@@ -360,15 +359,15 @@ export default {
           data: legendArr
         },
         xAxis: {
-          type: "category",
+          type: 'category',
           data: xObj,
           splitLine: {
             show: false
           }
         },
         yAxis: {
-          name: "数量",
-          type: "value",
+          name: '数量',
+          type: 'value',
           splitLine: {
             show: true
           }

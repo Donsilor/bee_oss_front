@@ -22,20 +22,19 @@
   </div>
 </template>
 
-
 <script>
-import { switchProductImport } from "../../lib/api.js"
+import { switchProductImport } from '../../lib/api.js'
 export default {
-  data() {
+  data () {
     return {
       uploadUrl: switchProductImport,
       uploadParams: {
-        token: JSON.parse(localStorage.getItem("localData")).user.info.token
+        token: JSON.parse(localStorage.getItem('localData')).user.info.token
       }
     }
   },
   methods: {
-    handleSuccess() {
+    handleSuccess () {
       this.$message({
         message: '导入成功！',
         type: 'success'

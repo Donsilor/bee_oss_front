@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- <div class="nav">
-      <el-radio-group 
-        v-model="tabPosition" 
+      <el-radio-group
+        v-model="tabPosition"
         @change="toPage">
         <el-radio-button label="/main/appHomeConfig/home" >首页模块</el-radio-button>
         <el-radio-button label="/main/appHomeConfig/music" >音乐模块</el-radio-button>
@@ -13,13 +13,13 @@
 </template>
 <script>
 export default {
-  data() {
+  data () {
     return {
       tabPosition: '/main/appHomeConfig/home'
     }
   },
   methods: {
-    toPage(path) {
+    toPage (path) {
       this.$router.push(path)
     }
   }

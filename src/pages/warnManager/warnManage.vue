@@ -29,7 +29,7 @@
         type="text"
         @click="goBack"
       >
-        <<&nbsp;返回
+        返回
       </el-button>
     </div>
     <el-row :gutter="24">
@@ -41,33 +41,33 @@
   </div>
 </template>
 <script>
-import echarts from "echarts"
-import { mapActions } from "vuex"
-import "../../lib/util"
-import API from "../../service/index"
+import echarts from 'echarts'
+import { mapActions } from 'vuex'
+import '../../lib/util'
+import API from '../../service/index'
 export default {
   components: {},
-  data() {
+  data () {
     let startTime = new Date().setHours(0, 0, 0)
     return {
       start_end_time: [new Date(startTime), new Date()],
       select_date: new Date(),
-      group_type: "svr_id",
-      group_by: ""
+      group_type: 'svr_id',
+      group_by: ''
     }
   },
-  mounted() {
+  mounted () {
     this.initEchart()
     this.changeSelectDate()
   },
   methods: {
-    changeSelectDate() {
+    changeSelectDate () {
       let obj = this
       let param = {
         select_date: obj.select_date,
         group_by: obj.group_by,
-        start_time: (obj.start_end_time[0] && obj.start_end_time[0].Format("hh:mm:ss")) || "",
-        end_time: (obj.start_end_time[1] && obj.start_end_time[1].Format("hh:mm:ss")) || ""
+        start_time: (obj.start_end_time[0] && obj.start_end_time[0].Format('hh:mm:ss')) || '',
+        end_time: (obj.start_end_time[1] && obj.start_end_time[1].Format('hh:mm:ss')) || ''
       }
       API.getwarnDatas(param).then(result => {
         if (result.data) {
@@ -90,32 +90,32 @@ export default {
         }
       })
     },
-    typeChange() {
+    typeChange () {
       this.changeSelectDate()
     },
-    initEchart() {
-      this.alertChart = echarts.init(document.getElementById("charts-con"))
+    initEchart () {
+      this.alertChart = echarts.init(document.getElementById('charts-con'))
     },
-    randomColor(num) {
+    randomColor (num) {
       let colors = [
-        "#336666",
-        "#642100",
-        "#930000",
-        "#0000E3",
-        "#0066CC",
-        "#333",
-        "#81C0C0",
-        "#20A0FF",
-        "#d9006c",
-        "#467500",
-        "#616130",
-        "#424200",
-        "#f00"
+        '#336666',
+        '#642100',
+        '#930000',
+        '#0000E3',
+        '#0066CC',
+        '#333',
+        '#81C0C0',
+        '#20A0FF',
+        '#d9006c',
+        '#467500',
+        '#616130',
+        '#424200',
+        '#f00'
       ]
       // let index = Math.floor((Math.random()*colors.length))
       return colors[num]
     },
-    renderEchart(xObj, datasObj) {
+    renderEchart (xObj, datasObj) {
       let curSeries = []
       let legendArr = []
       let num = 0
@@ -124,13 +124,13 @@ export default {
           legendArr.push(attr)
           curSeries.push({
             name: attr,
-            type: "line",
+            type: 'line',
             data: datasObj[attr],
             markPoint: {
-              data: [{ type: "max", name: "最大值" }, { type: "min", name: "最小值" }]
+              data: [{ type: 'max', name: '最大值' }, { type: 'min', name: '最小值' }]
             },
             markLine: {
-              data: [{ type: "average", name: "平均值" }]
+              data: [{ type: 'average', name: '平均值' }]
             },
             itemStyle: {
               normal: {
@@ -146,21 +146,21 @@ export default {
           left: 70
         },
         title: {
-          text: "",
-          subtext: ""
+          text: '',
+          subtext: ''
         },
         tooltip: {
-          trigger: "axis"
+          trigger: 'axis'
         },
         toolbox: {
           show: true,
           top: 0,
           feature: {
             dataZoom: {
-              yAxisIndex: "none"
+              yAxisIndex: 'none'
             },
             dataView: { readOnly: false },
-            magicType: { type: ["line", "bar"] },
+            magicType: { type: ['line', 'bar'] },
             restore: {},
             saveAsImage: {}
           }
@@ -171,7 +171,7 @@ export default {
           top: 35
         },
         xAxis: {
-          type: "category",
+          type: 'category',
           data: xObj,
           splitLine: {
             show: false
@@ -179,8 +179,8 @@ export default {
         },
         yAxis: {
           left: 200,
-          name: "数量",
-          type: "value",
+          name: '数量',
+          type: 'value',
           splitLine: {
             show: true
           }
@@ -188,11 +188,11 @@ export default {
         series: curSeries
       })
     },
-    goBack() {
+    goBack () {
       history.go(-1)
     }
   },
-  ...mapActions(["getwarnDatas"])
+  ...mapActions(['getwarnDatas'])
 }
 </script>
 <style lang="less">

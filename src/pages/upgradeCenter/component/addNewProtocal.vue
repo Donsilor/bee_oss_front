@@ -43,16 +43,17 @@
 
 <script>
 import Api from '@/service/upgrade.js'
+
 export default {
-  name: "AddNewProtocal",
+  name: 'AddNewProtocal',
   props: {
     type: {
       type: String,
       default: 'add'
     },
     info: {
-    	type: Object,
-      default: ()=>{
+      type: Object,
+      default: () => {
         return {}
       }
     },
@@ -61,19 +62,21 @@ export default {
       default: false
     }
   },
-  data() {
-  	function validateUrl(rule, value, callback) {
+  data () {
+    function validateUrl (rule, value, callback) {
       // eslint-disable-next-line no-useless-escape
       let reg = /(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%$#_]*)?/
-      if (!reg.test(value)){
-      	callback('请输入正确的url地址')
+      if (!reg.test(value)) {
+        // eslint-disable-next-line standard/no-callback-literal
+        callback('请输入正确的url地址')
       } else {
         callback()
       }
-  	}
+    }
+
     return {
       formLabelWidth: '120px',
-      form: Object.assign( {
+      form: Object.assign({
         name: '',
         url: '',
         remark: '',
@@ -81,33 +84,32 @@ export default {
       }, this.info),
       rules: {
         name: [
-          {required: true, message: '请输入协议名称', trigger: 'blur'}
+          { required: true, message: '请输入协议名称', trigger: 'blur' }
         ],
         url: [
-          {required: true, message: '请输入协议链接', trigger: 'blur'},
+          { required: true, message: '请输入协议链接', trigger: 'blur' },
           { validator: validateUrl, trigger: 'blur' }
-        ],
+        ]
       }
     }
   },
-  watch:{
-  	info(value){
-  		this.form = Object.assign({}, value)
+  watch: {
+    info (value) {
+      this.form = Object.assign({}, value)
     }
   },
   methods: {
-    close() {
-      this.$emit("update:dialogFormVisible", false)
+    close () {
+      this.$emit('update:dialogFormVisible', false)
     },
-    confirm() {
-      Api.agreementSave(this.form).then(res=>{
+    confirm () {
+      Api.agreementSave(this.form).then(res => {
         this.$emit('refreshData')
-        this.$message.success(`${this.type==='add'? '新增': '更新'}协议成功`)
+        this.$message.success(`${this.type === 'add' ? '新增' : '更新'}协议成功`)
         this.close()
       })
-
     }
-  },
+  }
 }
 </script>
 
