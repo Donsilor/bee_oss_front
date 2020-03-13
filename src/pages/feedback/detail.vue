@@ -75,7 +75,7 @@
     </div>
     <div v-if="has_reply">
       <p>已回复：</p>
-      <p>{{ contentReply }}</p>
+      <pre style="font-family: 微软雅黑">{{ contentReply }}</pre>
     </div>
     <!--回复按钮-->
     <div v-if="!has_reply">
