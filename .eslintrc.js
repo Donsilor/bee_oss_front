@@ -12,6 +12,7 @@ module.exports = {
     'no-tabs':'off',
     'no-lone-blocks':'off',
     'no-mixed-operators':'off',
+    'space-before-function-paren': 'off',
     'vue/valid-v-for':'off',
     'camelcase': 'off',
     'no-mixed-spaces-and-tabs': 'off',
