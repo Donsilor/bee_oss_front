@@ -13,7 +13,7 @@ import '@/assets/css/reset.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import { dateFormat } from '@/assets/js/utils.js'
 import { format } from '@/assets/js/fillters.js'
-import axios from '@/assets/js/axios.js'
+import axios from 'axios'
 import 'vue-photo-preview/dist/skin.css'
 
 Vue.prototype.$echarts = ECharts
