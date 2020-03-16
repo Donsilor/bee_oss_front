@@ -177,7 +177,6 @@ export default {
             color: #00cc33;
         }
         border: 1px solid #eee;
-        height: 150px;
         text-align: center;
     }
     .con-pp:hover {
