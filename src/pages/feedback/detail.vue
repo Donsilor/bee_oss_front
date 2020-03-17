@@ -90,7 +90,7 @@
         title="请输入回复的内容"
         width="30%">
         <el-input
-          v-model.trim="replyText"
+          v-model="replyText"
           type="textarea"
           placeholder="请输入内容"
           maxlength="100"
@@ -192,8 +192,9 @@ export default {
       if (!this.replyText) {
         this.$message.warning('请输入内容')
         return
-      }let obj = {
-        reply_content: this.replyText,
+      }
+      let obj = {
+        reply_content: this.replyText.trim(),
         id: this.$route.params.id
       }
       axios.post(URL.feedbackReply, obj).then(res => {
