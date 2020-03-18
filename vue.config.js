@@ -5,7 +5,7 @@ const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin')
 // 导入compression-webpack-plugin
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
 // 定义压缩文件类型
-const productionGzipExtensions = ['js', 'css']
+const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i
 function resolve (dir) {
   return path.join(__dirname, dir)
 }
@@ -28,7 +28,7 @@ if (process.env.NODE_ENV === 'production') {
   plugins.push(new CompressionWebpackPlugin({
     filename: '[path].gz[query]',
     algorithm: 'gzip',
-    test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'), // 匹配文件名
+    test: productionGzipExtensions, // 匹配文件名
     threshold: 10240, // 对10K以上的数据进行压缩
     minRatio: 0.8,
     deleteOriginalAssets: false// 是否删除源文件
