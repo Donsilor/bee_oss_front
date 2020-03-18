@@ -56,11 +56,11 @@
           <el-button-group>
             <el-button @click="openImportLayer">
               录入版本
-              <i class="el-icon-caret-bottom" />
+              <i class="el-icon-caret-bottom"/>
             </el-button>
             <el-button @click="openFilterFormLayer">
               匹配搜索
-              <i class="el-icon-caret-bottom" />
+              <i class="el-icon-caret-bottom"/>
             </el-button>
             <!--<el-button @click="openPushLayer">推送升级 <i class="el-icon-caret-bottom"></i></el-button>-->
           </el-button-group>
@@ -282,7 +282,7 @@
       :visible.sync="operateLogLayer"
       title="操作日志"
     >
-      <operate_log :operate-log-list="operateLogList" />
+      <operate_log :operate-log-list="operateLogList"/>
       <span
         slot="footer"
         class="dialog-footer"
@@ -329,6 +329,7 @@ import operate_log from './component/operateLogs.vue'
 import filter_form from './component/filterLayer.vue'
 import version_mapping from './component/versionMapping.vue'
 import API from '../../service/index'
+
 export default {
   components: {
     'version-input': version_input,
@@ -495,15 +496,6 @@ export default {
     }
   },
   mounted () {
-    //        this.$store.dispatch({
-    //            type: namespace.INITAPPIOS
-    //        })
-    //        this.$store.dispatch({
-    //            type: namespace.INITAPPANDROID
-    //        })
-    //		this.$store.dispatch({
-    //			type: namespace.INITROUTER
-    //		})
     this.$store.dispatch({
       type: namespace.INITPRODUCT
     })
@@ -708,9 +700,6 @@ export default {
       })
     },
     filterClearAll () {
-      //			for (let name in this.filterForm) {
-      //				this.filterForm[name] = '';
-      //			}
     },
     rowChosed (scope) {
       this.infoBoxFlag = true
@@ -958,58 +947,70 @@ export default {
 }
 </script>
 <style lang="less">
-.cp-filterFormBox {
-  padding: 20px;
-  label {
-    line-height: 36px;
-  }
-  .cpf-line {
-    margin-bottom: 20px;
-  }
-}
-.config-page {
-  .el-tabs__active-bar {
-    height: 2px;
-  }
-  .h3_pp {
-    height: 30px;
-    line-height: 30px;
-    margin: 30px 0 15px;
-  }
-  .cpsr-line {
-    margin-bottom: 80px;
-  }
-  .infoBox {
-    font-size: 1rem;
-    > div {
-      margin-bottom: 18px;
+  .cp-filterFormBox {
+    padding: 20px;
+
+    label {
+      line-height: 36px;
+    }
+
+    .cpf-line {
+      margin-bottom: 20px;
     }
   }
 
-  .p-r {
-    position: relative;
-  }
-  .btn-back {
-    position: absolute;
-    right: 10px;
-    z-index: 999;
-    top: 10px;
-  }
-  .support-routers {
-    border: 1px solid #d8d8d8;
-    li {
-      line-height: 35px;
-      padding-left: 30px;
-      height: 35px;
-      list-style: none;
-      border-bottom: 1px solid #d8d8d8;
+  .config-page {
+    .el-tabs__active-bar {
+      height: 2px;
     }
-    li:last-of-type {
-      border-bottom: 0;
+
+    .h3_pp {
+      height: 30px;
+      line-height: 30px;
+      margin: 30px 0 15px;
+    }
+
+    .cpsr-line {
+      margin-bottom: 80px;
+    }
+
+    .infoBox {
+      font-size: 1rem;
+
+      > div {
+        margin-bottom: 18px;
+      }
+    }
+
+    .p-r {
+      position: relative;
+    }
+
+    .btn-back {
+      position: absolute;
+      right: 10px;
+      z-index: 999;
+      top: 10px;
+    }
+
+    .support-routers {
+      border: 1px solid #d8d8d8;
+
+      li {
+        line-height: 35px;
+        padding-left: 30px;
+        height: 35px;
+        list-style: none;
+        border-bottom: 1px solid #d8d8d8;
+      }
+
+      li:last-of-type {
+        border-bottom: 0;
+      }
+    }
+
+    .el-tabs__nav-wrap::after {
+      height: 1px;
     }
   }
-  .el-tabs__nav-wrap::after {
-    height: 1px;
-  }
-}
 </style>

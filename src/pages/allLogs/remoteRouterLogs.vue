@@ -21,7 +21,8 @@
         style="padding-left: 20px;">
         <el-button
           type="primary"
-          @click="getLogs">抓取</el-button>
+          @click="getLogs">抓取
+        </el-button>
       </el-col>
     </el-row>
   </div>
@@ -29,6 +30,7 @@
 
 <script>
 import API from '../../service/index'
+
 export default {
   data () {
     return {
@@ -46,9 +48,9 @@ export default {
       }
       API.deviceLogs(obj).then(res => {
         let info =
-							(localStorage.getItem('localData') &&
-								JSON.parse(localStorage.getItem('localData')).user &&
-								JSON.parse(localStorage.getItem('localData')).user.info) || {}
+            (localStorage.getItem('localData') &&
+              JSON.parse(localStorage.getItem('localData')).user &&
+              JSON.parse(localStorage.getItem('localData')).user.info) || {}
         window.open('/api/index.php/monitor/download?token=' + info.token, '_self')
       })
     },
@@ -67,7 +69,7 @@ export default {
       let d = new Date(+date)
       let year = d.getFullYear()
       let month =
-						d.getMonth() + 1 < 10 ? '0' + (d.getMonth() + 1) : d.getMonth() + 1
+          d.getMonth() + 1 < 10 ? '0' + (d.getMonth() + 1) : d.getMonth() + 1
       let day = d.getDate() < 10 ? '0' + d.getDate() : d.getDate()
       let hours = d.getHours() < 10 ? '0' + d.getHours() : d.getHours()
       let minutes = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()
@@ -75,18 +77,19 @@ export default {
       if (type === 'fulltime') {
         return (
           year +
-							'-' +
-							month +
-							'-' +
-							day +
-							' ' +
-							hours +
-							':' +
-							minutes +
-							':' +
-							seconds
+            '-' +
+            month +
+            '-' +
+            day +
+            ' ' +
+            hours +
+            ':' +
+            minutes +
+            ':' +
+            seconds
         )
-      } {
+      }
+      {
         return year + '-' + month + '-' + day
       }
     }

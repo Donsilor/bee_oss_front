@@ -723,21 +723,6 @@ export default {
       }
     },
     ruleChange (val) {
-      //            if (val) {
-      //                this.rulesImport.productsList =  [
-      //                    { required: true, message: '请选择支持版本' }
-      //                ]
-      //                this.rulesImport.routersList =  [
-      //                    { required: true, message: '请选择支持版本' }
-      //                ]
-      //			} else {
-      //                this.rulesImport.productsList =  [
-      //                    { required: false }
-      //                ]
-      //                this.rulesImport.routersList =  [
-      //                    { required: false }
-      //                ]
-      //			}
     },
     renderEditData () {
       let attrObj = {

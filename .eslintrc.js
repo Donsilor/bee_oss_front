@@ -9,7 +9,7 @@ module.exports = {
   ],
   rules: {
     'no-console':'off',
-    'no-tabs':'off',
+    // 'no-tabs':'off',
     'no-lone-blocks':'off',
     'no-mixed-operators':'off',
     'space-before-function-paren': 'off',

@@ -262,6 +262,7 @@ import '../lib/util.js'
 import router_list_json from '../json/cancelBindRouterList.json'
 import { Message } from 'element-ui'
 import API from '../service/index'
+
 export default {
   components: {},
   filters: {
@@ -325,8 +326,7 @@ export default {
   computed: {
     ...mapGetters({})
   },
-  watch: {
-  },
+  watch: {},
   mounted () {
     this.getRouterList(1)
   },
@@ -368,7 +368,8 @@ export default {
             }
           })
         })
-        .catch(() => { })
+        .catch(() => {
+        })
     },
     goToImport () {
       this.$router.push({ path: '/main/routerManager/import' })
@@ -488,7 +489,7 @@ export default {
       this.clickObj = obj
     },
     okUnbind () {
-    	API.cancelBind({ router_uuid: this.clickObj.router_uuid }).then(res => {
+      API.cancelBind({ router_uuid: this.clickObj.router_uuid }).then(res => {
         this.dialogVisible = false
         this.getRouterList()
       })
@@ -497,51 +498,63 @@ export default {
 }
 </script>
 <style lang="less">
-	.cp-filterFormBox {
-		padding: 20px;
-		label {
-			line-height: 36px;
-		}
-		.cpf-line {
-			margin-bottom: 20px;
-		}
-	}
-	.config-page {
-		.el-tabs__active-bar {
-			height: 2px;
-		}
-		.h3_pp {
-			height: 30px;
-			line-height: 30px;
-			margin: 30px 0 15px;
-		}
-		.cpsr-line {
-			margin-bottom: 80px;
-		}
-		.infoBox {
-			font-size: 1rem;
-			> div {
-				margin-bottom: 18px;
-			}
-		}
-		.edit_form {
-			.el-form-item__label {
-				width: 80px;
-			}
-			.el-select {
-				width: 100%;
-			}
-		}
-		.el-input.is-disabled .el-input__inner {
-			color: #333;
-		}
-		.p-r {
-			position: relative;
-		}
-		.btn-back {
-			position: absolute;
-			right: 10px;
-			top: 10px;
-		}
-	}
+  .cp-filterFormBox {
+    padding: 20px;
+
+    label {
+      line-height: 36px;
+    }
+
+    .cpf-line {
+      margin-bottom: 20px;
+    }
+  }
+
+  .config-page {
+    .el-tabs__active-bar {
+      height: 2px;
+    }
+
+    .h3_pp {
+      height: 30px;
+      line-height: 30px;
+      margin: 30px 0 15px;
+    }
+
+    .cpsr-line {
+      margin-bottom: 80px;
+    }
+
+    .infoBox {
+      font-size: 1rem;
+
+      > div {
+        margin-bottom: 18px;
+      }
+    }
+
+    .edit_form {
+      .el-form-item__label {
+        width: 80px;
+      }
+
+      .el-select {
+        width: 100%;
+      }
+    }
+
+    .el-input.is-disabled .el-input__inner {
+      color: #333;
+    }
+
+    .p-r {
+      position: relative;
+    }
+
+    .btn-back {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+  }
 </style>

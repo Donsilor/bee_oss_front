@@ -248,32 +248,6 @@ export default {
       return colors[num]
     },
     getAlarmst () {
-      //			const handleData =  x => {
-      //				const curDate = new Date(x.statistics_time);
-      //				return {
-      //					name: curDate.toString(),
-      //					value: [
-      //						curDate.Format('yyyy/MM/dd hh:mm'),
-      //						x.count
-      //					]
-      //				}
-      //			}
-      //			let params = {
-      //				token: this.token
-      //			};
-      //            params.start_time = (new Date()).Format('yyyy/MM/dd') + ' 00:00';
-      //            params.end_time = (new Date()).Format('yyyy/MM/dd') + ' 23:59';
-      //
-      //			this.$http.post(PREFIX + 'homepage/alarmst', params).then(res => {
-      //				const json = res.data;
-      //				if (json.code === 200) {
-      //					const data = json.result.data.map(handleData);
-      //					this.renderEchart(data);
-      //				} else {
-      //					this.$message.error(json.msg);
-      //				}
-      //
-      //			})
       let obj = this
       let param = {
         select_date: new Date(),
@@ -379,135 +353,147 @@ export default {
 }
 </script>
 <style lang="less">
-.no-padding {
-  padding: 0 !important;
-}
-.iconStyle(@width: 16px, @height: 16px) {
-  width: @width;
-  height: @height;
-  background-size: @width @height;
-}
-.home-page {
-  background: #f2f2f2;
-  padding: 75px 60px;
-}
+  .no-padding {
+    padding: 0 !important;
+  }
 
-.hp-header {
-  position: relative;
-  margin-left: -0.8rem;
-  margin-bottom: 1em;
-  h2 {
-    font-size: 1.125em;
-    display: inline-block;
-    margin-right: 1em;
+  .iconStyle(@width: 16px, @height: 16px) {
+    width: @width;
+    height: @height;
+    background-size: @width @height;
   }
-  span {
-    font-size: 0.875em;
-    color: #999999;
+
+  .home-page {
+    background: #f2f2f2;
+    padding: 75px 60px;
   }
-}
-.hp-dataArea {
-  margin-bottom: 40px;
-}
-.hp-dataBox {
-  background: #ffffff;
-  box-sizing: border-box;
-  padding: 15px 0px 32px 20px;
-  position: relative;
-  /*
-	&:hover{
-		box-shadow:  2px 2px 10px rgba(0, 0, 0, .15)
-	}*/
-  p {
-    &:first-child {
-      color: #00cc33;
-      font-size: 1.75em;
-      height: 42px;
-      font-weight: bold;
+
+  .hp-header {
+    position: relative;
+    margin-left: -0.8rem;
+    margin-bottom: 1em;
+
+    h2 {
+      font-size: 1.125em;
+      display: inline-block;
+      margin-right: 1em;
     }
-    &:nth-child(2) {
-      color: #999999;
+
+    span {
       font-size: 0.875em;
+      color: #999999;
     }
   }
-  &:before {
-    content: " ";
-    display: block;
-    position: absolute;
-    top: 50px;
-    left: 30px;
-  }
-  &.hp-icon01 {
-    /*
-		&:before{
-			background-image: url("../images/u71.png");
-			.iconStyle(36px, 27px);
-		}
-		*/
+
+  .hp-dataArea {
+    margin-bottom: 40px;
   }
 
-  &.hp-icon02 {
+  .hp-dataBox {
+    background: #ffffff;
+    box-sizing: border-box;
+    padding: 15px 0px 32px 20px;
+    position: relative;
     /*
-		&:before{
-			background-image: url("../images/u91.png");
-			.iconStyle(32px, 32px);
-		}
-		*/
+      &:hover{
+          box-shadow:  2px 2px 10px rgba(0, 0, 0, .15)
+      }*/
+
     p {
       &:first-child {
-        &:after {
-          content: "%";
-          font-size: 0.5em;
+        color: #00cc33;
+        font-size: 1.75em;
+        height: 42px;
+        font-weight: bold;
+      }
+
+      &:nth-child(2) {
+        color: #999999;
+        font-size: 0.875em;
+      }
+    }
+
+    &:before {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 50px;
+      left: 30px;
+    }
+
+    &.hp-icon01 {
+      /*
+          &:before{
+              background-image: url("../images/u71.png");
+              .iconStyle(36px, 27px);
+          }
+          */
+    }
+
+    &.hp-icon02 {
+      /*
+          &:before{
+              background-image: url("../images/u91.png");
+              .iconStyle(32px, 32px);
+          }
+          */
+
+      p {
+        &:first-child {
+          &:after {
+            content: "%";
+            font-size: 0.5em;
+          }
         }
+      }
+    }
+
+    &.hp-icon03 {
+      &:before {
+        background-image: url("../images/u95.png");
+        .iconStyle(33px, 32px);
+      }
+    }
+
+    &.hp-icon04 {
+      &:before {
+        background-image: url("../images/u111.png");
+        .iconStyle(33px, 32px);
+      }
+    }
+
+    &.hp-icon05 {
+      &:before {
+        background-image: url("../images/u109.png");
+        .iconStyle(33px, 32px);
       }
     }
   }
 
-  &.hp-icon03 {
-    &:before {
-      background-image: url("../images/u95.png");
-      .iconStyle(33px, 32px);
+  .hp-alertTable {
+    background: #ffffff;
+    position: relative;
+    margin-left: -0.8rem;
+  }
+
+  .hpat-dateRangeArea {
+    padding: 30px 70px;
+  }
+
+  .echart-area {
+    width: 100%;
+    height: 400px;
+  }
+
+  @media (max-width: 1690px) {
+    .hp-dataBox {
+      &:before {
+        display: none;
+      }
     }
   }
 
-  &.hp-icon04 {
-    &:before {
-      background-image: url("../images/u111.png");
-      .iconStyle(33px, 32px);
-    }
+  .border-top {
+    border-top: 1px solid #d8d8d8;
   }
-
-  &.hp-icon05 {
-    &:before {
-      background-image: url("../images/u109.png");
-      .iconStyle(33px, 32px);
-    }
-  }
-}
-
-.hp-alertTable {
-  background: #ffffff;
-  position: relative;
-  margin-left: -0.8rem;
-}
-
-.hpat-dateRangeArea {
-  padding: 30px 70px;
-}
-
-.echart-area {
-  width: 100%;
-  height: 400px;
-}
-
-@media (max-width: 1690px) {
-  .hp-dataBox {
-    &:before {
-      display: none;
-    }
-  }
-}
-.border-top {
-  border-top: 1px solid #d8d8d8;
-}
 </style>
