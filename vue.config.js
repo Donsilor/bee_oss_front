@@ -1,40 +1,40 @@
 const path = require('path')
-const webpack = require('webpack')
-const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin')
-
+const isProduction = process.env.NODE_ENV !== 'development'
 // 导入compression-webpack-plugin
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
-// 定义压缩文件类型
-const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+
 function resolve (dir) {
   return path.join(__dirname, dir)
 }
-
-let plugins = [
-  new webpack.DllReferencePlugin({
-    context: process.cwd(),
-    manifest: require('./public/vendor/vendor-manifest.json')
-  }),
-  // 将 dll 注入到 生成的 html 模板中
-  new AddAssetHtmlPlugin({
-    // dll文件位置
-    filepath: path.resolve(__dirname, './public/vendor/*.js'),
-    // dll 引用路径
-    publicPath: './vendor',
-    // dll最终输出的目录
-    outputPath: './vendor'
-  })]
-if (process.env.NODE_ENV === 'production') {
+let plugins = [new BundleAnalyzerPlugin()]
+if (isProduction) {
+  const productionGzipExtensions = ['html', 'js', 'css']
+  plugins.push(new UglifyJsPlugin({
+    uglifyOptions: {
+      // 生产环境自动删除console
+      compress: {
+        drop_debugger: true,
+        drop_console: true,
+        pure_funcs: ['console.log']
+      }
+    },
+    sourceMap: false,
+    parallel: true
+  }))
   plugins.push(new CompressionWebpackPlugin({
     filename: '[path].gz[query]',
     algorithm: 'gzip',
-    test: productionGzipExtensions, // 匹配文件名
-    threshold: 10240, // 对10K以上的数据进行压缩
-    minRatio: 0.8,
-    deleteOriginalAssets: false// 是否删除源文件
+    test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
+    threshold: 10240, // 只有大小大于该值的资源会被处理 10240
+    minRatio: 0.8, // 只有压缩率小于这个值的资源才会被处理
+    deleteOriginalAssets: false // 删除原文件
   }))
 }
+
 module.exports = {
+  productionSourceMap: !isProduction,
   devServer: {
     open: true,
     proxy: {
@@ -78,6 +78,10 @@ module.exports = {
     plugins
   },
   chainWebpack: config => {
+    config.resolve.alias // 设置别名
+      .set('@', resolve('src'))
+      .set('~', resolve('src'))
+      .set('@img', resolve('src/assets/images'))
     // 公共资源提取，
     // vendors提取的是第三方公共库(满足提取规则的node_modules里面的且页面引入的)，这些文件会打到dist/js/chunk-vendors.js里面
     // 提取规则是每个页面都引入的才会打到chunk-vendors.js里面(如vue.js)
@@ -96,10 +100,12 @@ module.exports = {
         common: {}
       }
     })
-    config.resolve.alias // 设置别名
-      .set('@', resolve('src'))
-      .set('~', resolve('src'))
-      .set('@img', resolve('src/assets/images'))
+    // // 开启图片压缩
+    // config.module.rule('images')
+    //   .test(/\.(png|jpe?g|gif|svg)(\?.*)?$/)
+    //   .use('image-webpack-loader')
+    //   .loader('image-webpack-loader')
+    //   .options({ bypassOnDebug: true })
   },
   pluginOptions: {
     'style-resources-loader': {
