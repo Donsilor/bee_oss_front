@@ -129,6 +129,16 @@ export default {
       .post(OPS_API.familyList, params)
       .then(response => response.data)
   },
+  getFamilyDeviceList (params) {
+    return axios
+      .post(OPS_API.familyDeviceList, params)
+      .then(response => response.data)
+  },
+  getDeviceDetail (params) {
+    return axios
+      .post(OPS_API.deviceDetail, params)
+      .then(response => response.data)
+  },
   // 云端设备直连
   directdeviceList (params) {
     return axios

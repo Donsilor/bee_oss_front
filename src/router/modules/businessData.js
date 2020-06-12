@@ -12,7 +12,8 @@ import {
   MUSER,
   upgrade,
   Facility,
-  FamilyList
+  FamilyList,
+  DeviceList
 } from '../../pages/index.js'
 
 var businessData = [
@@ -44,6 +45,11 @@ var businessData = [
     path: 'familyList',
     name: 'familyList',
     component: FamilyList
+  },
+  {
+    path: 'deviceList',
+    name: 'deviceList',
+    component: DeviceList
   }
 ]
 

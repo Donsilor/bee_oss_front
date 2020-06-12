@@ -41,6 +41,11 @@ var businessData = {
       title: '家庭信息',
       path: '/main/familyList',
       icon: ''
+    },
+    {
+      title: '设备数据',
+      path: '/main/deviceList',
+      icon: ''
     }
   ]
 }

@@ -1,5 +1,6 @@
 const API_ROOT = ''
 const API_MASTER = '/api/index.php/'
+const API_DEVICE = '/api/device/'
 export const BASE_URL = API_MASTER
 export const OPS_API = {
   getTerminalList: API_ROOT + '../src/json/terminalList.json', // 终端列表
@@ -26,7 +27,10 @@ export const OPS_API = {
   deleteDirectdevice: API_MASTER + 'iotdirectdevice/del', // 删除直连设备
   importDirectdevice: API_MASTER + 'iotdirectdevice/import', // 直连设备批量导入
   bindedlists: API_MASTER + 'iotrouter/bindedlists',
-  routerUnbind: API_MASTER + 'iotrouter/unbind'
+  routerUnbind: API_MASTER + 'iotrouter/unbind',
+
+  familyDeviceList: API_DEVICE + 'family-devices/list', // 设备列表
+  deviceDetail: API_DEVICE + 'family-devices/detail' // 设备详情
 }
 
 export const UPGRADE_API = {

@@ -54,6 +54,15 @@ module.exports = {
           proxyReq.setHeader('Origin', 'http://beeoss.egtest.cn:7777')
           proxyReq.setHeader('Content-Type', 'application/json;charset=UTF-8')
         }
+      },
+      '/api/device': {
+        target: 'http://beeossdev.egtest.cn:7777', // 开发环境
+        // target: 'http://beeoss.egtest.cn:7777', // 测试环境
+        // target: 'http://beeoss.evergrande.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api/device': ''
+        }
       }
     }
   },

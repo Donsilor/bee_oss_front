@@ -67,6 +67,8 @@ const MallReservation = () => import('./mallMgmt/mallReservation.vue')
 
 const SemanticMange = () => import('./semanticMange/index.vue')
 
+const DeviceList = () => import('./deviceList.vue')
+
 // 家居组件
 const AppHomeConfig = () => import('./homeConfig/index.vue')
 const HomeConfig = () => import('./homeConfig/home/home.vue')
@@ -148,5 +150,6 @@ export {
   remoteDeviceLogs,
   remoteRouterLogs,
   BindRouter,
-  ProtocolManage
+  ProtocolManage,
+  DeviceList
 }
