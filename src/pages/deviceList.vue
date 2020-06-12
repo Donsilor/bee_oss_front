@@ -1,6 +1,6 @@
 <template>
   <div class="page-content deviceList-page">
-    <div style="padding-bottom: 30px;">
+    <div style="padding-bottom: 30px;"  class="search">
       <!--搜索框-->
       <el-row :gutter="24">
         <el-col :span="3" style="padding-right: 0">
@@ -29,22 +29,26 @@
         <el-col :span="3" style="padding-right: 0" class="time-box-col">
           <el-select v-model="familyDeviceForm.device_category" placeholder="请选择设备类型">
             <el-option
-              v-for="item in familyDeviceForm.device_category_option"
+              v-for="item in device_category_option"
               :key="item.value"
               :label="item.label"
               :value="item.value">
             </el-option>
           </el-select>
         </el-col>
-        <el-col :span="1">
-          <el-button type="primary" @click="getFamilyDeviceList(1)">
-            &nbsp;&nbsp;查询&nbsp;&nbsp;
-          </el-button>
-        </el-col>
-        <el-col :span="1">
-          <el-button  @click="reset()">
-            &nbsp;&nbsp;重置&nbsp;&nbsp;
-          </el-button>
+        <el-col :span="6">
+         <el-row>
+            <el-col :span="6" >
+              <el-button type="primary" @click="getFamilyDeviceList(1)">
+                &nbsp;&nbsp;查询&nbsp;&nbsp;
+              </el-button>
+            </el-col>
+            <el-col :span="6">
+              <el-button  @click="reset()">
+                &nbsp;&nbsp;重置&nbsp;&nbsp;
+              </el-button>
+            </el-col>
+          </el-row>
         </el-col>
       </el-row>
     </div>
@@ -97,7 +101,7 @@
               :key="key"
               :span="12"
             >
-              <el-form-item v-if="(key != 'params' && key != 'online')" :label="familyDeviceList.detailKey2Chinese[key]">
+              <el-form-item v-if="(key != 'params')" :label="familyDeviceList.detailKey2Chinese[key]">
                 <span>{{ value }}</span>
               </el-form-item>
             </el-col>
@@ -158,38 +162,42 @@ export default {
         device_name: '',
         beg_mtime: '',
         end_mtime: '',
-        device_category: '',
-        device_category_option: [{
-          value: '1',
-          label: '空调'
-        }, {
-          value: '22',
-          label: '路由器'
-        }, {
-          value: '8',
-          label: '开关'
-        }, {
-          value: '2',
-          label: '窗帘'
-        }, {
-          value: '3',
-          label: '电视'
-        }, {
-          value: '18',
-          label: '空气净化器'
-        }, {
-          value: '133',
-          label: '扫地机器人'
-        }, {
-          value: '138',
-          label: '人体移动传感器'
-        }, {
-          value: '139',
-          label: '门窗开关传感器'
-        }, {
-          value: '5',
-          label: '灯'
-        }]
+        device_category: ''
+      },
+      // 设备类型相对应得中文名字，用于组装成顶部得设备类型选择所需要得数据
+      device_category_type2name: {
+        '-1': '总开关',
+        '-2': '全屋灯',
+        '0': '无效',
+        '1': '空调',
+        '2': '窗帘',
+        '3': '电视',
+        '4': '电饭煲',
+        '5': '灯',
+        '6': '电子秤',
+        '7': '摄像头',
+        '8': '智能开关',
+        '9': '空气质量检测仪',
+        '10': '温湿度计',
+        '11': '路由器',
+        '12': '门窗传感器',
+        '13': '人体传感器',
+        '14': '可视对讲机',
+        '15': '音箱',
+        '16': '晾衣机',
+        '17': '洗衣机',
+        '18': '空气净化器',
+        '19': '净水器',
+        '20': '可视门铃',
+        '21': '信号放大器',
+        '22': '智能路由器',
+        '23': '门锁',
+        '24': '电烤箱',
+        '25': '电热水器',
+        '138': '人体移动传感器',
+        '139': '门窗开关传感器',
+        '159': '智能面板',
+        '160': '智能魔镜'
       },
       infoModel: false,
       totalItem: 0,
@@ -202,8 +210,9 @@ export default {
           { prop: 'family_id', label: '家庭id' },
           { prop: 'device_name', label: '设备名称' },
           { prop: 'device_uuid', label: '设备唯一uuid' },
-          { prop: 'bussiness_name', label: '渠道厂商名称' },
-          { prop: 'device_state', label: '设备状态' },
+          { prop: 'access_type', label: '设备接入类型' },
+          { prop: 'online', label: '设备状态' },
+          { prop: 'mode', label: '开启状态' },
           { prop: 'update_time', label: '更新时间' }
         ],
         detailKey2Chinese: {
@@ -217,9 +226,10 @@ export default {
           'access_type': '设备接入类型',
           'bussiness_name': '渠道厂商名称',
           'parent_uuid': '父中控uuid',
-          'device_state': '设备状态',
+          'online': '设备状态',
           'create_time': '绑定时间',
-          'update_time': '更新时间'
+          'update_time': '更新时间',
+          'mode': '开启状态'
         },
         // 调用getDeviceDetail接口获取回来的数据中alert中key对应的中文名
         alertKey2Chinese: {
@@ -232,6 +242,7 @@ export default {
           'alert_title': '推送标题',
           'alert_text': '推送内容'
         },
+        access_type_list: ['本地中控', '云云对接', '直连设备', '其他'],
         tableData: [],
         currentDetail: {},
         currentParams: null,
@@ -241,13 +252,22 @@ export default {
       activeNames: ['1', '2', '3']
     }
   },
-  computed: {},
+  computed: {
+    device_category_option() {
+      let optionList = []
+      for (let key in this.device_category_type2name) {
+        optionList.push({ value: key, label: this.device_category_type2name[key] })
+      }
+      return optionList
+    }
+  },
   watch: {},
   mounted() {
     this.getFamilyDeviceList(1)
   },
   methods: {
     getFamilyDeviceList(page) {
+      this.listParams.size = this.page_size// 一页的数据条数为page_siee固定
       this.listParams.family_id = this.familyDeviceForm.family_id
       this.listParams.device_uuid = this.familyDeviceForm.device_uuid
       this.listParams.device_name = this.familyDeviceForm.device_name
@@ -257,19 +277,27 @@ export default {
       this.listParams.page = page
       this.listParams.device_category = this.familyDeviceForm.device_category
       API.getFamilyDeviceList(this.listParams).then(result => {
+        console.log('result:', result)
         if (result && result.data && result.data.length) {
           this.familyDeviceList.tableData = result.data
           this.totalItem = result.page_info.total || 0
           for (let i = 0; i < this.familyDeviceList.tableData.length; i++) {
-            let onlineState = this.familyDeviceList.tableData[i].online
+            this.familyDeviceList.tableData[i].online = this.familyDeviceList.tableData[i].online === 0 ? '离线' : '在线'
             this.familyDeviceList.tableData[i].create_time = this.getDate(this.familyDeviceList.tableData[i].create_time)
             this.familyDeviceList.tableData[i].update_time = this.getDate(this.familyDeviceList.tableData[i].update_time)
-            if (onlineState === 0) {
-              this.familyDeviceList.tableData[i].device_state = '离线'
+            this.familyDeviceList.tableData[i].access_type = this.familyDeviceList.access_type_list[this.familyDeviceList.tableData[i].access_type]
+            this.familyDeviceList.tableData[i].category_id = this.device_category_type2name[this.familyDeviceList.tableData[i].category_id]
+            if (this.familyDeviceList.tableData[i].mode) {
+              if (this.familyDeviceList.tableData[i].mode === 'on') {
+                this.familyDeviceList.tableData[i].mode = '开启'
+              } else {
+                this.familyDeviceList.tableData[i].mode = '关闭'
+              }
             } else {
-              this.familyDeviceList.tableData[i].device_state = '在线'
+              this.familyDeviceList.tableData[i].mode = ''
             }
           }
+          console.log('familyDeviceList.tableData:', this.familyDeviceList.tableData)
         } else {
           this.familyDeviceList.tableData = []
         }
@@ -297,11 +325,10 @@ export default {
       let timestamp = new Date(1472048779952)
       return timestamp.toLocaleDateString().replace(/\//g, '-') + ' ' + timestamp.toTimeString().substr(0, 8)
     },
+    // 清空顶部得搜索条件
     reset() {
       for (let key in this.familyDeviceForm) {
-        if (key !== 'device_category_option') {
-          this.familyDeviceForm[key] = ''
-        }
+        this.familyDeviceForm[key] = ''
       }
     }
   }
@@ -342,7 +369,8 @@ export default {
   .el-collapse-item__header{
     font-weight:bold;
     font-size:17px;
+    height:50px;
+    line-height:50px;
   }
 }
-
 </style>

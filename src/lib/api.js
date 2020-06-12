@@ -2,7 +2,7 @@ const API_ROOT = ''
 const API_MASTER = '/api/index.php/'
 let API_DEVICE = ''
 if (process.env.NODE_ENV === 'development') {
-  API_DEVICE = '/api/device'
+  API_DEVICE = '/api/device/'
 } else {
   API_DEVICE = ''
 }
