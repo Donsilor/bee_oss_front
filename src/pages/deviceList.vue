@@ -38,12 +38,10 @@
         </el-col>
         <el-col :span="6">
          <el-row>
-            <el-col :span="6" >
-              <el-button type="primary" @click="getFamilyDeviceList(1)">
+            <el-col :span="24" class="searchBtnCon">
+              <el-button class="searchBtn" type="primary" @click="getFamilyDeviceList(1)">
                 &nbsp;&nbsp;查询&nbsp;&nbsp;
               </el-button>
-            </el-col>
-            <el-col :span="6">
               <el-button  @click="reset()">
                 &nbsp;&nbsp;重置&nbsp;&nbsp;
               </el-button>
@@ -276,6 +274,7 @@ export default {
       this.listParams.end_mtime = this.familyDeviceForm.end_mtime ? Date.parse(this.familyDeviceForm.end_mtime) / 1000 : ''
       this.listParams.page = page
       this.listParams.device_category = this.familyDeviceForm.device_category
+      console.log('this.listParams:', JSON.stringify(this.listParams))
       API.getFamilyDeviceList(this.listParams).then(result => {
         console.log('result:', result)
         if (result && result.data && result.data.length) {
@@ -322,7 +321,7 @@ export default {
       this.getDeviceDetail(this.detailParams)
     },
     getDate(time) {
-      let timestamp = new Date(1472048779952)
+      let timestamp = new Date(time)
       return timestamp.toLocaleDateString().replace(/\//g, '-') + ' ' + timestamp.toTimeString().substr(0, 8)
     },
     // 清空顶部得搜索条件
@@ -371,6 +370,11 @@ export default {
     font-size:17px;
     height:50px;
     line-height:50px;
+  }
+}
+.searchBtnCon{
+  .el-button{
+    margin-left: 10px;
   }
 }
 </style>
