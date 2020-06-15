@@ -282,8 +282,8 @@ export default {
           this.totalItem = result.page_info.total || 0
           for (let i = 0; i < this.familyDeviceList.tableData.length; i++) {
             this.familyDeviceList.tableData[i].online = this.familyDeviceList.tableData[i].online === 0 ? '离线' : '在线'
-            this.familyDeviceList.tableData[i].create_time = this.getDate(this.familyDeviceList.tableData[i].create_time)
-            this.familyDeviceList.tableData[i].update_time = this.getDate(this.familyDeviceList.tableData[i].update_time)
+            this.familyDeviceList.tableData[i].create_time = this.getDate(this.familyDeviceList.tableData[i].create_time*1000)
+            this.familyDeviceList.tableData[i].update_time = this.getDate(this.familyDeviceList.tableData[i].update_time*1000)
             this.familyDeviceList.tableData[i].access_type = this.familyDeviceList.access_type_list[this.familyDeviceList.tableData[i].access_type]
             this.familyDeviceList.tableData[i].category_id = this.device_category_type2name[this.familyDeviceList.tableData[i].category_id]
             if (this.familyDeviceList.tableData[i].mode) {
