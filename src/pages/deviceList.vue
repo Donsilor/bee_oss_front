@@ -195,7 +195,13 @@ export default {
         '138': '人体移动传感器',
         '139': '门窗开关传感器',
         '159': '智能面板',
-        '160': '智能魔镜'
+        '160': '智能魔镜',
+        '161': '体脂称',
+        '202': '净水器',
+        '203': '智能插座',
+        '204': '智能蒸箱',
+        '205': '智能马桶',
+        '1235': '手机'
       },
       infoModel: false,
       totalItem: 0,
@@ -262,6 +268,12 @@ export default {
   watch: {},
   mounted() {
     this.getFamilyDeviceList(1)
+    // 加载完成对按下事件进行监听
+    window.addEventListener('keydown', this.keyDown)
+  },
+  destroyed() {
+    // 对监听的keyDown事件进行移除
+    window.removeEventListener('keydown', this.keyDown, false)
   },
   methods: {
     getFamilyDeviceList(page) {
@@ -282,19 +294,10 @@ export default {
           this.totalItem = result.page_info.total || 0
           for (let i = 0; i < this.familyDeviceList.tableData.length; i++) {
             this.familyDeviceList.tableData[i].online = this.familyDeviceList.tableData[i].online === 0 ? '离线' : '在线'
-            this.familyDeviceList.tableData[i].create_time = this.getDate(this.familyDeviceList.tableData[i].create_time*1000)
-            this.familyDeviceList.tableData[i].update_time = this.getDate(this.familyDeviceList.tableData[i].update_time*1000)
+            this.familyDeviceList.tableData[i].create_time = this.getDate(this.familyDeviceList.tableData[i].create_time * 1000)
+            this.familyDeviceList.tableData[i].update_time = this.getDate(this.familyDeviceList.tableData[i].update_time * 1000)
             this.familyDeviceList.tableData[i].access_type = this.familyDeviceList.access_type_list[this.familyDeviceList.tableData[i].access_type]
-            this.familyDeviceList.tableData[i].category_id = this.device_category_type2name[this.familyDeviceList.tableData[i].category_id]
-            if (this.familyDeviceList.tableData[i].mode) {
-              if (this.familyDeviceList.tableData[i].mode === 'on') {
-                this.familyDeviceList.tableData[i].mode = '开启'
-              } else {
-                this.familyDeviceList.tableData[i].mode = '关闭'
-              }
-            } else {
-              this.familyDeviceList.tableData[i].mode = ''
-            }
+            this.familyDeviceList.tableData[i].category_id = this.device_category_type2name[this.familyDeviceList.tableData[i].category_id] + '(' + this.familyDeviceList.tableData[i].category_id + ')'
           }
           console.log('familyDeviceList.tableData:', this.familyDeviceList.tableData)
         } else {
@@ -329,6 +332,22 @@ export default {
       for (let key in this.familyDeviceForm) {
         this.familyDeviceForm[key] = ''
       }
+    },
+    keyDown (e) {
+      // 回车执行搜索功能
+      if (e.keyCode === 13) {
+        // 搜索条件上只要有一个有值，就可以进行搜索
+        let canSearch = false
+        for (let key in this.familyDeviceForm) {
+          if (this.familyDeviceForm[key]) {
+            canSearch = true
+            break
+          }
+        }
+        if (canSearch) {
+          this.getFamilyDeviceList(1)
+        }
+      }
     }
   }
 }
@@ -357,14 +376,14 @@ export default {
   .el-form-item{
     margin-bottom: 0;
   }
-  .el-form-item__content{
-     overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    -o-text-overflow: ellipsis;
-    -moz-text-overflow: ellipsis;
-    -webkit-text-overflow: ellipsis;
-  }
+  // .el-form-item__content{
+  //    overflow: hidden;
+  //   white-space: nowrap;
+  //   text-overflow: ellipsis;
+  //   -o-text-overflow: ellipsis;
+  //   -moz-text-overflow: ellipsis;
+  //   -webkit-text-overflow: ellipsis;
+  // }
   .el-collapse-item__header{
     font-weight:bold;
     font-size:17px;
